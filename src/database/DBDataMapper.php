@@ -1,13 +1,14 @@
 <?php
 
-class MySQL_DataMapper
+class DBDataMapper
 {
     //Provides a data wrapper service for database interactions
+    //TODO namespace
 
     /** @var PDO pdo */
     private $pdo;
 
-    public function __construct($pdo)
+    public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }

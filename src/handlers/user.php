@@ -3,7 +3,7 @@ header('Content-type: application/json');
 header('Access-Control-Allow-Origin: *');
 
 checkAuth();
-$database = new MySQL_DataMapper(getPDO());
+$database = new DBDataMapper(getPDO());
 
 //HANDLE GET
 if ($_SERVER["REQUEST_METHOD"] === "GET") {

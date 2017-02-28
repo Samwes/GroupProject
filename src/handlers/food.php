@@ -7,7 +7,7 @@ header('Access-Control-Allow-Origin: *');
 //TODO: Change these files into something controllers route into
 
 checkAuth();
-$database = new MySQL_DataMapper(getPDO());
+$database = new DBDataMapper(getPDO());
 
 //HANDLE GET
 if ($_SERVER["REQUEST_METHOD"] == "GET") {

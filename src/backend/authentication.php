@@ -12,7 +12,7 @@ function checkAuth(){
         $authtoken = $_COOKIE["AuthToken"];
         $id = $_COOKIE["ID"];
 
-        $datamapper = new MySQL_DataMapper(getPDO());
+        $datamapper = new DBDataMapper(getPDO());
 
         $array = $datamapper->getAuthTokenByID($id);
 

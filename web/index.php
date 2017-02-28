@@ -16,6 +16,11 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/views',
 ));
+// Registering service controllers
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+
+// Register URL generator
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 // Create our routing controllers
 //TODO: Classes!
@@ -26,7 +31,7 @@ $protected->before();
 // Our web handlers
 
 $app->get('/', function() use($app) {
-  $app['monolog']->addDebug('logging output.');
+  $app['monolog']->addDebug('logging output.'); //TODO ?
   return $app['twig']->render('index.twig');
 });
 
