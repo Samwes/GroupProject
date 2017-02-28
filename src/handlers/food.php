@@ -1,7 +1,10 @@
 <?php
 header('Content-type: application/json');
 header('Access-Control-Allow-Origin: *');
-require_once "includes.php";
+
+//TODO: Update file upload paths to work with changes
+//TODO: Namespaces for everything
+//TODO: Change these files into something controllers route into
 
 checkAuth();
 $database = new MySQL_DataMapper(getPDO());

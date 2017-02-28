@@ -1,13 +1,12 @@
 <?php
 header('Content-type: application/json');
 header('Access-Control-Allow-Origin: *');
-require_once "includes.php";
 
 checkAuth();
 $database = new MySQL_DataMapper(getPDO());
 
 //HANDLE GET
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
+if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
     $toEncode = (array("error" => "failed"));
 
@@ -31,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 }
 
 //HANDLE POST
-elseif ($_SERVER["REQUEST_METHOD"] == "POST") {    // TODO : Check for UN already existing
+elseif ($_SERVER["REQUEST_METHOD"] === "POST") {    // TODO : Check for UN already existing
     $username = $_POST["username"];
     $password = $_POST["password"];
     $picture = $_POST["picture"];

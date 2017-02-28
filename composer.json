@@ -3,9 +3,17 @@
     "silex/silex": "^1.3",
     "monolog/monolog": "^1.4",
     "twig/twig": "^1.8",
-    "symfony/twig-bridge": "^2"
+    "symfony/twig-bridge": "^2",
+    "roave/security-advisories": "dev-master"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Handler\\": "src/handlers/",
+      "Main\\" : "src/backend/",
+      "Database\\" : "src/database/"
+    }
   }
 }

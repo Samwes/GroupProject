@@ -18,6 +18,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 
 // Create our routing controllers
+//TODO: Classes!
 $protected = $app['controllers_factory'];
 $protected->before();
 
