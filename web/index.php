@@ -70,4 +70,11 @@ $app->error(function (\Exception $e, $code) use ($app) {
     return new Response($message);
 });
 
+$app->get('/scanner', function() use($app) {
+  $app['monolog']->addDebug('logging output.'); //TODO ?
+  return $app['twig']->render('scanner.html.twig', array(
+      'bodytags' => "onResize=resize()"
+  ));
+});
+
 $app->run();

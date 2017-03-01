@@ -1,232 +1,283 @@
 {% extends "layout.twig" %}
 
+{% block head %}
+<title>Homepage</title>
+{% endblock %}
+
 {%  block content %}
-  <br>
-  <!-- SEARCH OPTIONS -->
-  <div class="container">
-    <form class="form-inline" id="options">
-      <label class="sr-only" >Location</label>
-      <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -5px;">
-        <div class="input-group-addon square-border"><i class="fa fa-search" aria-hidden="true"></i></div>
-        <input type="text" class="form-control square-border" id="pac-input" placeholder="Location">
-      </div>
-
-      <div class="btn-group mr-1" role="group" aria-label="First group">
-        <button type="button" class="btn btn-secondary square-border">Button 1</button>
-        <button type="button" class="btn btn-secondary">Button 2</button>
-        <button type="button" class="btn btn-secondary">Button 3</button>
-        <button type="button" class="btn btn-secondary">Button 4</button>
-        <div class="btn-group" role="group">
-          <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown
-          </button>
-          <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-            <a class="dropdown-item" href="#">Dropdown link</a>
-            <a class="dropdown-item" href="#">Dropdown link</a>
-          </div>
-        </div>
-      </div>
-
-    </form>
-  </div>
-
-  <!--
-  <div class="container">
-    <div class="input-group">
-      <div class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></div>
-      <input type="text" class="form-control" placeholder="Location">
-      <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button">Button 1</button>
-        <div class="btn-group" role="group">
-          <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown
-          </button>
-          <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-            <a class="dropdown-item" href="#">Dropdown link</a>
-            <a class="dropdown-item" href="#">Dropdown link</a>
-          </div>
-        </div>
-        <button class="btn btn-secondary" type="button">Button 2</button>
-        <button class="btn btn-secondary" type="button">Button 3</button>
-      </span>
+<br>
+<!-- SEARCH OPTIONS -->
+<div class="container">
+  <form class="form-inline" id="options">
+    <label class="sr-only" for="inlineFormInputGroup">Location</label>
+    <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
+      <div class="input-group-addon square-border"><i class="fa fa-search" aria-hidden="true"></i></div>
+      <input type="text" title="Location" class="form-control square-border" id="pac-input" placeholder="Location">
     </div>
-  </div>
-  -->
 
-  <br>
+    <label class="sr-only" for="inlineFormInputGroup">Amount</label>
+    <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
+      <div class="input-group-addon square-border"><i class="fa fa-hashtag" aria-hidden="true"></i></div>
+      <input type="number" title="Quantity" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+      <input type="number" title="Quantity" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+    </div>
 
-  <div class="container main">
-    <div class="row">
-      <!-- FOOD ITEMS -->
-      <!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
-      <div class="col-md-6" style="overflow: scroll; overflow-x:hidden;" id="items" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
-        <div class="container" style="padding: 0;">
-          <div class="card-columns" id="item-cards">
-            <div class="card">
-      				<img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-      				<div class="card-block">
-      					<h4 class="card-title">Oranges</h4>
-      					<p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-      					<p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-      					<p class="card-text"><strong>Amount: </strong>4</p>
-      					<p class="card-text"><strong>Weight: </strong>500g</p>
-      				</div>
-      			</div>
-            <div class="card">
-      				<img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-      				<div class="card-block">
-      					<h4 class="card-title">Oranges</h4>
-      					<p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-      					<p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-      					<p class="card-text"><strong>Amount: </strong>4</p>
-      					<p class="card-text"><strong>Weight: </strong>500g</p>
-      				</div>
-      			</div>
-            <div class="card">
-      				<img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-      				<div class="card-block">
-      					<h4 class="card-title">Oranges</h4>
-      					<p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-      					<p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-      					<p class="card-text"><strong>Amount: </strong>4</p>
-      					<p class="card-text"><strong>Weight: </strong>500g</p>
-      				</div>
-      			</div>
-            <div class="card">
-      				<img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-      				<div class="card-block">
-      					<h4 class="card-title">Oranges</h4>
-      					<p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-      					<p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-      					<p class="card-text"><strong>Amount: </strong>4</p>
-      					<p class="card-text"><strong>Weight: </strong>500g</p>
-      				</div>
-      			</div>
-            <div class="card">
-      				<img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-      				<div class="card-block">
-      					<h4 class="card-title">Oranges</h4>
-      					<p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-      					<p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-      					<p class="card-text"><strong>Amount: </strong>4</p>
-      					<p class="card-text"><strong>Weight: </strong>500g</p>
-      				</div>
-      			</div>
-            <div class="card">
-      				<img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-      				<div class="card-block">
-      					<h4 class="card-title">Oranges</h4>
-      					<p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-      					<p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-      					<p class="card-text"><strong>Amount: </strong>4</p>
-      					<p class="card-text"><strong>Weight: </strong>500g</p>
-      				</div>
-      			</div>
-            <div class="card">
-      				<img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-      				<div class="card-block">
-      					<h4 class="card-title">Oranges</h4>
-      					<p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-      					<p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-      					<p class="card-text"><strong>Amount: </strong>4</p>
-      					<p class="card-text"><strong>Weight: </strong>500g</p>
-      				</div>
-      			</div>
-            <div class="card">
-      				<img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-      				<div class="card-block">
-      					<h4 class="card-title">Oranges</h4>
-      					<p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-      					<p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-      					<p class="card-text"><strong>Amount: </strong>4</p>
-      					<p class="card-text"><strong>Weight: </strong>500g</p>
-      				</div>
-      			</div>
+    <label class="sr-only" for="inlineFormInputGroup">Weight</label>
+    <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
+      <div class="input-group-addon square-border"><i class="fa fa-balance-scale" aria-hidden="true"></i></div>
+      <input type="number" title="Weight" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+      <input type="number" title="Weight" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+    </div>
+
+    <button type="button" class="btn square-border">Refresh</button>
+
+    <div class="btn-group mr-1 float-xs-right" role="group" aria-label="First group" style="margin: 0 !important;">
+      <button id="fake-button" type="button" class="btn btn-secondary square-border">Sort By:</button>
+      <button id="radius-sort" type="button" class="btn btn-secondary"><i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i> Radius</button>
+      <button id="weight-sort" type="button" class="btn btn-secondary"><i id="weight-sort-icon" class="" aria-hidden="true"></i>  Weight</button>
+      <button id="expiry-sort" type="button" class="btn btn-secondary square-border"><i id="expiry-sort-icon" class="" aria-hidden="true"></i> Expiry</button>
+    </div>
+
+  </form>
+</div>
+
+<br>
+
+<div class="container main">
+  <div class="row">
+    <!-- FOOD ITEMS -->
+    <!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
+    <div class="col-md-6" style="overflow: scroll; overflow-x:hidden;" id="items" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
+      <div class="container" style="padding: 0;">
+        <div class="card-columns" id="item-cards">
+          <div class="card">
+            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Oranges</h4>
+              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
+              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
+              <p class="card-text"><strong>Amount: </strong>4</p>
+              <p class="card-text"><strong>Weight: </strong>500g</p>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Oranges</h4>
+              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
+              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
+              <p class="card-text"><strong>Amount: </strong>4</p>
+              <p class="card-text"><strong>Weight: </strong>500g</p>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Oranges</h4>
+              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
+              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
+              <p class="card-text"><strong>Amount: </strong>4</p>
+              <p class="card-text"><strong>Weight: </strong>500g</p>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Oranges</h4>
+              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
+              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
+              <p class="card-text"><strong>Amount: </strong>4</p>
+              <p class="card-text"><strong>Weight: </strong>500g</p>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Oranges</h4>
+              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
+              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
+              <p class="card-text"><strong>Amount: </strong>4</p>
+              <p class="card-text"><strong>Weight: </strong>500g</p>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Oranges</h4>
+              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
+              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
+              <p class="card-text"><strong>Amount: </strong>4</p>
+              <p class="card-text"><strong>Weight: </strong>500g</p>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Oranges</h4>
+              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
+              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
+              <p class="card-text"><strong>Amount: </strong>4</p>
+              <p class="card-text"><strong>Weight: </strong>500g</p>
+            </div>
+          </div>
+          <div class="card">
+            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
+            <div class="card-block">
+              <h4 class="card-title">Oranges</h4>
+              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
+              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
+              <p class="card-text"><strong>Amount: </strong>4</p>
+              <p class="card-text"><strong>Weight: </strong>500g</p>
+            </div>
           </div>
         </div>
       </div>
-      <!-- MAP -->
-      <div class="col-md-6">
-        <div id=map></div>
-      </div>
-
     </div>
+    <!-- MAP -->
+    <div class="col-md-6">
+      <div id=map></div>
+    </div>
+
   </div>
+</div>
+
+<br>
 
 {% endblock %}
 
 
 {% block scripts %}
-  <script>
-    $(document).ready(function() {
-      $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-      $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-    });
-    function resize() {
-      $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-      $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+<!-- CORRECT SIZES OF ELEMENTS -->
+<script>
+  $(document).ready(function() {
+    $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+    $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+  });
+  function resize() {
+    $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+    $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+  }
+</script>
+
+<!-- HANDLE SORTING -->
+<script>
+  //  Radius
+  $("#radius-sort").click(function() {
+    // Change Icon
+    if ($("#radius-sort-icon").hasClass("fa-sort-asc")) {
+      $("#radius-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+      // Sort Items
+    } else if ($("#radius-sort").hasClass("fa-sort-desc")) {
+      $("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+      // Sort Items
+    } else {
+      $("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+      // Sort Items
     }
-  </script>
+    $("#weight-sort-icon").attr('class', '');
+    $("#expiry-sort-icon").attr('class', '');
+  });
 
+  // Weight
+  $("#weight-sort").click(function() {
+    // Change Icon
+    if ($("#weight-sort-icon").hasClass("fa-sort-asc")) {
+      $("#weight-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+      // Sort Items
+    } else if ($("#weight-sort").hasClass("fa-sort-desc")) {
+      $("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+      // Sort Items
+    } else {
+      $("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+      // Sort Items
+    }
+    $("#radius-sort-icon").attr('class', '');
+    $("#expiry-sort-icon").attr('class', '');
+  });
 
-  <script>
+  // Expiry
+  $("#expiry-sort").click(function() {
+    // Change Icon
+    if ($("#expiry-sort-icon").hasClass("fa-sort-asc")) {
+      $("#expiry-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+      // Sort Items
+    } else if ($("#expiry-sort").hasClass("fa-sort-desc")) {
+      $("#expiry-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+      // Sort Items
+    } else {
+      $("#expiry-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+      // Sort Items
+    }
+    $("#radius-sort-icon").attr('class', '');
+    $("#weight-sort-icon").attr('class', '');
+  });
+</script>
 
-      var map = null;
+<script>
+$(document).ready(function() {
+  $('#user-popover').popover({
+    trigger: 'focus'
+  });
+});
+</script>
 
-      function initMapElements() {
+<!-- MAPS SCRIPT -->
+<script>
+    var map = null;
 
-        var durham = {lat: 54.7752493, lng: -1.584852};
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12,
-          center: durham
-        });
-        var marker = new google.maps.Marker({
-          position: durham,
-          map: map
-        });
+    function initMapElements() {
 
-        // Create the search box and link it to the UI element.
-        var input = document.getElementById('pac-input');
-        var searchBox = new google.maps.places.SearchBox(input);
+      var durham = {lat: 54.7752493, lng: -1.584852};
+      map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 12,
+        center: durham
+      });
+      var marker = new google.maps.Marker({
+        position: durham,
+        map: map
+      });
 
-        // Listen for the event fired when the user selects a prediction and retrieve
-        // more details for that place.
-        searchBox.addListener('places_changed', function() {
-          var places = searchBox.getPlaces();
+      // Create the search box and link it to the UI element.
+      var input = document.getElementById('pac-input');
+      var searchBox = new google.maps.places.SearchBox(input);
 
-          if (places.length == 0) {
+      // Listen for the event fired when the user selects a prediction and retrieve
+      // more details for that place.
+      searchBox.addListener('places_changed', function() {
+        var places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+          return;
+        }
+
+        // For each place, get the icon, name and location.
+        var bounds = new google.maps.LatLngBounds();
+        places.forEach(function(place) {
+          if (!place.geometry) {
+            console.log("Returned place contains no geometry");
             return;
           }
 
-          // For each place, get the icon, name and location.
-          var bounds = new google.maps.LatLngBounds();
-          places.forEach(function(place) {
-            if (!place.geometry) {
-              console.log("Returned place contains no geometry");
-              return;
-            }
+          /*var icon = {
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25)
+          };
 
-            /*var icon = {
-              url: place.icon,
-              size: new google.maps.Size(71, 71),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(17, 34),
-              scaledSize: new google.maps.Size(25, 25)
-            };
+          console.log(icon);*/
+          console.log(place.name);
+          console.log(place.geometry.location.lat());
+          console.log(place.geometry.location.lng());
 
-            console.log(icon);*/
-            console.log(place.name);
-            console.log(place.geometry.location.lat());
-            console.log(place.geometry.location.lng());
-
-          });
         });
-      }
-
-    </script>
-
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
+      });
+    }
   </script>
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
+</script>
 
 {% endblock %}
