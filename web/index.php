@@ -29,8 +29,8 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 // Register session storage for between request data store
 $app->register(new Silex\Provider\SessionServiceProvider());
 
-// Register security service
-$app->register(new Silex\Provider\SecurityServiceProvider());
+// Register security service TODO turn on
+//$app->register(new Silex\Provider\SecurityServiceProvider());
 
 // Register DB service
 $app['DB'] = function() {
