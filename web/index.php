@@ -34,7 +34,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider());
 
 // Register DB service
 $app['DB'] = function() {
-    return new \Database\DBDataMapper(Database::getPDO());
+    return new \Database\DBDataMapper();
 };
 
 // Register our routing controllers

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 23, 2016 at 06:48 PM
+-- Generation Time: Mar 01, 2017 at 07:33 PM
 -- Server version: 5.7.14
--- PHP Version: 5.6.25
+-- PHP Version: 7.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,23 +14,11 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `gpmain`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `authtable`
---
-
-CREATE TABLE `authtable` (
-  `userid` int(11) NOT NULL,
-  `authToken` text NOT NULL,
-  `expirDate` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -59,7 +47,7 @@ CREATE TABLE `itemtable` (
   `name` text NOT NULL,
   `description` text NOT NULL,
   `latit` decimal(12,10) NOT NULL,
-  `longit`  decimal(12,10) NOT NULL,
+  `longit` decimal(12,10) NOT NULL,
   `amount` int(11) NOT NULL,
   `weight` float NOT NULL,
   `image` text NOT NULL,
@@ -76,8 +64,15 @@ CREATE TABLE `itemtable` (
 CREATE TABLE `messagetable` (
   `messageid` int(11) NOT NULL,
   `message` text NOT NULL,
-  `time` timestamp NOT NULL
+  `time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `messagetable`
+--
+
+INSERT INTO `messagetable` (`messageid`, `message`, `time`) VALUES
+(1, 'Test Message', '2016-12-24 16:09:36');
 
 -- --------------------------------------------------------
 
@@ -101,7 +96,7 @@ CREATE TABLE `requesttable` (
   `requestid` int(11) NOT NULL,
   `requester` int(11) NOT NULL,
   `foodid` int(11) NOT NULL,
-  `accepted` tinyint(1) NOT NULL
+  `accepted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -126,20 +121,14 @@ CREATE TABLE `usertable` (
   `userid` int(11) NOT NULL,
   `username` text NOT NULL,
   `password` text NOT NULL,
-  `salt` char(22) NOT NULL,  
   `picture` text,
-  `email` text
+  `email` text,
+  `roles` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `authtable`
---
-ALTER TABLE `authtable`
-  ADD PRIMARY KEY (`userid`);
 
 --
 -- Indexes for table `chattable`
@@ -195,26 +184,29 @@ ALTER TABLE `usertable`
 -- AUTO_INCREMENT for dumped tables
 --
 
-ALTER TABLE `usertable`
-  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT;
-  
-ALTER TABLE `messagetable`
-  MODIFY `messageid` int(11) NOT NULL AUTO_INCREMENT;
-  
-ALTER TABLE `requesttable`
-  MODIFY `requestid` int(11) NOT NULL AUTO_INCREMENT;
-  
+--
+-- AUTO_INCREMENT for table `itemtable`
+--
 ALTER TABLE `itemtable`
   MODIFY `foodid` int(11) NOT NULL AUTO_INCREMENT;
-
+--
+-- AUTO_INCREMENT for table `messagetable`
+--
+ALTER TABLE `messagetable`
+  MODIFY `messageid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `requesttable`
+--
+ALTER TABLE `requesttable`
+  MODIFY `requestid` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `usertable`
+--
+ALTER TABLE `usertable`
+  MODIFY `userid` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `authtable`
---
-ALTER TABLE `authtable`
-  ADD CONSTRAINT `authtable_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `usertable` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `chattable`
