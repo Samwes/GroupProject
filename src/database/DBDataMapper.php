@@ -14,12 +14,16 @@ class DBDataMapper
         $this->pdo = $pdo;
     }
 
-    public function getFoodItemsByUserID($id)
+    public function getUserByUsername(string $un){
+        executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
+    }
+
+    public function getFoodItemsByUserID(int $id)
     {
-        $query = "SELECT `expirydate`,`category`,`foodid`,`name`,`description`,`latit`,`longit`,`amount`,
+        $query = 'SELECT `expirydate`,`category`,`foodid`,`name`,`description`,`latit`,`longit`,`amount`,
                   `weight` ,`image`,`active`,`hidden` 
                     FROM `itemtable`
-                    WHERE `userid` = :id";
+                    WHERE `userid` = :id';
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -38,10 +42,10 @@ class DBDataMapper
 
     public function getFoodItemByID($id)
     {
-        $query = "SELECT `expirydate`,`category`,`userid`,`name`,`description`,`latit`,`longit`,`amount`,
+        $query = 'SELECT `expirydate`,`category`,`userid`,`name`,`description`,`latit`,`longit`,`amount`,
                   `weight` ,`image`,`active`,`hidden` 
                     FROM `itemtable`
-                    WHERE `foodid` = :id";
+                    WHERE `foodid` = :id';
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);

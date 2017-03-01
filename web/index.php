@@ -11,6 +11,8 @@ if (!$app['debug']){
         ->requireHttps(); //We can change it so only some pages require https
 }
 
+// -------- SERVICES --------
+
 // Register the monolog logging service
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => 'php://stderr',
@@ -32,10 +34,17 @@ $app['DB'] = function() {
 $app['rest.handler'] = function() use ($app) {
     return new \Handler\Controller($app['DB']);
 };
+// ----------------------------
 
+
+// -------- SECURITY --------
 //TODO: @Security
 
+// ----------------------------
 
+
+
+// -------- REST API --------
 //TODO: All get/posts
 
 $app->get('/food/{foodID}', 'rest.controller:foodItemGet')
@@ -44,6 +53,11 @@ $app->get('/food/{foodID}', 'rest.controller:foodItemGet')
 $app->get('/food/{userID}', 'rest.controller:foodItemsGet')
     -> assert('userID', '\d+');
 
+// ----------------------------
+
+
+
+// -------- WEB PAGES --------
 //TODO: Our web handlers
 
 $app->get('/', function() use($app) {
@@ -57,9 +71,10 @@ $app->get('/scanner', function() use($app) {
         'bodytags' => 'onResize=resize()'
     ));
 });
+// ----------------------------
 
 
-// Error Handlings
+// -------- ERROR HANDLING --------
 
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {
@@ -75,6 +90,8 @@ $app->error(function (\Exception $e, $code) use ($app) {
     }
     return new Response($message);
 });
+
+// ----------------------------
 
 //Finally Run
 

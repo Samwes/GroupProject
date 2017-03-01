@@ -11,49 +11,39 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class UserProvider implements UserProviderInterface
 {
-    private $conn;
+    /** @var DBDataMapper $DB */
+    private $DB;
     //TODO: Implement this
     //TODO: Register all security components etc.
     //TODO: Customer User class?
 
-    public function __construct(DBDataMapper $conn)
+    public function __construct(DBDataMapper $DB)
     {
-        $this->conn = $conn;
+        $this->db = $DB;
     }
 
-    /**
-     * This method must throw UsernameNotFoundException if the user is not
-     * found.
-     * @param string $username The username
-     * @return UserInterface
-     * @throws UsernameNotFoundException if the user is not found
-     */
     public function loadUserByUsername($username)
     {
-        // TODO: Implement loadUserByUsername() method.
+        $stmt = $this->conn->executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
+
+        if (!$user = $stmt->fetch()) {
+            throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
+        }
+
+        return new User($user['username'], $user['password'], explode(',', $user['roles']), true, true, true, true);
     }
 
-    /**
-     * It is up to the implementation to decide if the user data should be
-     * totally reloaded (e.g. from the database), or if the UserInterface
-     * object can just be merged into some internal array of users / identity
-     * map.
-     * @param UserInterface $user
-     * @return UserInterface
-     * @throws UnsupportedUserException if the account is not supported
-     */
     public function refreshUser(UserInterface $user)
     {
-        // TODO: Implement refreshUser() method.
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        }
+
+        return $this->loadUserByUsername($user->getUsername());
     }
 
-    /**
-     * Whether this provider supports the given user class.
-     * @param string $class
-     * @return bool
-     */
     public function supportsClass($class)
     {
-        // TODO: Implement supportsClass() method.
+        return $class === 'Symfony\Component\Security\Core\User\User';
     }
 }
