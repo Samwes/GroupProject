@@ -5,17 +5,16 @@ require __DIR__. '/../vendor/autoload.php';
 $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
-//$app['controllers']
-//    ->requireHttps(); //We can change it so only some pages require https
+
+if (!$app['debug']){
+    $app['controllers']
+        ->requireHttps(); //We can change it so only some pages require https
+}
 
 // Register the monolog logging service
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => 'php://stderr',
 ));
-
-// TODO what is this
-//$app->register(new Sorien\Provider\PimpleDumpProvider());
-//$app['pimpledump.output_dir'] = '/';
 
 // Register view rendering
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -23,9 +22,6 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 ));
 // Registering service controllers
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
-
-// Register URL generator
-//$app->register(new Silex\Provider\RoutingServiceProvider());
 
 // Register DB service
 $app['DB'] = function() {
@@ -37,15 +33,41 @@ $app['rest.handler'] = function() use ($app) {
     return new \Handler\Controller($app['DB']);
 };
 
+//TODO:@Security
 
 // Our web handlers
 //TODO: All get/posts
 
+$app->get('/food/{foodID}', 'rest.controller:foodItemGet')
+    -> assert('foodID', '\d+');
+
+$app->get('/food/{userID}', 'rest.controller:foodItemsGet')
+    -> assert('userID', '\d+');
+
+
 $app->get('/', function() use($app) {
-  $app['monolog']->addDebug('logging output.'); //TODO ?
   return $app['twig']->render('index.html.twig', array(
-      'bodytags' => "onResize=resize()"
+      'bodytags' => 'onResize=resize()'
   ));
+})->bind('home');
+
+
+
+// Error Handlings
+
+$app->error(function (\Exception $e, $code) use ($app) {
+    if ($app['debug']) {
+        // in debug mode we want to get the regular error message
+        return;
+    }
+    switch ($code) {
+        case 404:
+            $message = 'The requested page could not be found.';
+            break;
+        default:
+            $message = 'We are sorry, but something went terribly wrong.';
+    }
+    return new Response($message);
 });
 
 $app->run();

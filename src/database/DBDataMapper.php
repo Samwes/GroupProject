@@ -5,7 +5,6 @@ namespace Database;
 class DBDataMapper
 {
     //Provides a data wrapper service for database interactions
-    //TODO namespace
 
     /** @var PDO pdo */
     private $pdo;

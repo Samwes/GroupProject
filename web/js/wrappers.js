@@ -10,7 +10,7 @@ POST FUNCTIONS:
 
 // HTTP GET FUNCTIONS
 //TODO: Move images from res/ to an image folder. Sort this out
-//TODO: Find something todo with javascript files. Dunno where to put em yet
+//TODO: Find something todo with js files. Dunno where to put em yet
 //TODO: Sort out css as well (using asset() in twig)
 
 function getFoodItemsByUserID(userid) {
