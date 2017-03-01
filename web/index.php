@@ -1,6 +1,6 @@
 <?php
 
-require '../vendor/autoload.php';
+require __DIR__. '/../vendor/autoload.php';
 
 $app = new Silex\Application();
 //Settings
@@ -10,11 +10,11 @@ $app['debug'] = true;
 
 // Register the monolog logging service
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
-  'monolog.logfile' => __DIR__.'/development.log'
+    'monolog.logfile' => 'php://stderr',
 ));
 
 // TODO what is this
-$app->register(new Sorien\Provider\PimpleDumpProvider());
+//$app->register(new Sorien\Provider\PimpleDumpProvider());
 //$app['pimpledump.output_dir'] = '/';
 
 // Register view rendering
@@ -29,7 +29,7 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 // Register DB service
 $app['DB'] = function() {
-    return new \Database\DBDataMapper(\Database\getPDO());
+    return new \Database\DBDataMapper(\Database::getPDO());
 };
 
 // Register our routing controllers
