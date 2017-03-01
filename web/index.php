@@ -48,4 +48,11 @@ $app->get('/', function() use($app) {
   ));
 });
 
+$app->get('/scanner', function() use($app) {
+  $app['monolog']->addDebug('logging output.'); //TODO ?
+  return $app['twig']->render('scanner.html.twig', array(
+      'bodytags' => "onResize=resize()"
+  ));
+});
+
 $app->run();

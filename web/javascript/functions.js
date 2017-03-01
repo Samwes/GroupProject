@@ -4,8 +4,7 @@ function addItemToPage(name, expiredate, category, userid, description, latitude
 	EXAMPLE:
 	addItemToPage("Test", "11/2/11", "bananas", 12, "Lovely Test", 54.776817, -1.574359, 12, "250g", "res/sample.jpg");
 	*/
-	//TODO: Need to supply map to here (or embed function directly?) maybe it just works
-	if (null !== image) {
+	if (image != null) {
 		$('#item-cards').append('' +
 			'<div class="card">'+
 				'<img class="card-img-top" src="' + image + '" alt="Card image cap">' +
