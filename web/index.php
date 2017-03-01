@@ -84,10 +84,14 @@ $app->get('/', function() use($app) {
 })->bind('home');
 
 $app->get('/scanner', function() use($app) {
-    return $app['twig']->render('scanner.html.twig', array(
-        'bodytags' => 'onResize=resize()'
-    ));
+    return $app['twig']->render('scanner.html.twig');
 });
+
+$app->get('/admin', function() use($app) {
+    return $app['twig']->render('admin.html.twig');
+});
+
+
 // ----------------------------
 
 
