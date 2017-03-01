@@ -34,7 +34,7 @@ $app->register(new Silex\Provider\SecurityServiceProvider());
 
 // Register DB service
 $app['DB'] = function() {
-    return new \Database\DBDataMapper(\Database::getPDO());
+    return new \Database\DBDataMapper(Database::getPDO());
 };
 
 // Register our routing controllers
@@ -46,24 +46,40 @@ $app['rest.handler'] = function() use ($app) {
 
 // -------- SECURITY --------
 //TODO: @Security
-//app boot or some shit?
 
 $app['security.firewalls'] = array(
-    'admin' => array(
-        'pattern' => '^/admin',
-        'http' => true,
-        'users' => array(
-            // raw password is foo
-            'admin' => array('ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
-        ),
+//    'admin' => array(
+//        'pattern' => '^/admin',
+//        'http' => true,
+//        'users' => function () use ($app) {
+//            return new \Main\UserProvider($app['DB']);
+//        },
+//    ),
+    'login' => array(
+        'pattern' => '^/login',  //Match all login pages
     ),
+
+    'secure' => array(
+        'pattern' => '^/account',  //Doesn't match admin but handled below (?)
+        'form' => array('login_path' => '/login', 'check_path' => '/acount'),
+        'users' => function () use ($app) {
+            return new \Main\UserProvider($app['DB']);
+        },
+    ),
+
     'unsecured' => array(
+        'anonymous' => true,
         'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
     ),
 );
 
 $app['security.role_hierarchy'] = array(
     'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+);
+
+$app['security.access_rules'] = array(
+    array('^/admin', 'ROLE_ADMIN', 'https'),
+    array('^/account', 'ROLE_USER'),
 );
 
 // ----------------------------
@@ -84,7 +100,7 @@ $app->get('/food/{userID}', 'rest.controller:foodItemsGet')
 
 
 // -------- WEB PAGES --------
-//TODO: Our web handlers
+//TODO: Web handlers
 
 $app->get('/', function() use($app) {
   return $app['twig']->render('index.html.twig', array(
