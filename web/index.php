@@ -33,9 +33,9 @@ $app['rest.handler'] = function() use ($app) {
     return new \Handler\Controller($app['DB']);
 };
 
-//TODO:@Security
+//TODO: Security
 
-// Our web handlers
+
 //TODO: All get/posts
 
 $app->get('/food/{foodID}', 'rest.controller:foodItemGet')
@@ -44,6 +44,7 @@ $app->get('/food/{foodID}', 'rest.controller:foodItemGet')
 $app->get('/food/{userID}', 'rest.controller:foodItemsGet')
     -> assert('userID', '\d+');
 
+//TODO: Our web handlers
 
 $app->get('/', function() use($app) {
   return $app['twig']->render('index.html.twig', array(
@@ -51,6 +52,11 @@ $app->get('/', function() use($app) {
   ));
 })->bind('home');
 
+$app->get('/scanner', function() use($app) {
+    return $app['twig']->render('scanner.html.twig', array(
+        'bodytags' => 'onResize=resize()'
+    ));
+});
 
 
 // Error Handlings
@@ -70,11 +76,6 @@ $app->error(function (\Exception $e, $code) use ($app) {
     return new Response($message);
 });
 
-$app->get('/scanner', function() use($app) {
-  $app['monolog']->addDebug('logging output.'); //TODO ?
-  return $app['twig']->render('scanner.html.twig', array(
-      'bodytags' => "onResize=resize()"
-  ));
-});
+//Finally Run
 
 $app->run();
