@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% include 'header.html' %}
+</head>
+
+{% if bodytags is defined %}
+<body {{ bodytags }}>
+{% else %}
+<body>
+{% endif %}
+
+    {% include 'nav.html' %}
+
+    {% block content %}{% endblock %}
+
+    {% block footer %}{% endblock %}
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

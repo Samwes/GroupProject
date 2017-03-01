@@ -6,9 +6,6 @@ header('Access-Control-Allow-Origin: *');
 //TODO: Namespaces for everything
 //TODO: Change these files into something controllers route into
 
-checkAuth();
-$database = new DBDataMapper(getPDO());
-
 //HANDLE GET
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
 

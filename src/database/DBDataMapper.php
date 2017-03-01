@@ -1,5 +1,7 @@
 <?php
 
+namespace Database;
+
 class DBDataMapper
 {
     //Provides a data wrapper service for database interactions

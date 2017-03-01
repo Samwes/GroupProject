@@ -1,8 +1,9 @@
 <?php
 
-require __DIR__. '../vendor/autoload.php';
+require dirname(__DIR__) . '\vendor\autoload.php';
 
 $app = new Silex\Application();
+//Settings
 $app['debug'] = true;
 $app['controllers']
     ->requireHttps(); //We can change it so only some pages require https
@@ -11,6 +12,10 @@ $app['controllers']
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
   'monolog.logfile' => 'php://stderr',
 ));
+
+// TODO what is this
+$app->register(new Sorien\Provider\PimpleDumpProvider());
+//$app['pimpledump.output_dir'] = '/';
 
 // Register view rendering
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -22,17 +27,23 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 // Register URL generator
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-// Create our routing controllers
-//TODO: Classes!
-$protected = $app['controllers_factory'];
-$protected->before();
+// Register DB service
+$app['DB'] = function() {
+    return new \Database\DBDataMapper(\Database\getPDO());
+};
+
+// Register our routing controllers
+$app['rest.handler'] = function() use ($app) {
+    return new \Handler\Controller($app['DB']);
+};
 
 
 // Our web handlers
+//TODO: All get/posts
 
 $app->get('/', function() use($app) {
   $app['monolog']->addDebug('logging output.'); //TODO ?
-  return $app['twig']->render('index.twig');
+  return $app['twig']->render('index.html.twig');
 });
 
 $app->run();

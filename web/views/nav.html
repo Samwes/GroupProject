@@ -1,32 +1,39 @@
-<nav class="navbar navbar-default navbar-static-top navbar-inverse">
+<nav class="navbar navbar-light bg-faded navbar-static-top" id="search-navbar">
   <div class="container">
+    <a class="navbar-brand" href="#">FoodShare</a>
     <ul class="nav navbar-nav">
-      <li class="active">
-        <a href="/"><span class="glyphicon glyphicon-home"></span> Home</a>
+      <li class="nav-item">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" style="width: 40rem;">
       </li>
-      <li>
-        <a href="https://devcenter.heroku.com/articles/how-heroku-works"><span class="glyphicon glyphicon-user"></span> How Heroku Works</a>
+      <li class="nav-item">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle index" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Categories
+          </button>
+          <div class="dropdown-menu" id="topic-dropdown" aria-labelledby="dropdownMenu2">
+            <a class="dropdown-item" href="#">Drinks</a>
+            <a class="dropdown-item" href="#">Bakery</a>
+            <a class="dropdown-item" href="#">Cans & Jars</a>
+            <a class="dropdown-item" href="#">Dairy</a>
+            <a class="dropdown-item" href="#">Baking</a>
+            <a class="dropdown-item" href="#">Breakfast</a>
+            <a class="dropdown-item" href="#">Frozen</a>
+            <a class="dropdown-item" href="#">Meat</a>
+            <a class="dropdown-item" href="#">Fruit & Veg</a>
+            <a class="dropdown-item" href="#">Kitchen</a>
+            <a class="dropdown-item" href="#">Personal</a>
+            <a class="dropdown-item" href="#">Other</a>
+          </div>
+        </div>
       </li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-info-sign"></span> Getting Started Guides <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-ruby">Getting Started with Ruby on Heroku</a></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started with Node on Heroku</a></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-php">Getting Started with PHP on Heroku</a></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-python">Getting Started with Python on Heroku</a></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-java">Getting Started with Java on Heroku</a></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-go">Getting Started with Go on Heroku</a></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-clojure">Getting Started with Clojure on Heroku</a></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-scala">Getting Started with Scala on Heroku</a></li>
-            <li class="divider"></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-heroku-and-connect-without-local-dev">Getting Started on Heroku with Heroku Connect</a></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-jruby">Getting Started with Ruby on Heroku (Microsoft Windows)</a></li>
-          </ul>
+      <li class="nav-item">
+        <button class="btn" type="submit">Search</button>
       </li>
     </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li class="navbar-right">
-        <a href="https://devcenter.heroku.com"><span class="glyphicon glyphicon-book"></span> Heroku Dev Center</a>
+
+    <ul class="nav navbar-nav float-xs-right">
+      <li>
+        <button class="btn btn-primary" type="button">Account</button>
       </li>
     </ul>
   </div>
