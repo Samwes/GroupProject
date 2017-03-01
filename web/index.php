@@ -47,40 +47,33 @@ $app['rest.handler'] = function() use ($app) {
 // -------- SECURITY --------
 //TODO: @Security
 
-$app['security.firewalls'] = array(
-//    'admin' => array(
-//        'pattern' => '^/admin',
-//        'http' => true,
+//$app['security.firewalls'] = array(
+//    'login' => array(
+//        'pattern' => '^/login',  //Match all login pages
+//    ),
+//
+//    'secure' => array(
+//        'pattern' => '^/account',  //Doesn't match admin but handled below (?)
+//        'form' => array('login_path' => '/login', 'check_path' => '/acount'),
 //        'users' => function () use ($app) {
 //            return new \Main\UserProvider($app['DB']);
 //        },
 //    ),
-    'login' => array(
-        'pattern' => '^/login',  //Match all login pages
-    ),
-
-    'secure' => array(
-        'pattern' => '^/account',  //Doesn't match admin but handled below (?)
-        'form' => array('login_path' => '/login', 'check_path' => '/acount'),
-        'users' => function () use ($app) {
-            return new \Main\UserProvider($app['DB']);
-        },
-    ),
-
-    'unsecured' => array(
-        'anonymous' => true,
-        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
-    ),
-);
-
-$app['security.role_hierarchy'] = array(
-    'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
-);
-
-$app['security.access_rules'] = array(
-    array('^/admin', 'ROLE_ADMIN', 'https'),
-    array('^/account', 'ROLE_USER'),
-);
+//
+//    'unsecured' => array(
+//        'anonymous' => true,
+//        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
+//    ),
+//);
+//
+//$app['security.role_hierarchy'] = array(
+//    'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+//);
+//
+//$app['security.access_rules'] = array(
+//    array('^/admin', 'ROLE_ADMIN', 'https'),
+//    array('^/account', 'ROLE_USER'),
+//);
 
 // ----------------------------
 
