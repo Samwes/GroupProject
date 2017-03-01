@@ -16,14 +16,14 @@ class DBDataMapper
         if (null === $pdo) {
             //TODO: Swap on debug?
             $servername = 'mysql: host=mysql.dur.ac.uk;dbname=Cmfgk23_GPTest;port=3306';
-            $username = 'nobody';
+            $username = "nobody";
             $password = '';
 
             // Create connection
             try {
                 $pdo = new \PDO($servername, $username, $password,
                     array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::ATTR_PERSISTENT => true));
-            } catch (PDOException $e) {
+            } catch (\PDOException $e) {
                 die ('Database Connection failed: ' . $e->getMessage());
             }
         }
