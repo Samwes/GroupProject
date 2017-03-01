@@ -6,6 +6,7 @@ $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
 
+//TODO: HTTPs only important pages
 if (!$app['debug']){
     $app['controllers']
         ->requireHttps(); //We can change it so only some pages require https
@@ -56,7 +57,15 @@ $app['security.firewalls'] = array(
             'admin' => array('ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
         ),
     ),
+    'unsecured' => array(
+        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
+    ),
 );
+
+$app['security.role_hierarchy'] = array(
+    'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+);
+
 // ----------------------------
 
 

@@ -14,9 +14,8 @@ final class User implements AdvancedUserInterface
     private $credentialsNonExpired;
     private $accountNonLocked;
     private $roles;
-    private $salt;
 
-    public function __construct($username, $password, $salt, array $roles = array(), $enabled = true, $userNonExpired = true, $credentialsNonExpired = true, $userNonLocked = true)
+    public function __construct($username, $password, array $roles = array(), $enabled = true, $userNonExpired = true, $credentialsNonExpired = true, $userNonLocked = true)
     {
         if ('' === $username || null === $username) {
             throw new \InvalidArgumentException('The username cannot be empty.');
@@ -48,7 +47,6 @@ final class User implements AdvancedUserInterface
     
     public function getSalt()
     {
-        return $this->salt;
     }
 
     public function getUsername()

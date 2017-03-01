@@ -12,7 +12,7 @@ class UserProvider implements UserProviderInterface
 {
     /** @var DBDataMapper $DB */
     private $DB;
-    //TODO: Implement this
+    //TODO: Storing a user
     //TODO: Register all security components etc.
 
     public function __construct(DBDataMapper $DB)
@@ -28,7 +28,7 @@ class UserProvider implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 
-        return new User($user['username'], $user['password'], $user['salt'] ,explode(',', $user['roles']), true, true, true, true);
+        return new User($user['username'], $user['password'], explode(',', $user['roles']), true, true, true, true);
     }
 
     public function refreshUser(UserInterface $user)
