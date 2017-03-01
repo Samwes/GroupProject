@@ -24,7 +24,7 @@ class DBDataMapper
                 $pdo = new \PDO($servername, $username, $password,
                     array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::ATTR_PERSISTENT => true));
             } catch (\PDOException $e) {
-                die ('Database Connection failed: ' . $e->getMessage());
+                die ('Database Connection failed: ' . $e->getMessage() . $e->getTraceAsString());
             }
         }
         $this->pdo = $pdo;
