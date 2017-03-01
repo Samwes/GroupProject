@@ -6,7 +6,7 @@
 // FOOD NAME TO CATEGORY - https://spoonacular.com/food-api
 
 function getDataOpenFoodFacts(barcode, callback) {
-	var toReturn = {};
+	let toReturn = {};
 	$.getJSON("https://world.openfoodfacts.org/api/v0/product/"+barcode+".json", function(data) {
 		//console.log(data);
 		if (data.status_verbose === "product found") {

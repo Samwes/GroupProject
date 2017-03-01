@@ -1,0 +1,47 @@
+/* MOBILE */
+@media screen and (min-width: 544px) {
+  .card-columns {
+    column-count: 1;
+  }
+}
+
+/* TABLETS */
+@media screen and (min-width: 768px) {
+  .card-columns {
+    column-count: 2;
+  }
+}
+
+/* DESKTOP */
+@media screen and (min-width: 992px) {
+  .card-columns {
+    column-count: 2;
+  }
+}
+
+.card {
+  border-radius: 0 !important;
+  margin-bottom: 0;
+  border: 0;
+}
+
+.square-border {
+  border-radius: 0
+}
+
+.card-group {
+  margin-top: -1px;
+}
+
+.card-text {
+  margin-bottom: 2px;
+  font-size: 1rem;
+}
+
+.card-columns {
+  column-gap: 0;
+}
+
+.col-md-6 {
+  padding: 0;
+}

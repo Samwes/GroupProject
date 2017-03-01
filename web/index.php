@@ -43,7 +43,9 @@ $app['rest.handler'] = function() use ($app) {
 
 $app->get('/', function() use($app) {
   $app['monolog']->addDebug('logging output.'); //TODO ?
-  return $app['twig']->render('index.html.twig');
+  return $app['twig']->render('index.html.twig', array(
+      'bodytags' => "onResize=resize()"
+  ));
 });
 
 $app->run();
