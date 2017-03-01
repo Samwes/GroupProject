@@ -25,6 +25,12 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 // Registering service controllers
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
+// Register session storage for between request data store
+$app->register(new Silex\Provider\SessionServiceProvider());
+
+// Register security service
+$app->register(new Silex\Provider\SecurityServiceProvider());
+
 // Register DB service
 $app['DB'] = function() {
     return new \Database\DBDataMapper(\Database::getPDO());
@@ -39,7 +45,18 @@ $app['rest.handler'] = function() use ($app) {
 
 // -------- SECURITY --------
 //TODO: @Security
+//app boot or some shit?
 
+$app['security.firewalls'] = array(
+    'admin' => array(
+        'pattern' => '^/admin',
+        'http' => true,
+        'users' => array(
+            // raw password is foo
+            'admin' => array('ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
+        ),
+    ),
+);
 // ----------------------------
 
 

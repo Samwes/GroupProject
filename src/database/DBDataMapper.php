@@ -14,8 +14,22 @@ class DBDataMapper
         $this->pdo = $pdo;
     }
 
-    public function getUserByUsername(string $un){
-        executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
+    public function getUserByUsername(string $username){
+        $query =  'SELECT * FROM `usertable` WHERE username = :un';
+        $result = NULL;
+        try {
+            $stmt = $this->pdo->prepare($query);
+
+            $stmt->execute(array(
+                ':un' => strtolower($username)
+            ));
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Getting user failed: ' . $e->getMessage();
+        }
+        $stmt = NULL;
+        return $result;
     }
 
     public function getFoodItemsByUserID(int $id)
@@ -64,8 +78,8 @@ class DBDataMapper
 
     public function addNewFoodItem($name, $expirDate, $category, $userID,$desc, $lat, $long, $amount, $weight, $image)
     {
-        $query = "INSERT INTO itemtable (name, expirydate, category,userid,description,latit,longit,amount,weight,image) 
-        VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)";
+        $query = 'INSERT INTO itemtable (name, expirydate, category,userid,description,latit,longit,amount,weight,image) 
+        VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)';
         $result = true;
         try {
             $stmt = $this->pdo->prepare($query);
