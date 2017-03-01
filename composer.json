@@ -8,7 +8,8 @@
     "symfony/security": "^3.2",
     "symfony/form": "^3.2",
     "symfony/validator": "^3.2",
-    "sorien/silex-pimple-dumper": "~2.0"
+    "sorien/silex-pimple-dumper": "~2.0",
+    "php" : "^7.0.2"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
