@@ -5,12 +5,12 @@ require dirname(__DIR__) . '\vendor\autoload.php';
 $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
-$app['controllers']
-    ->requireHttps(); //We can change it so only some pages require https
+//$app['controllers']
+//    ->requireHttps(); //We can change it so only some pages require https
 
 // Register the monolog logging service
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
-  'monolog.logfile' => 'php://stderr',
+  'monolog.logfile' => __DIR__.'/development.log'
 ));
 
 // TODO what is this
@@ -25,7 +25,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 // Register URL generator
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+//$app->register(new Silex\Provider\RoutingServiceProvider());
 
 // Register DB service
 $app['DB'] = function() {

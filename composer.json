@@ -3,7 +3,7 @@
     "silex/silex": "~2.0",
     "monolog/monolog": "^1.4",
     "twig/twig": "~2.0",
-    "symfony/twig-bridge": "^2",
+    "symfony/twig-bridge": "~3",
     "roave/security-advisories": "dev-master",
     "symfony/security": "^3.2",
     "symfony/form": "^3.2",
