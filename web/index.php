@@ -56,7 +56,7 @@ $app['security.firewalls'] = array(
 
     'secure' => array(
         'pattern' => '^/account',  //Doesn't match admin but handled below (?)
-        'form' => array('login_path' => '/login', 'check_path' => '/acount'),
+        'form' => array('login_path' => '/login', 'check_path' => '/account'),
         'users' => function () use ($app) {
             return new \Main\UserProvider($app['DB']);
         },
@@ -91,8 +91,8 @@ $app->get('/food/{userID}', 'rest.controller:foodItemsGet')
     -> assert('userID', '\d+');
 
 //TODO: Secure post for registered users only
-$app->post('/food', 'rest.controller:foodItemPost')
-    -> secure('ROLE_USER');
+$app->post('/food', 'rest.controller:foodItemPost');
+//    -> secure('ROLE_USER');
 
 
 // ----------------------------
@@ -113,6 +113,10 @@ $app->get('/scanner', function() use($app) {
 });
 
 $app->get('/admin', function() use($app) {
+    return $app['twig']->render('admin.html.twig');
+});
+
+$app->get('/account', function() use($app) {
     return $app['twig']->render('admin.html.twig');
 });
 
