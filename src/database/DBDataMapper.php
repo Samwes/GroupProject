@@ -6,20 +6,60 @@ class DBDataMapper
 {
     //Provides a data wrapper service for database interactions
 
-    /** @var PDO pdo */
+    /** @var \PDO pdo */
     private $pdo;
 
-    public function __construct(PDO $pdo)
+    public function __construct(\PDO $pdo = null)
     {
+        //TODO: Move DB login into ini file
+
+        if (null === $pdo) {
+            //TODO: Swap on debug?
+            $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+
+//            die (var_dump($url));
+
+            $servername = $url["host"];
+            $username = $url["user"];
+            $password = $url["pass"];
+            $db = substr($url["path"], 1);
+            $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername;  //. '/' .$url['query'];
+
+            // Create connection
+            try {
+                $pdo = new \PDO($dsn, $username, $password,
+                    array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::ATTR_PERSISTENT => true));
+            } catch (\PDOException $e) {
+                die ('Database Connection failed in create: ' . $e->getMessage());
+            }
+        }
         $this->pdo = $pdo;
     }
 
-    public function getFoodItemsByUserID($id)
+    public function getUserByUsername(string $username){
+        $query =  'SELECT * FROM `usertable` WHERE username = :un';
+        $result = NULL;
+        try {
+            $stmt = $this->pdo->prepare($query);
+
+            $stmt->execute(array(
+                ':un' => strtolower($username)
+            ));
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Getting user failed: ' . $e->getMessage();
+        }
+        $stmt = NULL;
+        return $result;
+    }
+
+    public function getFoodItemsByUserID(int $id)
     {
-        $query = "SELECT `expirydate`,`category`,`foodid`,`name`,`description`,`latit`,`longit`,`amount`,
+        $query = 'SELECT `expirydate`,`category`,`foodid`,`name`,`description`,`latit`,`longit`,`amount`,
                   `weight` ,`image`,`active`,`hidden` 
                     FROM `itemtable`
-                    WHERE `userid` = :id";
+                    WHERE `userid` = :id';
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -38,10 +78,10 @@ class DBDataMapper
 
     public function getFoodItemByID($id)
     {
-        $query = "SELECT `expirydate`,`category`,`userid`,`name`,`description`,`latit`,`longit`,`amount`,
+        $query = 'SELECT `expirydate`,`category`,`userid`,`name`,`description`,`latit`,`longit`,`amount`,
                   `weight` ,`image`,`active`,`hidden` 
                     FROM `itemtable`
-                    WHERE `foodid` = :id";
+                    WHERE `foodid` = :id';
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -58,10 +98,10 @@ class DBDataMapper
         return $result;
     }
 
-    public function addNewFoodItem($name, $expirDate, $category, $userID,$desc, $lat, $long, $amount, $weight, $image)
+    public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image)
     {
-        $query = "INSERT INTO itemtable (name, expirydate, category,userid,description,latit,longit,amount,weight,image) 
-        VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)";
+        $query = 'INSERT INTO itemtable (name, expirydate, category,userid,description,latit,longit,amount,weight,image) 
+        VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)';
         $result = true;
         try {
             $stmt = $this->pdo->prepare($query);

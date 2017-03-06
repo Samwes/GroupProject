@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layout.twig" %}
 
 {% block head %}
@@ -24,3 +25,31 @@
 	<script src="js/barcode.js" type="text/javascript"></script>
 	<script src="js/scanner.js" type="text/javascript"></script>
 {% endblock %}
+=======
+{% extends "layout.twig" %}
+
+{% block head %}
+<title>Barcode Scanner</title>
+{% endblock %}
+
+{% block content %}
+	<h1>Barcode Scanner</h1>
+
+	<br>
+
+	<input type="file" accept="image/*" capture="camera"/>
+
+	<p id="code">Ready For Scan</p>
+	<p id="name"></p>
+	<p id="description"></p>
+	<p id="category"></p>
+	<p id="weight"></p>
+	<img id="image" src=""></img>
+{% endblock %}
+
+{% block scripts %}
+	<script src="js/quaggaJS-master/dist/quagga.js" type="text/javascript"></script>
+	<script src="js/barcode.js" type="text/javascript"></script>
+	<script src="js/scanner.js" type="text/javascript"></script>
+{% endblock %}
+>>>>>>> 5ac2adbe59c9bc32b291d1d0270ce9fec60bbd7c

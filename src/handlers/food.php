@@ -60,7 +60,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if(isset($_POST["image"])) {
-        $target_dir = "images/food/";
+        $target_dir = 'images/food/';
         $GUID = GUIDv4();
         $imagedir = $target_dir . $GUID;
         $uploadOk = 1;
@@ -74,7 +74,6 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (DEBUG) echo "File is not an image.";
             $uploadOk = 0;
         }
-
         if (file_exists($imagedir)) {
             if (DEBUG) echo "Sorry, file already exists.";
             $uploadOk = 0;
