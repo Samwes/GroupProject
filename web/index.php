@@ -95,7 +95,6 @@ $app->post('/food', 'rest.controller:foodItemPost');
 //    -> secure('ROLE_USER');
 
 
-
 // ----------------------------
 
 
