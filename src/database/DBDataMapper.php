@@ -17,16 +17,17 @@ class DBDataMapper
             //TODO: Swap on debug?
             $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
-            die (var_dump($url));
+//            die (var_dump($url));
 
             $servername = $url["host"];
             $username = $url["user"];
             $password = $url["pass"];
             $db = substr($url["path"], 1);
+            $dsn = $url['scheme'].':dbname=' .$db.$servername. '/' .$url['query'];
 
             // Create connection
             try {
-                $pdo = new \PDO($servername, $username, $password,
+                $pdo = new \PDO($dsn, $username, $password,
                     array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::ATTR_PERSISTENT => true));
             } catch (\PDOException $e) {
                 die ('Database Connection failed: ' . $e->getMessage());
