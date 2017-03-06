@@ -17,7 +17,7 @@ class DBDataMapper
             //TODO: Swap on debug?
             $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
-            die ($url);
+            die (var_dump($url));
 
             $servername = $url["host"];
             $username = $url["user"];
