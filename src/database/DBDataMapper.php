@@ -23,14 +23,14 @@ class DBDataMapper
             $username = $url["user"];
             $password = $url["pass"];
             $db = substr($url["path"], 1);
-            $dsn = $url['scheme'].':dbname=' .$db.$servername. '/' .$url['query'];
+            $dsn = $url['scheme'].':dbname=' .$db.$servername;  //. '/' .$url['query'];
 
             // Create connection
             try {
                 $pdo = new \PDO($dsn, $username, $password,
                     array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::ATTR_PERSISTENT => true));
             } catch (\PDOException $e) {
-                die ('Database Connection failed: ' . $e->getMessage());
+                die ('Database Connection failed in create: ' . $e->getMessage());
             }
         }
         $this->pdo = $pdo;
