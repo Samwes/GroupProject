@@ -1,5 +1,7 @@
 <?php
 
+//TODO: Have a rerouter hosted on community file server that executed input command on database and sends result?
+
 require __DIR__. '/../vendor/autoload.php';
 
 $app = new Silex\Application();
@@ -30,7 +32,7 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
 
 // Register security service TODO turn on
-//$app->register(new Silex\Provider\SecurityServiceProvider());
+$app->register(new Silex\Provider\SecurityServiceProvider());
 
 // Register DB service
 $app['DB'] = function() {
@@ -47,33 +49,33 @@ $app['rest.handler'] = function() use ($app) {
 // -------- SECURITY --------
 //TODO: @Security
 
-//$app['security.firewalls'] = array(
-//    'login' => array(
-//        'pattern' => '^/login',  //Match all login pages
-//    ),
-//
-//    'secure' => array(
-//        'pattern' => '^/account',  //Doesn't match admin but handled below (?)
-//        'form' => array('login_path' => '/login', 'check_path' => '/acount'),
-//        'users' => function () use ($app) {
-//            return new \Main\UserProvider($app['DB']);
-//        },
-//    ),
-//
-//    'unsecured' => array(
-//        'anonymous' => true,
-//        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
-//    ),
-//);
-//
-//$app['security.role_hierarchy'] = array(
-//    'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
-//);
-//
-//$app['security.access_rules'] = array(
-//    array('^/admin', 'ROLE_ADMIN', 'https'),
-//    array('^/account', 'ROLE_USER'),
-//);
+$app['security.firewalls'] = array(
+    'login' => array(
+        'pattern' => '^/login',  //Match all login pages
+    ),
+
+    'secure' => array(
+        'pattern' => '^/account',  //Doesn't match admin but handled below (?)
+        'form' => array('login_path' => '/login', 'check_path' => '/acount'),
+        'users' => function () use ($app) {
+            return new \Main\UserProvider($app['DB']);
+        },
+    ),
+
+    'unsecured' => array(
+        'anonymous' => true,
+        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
+    ),
+);
+
+$app['security.role_hierarchy'] = array(
+    'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+);
+
+$app['security.access_rules'] = array(
+    array('^/admin', 'ROLE_ADMIN', 'https'),
+    array('^/account', 'ROLE_USER'),
+);
 
 // ----------------------------
 
@@ -87,6 +89,12 @@ $app->get('/food/{foodID}', 'rest.controller:foodItemGet')
 
 $app->get('/food/{userID}', 'rest.controller:foodItemsGet')
     -> assert('userID', '\d+');
+
+//TODO: Secure post for registered users only
+$app->post('/food', 'rest.controller:foodItemPost');
+//    -> secure('ROLE_USER');
+
+
 
 // ----------------------------
 

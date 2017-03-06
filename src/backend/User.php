@@ -9,18 +9,20 @@ final class User implements AdvancedUserInterface
 {
     private $username;
     private $password;
+    private $userID;
     private $enabled;
     private $accountNonExpired;
     private $credentialsNonExpired;
     private $accountNonLocked;
     private $roles;
 
-    public function __construct($username, $password, array $roles = array(), $enabled = true, $userNonExpired = true, $credentialsNonExpired = true, $userNonLocked = true)
+    public function __construct($username, $password, $userid, array $roles = array(), $enabled = true, $userNonExpired = true, $credentialsNonExpired = true, $userNonLocked = true)
     {
         if ('' === $username || null === $username) {
             throw new \InvalidArgumentException('The username cannot be empty.');
         }
 
+        $this->userID = $userid;
         $this->username = $username;
         $this->password = $password;
         $this->enabled = $enabled;
@@ -38,6 +40,11 @@ final class User implements AdvancedUserInterface
     public function getRoles()
     {
         return $this->roles;
+    }
+
+    public function getID()
+    {
+        return $this->userID;
     }
 
     public function getPassword()

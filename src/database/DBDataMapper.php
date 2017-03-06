@@ -24,7 +24,7 @@ class DBDataMapper
                 $pdo = new \PDO($servername, $username, $password,
                     array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::ATTR_PERSISTENT => true));
             } catch (\PDOException $e) {
-                die ('Database Connection failed: ' . $e->getMessage() . $e->getTraceAsString());
+                die ('Database Connection failed: ' . $e->getMessage());
             }
         }
         $this->pdo = $pdo;
@@ -92,7 +92,7 @@ class DBDataMapper
         return $result;
     }
 
-    public function addNewFoodItem($name, $expirDate, $category, $userID,$desc, $lat, $long, $amount, $weight, $image)
+    public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image)
     {
         $query = 'INSERT INTO itemtable (name, expirydate, category,userid,description,latit,longit,amount,weight,image) 
         VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)';

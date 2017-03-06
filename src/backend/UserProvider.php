@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Database\DBDataMapper;
+use Main\User;
 
 class UserProvider implements UserProviderInterface
 {
@@ -29,7 +30,7 @@ class UserProvider implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 
-        return new User($user['username'], $user['password'], explode(',', $user['roles']), true, true, true, true);
+        return new User($user['username'], $user['password'], $user['userid'], explode(',', $user['roles']), true, true, true, true);
     }
 
     public function refreshUser(UserInterface $user)
