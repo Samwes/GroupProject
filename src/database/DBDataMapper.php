@@ -15,9 +15,9 @@ class DBDataMapper
 
         if (null === $pdo) {
             //TODO: Swap on debug?
-            $servername = 'mysql: host=databases.000webhost.com;dbname=id997445_groupproject;port=3306';
-            $username = 'id997445_groupproject';
-            $password = 'groupproject';
+            $servername = 'mysql: host=mysql.dur.ac.uk;dbname=Cmfgk23_GPTest;port=3306';
+            $username = 'nobody';
+            $password = '';
 
             // Create connection
             try {
