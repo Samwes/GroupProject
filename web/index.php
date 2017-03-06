@@ -58,7 +58,7 @@ $app['security.firewalls'] = array(
 
     'secure' => array(
         'pattern' => '^/account',  //Doesn't match admin but handled below (?)
-        'form' => array('login_path' => '/login', 'check_path' => '/acount'),
+        'form' => array('login_path' => '/login', 'check_path' => '/account'),
         'users' => function () use ($app) {
             return new \Main\UserProvider($app['DB']);
         },
