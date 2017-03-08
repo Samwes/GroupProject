@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {% extends "layout.twig" %}
 
 {% block head %}
@@ -6,50 +6,165 @@
 {% endblock %}
 
 {% block content %}
-	<h1>Barcode Scanner</h1>
+<br>
 
-	<br>
+<!-- MAIN FORM SECTION -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<!-- INPUT A BARCODE -->
+			<h5>Scan A Barcode</h5>
+			<label class="custom-file">
+				<input type="file" accept="image/*" capture="camera" class="custom-file-input form-control-file" aria-describedby="fileHelp">
+				<span class="custom-file-control"></span>
+			</label>
+			<!--<label class="">
+				<input type="file" accept="image/*" capture="camera" class="form-control-file" aria-describedby="fileHelp">
+			</label>-->
+			<small id="fileHelp" class="form-text text-muted">Uses camera on mobile device</small>
+			<br>
+		</div>
+	</div>
 
-	<input type="file" accept="image/*" capture="camera"/>
+	<div class="row">
+		<div class="col-md-6">
+			<form>
+				<!-- NAME INPUT -->
+				<div class="form-group">
+					<label for="nameTextInput">Name</label>
+					<input class="form-control mr-sm-2 square-border" type="text" placeholder="Name" id="nameTextInput">
+				</div>
 
-	<p id="code">Ready For Scan</p>
-	<p id="name"></p>
-	<p id="description"></p>
-	<p id="category"></p>
-	<p id="weight"></p>
-	<img id="image" src=""></img>
+				<div class="form-group">
+					<label for="categorySelect">Category</label>
+					<!-- Category INPUT -->
+					<select class="form-control square-border" id="categorySelect">
+						<!--
+						<a class="dropdown-item" href="#">Fresh Food</a>
+						<a class="dropdown-item" href="#">Bakery</a>
+						<a class="dropdown-item" href="#">Food Cupboard</a>
+						<a class="dropdown-item" href="#">Frozen Food</a>
+						<a class="dropdown-item" href="#">Drinks</a>
+						<a class="dropdown-item" href="#">Baby</a>
+						<a class="dropdown-item" href="#">Personal</a>
+						<a class="dropdown-item" href="#">Pet Care</a>
+						<a class="dropdown-item" href="#">Household</a>
+						-->
+						<option>Fresh Food</option>
+						<option>Bakery</option>
+						<option>Food Cupboard</option>
+						<option>Frozen Food</option>
+						<option>Drinks</option>
+						<option>Baby</option>
+						<option>Personal</option>
+						<option>Pet Care</option>
+						<option>Household</option>
+					</select>
+				</div>
+				<p id="tempCategory">Puts Category Here Instead At The Moment</p>
+
+				<!-- EXPIRY INPUT -->
+				<div class="form-group">
+					<label for="dateInput">Expiry Date</label>
+					<input class="form-control mr-sm-2 square-border" type="date" id="dateInput">
+				</div>
+
+				<!-- AMOUNT INPUT -->
+				<div class="form-group">
+					<label for="amountNumberInput">Amount</label>
+					<input class="form-control mr-sm-2 square-border" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="amountNumberInput">
+				</div>
+
+				<!-- WEIGHT INPUT -->
+				<div class="form-group">
+					<label for="weightNumberInput">Weight (g)</label>
+					<input class="form-control mr-sm-2 square-border" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="weightNumberInput">
+				</div>
+
+				<!-- DESCRIPTION INPUT -->
+				<div class="form-group">
+					<label for="descriptionTextarea">Description</label>
+					<textarea class="form-control square-border" id="descriptionTextarea" rows="3"></textarea>
+				</div>
+
+				<!-- SUBMIT BUTTON -->
+				<button type="submit" class="btn btn-primary">Add Food</button>
+			</form>
+		</div>
+		<div class="col-md-6">
+			<h5>Image Uploader</h5>
+			<p>Click 'Select Image' or Drag and Drop into pane</p>
+			<img id="tempImage" src=""></img>
+
+			<div class="image-editor">
+				<input type="file" accept="image/*" capture="camera" class="cropit-image-input hidden-xs-up">
+				<button class="btn btn-primary select-image-btn">Select Image</button>
+				<div class="cropit-preview">
+				</div>
+				<button class="btn btn-link rotate-ccw"><i class="fa fa-undo" aria-hidden="true"></i></button>
+				<button class="btn btn-link rotate-cw"><i class="fa fa-repeat" aria-hidden="true"></i></button>
+				<i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;" ></i>
+				<input class="cropit-image-zoom-input" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
+				<i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i>
+
+			</div>
+
+		</div>
+	</div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-	<script src="js/quaggaJS-master/dist/quagga.js" type="text/javascript"></script>
-	<script src="js/barcode.js" type="text/javascript"></script>
-	<script src="js/scanner.js" type="text/javascript"></script>
+<!-- CORRECT SIZES OF ELEMENTS -->
+<script>
+	$(document).ready(function() {
+		$('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		$('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').width() - $('#main-search-button').width() - $('#user-popover').width() - 150);
+		$('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
+	});
+	function resize() {
+		$('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		$('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').width() - $('#main-search-button').width() - $('#user-popover').width()  - 150);
+		$('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
+	}
+</script>
+
+<script>
+// Slider
+$('#ex1').slider({
+	formatter: function(value) {
+		return 'Current value: ' + value;
+	}
+});
+</script>
+
+<script>
+$(function() {
+	$('.image-editor').cropit();
+
+	$('.rotate-cw').click(function() {
+		$('.image-editor').cropit('rotateCW');
+	});
+	$('.rotate-ccw').click(function() {
+		$('.image-editor').cropit('rotateCCW');
+	});
+	$('.select-image-btn').click(function() {
+		$('.cropit-image-input').click();
+	});
+	$('.cropit-preview-image-container').click(function() {
+		if($('.image-editor').cropit('imageSrc') == "") {
+			$('.cropit-image-input').click();
+		}
+	});
+	$('.export').click(function() {
+		var imageData = $('.image-editor').cropit('export');
+		window.open(imageData);
+	});
+});
+</script>
+
+<script src="barcode.js" type="text/javascript"></script>
+<script src="scanner.js" type="text/javascript"></script>
 {% endblock %}
-=======
-{% extends "layout.twig" %}
-
-{% block head %}
-<title>Barcode Scanner</title>
-{% endblock %}
-
-{% block content %}
-	<h1>Barcode Scanner</h1>
-
-	<br>
-
-	<input type="file" accept="image/*" capture="camera"/>
-
-	<p id="code">Ready For Scan</p>
-	<p id="name"></p>
-	<p id="description"></p>
-	<p id="category"></p>
-	<p id="weight"></p>
-	<img id="image" src=""></img>
-{% endblock %}
-
-{% block scripts %}
-	<script src="js/quaggaJS-master/dist/quagga.js" type="text/javascript"></script>
-	<script src="js/barcode.js" type="text/javascript"></script>
-	<script src="js/scanner.js" type="text/javascript"></script>
-{% endblock %}
->>>>>>> 5ac2adbe59c9bc32b291d1d0270ce9fec60bbd7c

@@ -6,33 +6,33 @@
 
 {%  block content %}
 <br>
-<!-- SEARCH OPTIONS -->
-<div class="container">
+
+<div class="container hidden-md-down">
   <form class="form-inline" id="options">
     <label class="sr-only" for="inlineFormInputGroup">Location</label>
     <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
       <div class="input-group-addon square-border"><i class="fa fa-search" aria-hidden="true"></i></div>
-      <input type="text" title="Location" class="form-control square-border" id="pac-input" placeholder="Location">
+      <input type="text" title="Location" class="form-control square-border" id="pac-input" placeholder="Location" latitude="" longitude="">
     </div>
 
     <label class="sr-only" for="inlineFormInputGroup">Amount</label>
     <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
       <div class="input-group-addon square-border"><i class="fa fa-hashtag" aria-hidden="true"></i></div>
-      <input type="number" title="Quantity" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
-      <input type="number" title="Quantity" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+      <input id="amount-min" type="number" title="Quantity" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+      <input id="amount-max" type="number" title="Quantity" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
     </div>
 
     <label class="sr-only" for="inlineFormInputGroup">Weight</label>
     <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
       <div class="input-group-addon square-border"><i class="fa fa-balance-scale" aria-hidden="true"></i></div>
-      <input type="number" title="Weight" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
-      <input type="number" title="Weight" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+      <input id="weight-min" type="number" title="Weight" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+      <input id="weight-max" type="number" title="Weight" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
     </div>
 
-    <button type="button" class="btn square-border">Refresh</button>
+    <button id="refresh" type="button" class="btn square-border">Refresh</button>
 
     <div class="btn-group mr-1 float-xs-right" role="group" aria-label="First group" style="margin: 0 !important;">
-      <button id="fake-button" type="button" class="btn btn-secondary square-border">Sort By:</button>
+      <button id="fake-button" type="button" class="btn btn-secondary square-border hidden-lg-down">Sort By:</button>
       <button id="radius-sort" type="button" class="btn btn-secondary"><i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i> Radius</button>
       <button id="weight-sort" type="button" class="btn btn-secondary"><i id="weight-sort-icon" class="" aria-hidden="true"></i>  Weight</button>
       <button id="expiry-sort" type="button" class="btn btn-secondary square-border"><i id="expiry-sort-icon" class="" aria-hidden="true"></i> Expiry</button>
@@ -41,100 +41,463 @@
   </form>
 </div>
 
+<!-- MOBILE SEARCH OPTIONS -->
+<div class="container hidden-lg-up">
+  <p>
+    <button class="btn btn-secondary square-border" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseExample" style="width:49%;">
+      Filter
+    </button>
+    <button class="btn btn-secondary square-border" type="button" data-toggle="collapse" data-target="#collapseSort" aria-expanded="false" aria-controls="collapseExample" style="width:49%;">
+      Sort
+    </button>
+  </p>
+  <div class="collapse" id="collapseFilter">
+    <!-- FILTER OPTIONS -->
+    <div class="card card-block">
+      <form class="form-group" id="options">
+        <h5>Category</h5>
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle index square-border" style="margin-right: -17px;" type="button" id="categories-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Categories
+          </button>
+          <div class="dropdown-menu" id="topic-dropdown" aria-labelledby="categories-dropdown">
+            <a class="dropdown-item" href="#">Fresh Food</a>
+            <a class="dropdown-item" href="#">Bakery</a>
+            <a class="dropdown-item" href="#">Food Cupboard</a>
+            <a class="dropdown-item" href="#">Frozen Food</a>
+            <a class="dropdown-item" href="#">Drinks</a>
+            <a class="dropdown-item" href="#">Baby</a>
+            <a class="dropdown-item" href="#">Personal</a>
+            <a class="dropdown-item" href="#">Pet Care</a>
+            <a class="dropdown-item" href="#">Household</a>
+          </div>
+        </div>
+
+        <br>
+
+        <h5>Location</h5>
+        <label class="sr-only" for="locationInputGroup">Location</label>
+        <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
+          <div class="input-group-addon square-border"><i class="fa fa-search" aria-hidden="true"></i></div>
+          <input type="text" title="Location" class="form-control square-border" id="pac-input" placeholder="Location">
+        </div>
+
+        <br>
+
+        <h5>Amount</h5>
+        <label class="sr-only" for="amountInputGroup">Amount</label>
+        <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
+          <div class="input-group-addon square-border"><i class="fa fa-hashtag" aria-hidden="true"></i></div>
+          <input type="number" title="Quantity" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+          <input type="number" title="Quantity" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        </div>
+
+        <br>
+
+        <h5>Weight</h5>
+        <label class="sr-only" for="weightInputGroup">Weight</label>
+        <div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
+          <div class="input-group-addon square-border"><i class="fa fa-balance-scale" aria-hidden="true"></i></div>
+          <input type="number" title="Weight" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+          <input type="number" title="Weight" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+        </div>
+
+        <br>
+
+        <button type="button" class="btn square-border">Refresh</button>
+
+      </form>
+    </div>
+  </div>
+  <div class="collapse" id="collapseSort">
+    <!-- SORT OPTIONS -->
+    <div class="card card-block">
+      <div class="btn-group mr-1" role="group" aria-label="First group" style="margin: 0 !important;">
+        <div class="container">
+          <div class="row">
+            <div class="col-xs-4">
+              <button id="radius-sort" type="button" class="btn btn-secondary square-border"><i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i> Radius</button>
+            </div>
+            <div class="col-xs-4">
+              <button id="weight-sort" type="button" class="btn btn-secondary square-border"><i id="weight-sort-icon" class="" aria-hidden="true"></i>  Weight</button>
+            </div>
+            <div class="col-xs-4">
+              <button id="expiry-sort" type="button" class="btn btn-secondary square-border"><i id="expiry-sort-icon" class="" aria-hidden="true"></i> Expiry</button>
+            </div>
+          </div>
+        </div>
+        <br>
+        <button id="radius-sort" type="button" class="btn btn-secondary square-border" style="width:33%;"><i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i> Radius</button>
+        <button id="weight-sort" type="button" class="btn btn-secondary" style="width:33%;"><i id="weight-sort-icon" class="" aria-hidden="true"></i>  Weight</button>
+        <button id="expiry-sort" type="button" class="btn btn-secondary square-border" style="width:33%;"><i id="expiry-sort-icon" class="" aria-hidden="true"></i> Expiry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <br>
 
 <div class="container main">
   <div class="row">
     <!-- FOOD ITEMS -->
     <!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
-    <div class="col-md-6" style="overflow: scroll; overflow-x:hidden;" id="items" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
+    <div class="col-md-6 no-padding" style="overflow: scroll; overflow-x:hidden;" id="items" onmouseover="document.body.style.overflow='hidden';" onmouseout="document.body.style.overflow='auto';">
       <div class="container" style="padding: 0;">
-        <div class="card-columns" id="item-cards">
+        <div class="card-columns" id="item-cards" style="column-count: 1;">
           <div class="card">
-            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">Oranges</h4>
-              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-              <p class="card-text"><strong>Amount: </strong>4</p>
-              <p class="card-text"><strong>Weight: </strong>500g</p>
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card">
-            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">Oranges</h4>
-              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-              <p class="card-text"><strong>Amount: </strong>4</p>
-              <p class="card-text"><strong>Weight: </strong>500g</p>
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card">
-            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">Oranges</h4>
-              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-              <p class="card-text"><strong>Amount: </strong>4</p>
-              <p class="card-text"><strong>Weight: </strong>500g</p>
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card">
-            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">Oranges</h4>
-              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-              <p class="card-text"><strong>Amount: </strong>4</p>
-              <p class="card-text"><strong>Weight: </strong>500g</p>
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card">
-            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">Oranges</h4>
-              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-              <p class="card-text"><strong>Amount: </strong>4</p>
-              <p class="card-text"><strong>Weight: </strong>500g</p>
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card">
-            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">Oranges</h4>
-              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-              <p class="card-text"><strong>Amount: </strong>4</p>
-              <p class="card-text"><strong>Weight: </strong>500g</p>
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card">
-            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">Oranges</h4>
-              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-              <p class="card-text"><strong>Amount: </strong>4</p>
-              <p class="card-text"><strong>Weight: </strong>500g</p>
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card">
-            <img class="card-img-top" src="res/sample.jpg" alt="Card image cap">
-            <div class="card-block">
-              <h4 class="card-title">Oranges</h4>
-              <p class="card-text"><strong>Description: </strong>Tasty Oranges</p>
-              <p class="card-text"><strong>Expiry Date: </strong>21/03/2017</p>
-              <p class="card-text"><strong>Amount: </strong>4</p>
-              <p class="card-text"><strong>Weight: </strong>500g</p>
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
+          <div class="card">
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row">
+              <div class="col-xs-4" style="padding-right:0">
+                <img class="card-img-top" src="res/coal.jpg" alt="Card image cap" style="width:100%;">
+              </div>
+              <div class="col-xs-8">
+                <div class="card-block" style="padding:0">
+                  <h5 class="card-title">Coal</h5>
+                  <p style="font-size:0.8em; margin-bottom:5px">Some lovely and tasty coal for all to enjoy ♥</p>
+                  <table class="table table-sm">
+                    <tbody style="font-size: 0.8em">
+                      <tr>
+                        <td scope="row">Expiry Date:</th>
+                        <td>21/03/2017</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Amount:</th>
+                        <td>5</td>
+                      </tr>
+                      <tr>
+                        <td scope="row">Weight:</th>
+                        <td>500g</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
     <!-- MAP -->
-    <div class="col-md-6">
+    <div class="col-md-6 no-padding">
       <div id=map></div>
     </div>
 
@@ -152,10 +515,14 @@
   $(document).ready(function() {
     $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
     $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+    $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').width() - $('#main-search-button').width() - $('#user-popover').width() - 150);
+    $('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
   });
   function resize() {
     $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
     $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+    $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').width() - $('#main-search-button').width() - $('#user-popover').width()  - 150);
+    $('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
   }
 </script>
 
@@ -221,6 +588,19 @@ $(document).ready(function() {
 });
 </script>
 
+<!-- SUBMIT SEARCH FORM -->
+<script>
+  $("#refresh").click(function() {
+    var latitude = $("#pac-input").attr("latitude");
+    var longitude = $("#pac-input").attr("longitude");
+    var amountMin = $("#amount-min").val();
+    var amountMax = $("#amount-max").val();
+    var weightMin = $("#weight-min").val();
+    var weightMax = $("#weight-max").val();
+    searchWithParameters(latitude, longitude, amountMin, amountMax, weightMin, weightMax);
+  })
+</script>
+
 <!-- MAPS SCRIPT -->
 <script>
     var map = null;
@@ -267,10 +647,8 @@ $(document).ready(function() {
           };
 
           console.log(icon);*/
-          console.log(place.name);
-          console.log(place.geometry.location.lat());
-          console.log(place.geometry.location.lng());
-
+          $("#pac-input").attr("latitude", place.geometry.location.lat());
+          $("#pac-input").attr("longitude", place.geometry.location.lng());
         });
       });
     }
