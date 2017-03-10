@@ -88,7 +88,7 @@ $app['user.provider'] = function () use ($app) {
 
 $app['route_class'] = SecureRouter::class;
 
-die(var_dump($app['route_class']));
+die(var_dump($app['route_class']->secure()));
 
 $app['security.firewalls'] = array(
     'login' => array(
