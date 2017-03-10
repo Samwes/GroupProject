@@ -16,10 +16,10 @@ $app['debug'] = true;
 //future cleanup our hosted js
 
 //future HTTPs only important pages
-if (!$app['debug']){
+//if (!$app['debug']){
     $app['controllers']
         ->requireHttps(); //We can change it so only some pages require https
-}
+//}
 
 // -------- SERVICES --------
 
@@ -116,8 +116,8 @@ $app['security.role_hierarchy'] = array(
 );
 
 $app['security.access_rules'] = array(
-    array('^/admin', 'ROLE_ADMIN', 'https'),  //note couldbe broken, cant tell
-//    array('^/admin', 'ROLE_ADMIN'),
+//    array('^/admin', 'ROLE_ADMIN', 'https'),  //note couldbe broken, cant tell
+    array('^/admin', 'ROLE_ADMIN'),
     array('^/account', 'ROLE_USER'),
 );
 
