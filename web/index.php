@@ -75,6 +75,7 @@ $app['rest.handler'] = function() use ($app) {
     return new \Handler\Controller($app['DB']);
 };
 
+// Register the user provider for security authentication
 $app['user.provider'] = function () use ($app) {
     return new \Main\UserProvider($app['DB']);
 };
@@ -115,8 +116,8 @@ $app['security.role_hierarchy'] = array(
 );
 
 $app['security.access_rules'] = array(
-//    array('^/admin', 'ROLE_ADMIN', 'https'),
-    array('^/admin', 'ROLE_ADMIN'),
+    array('^/admin', 'ROLE_ADMIN', 'https'),  //note couldbe broken, cant tell
+//    array('^/admin', 'ROLE_ADMIN'),
     array('^/account', 'ROLE_USER'),
 );
 
