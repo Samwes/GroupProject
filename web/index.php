@@ -2,7 +2,7 @@
 
 //future learn symfony forms and have them do shit
 
-use Main\SecureRouter; //todo test in run
+use Main\SecureRouter; //todo test in run removing this
 
 require __DIR__. '/../vendor/autoload.php';
 
@@ -53,13 +53,11 @@ if ($app['debug']) {
     $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
         'profiler.cache_dir' => __DIR__.'/../cache/profiler',
         'profiler.mount_prefix' => '/_profiler', // this is the default
-        'profiler.only_exceptions' => true,
-        'profiler.only_master_requests' => true,
     ));
     //TODO: Look at source code for service above, disable useless logging because its spam central
     //fixme seriously this spams the shit out of the log
-    $app['profiler.only_exceptions'] = true;
-    $app['profiler.only_master_requests'] = true;
+//    $app['profiler.only_exceptions'] = true;
+//    $app['profiler.only_master_requests'] = true;
 }
 
 // Register asset rerouting
