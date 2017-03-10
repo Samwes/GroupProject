@@ -11,6 +11,8 @@ $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
 
+//fixme mysql server has gone away. possible persistance error.
+
 //TODO: Maybe use assetic instead
 //TODO: twig asset command to hide template elemenets away from there
 //TODO: Move twig assets etc. to source, only have web with stuff that needs exposing
@@ -30,7 +32,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 
 // Register view rendering  // future note can change this instead?
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__ . '/../views/html/',
+    'twig.path' => __DIR__ . '/../src/views/html/',
 ));
 // Registering service controllers
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
