@@ -127,10 +127,10 @@ class DBDataMapper
     }
 
     //Never call directly, simply inserts values. Use handler
-    public function addNewUser($un,$pw,$pic,$email,$salt)
+    public function addNewUser($un,$pw,$pic,$email)
     {
-        $query = "INSERT INTO usertable (username, password, picture, email, salt) 
-                  VALUES (:un, :pw, :pic, :email, :salt)";
+        $query = "INSERT INTO usertable (username, password, picture, email) 
+                  VALUES (:un, :pw, :pic, :email)";
         $result = true;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -139,7 +139,6 @@ class DBDataMapper
                 ':un' => $un,
                 ':pw' => $pw,
                 ':pic' => $pic,
-                ':salt' => $salt,
                 ':email' => $email
             ));
         } catch (PDOException $e) {

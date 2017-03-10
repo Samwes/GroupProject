@@ -6,7 +6,7 @@ use Main\SecureRouter; //todo test in run removing this
 
 require __DIR__. '/../vendor/autoload.php';
 
-//This took a solid 2-3 hours to fix due to heroku being cunts future maybe remove this
+//This took a solid 2-3 hours to fix due to heroku being cunts future maybe remove this wording
 if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'){
     $_SERVER['HTTPS']='on';
 }
@@ -14,6 +14,7 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
 $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
+define('DEBUG',true); //future remove this, just for old code. refactor it out
 
 //future force https and redirect otherwise
 //$app['controllers']
@@ -191,7 +192,7 @@ $app->get('/login', function() use($app) {
     return $app['twig']->render('login.twig');
 })->bind('login')->requireHttps();
 
-//TODO: Register app
+//TODO: Register a person with the DB
 $app->get('/register', function() use($app) {
     return $app['twig']->render('signup.twig');
 })->bind('register')->requireHttps();

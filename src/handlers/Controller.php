@@ -4,6 +4,8 @@
 namespace Handler;
 
 use Silex\Application;
+use Silex\Application\SecurityTrait;
+use Symfony\Component\Security\Core\User;
 use Symfony\Component\HttpFoundation\Request;
 
 class Controller
@@ -35,8 +37,31 @@ class Controller
     }
 
     public function registerNewUser(Request $request, Application $app){
-        # TODO future fixme
+        $username = $request->get('username');
+        $email = $request->get('email');
+        $password = $request->get('password');
 
+        //Check Vars
+        //TODO: More JS handling before send off or properly implementing form with symfony form stuff
+
+        if (!is_string($username)) {
+            die(json_encode(array('error' => 'no usernamed')));
+        } elseif (!is_string($email)) {
+            die(json_encode(array('error' => 'no email')));
+        } elseif (!is_string($password)) {
+            die(json_encode(array('error' => 'no pw')));
+        }
+
+        $token = $app['security.token_storage']->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+        } else {
+            $user = new User();
+        }
+
+        $encoded = $app->encodePassword($user, $password);
+
+        return $this->db->addNewUser($username,$encoded,null,$email);
     }
 
     public function foodItemPost(Request $request, Application $app)
