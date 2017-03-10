@@ -11,7 +11,7 @@ $app['debug'] = true;
 
 //TODO: twig asset command to hide template elemenets away from there
 //TODO: Move twig assets etc. to source, only have web with stuff that needs exposing
-//TODO: HTTPs only important pages
+//future HTTPs only important pages
 if (!$app['debug']){
     $app['controllers']
         ->requireHttps(); //We can change it so only some pages require https
@@ -34,7 +34,7 @@ $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 // Register session storage for between request data store
 $app->register(new Silex\Provider\SessionServiceProvider());
 
-// Register security service TODO turn on
+// Register security service
 $app->register(new Silex\Provider\SecurityServiceProvider());
 
 // Register DB service
@@ -50,7 +50,7 @@ $app['rest.handler'] = function() use ($app) {
 
 
 // -------- SECURITY --------
-//TODO: @Security
+//fixme @Security
 
 $app['security.firewalls'] = array(
     'login' => array(
@@ -85,7 +85,7 @@ $app['security.access_rules'] = array(
 
 
 // -------- REST API --------
-//TODO: All get/posts
+//note: All get/posts
 
 $app->get('/food/{foodID}', 'rest.controller:foodItemGet')
     -> assert('foodID', '\d+');
@@ -93,7 +93,7 @@ $app->get('/food/{foodID}', 'rest.controller:foodItemGet')
 $app->get('/food/{userID}', 'rest.controller:foodItemsGet')
     -> assert('userID', '\d+');
 
-//TODO: Secure post for registered users only
+//future Secure post for registered users only
 $app->post('/food', 'rest.controller:foodItemPost');
 //    -> secure('ROLE_USER');
 
@@ -103,7 +103,7 @@ $app->post('/food', 'rest.controller:foodItemPost');
 
 
 // -------- WEB PAGES --------
-//TODO: Web handlers
+//note: Web handlers
 
 $app->get('/', function() use($app) {
   return $app['twig']->render('index.html.twig', array(
@@ -111,9 +111,38 @@ $app->get('/', function() use($app) {
   ));
 })->bind('home');
 
+//future cleam this up (double index)
+$app->get('/index', function() use($app) {
+    return $app['twig']->render('index.html.twig', array(
+        'bodytags' => 'onResize=resize()'
+    ));
+});
+
 $app->get('/scanner', function() use($app) {
     return $app['twig']->render('scanner.html.twig');
-});
+})->bind('scanner');
+
+$app->get('/userprofile', function() use($app) {
+    return $app['twig']->render('userProfile.html.twig', array(
+        'bodytags' => 'onResize=resize()'
+    ));
+})->bind('user');
+
+$app->get('/login', function() use($app) {
+    return $app['twig']->render('login.html.twig', array(
+        'bodytags' => 'onResize=resize()'
+    ));
+})->bind('user');
+
+//note Temp, move these to proper routes
+$app->get('/itempage', function() use($app) {
+    return $app['twig']->render('userProfile.html.twig', array(
+        'bodytags' => 'onResize=resize()'
+    ));
+})->bind('user');
+
+
+//fixme these are debug pages to test security
 
 $app->get('/admin', function() use($app) {
     return $app['twig']->render('admin.html.twig');
@@ -123,9 +152,9 @@ $app->get('/account', function() use($app) {
     return $app['twig']->render('admin.html.twig');
 });
 
-$app->get('/login', function() use($app) {
-    return $app['twig']->render('admin.html.twig');
-});
+//$app->get('/login', function() use($app) {
+//    return $app['twig']->render('admin.html.twig');
+//});
 
 
 
@@ -133,7 +162,7 @@ $app->get('/login', function() use($app) {
 
 
 // -------- ERROR HANDLING --------
-
+//future better error handling here
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {
         // in debug mode we want to get the regular error message
