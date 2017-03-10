@@ -74,6 +74,11 @@ $app['DB'] = function() {
 $app['rest.handler'] = function() use ($app) {
     return new \Handler\Controller($app['DB']);
 };
+
+$app['user.provider'] = function () use ($app) {
+    return new \Main\UserProvider($app['DB']);
+};
+
 // ----------------------------
 
 
@@ -87,12 +92,16 @@ $app['security.firewalls'] = array(
         'pattern' => '^/login',  //Match all login pages
     ),
 
-    'secure' => array(
-        'pattern' => '^/account',  //Doesn't match admin but handled below (?)
+    'loggedin' => array(
+        'pattern' => '^/account',
         'form' => array('login_path' => '/login', 'check_path' => '/account'),
-        'users' => function () use ($app) {
-            return new \Main\UserProvider($app['DB']);
-        },
+        'users' => $app['user.provider'],
+    ),
+
+    'admin' => array(
+        'pattern' => '^/admin',
+        'form' => array('login_path' => '/login', 'check_path' => '/admin'),
+        'users' => $app['user.provider'],
     ),
 
     'unsecured' => array(
