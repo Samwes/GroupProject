@@ -68,7 +68,7 @@ $app['rest.handler'] = function() use ($app) {
 // -------- SECURITY --------
 //fixme @Security
 
-$app['route_class'] = 'Main\SecureRoute';
+$app['route_class'] = '\Main\SecureRoute';
 
 $app['security.firewalls'] = array(
     'login' => array(
