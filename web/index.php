@@ -49,7 +49,7 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
         'food' => array('base_path' => 'images/food/'),
         'javascript' => array('base_path' => 'js/'),
         'twigcomp' => array('base_path' => '../src/views/components/'),
-        'html' => array('base_path' => '../src/views/html/'),
+        'html' => array('base_path' => '../src/views/html/'), // note redundant
     ),
 ));
 
