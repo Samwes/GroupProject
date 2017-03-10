@@ -12,6 +12,8 @@ $app = new Silex\Application();
 $app['debug'] = true;
 
 //fixme mysql server has gone away. possible persistance error.
+//future look into extra modules for added features
+//future learn how symfony forms work
 
 //TODO: Maybe use assetic instead
 //TODO: twig asset command to hide template elemenets away from there
@@ -44,7 +46,7 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\SecurityServiceProvider());
 
 // Register asset rerouting through twig
-$app->register(new Silex\Provider\AssetServiceProvider(), array(
+$app->register(new Silex\Provider\AssetServiceProvider(), array( //fixme broken
     'assets.version' => 'v1',
     'assets.version_format' => '%s?version=%s',
     'assets.named_packages' => array(
