@@ -14,11 +14,13 @@ $app['debug'] = true;
 //fixme mysql server has gone away. possible persistance error.
 //future look into extra modules for added features
 //future learn how symfony forms work
+//future cleanup our hosted js
 
 //TODO: Maybe use assetic instead
 //TODO: twig asset command to hide template elemenets away from there
 //TODO: Move twig assets etc. to source, only have web with stuff that needs exposing
 //TODO: resize function changes yo. have default and then override cos BAMF
+
 //future HTTPs only important pages
 if (!$app['debug']){
     $app['controllers']
@@ -54,8 +56,7 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array( //fixme broken
         'images' => array('base_path' => 'images/'),
         'food' => array('base_path' => 'images/food/'),
         'javascript' => array('base_path' => 'js/'),
-        'twigcomp' => array('base_path' => '/../src/views/components/'),
-        'html' => array('base_path' => '/../src/views/html/'), // note redundant
+        'twigcomp' => array('base_path' => 'components/'),
     ),
 ));
 
