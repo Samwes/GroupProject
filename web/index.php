@@ -53,8 +53,11 @@ if ($app['debug']) {
     $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
         'profiler.cache_dir' => __DIR__.'/../cache/profiler',
         'profiler.mount_prefix' => '/_profiler', // this is the default
+        'profiler.only_exceptions' => true,
+        'profiler.only_master_requests' => true,
     ));
     //TODO: Look at source code for service above, disable useless logging because its spam central
+    //fixme seriously this spams the shit out of the log
     $app['profiler.only_exceptions'] = true;
     $app['profiler.only_master_requests'] = true;
 }
@@ -92,6 +95,7 @@ $app['user.provider'] = function () use ($app) {
 
 // -------- SECURITY --------
 //future @Security
+//note eveyrthing is secured 3 times, maybe overkill? can put in our end notes
 
 $app['route_class'] = SecureRouter::class;
 
@@ -114,7 +118,7 @@ $app['security.firewalls'] = array(
 
     'unsecured' => array(
         'anonymous' => true,
-//        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
+        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
     ),
 );
 
@@ -125,7 +129,7 @@ $app['security.role_hierarchy'] = array(
 $app['security.access_rules'] = array(
     array('^/admin', 'ROLE_ADMIN', 'https'),  //note couldbe broken, cant tell
 //    array('^/admin', 'ROLE_ADMIN'),
-    array('^/account', 'ROLE_USER'),
+    array('^/account', 'ROLE_USER', 'https'),
 //    array('^/account', 'ROLE_USER'),
 //    array('^/account', 'ROLE_USER'),
 );
@@ -171,7 +175,6 @@ $app->get('/account/scanner', function() use($app) {
 $app->get('/account/userprofile', function() use($app) {
     return $app['twig']->render('userProfile.twig');
 })->bind('user');
-
 
 //TODO: Login page that causes you to actually login
 $app->get('/login', function() use($app) {
