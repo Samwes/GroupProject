@@ -168,7 +168,7 @@ $app->get('/account/userprofile', function() use($app) {
 //TODO: Login page that causes you to actually login
 $app->get('/login', function() use($app) {
     return $app['twig']->render('login.twig');
-})->bind('login') -> requireHttps();
+})->bind('login');
 
 //TODO: Register app
 $app->get('/register', function() use($app) {
