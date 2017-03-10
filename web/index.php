@@ -16,10 +16,10 @@ $app['debug'] = true;
 //future cleanup our hosted js
 
 //future HTTPs only important pages
-if (!$app['debug']){
+//if (!$app['debug']){
     $app['controllers']
         ->requireHttps(); //We can change it so only some pages require https
-}
+//}
 
 // -------- SERVICES --------
 
