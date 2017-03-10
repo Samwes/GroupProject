@@ -120,7 +120,6 @@ $app['security.access_rules'] = array(
     array('^/admin', 'ROLE_ADMIN', 'https'),  //note couldbe broken, cant tell
 //    array('^/admin', 'ROLE_ADMIN'),
     array('^/account', 'ROLE_USER'),
-    array('^/login', '', 'https'),
 );
 
 // ----------------------------
@@ -169,12 +168,12 @@ $app->get('/account/userprofile', function() use($app) {
 //TODO: Login page that causes you to actually login
 $app->get('/login', function() use($app) {
     return $app['twig']->render('login.twig');
-})->bind('login');
+})->bind('login') -> requireHttps();
 
 //TODO: Register app
 $app->get('/register', function() use($app) {
     return $app['twig']->render('signup.twig');
-})->bind('register');
+})->bind('register') -> requireHttps();
 
 //note Temp, move these to proper routes
 $app->get('/itempage', function() use($app) {
