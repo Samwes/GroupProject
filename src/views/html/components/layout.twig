@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  {% include asset('header.twig','twigcomp') %}
+  {% include 'header.twig' %}
   
   {% block head %}{% endblock %}
 </head>
 
 <body onResize=resize()>
 
-    {% include asset('nav.twig','twigcomp') %}
+    {% include 'nav.twig' %}
 
-    {% include asset('categorybar.twig','twigcomp') %}
+    {% include 'categorybar.twig' %}
 
     {% block content %}{% endblock %}
 

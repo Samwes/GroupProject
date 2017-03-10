@@ -83,7 +83,6 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
         'images' => array('base_path' => 'images/'),
         'food' => array('base_path' => 'images/food/'),
         'javascript' => array('base_path' => 'js/'),
-        'twigcomp' => array('base_path' => 'components/'),
     ),
 ));
 
@@ -140,10 +139,7 @@ $app['security.role_hierarchy'] = array(
 
 $app['security.access_rules'] = array(
     array('^/admin', 'ROLE_ADMIN', 'https'),
-//    array('^/admin', 'ROLE_ADMIN'),
     array('^/account', 'ROLE_USER', 'https'),
-//    array('^/account', 'ROLE_USER'),
-//    array('^/account', 'ROLE_USER'),
 );
 
 // ----------------------------
@@ -207,7 +203,7 @@ $app->get('/itempage', function() use($app) {
 //})->bind('item');
 
 
-//fixme these are debug pages to test security
+//note these are debug pages to test security
 
 $app->get('/admin', function() use($app) {
     return $app['twig']->render('admin.twig');
