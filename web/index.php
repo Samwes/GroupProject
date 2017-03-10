@@ -16,10 +16,10 @@ $app['debug'] = true;
 //future cleanup our hosted js
 
 //future HTTPs only important pages
-//if (!$app['debug']){
+if (!$app['debug']){
     $app['controllers']
         ->requireHttps(); //We can change it so only some pages require https
-//}
+}
 
 // -------- SERVICES --------
 
@@ -87,8 +87,6 @@ $app['user.provider'] = function () use ($app) {
 //future @Security
 
 $app['route_class'] = SecureRouter::class;
-
-die(var_dump($app['route_class']->secure()));
 
 $app['security.firewalls'] = array(
     'login' => array(
