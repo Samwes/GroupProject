@@ -88,6 +88,8 @@ $app['user.provider'] = function () use ($app) {
 
 $app['route_class'] = SecureRouter::class;
 
+die(var_dump($app['route_class']));
+
 $app['security.firewalls'] = array(
     'login' => array(
         'pattern' => '^/login',  //Match all login pages
