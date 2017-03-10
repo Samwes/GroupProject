@@ -6,6 +6,7 @@ use Main\SecureRouter; //todo test in run
 
 require __DIR__. '/../vendor/autoload.php';
 
+//This took a solid 2-3 hours to fix due to heroku being cunts future maybe remove this
 if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'){
     $_SERVER['HTTPS']='on';
 }
@@ -13,6 +14,10 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
 $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
+
+//Note forces https on all pages (good?)
+//$app['controllers']
+//    ->requireHttps();
 
 //fixme mysql server has gone away. possible persistance error.
 //future look into extra modules for added features
@@ -50,12 +55,12 @@ $app->register(new Silex\Provider\SecurityServiceProvider());
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
 // Register web profiler if in debug mode
-if ($app['debug']) {
-    $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
-        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
-        'profiler.mount_prefix' => '/_profiler', // this is the default
-    ));
-}
+//if ($app['debug']) {
+//    $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
+//        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+//        'profiler.mount_prefix' => '/_profiler', // this is the default
+//    ));
+//}
 
 // Register asset rerouting
 $app->register(new Silex\Provider\AssetServiceProvider(), array(
@@ -174,7 +179,7 @@ $app->get('/account/userprofile', function() use($app) {
 //TODO: Login page that causes you to actually login
 $app->get('/login', function() use($app) {
     return $app['twig']->render('login.twig');
-})->bind('login');
+})->bind('login')->requireHttps();
 
 //TODO: Register app
 $app->get('/register', function() use($app) {
