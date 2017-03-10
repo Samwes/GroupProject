@@ -122,7 +122,7 @@ $app->get('/scanner', function() use($app) {
     return $app['twig']->render('scanner.html.twig');
 })->bind('scanner');
 
-$app->get('/userprofile', function() use($app) {
+$app->get('/account/userprofile', function() use($app) {
     return $app['twig']->render('userProfile.html.twig', array(
         'bodytags' => 'onResize=resize()'
     ));
