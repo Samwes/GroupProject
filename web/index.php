@@ -8,6 +8,8 @@ $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
 
+//TODO: twig asset command to hide template elemenets away from there
+//TODO: Move twig assets etc. to source, only have web with stuff that needs exposing
 //TODO: HTTPs only important pages
 if (!$app['debug']){
     $app['controllers']
