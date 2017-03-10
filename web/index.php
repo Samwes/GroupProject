@@ -2,7 +2,7 @@
 
 //future learn symfony forms and have them do shit
 
-//use Main\SecureRouter; //todo test in run
+use Main\SecureRouter; //todo test in run
 
 require __DIR__. '/../vendor/autoload.php';
 
@@ -86,7 +86,7 @@ $app['user.provider'] = function () use ($app) {
 // -------- SECURITY --------
 //future @Security
 
-$app['route_class'] = 'Main\SecureRouter';
+$app['route_class'] = SecureRouter::class;
 
 $app['security.firewalls'] = array(
     'login' => array(
