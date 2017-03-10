@@ -53,7 +53,7 @@ if ($app['debug']) {
 }
 
 // Register asset rerouting
-$app->register(new Silex\Provider\AssetServiceProvider(), array( //fixme broken
+$app->register(new Silex\Provider\AssetServiceProvider(), array(
     'assets.version' => 'v1',
     'assets.version_format' => '%s?version=%s',
     'assets.named_packages' => array(
@@ -78,9 +78,9 @@ $app['rest.handler'] = function() use ($app) {
 
 
 // -------- SECURITY --------
-//fixme @Security
+//future @Security
 
-$app['route_class'] = SecureRouter::class;
+$app['route_class'] = Main\SecureRouter::class;
 
 $app['security.firewalls'] = array(
     'login' => array(

@@ -32,13 +32,13 @@
 {% block scripts %}
 <!-- CORRECT SIZES OF ELEMENTS -->
 <script>
-  $(document).ready(function() {
-    $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-    $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-  });
-  function resize() {
-    $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-    $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-  }
+    $(document).ready(function() {
+        $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+        $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+    });
+    function resize() {
+        $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+        $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+    }
 </script>
 {% endblock %}
