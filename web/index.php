@@ -16,11 +16,6 @@ $app['debug'] = true;
 //future learn how symfony forms work
 //future cleanup our hosted js
 
-//TODO: Maybe use assetic instead
-//TODO: twig asset command to hide template elemenets away from there
-//TODO: Move twig assets etc. to source, only have web with stuff that needs exposing
-//TODO: resize function changes yo. have default and then override cos BAMF
-
 //future HTTPs only important pages
 if (!$app['debug']){
     $app['controllers']
