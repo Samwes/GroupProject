@@ -150,17 +150,17 @@ $app['security.access_rules'] = array(
 // -------- REST API --------
 //note: All get/posts
 
-$app->get('/food/{foodID}', 'rest.controller:foodItemGet')
+$app->get('/food/{foodID}', 'rest.handler:foodItemGet')
     -> assert('foodID', '\d+');
 
-$app->get('/food/{userID}', 'rest.controller:foodItemsGet')
+$app->get('/food/{userID}', 'rest.handler:foodItemsGet')
     -> assert('userID', '\d+');
 
 //future Secure post for registered users only
-$app->post('/food', 'rest.controller:foodItemPost')
+$app->post('/food', 'rest.handler:foodItemPost')
     -> secure('ROLE_USER');
 
-$app->post('/register/user', 'rest.controller:registerNewUser')
+$app->post('/register/user', 'rest.handler:registerNewUser')
     -> requireHttps();
 
 // ----------------------------
