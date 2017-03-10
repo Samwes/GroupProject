@@ -5,6 +5,7 @@ namespace Handler;
 
 use Silex\Application;
 use Silex\Application\SecurityTrait;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,11 +47,11 @@ class Controller
         //TODO: More JS handling before send off or properly implementing form with symfony form stuff
 
         if (!is_string($username)) {
-            die(json_encode(array('error' => 'no usernamed')));
+            return new JsonResponse(array('error' => 'no usernamed'));
         } elseif (!is_string($email)) {
-            die(json_encode(array('error' => 'no email')));
+            return new JsonResponse(array('error' => 'no email'));
         } elseif (!is_string($password)) {
-            die(json_encode(array('error' => 'no pw')));
+            return new JsonResponse(array('error' => 'no password'));
         }
 
         $token = $app['security.token_storage']->getToken();
