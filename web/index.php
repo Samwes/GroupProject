@@ -30,7 +30,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 
 // Register view rendering  // future note can change this instead?
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__ . '../views/html',
+    'twig.path' => __DIR__ . '/../views/html',
 ));
 // Registering service controllers
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
