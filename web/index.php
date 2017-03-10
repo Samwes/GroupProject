@@ -117,8 +117,8 @@ $app['security.role_hierarchy'] = array(
 );
 
 $app['security.access_rules'] = array(
-//    array('^/admin', 'ROLE_ADMIN', 'https'),  //note couldbe broken, cant tell
-    array('^/admin', 'ROLE_ADMIN'),
+    array('^/admin', 'ROLE_ADMIN', 'https'),  //note couldbe broken, cant tell
+//    array('^/admin', 'ROLE_ADMIN'),
     array('^/account', 'ROLE_USER'),
 );
 
