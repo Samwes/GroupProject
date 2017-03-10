@@ -20,17 +20,10 @@ $app['debug'] = true;
 //    ->requireHttps();
 
 
-//fixme mysql server has gone away. possible persistance causing error.
+//fixme mysql server has gone away. possible persistance causing error. research cleardb and persistent mode
 //future look into extra modules for added features
 //future learn how symfony forms work
 //future cleanup our hosted js
-
-//future HTTPs only important pages
-
-//if (!$app['debug']){
-//    $app['controllers']
-//        ->requireHttps(); //We can change it so only some pages require https
-//}
 
 // -------- SERVICES --------
 
@@ -39,7 +32,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => 'php://stderr',
 ));
 
-// Register view rendering  // future note can change this instead?
+// Register view rendering
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__ . '/../src/views/html/',
 ));
@@ -61,6 +54,7 @@ if ($app['debug']) {
         'profiler.cache_dir' => __DIR__.'/../cache/profiler',
         'profiler.mount_prefix' => '/_profiler', // this is the default
     ));
+    //TODO: Look at source code for service above, disable useless logging because its spam central
     $app['profiler.only_exceptions'] = true;
     $app['profiler.only_master_requests'] = true;
 }
