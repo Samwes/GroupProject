@@ -3,12 +3,13 @@
     "silex/silex": "~2.0",
     "monolog/monolog": "^1.4",
     "twig/twig": "~2.0",
-    "symfony/twig-bridge": "~3",
+    "symfony/twig-bridge": "^3.2",
     "roave/security-advisories": "dev-master",
     "symfony/security": "^3.2",
     "symfony/form": "^3.2",
     "symfony/validator": "^3.2",
-    "sorien/silex-pimple-dumper": "~2.0"
+    "sorien/silex-pimple-dumper": "~2.0",
+    "symfony/asset": "^3.2"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"

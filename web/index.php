@@ -128,11 +128,19 @@ $app->get('/account/userprofile', function() use($app) {
     ));
 })->bind('user');
 
+
+//TODO: Login page causes you to login
 $app->get('/login', function() use($app) {
     return $app['twig']->render('login.html.twig', array(
         'bodytags' => 'onResize=resize()'
     ));
 })->bind('login');
+
+$app->get('/register', function() use($app) {
+    return $app['twig']->render('signup.html.twig', array(
+        'bodytags' => 'onResize=resize()'
+    ));
+})->bind('register');
 
 //note Temp, move these to proper routes
 $app->get('/itempage', function() use($app) {
