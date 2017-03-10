@@ -15,11 +15,12 @@ $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
 
-//Note forces https on all pages (good?)
+//future force https and redirect otherwise
 //$app['controllers']
 //    ->requireHttps();
 
-//fixme mysql server has gone away. possible persistance error.
+
+//fixme mysql server has gone away. possible persistance causing error.
 //future look into extra modules for added features
 //future learn how symfony forms work
 //future cleanup our hosted js
@@ -55,12 +56,14 @@ $app->register(new Silex\Provider\SecurityServiceProvider());
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
 // Register web profiler if in debug mode
-//if ($app['debug']) {
-//    $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
-//        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
-//        'profiler.mount_prefix' => '/_profiler', // this is the default
-//    ));
-//}
+if ($app['debug']) {
+    $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
+        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+        'profiler.mount_prefix' => '/_profiler', // this is the default
+    ));
+    $app['profiler.only_exceptions'] = true;
+    $app['profiler.only_master_requests'] = true;
+}
 
 // Register asset rerouting
 $app->register(new Silex\Provider\AssetServiceProvider(), array(
