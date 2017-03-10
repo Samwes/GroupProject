@@ -1,6 +1,7 @@
 <?php
 
-//TODO: Have a rerouter hosted on community file server that executed input command on database and sends result?
+//future learn symfony forms and have them do shit
+//future have reorouter twig service that loads things from src/ rather than web/ where people can access it
 
 require __DIR__. '/../vendor/autoload.php';
 
@@ -121,7 +122,6 @@ $app->get('/admin', function() use($app) {
 $app->get('/account', function() use($app) {
     return $app['twig']->render('admin.html.twig');
 });
-
 
 $app->get('/login', function() use($app) {
     return $app['twig']->render('admin.html.twig');
