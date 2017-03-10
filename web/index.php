@@ -106,7 +106,7 @@ $app['security.firewalls'] = array(
 
     'unsecured' => array(
         'anonymous' => true,
-        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
+//        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
     ),
 );
 
@@ -115,7 +115,8 @@ $app['security.role_hierarchy'] = array(
 );
 
 $app['security.access_rules'] = array(
-    array('^/admin', 'ROLE_ADMIN', 'https'),
+//    array('^/admin', 'ROLE_ADMIN', 'https'),
+    array('^/admin', 'ROLE_ADMIN'),
     array('^/account', 'ROLE_USER'),
 );
 
