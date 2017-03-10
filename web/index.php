@@ -34,7 +34,11 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 
 // Register view rendering
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__ . '/../src/views/html/',
+    'twig.path' =>
+    array(
+        __DIR__ . '/../src/views/html/',
+        __DIR__ . '/../src/views/html/components',
+    )
 ));
 // Registering service controllers
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
@@ -48,6 +52,8 @@ $app->register(new Silex\Provider\SecurityServiceProvider());
 //
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
+//TODO: 2 new services, validator and form service
+
 // Register web profiler if in debug mode
 if ($app['debug']) {
     $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
@@ -56,8 +62,16 @@ if ($app['debug']) {
     ));
     //TODO: Look at source code for service above, disable useless logging because its spam central
     //fixme seriously this spams the shit out of the log
+    //fixme maybe remove cache_dir
 //    $app['profiler.only_exceptions'] = true;
 //    $app['profiler.only_master_requests'] = true;
+
+    //fixme remove this code from the source and reuse our own class cos I think this does it all
+    //fixme or its the ProfileListener
+    //fixme remove anything that logs from this cunt class and make it our own until it doesnt rape everything
+    //        $app->extend('dispatcher', function ($dispatcher, $app) {
+//    return new TraceableEventDispatcher($dispatcher, $app['stopwatch'], $app['logger']);
+//});
 }
 
 // Register asset rerouting
@@ -125,7 +139,7 @@ $app['security.role_hierarchy'] = array(
 );
 
 $app['security.access_rules'] = array(
-    array('^/admin', 'ROLE_ADMIN', 'https'),  //note couldbe broken, cant tell
+    array('^/admin', 'ROLE_ADMIN', 'https'),
 //    array('^/admin', 'ROLE_ADMIN'),
     array('^/account', 'ROLE_USER', 'https'),
 //    array('^/account', 'ROLE_USER'),
@@ -149,6 +163,8 @@ $app->get('/food/{userID}', 'rest.controller:foodItemsGet')
 $app->post('/food', 'rest.controller:foodItemPost')
     -> secure('ROLE_USER');
 
+$app->post('/register/user', 'rest.controller:registerNewUser')
+    -> requireHttps();
 
 // ----------------------------
 

@@ -12,7 +12,8 @@
     "symfony/asset": "^3.2",
     "silex/web-profiler": "^2.0",
     "symfony/monolog-bridge": "^3.2",
-    "symfony/console": "^3.2"
+    "symfony/console": "^3.2",
+    "symfony/config": "^3.2"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"

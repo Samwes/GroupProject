@@ -34,6 +34,11 @@ class Controller
         return new JsonResponse($toEncode);
     }
 
+    public function registerNewUser(Request $request, Application $app){
+        # TODO future fixme
+
+    }
+
     public function foodItemPost(Request $request, Application $app)
     {
         $toEncode = array("error" => "failed to add");
