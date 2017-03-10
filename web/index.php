@@ -50,6 +50,9 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 // Register security service
 $app->register(new Silex\Provider\SecurityServiceProvider());
 
+// Generate urls from bound names
+$app->register(new Silex\Provider\RoutingServiceProvider());
+
 //
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
@@ -209,6 +212,11 @@ $app->get('/itempage', function() use($app) {
 $app->get('/admin', function() use($app) {
     return $app['twig']->render('admin.twig');
 });
+
+//fixme return to login but say why cunt
+$app->get('/failed', function() use($app) {
+    return $app['twig']->render('test.twig');
+})->bind('failure');
 
 $app->get('/account', function() use($app) {
     return $app['twig']->render('admin.twig');

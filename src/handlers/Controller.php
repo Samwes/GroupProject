@@ -5,6 +5,7 @@ namespace Handler;
 
 use Silex\Application;
 use Silex\Application\SecurityTrait;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -61,7 +62,11 @@ class Controller
 
         $encoded = $app->encodePassword($user, $password);
 
-        return $this->db->addNewUser($username,$encoded,null,$email);
+        if ($this->db->addNewUser($username,$encoded,null,$email)) {
+            return new RedirectResponse($app['url_generator']->generate('index'));
+        } else {
+            return new RedirectResponse($app['url_generator']->generate('failure'));
+        }
     }
 
     public function foodItemPost(Request $request, Application $app)
