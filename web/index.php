@@ -30,7 +30,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 
 // Register view rendering  // future note can change this instead?
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__ . '/../views/html',
+    'twig.path' => __DIR__ . '/../views/html/',
 ));
 // Registering service controllers
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
@@ -50,8 +50,8 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
         'images' => array('base_path' => 'images/'),
         'food' => array('base_path' => 'images/food/'),
         'javascript' => array('base_path' => 'js/'),
-        'twigcomp' => array('base_path' => '../src/views/components/'),
-        'html' => array('base_path' => '../src/views/html/'), // note redundant
+        'twigcomp' => array('base_path' => '/../src/views/components/'),
+        'html' => array('base_path' => '/../src/views/html/'), // note redundant
     ),
 ));
 
