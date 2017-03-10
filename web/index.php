@@ -6,6 +6,10 @@ use Main\SecureRouter; //todo test in run
 
 require __DIR__. '/../vendor/autoload.php';
 
+if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'){
+    $_SERVER['HTTPS']='on';
+}
+
 $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
@@ -120,6 +124,8 @@ $app['security.access_rules'] = array(
     array('^/admin', 'ROLE_ADMIN', 'https'),  //note couldbe broken, cant tell
 //    array('^/admin', 'ROLE_ADMIN'),
     array('^/account', 'ROLE_USER'),
+//    array('^/account', 'ROLE_USER'),
+//    array('^/account', 'ROLE_USER'),
 );
 
 // ----------------------------
@@ -173,7 +179,7 @@ $app->get('/login', function() use($app) {
 //TODO: Register app
 $app->get('/register', function() use($app) {
     return $app['twig']->render('signup.twig');
-})->bind('register') -> requireHttps();
+})->bind('register')->requireHttps();
 
 //note Temp, move these to proper routes
 $app->get('/itempage', function() use($app) {
