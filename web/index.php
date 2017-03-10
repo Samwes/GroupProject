@@ -132,14 +132,15 @@ $app->get('/login', function() use($app) {
     return $app['twig']->render('login.html.twig', array(
         'bodytags' => 'onResize=resize()'
     ));
-})->bind('user');
+})->bind('login');
 
 //note Temp, move these to proper routes
 $app->get('/itempage', function() use($app) {
     return $app['twig']->render('userProfile.html.twig', array(
         'bodytags' => 'onResize=resize()'
     ));
-})->bind('user');
+});
+//})->bind('item');
 
 
 //fixme these are debug pages to test security
