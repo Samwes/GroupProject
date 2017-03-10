@@ -9,8 +9,10 @@ $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
 
+//TODO: Maybe use assetic instead
 //TODO: twig asset command to hide template elemenets away from there
 //TODO: Move twig assets etc. to source, only have web with stuff that needs exposing
+//TODO: resize function changes yo. have default and then override cos BAMF
 //future HTTPs only important pages
 if (!$app['debug']){
     $app['controllers']
@@ -24,9 +26,9 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => 'php://stderr',
 ));
 
-// Register view rendering
+// Register view rendering  // future note can change this instead?
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/views',
+    'twig.path' => __DIR__ . '../views/html',
 ));
 // Registering service controllers
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
@@ -37,7 +39,21 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 // Register security service
 $app->register(new Silex\Provider\SecurityServiceProvider());
 
-// Register DB service
+// Register asset rerouting through twig
+$app->register(new Silex\Provider\AssetServiceProvider(), array(
+    'assets.version' => 'v1',
+    'assets.version_format' => '%s?version=%s',
+    'assets.named_packages' => array(
+        'css' => array('version' => 'css3', 'base_path' => 'stylesheets/'),
+        'images' => array('base_path' => 'images/'),
+        'food' => array('base_path' => 'images/food/'),
+        'javascript' => array('base_path' => 'js/'),
+        'twigcomp' => array('base_path' => '../src/views/components/'),
+        'html' => array('base_path' => '../src/views/html/'),
+    ),
+));
+
+// Register DB provider service
 $app['DB'] = function() {
     return new \Database\DBDataMapper();
 };
@@ -108,47 +124,36 @@ $app->post('/food', 'rest.controller:foodItemPost')
 //note: Web handlers
 
 $app->get('/', function() use($app) {
-  return $app['twig']->render('index.html.twig', array(
-      'bodytags' => 'onResize=resize()'
-  ));
+  return $app['twig']->render('index.twig');
 })->bind('home');
 
 //future cleam this up (double index)
 $app->get('/index', function() use($app) {
-    return $app['twig']->render('index.html.twig', array(
-        'bodytags' => 'onResize=resize()'
-    ));
+    return $app['twig']->render('index.twig');
 });
 
-$app->get('/scanner', function() use($app) {
-    return $app['twig']->render('scanner.html.twig');
+$app->get('/account/scanner', function() use($app) {
+    return $app['twig']->render('scanner.twig');
 })->bind('scanner');
 
 $app->get('/account/userprofile', function() use($app) {
-    return $app['twig']->render('userProfile.html.twig', array(
-        'bodytags' => 'onResize=resize()'
-    ));
+    return $app['twig']->render('userProfile.twig');
 })->bind('user');
 
 
-//TODO: Login page causes you to login
+//TODO: Login page that causes you to actually login
 $app->get('/login', function() use($app) {
-    return $app['twig']->render('login.html.twig', array(
-        'bodytags' => 'onResize=resize()'
-    ));
+    return $app['twig']->render('login.twig');
 })->bind('login');
 
+//TODO: Register app
 $app->get('/register', function() use($app) {
-    return $app['twig']->render('signup.html.twig', array(
-        'bodytags' => 'onResize=resize()'
-    ));
+    return $app['twig']->render('signup.twig');
 })->bind('register');
 
 //note Temp, move these to proper routes
 $app->get('/itempage', function() use($app) {
-    return $app['twig']->render('itemPage.html.twig', array(
-        'bodytags' => 'onResize=resize()'
-    ));
+    return $app['twig']->render('itemPage.twig');
 });
 //})->bind('item');
 
@@ -156,15 +161,15 @@ $app->get('/itempage', function() use($app) {
 //fixme these are debug pages to test security
 
 $app->get('/admin', function() use($app) {
-    return $app['twig']->render('admin.html.twig');
+    return $app['twig']->render('admin.twig');
 });
 
 $app->get('/account', function() use($app) {
-    return $app['twig']->render('admin.html.twig');
+    return $app['twig']->render('admin.twig');
 });
 
 //$app->get('/login', function() use($app) {
-//    return $app['twig']->render('admin.html.twig');
+//    return $app['twig']->render('admin.twig');
 //});
 
 

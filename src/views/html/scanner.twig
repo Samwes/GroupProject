@@ -1,5 +1,5 @@
 
-{% extends "layout.twig" %}
+{% extends asset('layout.twig',twigcomp) %}
 
 {% block head %}
 <title>Barcode Scanner</title>
@@ -165,6 +165,6 @@ $(function() {
 });
 </script>
 
-<script src="barcode.js" type="text/javascript"></script>
-<script src="scanner.js" type="text/javascript"></script>
+<script src="{{ asset(barcode.js, javascript) }}" type="text/javascript"></script>
+<script src="{{ asset(scanner.js, javascript) }}"  type="text/javascript"></script>
 {% endblock %}

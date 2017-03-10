@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  {% include 'header.twig' %}
+  {% include asset('header.twig',twigcomp) %}
   
   {% block head %}{% endblock %}
 </head>
 
-{% if bodytags is defined %}
-<body {{ bodytags }}>
-{% else %}
-<body>
-{% endif %}
+<body onResize=resize()>
 
-    {% include 'nav.twig' %}
+    {% include asset('nav.twig',twigcomp) %}
 
-    {% include 'categorybar.twig' %}
+    {% include asset('categorybar.twig',twigcomp) %}
 
     {% block content %}{% endblock %}
 
     {% block footer %}{% endblock %}
 
     {% block scripts %}{% endblock %}
+
 </body>
 </html>
