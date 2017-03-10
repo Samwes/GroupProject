@@ -3,6 +3,8 @@
 //future learn symfony forms and have them do shit
 //future have reorouter twig service that loads things from src/ rather than web/ where people can access it
 
+use Main\SecureRouter;
+
 require __DIR__. '/../vendor/autoload.php';
 
 $app = new Silex\Application();
@@ -68,7 +70,7 @@ $app['rest.handler'] = function() use ($app) {
 // -------- SECURITY --------
 //fixme @Security
 
-$app['route_class'] = '\Main\SecureRoute';
+$app['route_class'] = SecureRouter::class;
 
 $app['security.firewalls'] = array(
     'login' => array(
