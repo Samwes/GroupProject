@@ -1,9 +1,8 @@
 <?php
 
 //future learn symfony forms and have them do shit
-//future have reorouter twig service that loads things from src/ rather than web/ where people can access it
 
-use Main\SecureRouter;
+//use Main\SecureRouter; //todo test in run
 
 require __DIR__. '/../vendor/autoload.php';
 
@@ -42,7 +41,18 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 // Register security service
 $app->register(new Silex\Provider\SecurityServiceProvider());
 
-// Register asset rerouting through twig
+//
+$app->register(new Silex\Provider\HttpFragmentServiceProvider());
+
+// Register web profiler if in debug mode
+if ($app['debug']) {
+    $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
+        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+        'profiler.mount_prefix' => '/_profiler', // this is the default
+    ));
+}
+
+// Register asset rerouting
 $app->register(new Silex\Provider\AssetServiceProvider(), array( //fixme broken
     'assets.version' => 'v1',
     'assets.version_format' => '%s?version=%s',

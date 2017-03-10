@@ -9,7 +9,10 @@
     "symfony/form": "^3.2",
     "symfony/validator": "^3.2",
     "sorien/silex-pimple-dumper": "~2.0",
-    "symfony/asset": "^3.2"
+    "symfony/asset": "^3.2",
+    "silex/web-profiler": "^2.0",
+    "symfony/monolog-bridge": "^3.2",
+    "symfony/console": "^3.2"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
