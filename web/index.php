@@ -86,7 +86,7 @@ $app['user.provider'] = function () use ($app) {
 // -------- SECURITY --------
 //future @Security
 
-$app['route_class'] = Main\SecureRouter::class;
+$app['route_class'] = SecureRouter::class;
 
 $app['security.firewalls'] = array(
     'login' => array(
