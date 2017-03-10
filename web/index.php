@@ -52,6 +52,8 @@ $app['rest.handler'] = function() use ($app) {
 // -------- SECURITY --------
 //fixme @Security
 
+$app['route_class'] = 'Main\SecureRoute';
+
 $app['security.firewalls'] = array(
     'login' => array(
         'pattern' => '^/login',  //Match all login pages
@@ -94,8 +96,8 @@ $app->get('/food/{userID}', 'rest.controller:foodItemsGet')
     -> assert('userID', '\d+');
 
 //future Secure post for registered users only
-$app->post('/food', 'rest.controller:foodItemPost');
-//    -> secure('ROLE_USER');
+$app->post('/food', 'rest.controller:foodItemPost')
+    -> secure('ROLE_USER');
 
 
 // ----------------------------
@@ -144,7 +146,7 @@ $app->get('/register', function() use($app) {
 
 //note Temp, move these to proper routes
 $app->get('/itempage', function() use($app) {
-    return $app['twig']->render('userProfile.html.twig', array(
+    return $app['twig']->render('itemPage.html.twig', array(
         'bodytags' => 'onResize=resize()'
     ));
 });

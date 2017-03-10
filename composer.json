@@ -17,7 +17,7 @@
   "autoload": {
     "psr-4": {
       "Handler\\": "src/handlers/",
-      "Main\\" : "src/backend/",
+      "Main\\" : "src/Main/",
       "Database\\" : "src/database/"
     }
   }
