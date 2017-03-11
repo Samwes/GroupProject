@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User;
 use Symfony\Component\HttpFoundation\Request;
+use Database\DBDataMapper;
 
 class Controller
 {
