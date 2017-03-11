@@ -114,7 +114,7 @@ $app['user.provider'] = function () use ($app) {
 //future @Security
 //note eveyrthing is secured 3 times, maybe overkill? can put in our end notes
 
-$app['route_class'] = SecureRouter::class;
+$app['route_class'] = '\Main\SecureRouter';
 
 $app['security.firewalls'] = array(
     'login' => array(
