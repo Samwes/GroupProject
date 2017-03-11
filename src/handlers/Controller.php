@@ -64,7 +64,7 @@ class Controller
 
         $app['monolog']->addDebug('All checks passed');
 
-        if (!$this->db->getUserByUsername($username))
+        if (!$user = $this->db->getUserByUsername($username)) {
 
 //        $token = $app['security.token_storage']->getToken();
 //        if (null !== $token) {
@@ -76,13 +76,15 @@ class Controller
 //        }
 
 //        $encoded = $app->encodePassword($user, $password);
-        $encoded = $app['security.encoder_factory']->getEncoder($user)->encodePassword($password, $user->getSalt());
+            $encoded = $app['security.encoder_factory']->getEncoder($user)->encodePassword($password, $user->getSalt());
 
-        //future Update user password? only if null
+            //future Update user password? only if null
 
-        $app['monolog']->addDebug('encoded password:' . $encoded);
+            $app['monolog']->addDebug('encoded password:' . $encoded);
 
-
+        } else {
+            return new RedirectResponse($app['url_generator']->generate('failure'));
+        }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
             return new RedirectResponse($app['url_generator']->generate('home'));
