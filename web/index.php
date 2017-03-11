@@ -11,14 +11,14 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
 $app = new Silex\Application();
 //Setting
 $app['debug'] = true;
-define('DEBUG',true); //future remove this, just for old code. refactor it out
+define('DEBUG',true); //future remove this, just for old code. refactor it out completely
 
 //future force https and redirect otherwise
-//$app['controllers']
-//    ->requireHttps();
+$app['controllers']
+    ->requireHttps();
 
-//future learn how symfony forms work
 //future cleanup our hosted js
+//note maybe change logging at heroku level, dont care about most (successful) connections
 
 // -------- SERVICES --------
 
@@ -52,7 +52,8 @@ $app->register(new Silex\Provider\RoutingServiceProvider());
 //
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
-//TODO: 2 new services, validator and form service
+//future: 2 new services, validator and form service?
+//TODO: emailing and account validation
 
 // Register web profiler if in debug mode
 if ($app['debug']) {
@@ -109,7 +110,7 @@ $app['security.firewalls'] = array(
         'users' => $app['user.provider'],
     ),
 
-    'admin' => array(
+    'admin' => array( //note no idea if this works (the login check part for admin accounts)
         'pattern' => '^/admin',
         'form' => array('login_path' => '/login', 'check_path' => '/admin/login/check'),
         'users' => $app['user.provider'],
@@ -152,19 +153,22 @@ $app->post('/register/user', 'rest.handler:registerNewUser')
 
 // ----------------------------
 
+//future get rid of these, maybe even from the subclass. They fucking suck
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 // -------- WEB PAGES --------
-//note: Web handlers with controller?
+//future Web handlers with controller as service, seperate class.
+//future Move this all out, app class, router (get/post) classes etc. (split normal/admin/user etc?)
 
 $app->get('/', function() use($app) {
-  return $app['twig']->render('index.twig');
-})->bind('home');
+    return $app['twig']->render('index.twig');
+})->bind('index');
 
 //future cleam this up (double index)
 $app->get('/index', function() use($app) {
-    return $app['twig']->render('index.twig');
-})->bind('index');
+    return new RedirectResponse($app['url_generator']->generate('index'));
+});
 
 $app->get('/account/scanner', function() use($app) {
     return $app['twig']->render('scanner.twig');
@@ -174,7 +178,7 @@ $app->get('/account/userprofile', function() use($app) {
     return $app['twig']->render('userProfile.twig');
 })->bind('user');
 
-$app->get('/login', function(Request $request) use ($app) { // Use app to get request or use request as well?
+$app->get('/login', function(Request $request) use ($app) { //fixme Use app to get request or use request as well?
     return $app['twig']->render('login.twig', array(
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),
@@ -185,14 +189,14 @@ $app->get('/register', function() use($app) {
     return $app['twig']->render('signup.twig');
 })->bind('register')->requireHttps();
 
-//note Temp, move these to proper routes
+//note Temp, move these to proper routes. Fill them with data as well
 $app->get('/itempage', function() use($app) {
     return $app['twig']->render('itemPage.twig');
 });
 //})->bind('item');
 
 
-//note these are debug pages to test security
+//note these are debug pages to test security, remove asap or change into something usabel
 
 $app->get('/admin', function() use($app) {
     return $app['twig']->render('admin.twig');
@@ -217,6 +221,8 @@ $app->get('/account', function() use($app) {
 
 
 // -------- ERROR HANDLING --------
+//future handle authentication errors with redirects and messages
+
 //future better error handling here
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {

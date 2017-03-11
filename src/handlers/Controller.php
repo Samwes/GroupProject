@@ -23,7 +23,7 @@ class Controller
         $this->db = $db;
     }
 
-    //TODO: Request handling functions go here
+    //note: Request handling functions go here
 
     public function foodItemsGet(Request $request, Application $app, $userID) {
         $toEncode = $this->db->getFoodItemsByUserID($userID);
@@ -48,7 +48,9 @@ class Controller
         $password = $request->get('password');
 
         //Check Vars
-        //TODO: More JS handling before send off or properly implementing form with symfony form stuff
+        //TODO: Clean this up. Use -> assert instead, don't repeat checks
+        // More JS handling before send off or properly implementing form with symfony form stuff
+
 
         if (!is_string($username)) {
             return new JsonResponse(array('error' => 'no usernamed'));
@@ -57,8 +59,6 @@ class Controller
         } elseif (!is_string($password)) {
             return new JsonResponse(array('error' => 'no password'));
         }
-
-        $app['monolog']->addDebug('All checks passed');
 
         if (!$user = $this->db->getUserByUsername($username)) {
 
@@ -70,18 +70,19 @@ class Controller
             $user = new User($username, null);
 //        }
 
-//        $encoded = $app->encodePassword($user, $password);
+//        $encoded = $app->encodePassword($user, $password); //note: just get default encoder, dont make new user
             $encoded = $app['security.encoder_factory']->getEncoder($user)->encodePassword($password, $user->getSalt());
 
             //future Update user password? only if null. Fixup all this
 
-
+            //todo: now log them in
+            //todo: emailing and account validation
         } else {
             return new RedirectResponse($app['url_generator']->generate('failure'));
         }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
-            return new RedirectResponse($app['url_generator']->generate('home'));
+            return new RedirectResponse($app['url_generator']->generate('index'));
         } else {
             return new RedirectResponse($app['url_generator']->generate('failure'));
         }

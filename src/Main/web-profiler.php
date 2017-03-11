@@ -11,6 +11,8 @@
 
 namespace Main; //note this should be Silex/Component
 
+//Future maybe remove this cos not doesnt go any actual changes?
+
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\ControllerProviderInterface;

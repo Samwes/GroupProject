@@ -13,10 +13,8 @@ class DBDataMapper
 
     public function __construct(PDO $pdo = null)
     {
-        //TODO: Move DB login into ini file
-
         if (null === $pdo) {
-            //TODO: Swap on debug?
+            //future Swap on debug to localhost
             $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
 //            die (var_dump($url));

@@ -1,10 +1,8 @@
-<?php
+<?ph
 header('Content-type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-//TODO: Update file upload paths to work with changes
-//TODO: Namespaces for everything
-//TODO: Change these files into something controllers route into
+//fixme refactor these our, use routers
 
 //HANDLE GET
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
