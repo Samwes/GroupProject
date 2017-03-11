@@ -269,8 +269,8 @@ class WebProfilerServiceProvider implements ServiceProviderInterface, Controller
         };
 
         $app['profiler.request_matcher'] = null;
-        $app['profiler.only_exceptions'] = true;
-        $app['profiler.only_master_requests'] = true;
+        $app['profiler.only_exceptions'] = false;
+        $app['profiler.only_master_requests'] = false;
         $app['web_profiler.debug_toolbar.enable'] = true;
         $app['web_profiler.debug_toolbar.position'] = 'bottom';
         $app['web_profiler.debug_toolbar.intercept_redirects'] = false;
