@@ -9,7 +9,7 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
 
 //fixme have own app with useful traits
 $app = new Silex\Application();
-//Settings
+//Setting
 $app['debug'] = true;
 define('DEBUG',true); //future remove this, just for old code. refactor it out
 
@@ -148,9 +148,6 @@ $app->post('/food', 'rest.handler:foodItemPost')
 
 $app->post('/register/user', 'rest.handler:registerNewUser')
     -> requireHttps();
-
-//$app->post('/login/user', 'rest.handler:loginAUser')
-//    -> requireHttps();
 
 // ----------------------------
 
