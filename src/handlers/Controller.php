@@ -44,6 +44,10 @@ class Controller
         $email = $request->get('email');
         $password = $request->get('password');
 
+        $app['monolog']->addDebug('logging un:' . $username);
+        $app['monolog']->addDebug('logging email:' . $email);
+        $app['monolog']->addDebug('logging pw:' . $password);
+
         //Check Vars
         //TODO: More JS handling before send off or properly implementing form with symfony form stuff
 
@@ -55,14 +59,20 @@ class Controller
             return new JsonResponse(array('error' => 'no password'));
         }
 
+        $app['monolog']->addDebug('All checks passed');
+
         $token = $app['security.token_storage']->getToken();
         if (null !== $token) {
             $user = $token->getUser();
+            $app['monolog']->addDebug('token found got user');
         } else {
             $user = new User();
+            $app['monolog']->addDebug('making new user no constructor');
         }
 
         $encoded = $app->encodePassword($user, $password);
+
+        $app['monolog']->addDebug('encoded password:' . $encoded);
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
             return new RedirectResponse($app['url_generator']->generate('index'));
