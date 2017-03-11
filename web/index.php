@@ -7,7 +7,7 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
     $_SERVER['HTTPS']='on';
 }
 
-//fixme have own app with useful traits
+//TODO: have own app with useful traits
 $app = new Silex\Application();
 //Setting
 $app['debug'] = true;
@@ -44,6 +44,7 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 
 // Register security service
 $app->register(new Silex\Provider\SecurityServiceProvider());
+//TODO: remember me
 
 // Generate urls from bound names
 $app->register(new Silex\Provider\RoutingServiceProvider());
@@ -173,7 +174,6 @@ $app->get('/account/userprofile', function() use($app) {
     return $app['twig']->render('userProfile.twig');
 })->bind('user');
 
-//TODO: Login page that causes you to actually login
 $app->get('/login', function(Request $request) use ($app) { // Use app to get request or use request as well?
     return $app['twig']->render('login.twig', array(
         'error'         => $app['security.last_error']($request),
@@ -181,7 +181,6 @@ $app->get('/login', function(Request $request) use ($app) { // Use app to get re
     ));
 })->bind('login');
 
-//TODO: Register a person with the DB done! Its shit
 $app->get('/register', function() use($app) {
     return $app['twig']->render('signup.twig');
 })->bind('register')->requireHttps();
@@ -199,7 +198,7 @@ $app->get('/admin', function() use($app) {
     return $app['twig']->render('admin.twig');
 });
 
-//fixme return to login but say why cunt
+//fixme return to login but say why cunt or something
 $app->get('/failed', function() use($app) {
     return $app['twig']->render('test.twig');
 })->bind('failure');
