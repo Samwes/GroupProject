@@ -65,14 +65,18 @@ class Controller
             $user = $token->getUser();
             $app['monolog']->addDebug('token found got user');
         } else {
-            $user = new User();
-            $app['monolog']->addDebug('making new user no constructor');
+            $user = new User($username, null);
+            $app['monolog']->addDebug('making new user no pw');
         }
 
 //        $encoded = $app->encodePassword($user, $password);
         $encoded = $app['security.encoder_factory']->getEncoder($user)->encodePassword($password, $user->getSalt());
 
+        //future Update user password? only if null
+
         $app['monolog']->addDebug('encoded password:' . $encoded);
+
+
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
             return new RedirectResponse($app['url_generator']->generate('index'));
