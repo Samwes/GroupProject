@@ -2,7 +2,7 @@
 
 //future learn symfony forms and have them do shit
 
-use Main\SecureRouter; //todo test in run removing this
+//use Main\SecureRouter; //todo test in run removing this
 
 require __DIR__. '/../vendor/autoload.php';
 
@@ -11,6 +11,7 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
     $_SERVER['HTTPS']='on';
 }
 
+//future have own app with useful traits
 $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
@@ -60,10 +61,11 @@ $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
 // Register web profiler if in debug mode
 if ($app['debug']) {
-    $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
+    $app->register(new Main\WebProfilerServiceProvider(), array(
         'profiler.cache_dir' => __DIR__.'/../cache/profiler',
         'profiler.mount_prefix' => '/_profiler', // this is the default
     ));
+}
     //TODO: Look at source code for service above, disable useless logging because its spam central
     //fixme seriously this spams the shit out of the log
     //fixme maybe remove cache_dir
@@ -76,7 +78,7 @@ if ($app['debug']) {
     //        $app->extend('dispatcher', function ($dispatcher, $app) {
 //    return new TraceableEventDispatcher($dispatcher, $app['stopwatch'], $app['logger']);
 //});
-}
+
 
 // Register asset rerouting
 $app->register(new Silex\Provider\AssetServiceProvider(), array(
