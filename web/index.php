@@ -180,7 +180,7 @@ $app->get('/', function() use($app) {
 //future cleam this up (double index)
 $app->get('/index', function() use($app) {
     return $app['twig']->render('index.twig');
-});
+})->bind('index');
 
 $app->get('/account/scanner', function() use($app) {
     return $app['twig']->render('scanner.twig');

@@ -79,7 +79,7 @@ class Controller
 
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
-            return new RedirectResponse($app['url_generator']->generate('index'));
+            return new RedirectResponse($app['url_generator']->generate('home'));
         } else {
             return new RedirectResponse($app['url_generator']->generate('failure'));
         }
