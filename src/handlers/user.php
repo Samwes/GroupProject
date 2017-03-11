@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 }
 
 //HANDLE POST
-elseif ($_SERVER["REQUEST_METHOD"] === "POST") {    // TODO : Check for UN already existing
+elseif ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = $_POST["username"];
     $password = $_POST["password"];
     $picture = $_POST["picture"];
@@ -92,7 +92,6 @@ elseif ($_SERVER["REQUEST_METHOD"] === "POST") {    // TODO : Check for UN alrea
         }
     }
 
-    //TODO: Issue correct auth token?
 
     if ($database->addNewUser($username, $password, $imagedir, $email, $salt)) {
         $toEncode = array("success" => "topic added");

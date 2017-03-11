@@ -14,8 +14,6 @@ class UserProvider implements UserProviderInterface
 {
     /** @var DBDataMapper $DB */
     private $DB;
-    //TODO: Storing a user
-    //TODO: Register all security components etc.
 
     public function __construct(DBDataMapper $DB)
     {

@@ -9,10 +9,7 @@ POST FUNCTIONS:
 */
 
 // HTTP GET FUNCTIONS
-//TODO: Move images from res/ to an image folder. Sort this out
-//TODO: Find something todo with js files. Dunno where to put em yet
-//TODO: Sort out css as well (using asset() in twig)
-
+//TODO: update handlers to point to correct routes (repeat)
 function getFoodItemsByUserID(userid) {
   // Wrapper function - gets food items submitted by userid
   $.getJSON("handlers/food.php", {"userid": userid}, function(data) {
@@ -43,6 +40,9 @@ function addNewFoodItem(name, expiredate, category, userid, description, latitud
   }
 }
 
+/**
+ * @deprecated Using security system instead
+ */
 function addNewUser(username, password, picture, email) {
   // Wrapper function - adds a new user to database
     //TODO: Image!

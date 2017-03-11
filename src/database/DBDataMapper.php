@@ -26,6 +26,7 @@ class DBDataMapper
             $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername;  //. '/' .$url['query'];
 
             // Create connection
+            //future disable persisistent for cleardb likely needed. add request (?reconnect=true) as well 100%
             try {
                 $pdo = new PDO($dsn, $username, $password,
                     array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_PERSISTENT => true));

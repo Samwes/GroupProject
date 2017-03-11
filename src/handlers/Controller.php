@@ -51,7 +51,6 @@ class Controller
         //TODO: Clean this up. Use -> assert instead, don't repeat checks
         // More JS handling before send off or properly implementing form with symfony form stuff
 
-
         if (!is_string($username)) {
             return new JsonResponse(array('error' => 'no usernamed'));
         } elseif (!is_string($email)) {
@@ -61,24 +60,13 @@ class Controller
         }
 
         if (!$user = $this->db->getUserByUsername($username)) {
-
-//        $token = $app['security.token_storage']->getToken();
-//        if (null !== $token) {
-//            $user = $token->getUser();
-//            $app['monolog']->addDebug('token found got user');
-//        } else {
-            $user = new User($username, null);
-//        }
-
-//        $encoded = $app->encodePassword($user, $password); //note: just get default encoder, dont make new user
-            $encoded = $app['security.encoder_factory']->getEncoder($user)->encodePassword($password, $user->getSalt());
-
-            //future Update user password? only if null. Fixup all this
+            //todo test this maybe broke it should be k
+            $encoded = $app['security.default_encoder']->encodePassword($password);
 
             //todo: now log them in
             //todo: emailing and account validation
         } else {
-            return new RedirectResponse($app['url_generator']->generate('failure'));
+            return new RedirectResponse($app['url_generator']->generate('failure')); //future different failures or messages or raise exceptions
         }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
@@ -90,6 +78,7 @@ class Controller
 
     public function foodItemPost(Request $request, Application $app)
     {
+        //fixme yeah dont think this works. Check it, fix it
         $toEncode = array("error" => "failed to add");
         $token = $app['security.token_storage']->getToken();
         if (null !== $token) {

@@ -8,17 +8,22 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
 }
 
 //TODO: have own app with useful traits
-//TODO: todo filters for each type (useful IDE thing)
+//TODO: Start extending all their classes with our own exits.
+//TODO: todo filters for each todo (fixme, future) (useful IDE thing) in alt-6 menu
+
 $app = new Silex\Application();
 //Setting
 $app['debug'] = true;
 define('DEBUG',true); //future remove this, just for old code. refactor it out completely
 
 //future force https and redirect otherwise
+//TODO: learn and use extend or this wont work (I think you can only assign to controllers once, then its an extend)
+//note as we assign here, routing cant register later
+//fixme maybe just do this after routing service proider
 //$app['controllers']
 //    ->requireHttps();
 
-//future cleanup our hosted js
+//TODO: The javascript files we have are the fulll webkits. Scrub out what we need.
 //note maybe change logging at heroku level, dont care about most (successful) connections
 
 // -------- SERVICES --------
@@ -50,10 +55,10 @@ $app->register(new Silex\Provider\SecurityServiceProvider());
 // Generate urls from bound names
 $app->register(new Silex\Provider\RoutingServiceProvider());
 
-//
+//note what is this
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
-//future: 2 new services, validator and form service?
+//future: 2 new services, validator and form service? bootstrap forms?
 //TODO: emailing and account validation
 
 // Register web profiler if in debug mode
@@ -87,6 +92,7 @@ $app['rest.handler'] = function() use ($app) {
 };
 
 // Register the user provider for security authentication
+//future use converters that input username and output a user class, either security or otherwise
 $app['user.provider'] = function () use ($app) {
     return new \Main\UserProvider($app['DB']);
 };
@@ -95,8 +101,11 @@ $app['user.provider'] = function () use ($app) {
 
 
 // -------- SECURITY --------
-//future @Security
+//future look into the entire security package, make use of it all
+//example: security.providers for database users and user class instead of users in each firewall
 //note eveyrthing is secured 3 times, maybe overkill? can put in our end notes
+
+//future logout
 
 $app['route_class'] = '\Main\SecureRouter';
 
@@ -224,7 +233,7 @@ $app->get('/account', function() use($app) {
 // -------- ERROR HANDLING --------
 //future handle authentication errors with redirects and messages
 
-//future better error handling here
+//note need better error handling here
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {
         // in debug mode we want to get the regular error message
