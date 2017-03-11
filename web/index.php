@@ -1,9 +1,5 @@
 <?php
 
-//future learn symfony forms and have them do shit
-
-//use Main\SecureRouter; //todo test in run removing this
-
 require __DIR__. '/../vendor/autoload.php';
 
 //This took a solid 2-3 hours to fix due to heroku being cunts future maybe remove this wording
@@ -11,7 +7,7 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
     $_SERVER['HTTPS']='on';
 }
 
-//future have own app with useful traits
+//fixme have own app with useful traits
 $app = new Silex\Application();
 //Settings
 $app['debug'] = true;
@@ -23,7 +19,6 @@ define('DEBUG',true); //future remove this, just for old code. refactor it out
 
 
 //fixme mysql server has gone away. possible persistance causing error. research cleardb and persistent mode
-//future look into extra modules for added features
 //future learn how symfony forms work
 //future cleanup our hosted js
 
@@ -32,6 +27,9 @@ define('DEBUG',true); //future remove this, just for old code. refactor it out
 // Register the monolog logging service
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => 'php://stderr',
+    'monolog.level' => function () {
+        return Logger::NOTICE;  //note change to debug if you want messages everywhere
+    },
 ));
 
 // Register view rendering
@@ -60,25 +58,12 @@ $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 //TODO: 2 new services, validator and form service
 
 // Register web profiler if in debug mode
-//if ($app['debug']) {
-//    $app->register(new Main\WebProfilerServiceProvider(), array(
-//        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
-//        'profiler.mount_prefix' => '/_profiler', // this is the default
-//    ));
-//}
-    //TODO: Look at source code for service above, disable useless logging because its spam central
-    //fixme seriously this spams the shit out of the log
-    //fixme maybe remove cache_dir
-//    $app['profiler.only_exceptions'] = true;
-//    $app['profiler.only_master_requests'] = true;
-
-    //fixme remove this code from the source and reuse our own class cos I think this does it all
-    //fixme or its the ProfileListener
-    //fixme remove anything that logs from this cunt class and make it our own until it doesnt rape everything
-    //        $app->extend('dispatcher', function ($dispatcher, $app) {
-//    return new TraceableEventDispatcher($dispatcher, $app['stopwatch'], $app['logger']);
-//});
-
+if ($app['debug']) {
+    $app->register(new Main\WebProfilerServiceProvider(), array(
+        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+        'profiler.mount_prefix' => '/_profiler', // this is the default
+    ));
+}
 
 // Register asset rerouting
 $app->register(new Silex\Provider\AssetServiceProvider(), array(
