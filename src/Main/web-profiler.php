@@ -67,9 +67,9 @@ class WebProfilerServiceProvider implements ServiceProviderInterface, Controller
     public function register(Container $app)
     {
         $app['profiler.mount_prefix'] = '/_profiler';
-//        $app->extend('dispatcher', function ($dispatcher, $app) {
-//            return new TraceableEventDispatcher($dispatcher, $app['stopwatch'], $app['logger']);
-//        });
+        $app->extend('dispatcher', function ($dispatcher, $app) {
+            return new TraceableEventDispatcher($dispatcher, $app['stopwatch'], $app['logger']);
+        });
 
         $baseDir = $this->getBaseDir();
 
@@ -368,17 +368,17 @@ class WebProfilerServiceProvider implements ServiceProviderInterface, Controller
 
     public function subscribe(Container $app, EventDispatcherInterface $dispatcher)
     {
-//        $dispatcher->addSubscriber($app['profiler.listener']);
+        $dispatcher->addSubscriber($app['profiler.listener']);
 
         if ($app['web_profiler.debug_toolbar.enable']) {
             $dispatcher->addSubscriber($app['web_profiler.toolbar.listener']);
         }
 
-//        $dispatcher->addSubscriber($app['profiler']->get('request'));
-//
-//        if (isset($app['var_dumper.data_collector'])) {
-//            $dispatcher->addSubscriber($app['var_dumper.dump_listener']);
-//        }
+        $dispatcher->addSubscriber($app['profiler']->get('request'));
+
+        if (isset($app['var_dumper.data_collector'])) {
+            $dispatcher->addSubscriber($app['var_dumper.dump_listener']);
+        }
     }
 
     private function getBaseDir()
