@@ -8,14 +8,15 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
 }
 
 //TODO: have own app with useful traits
+//TODO: todo filters for each type (useful IDE thing)
 $app = new Silex\Application();
 //Setting
 $app['debug'] = true;
 define('DEBUG',true); //future remove this, just for old code. refactor it out completely
 
 //future force https and redirect otherwise
-$app['controllers']
-    ->requireHttps();
+//$app['controllers']
+//    ->requireHttps();
 
 //future cleanup our hosted js
 //note maybe change logging at heroku level, dont care about most (successful) connections
