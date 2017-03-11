@@ -62,7 +62,7 @@ use Symfony\Component\Yaml\Yaml;
  * @author Fabien Potencier <fabien@symfony.com>
  * Modified cos hes crazy if he thinks all this is worth logging
  */
-class WebProfilerServiceProvider implements ServiceProviderInterface, ControllerProviderInterface, BootableProviderInterface
+class WebProfilerServiceProvider implements ServiceProviderInterface, ControllerProviderInterface, BootableProviderInterface, EventListenerProviderInterface
 {
     public function register(Container $app)
     {
