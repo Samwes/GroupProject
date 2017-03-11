@@ -154,7 +154,7 @@ $app->post('/login/user', 'rest.handler:loginAUser')
 
 // ----------------------------
 
-
+use Symfony\Component\HttpFoundation\Request;
 
 // -------- WEB PAGES --------
 //note: Web handlers with controller?
