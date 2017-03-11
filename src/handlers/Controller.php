@@ -44,8 +44,6 @@ class Controller
         $email = $request->get('email');
         $password = $request->get('password');
 
-        return new JsonResponse(array('ok' => $username));
-
         //Check Vars
         //TODO: More JS handling before send off or properly implementing form with symfony form stuff
 
