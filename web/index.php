@@ -27,7 +27,7 @@ define('DEBUG',true); //future remove this, just for old code. refactor it out
 // Register the monolog logging service
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => 'php://stderr',
-    'monolog.level' => 'Logger::NOTICE',  //note change to debug if you want messages everywhere
+    'monolog.level' => 'NOTICE',  //note change to debug if you want messages everywhere
 ));
 
 // Register view rendering
