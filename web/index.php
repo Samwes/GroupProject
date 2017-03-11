@@ -178,7 +178,7 @@ $app->get('/account/userprofile', function() use($app) {
 
 //TODO: Login page that causes you to actually login
 $app->get('/login', function(Request $request) use ($app) {
-    return $app['twig']->render('login.html', array(
+    return $app['twig']->render('login.twig', array(
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),
     ));
