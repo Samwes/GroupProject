@@ -60,14 +60,14 @@ class Controller
 
         $app['monolog']->addDebug('All checks passed');
 
-        $token = $app['security.token_storage']->getToken();
-        if (null !== $token) {
-            $user = $token->getUser();
-            $app['monolog']->addDebug('token found got user');
-        } else {
+//        $token = $app['security.token_storage']->getToken();
+//        if (null !== $token) {
+//            $user = $token->getUser();
+//            $app['monolog']->addDebug('token found got user');
+//        } else {
             $user = new User($username, null);
             $app['monolog']->addDebug('making new user no pw');
-        }
+//        }
 
 //        $encoded = $app->encodePassword($user, $password);
         $encoded = $app['security.encoder_factory']->getEncoder($user)->encodePassword($password, $user->getSalt());
