@@ -366,20 +366,20 @@ class WebProfilerServiceProvider implements ServiceProviderInterface, Controller
         $app->mount($app['profiler.mount_prefix'], $this->connect($app));
     }
 
-//    public function subscribe(Container $app, EventDispatcherInterface $dispatcher)
-//    {
+    public function subscribe(Container $app, EventDispatcherInterface $dispatcher)
+    {
 //        $dispatcher->addSubscriber($app['profiler.listener']);
-//
-//        if ($app['web_profiler.debug_toolbar.enable']) {
-//            $dispatcher->addSubscriber($app['web_profiler.toolbar.listener']);
-//        }
-//
+
+        if ($app['web_profiler.debug_toolbar.enable']) {
+            $dispatcher->addSubscriber($app['web_profiler.toolbar.listener']);
+        }
+
 //        $dispatcher->addSubscriber($app['profiler']->get('request'));
 //
 //        if (isset($app['var_dumper.data_collector'])) {
 //            $dispatcher->addSubscriber($app['var_dumper.dump_listener']);
 //        }
-//    }
+    }
 
     private function getBaseDir()
     {
