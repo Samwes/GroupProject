@@ -2,14 +2,16 @@
 
 namespace Database;
 
+use PDO;
+
 class DBDataMapper
 {
     //Provides a data wrapper service for database interactions
 
-    /** @var \PDO pdo */
+    /** @var PDO pdo */
     private $pdo;
 
-    public function __construct(\PDO $pdo = null)
+    public function __construct(PDO $pdo = null)
     {
         //TODO: Move DB login into ini file
 
@@ -27,9 +29,9 @@ class DBDataMapper
 
             // Create connection
             try {
-                $pdo = new \PDO($dsn, $username, $password,
-                    array(\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION, \PDO::ATTR_PERSISTENT => true));
-            } catch (\PDOException $e) {
+                $pdo = new PDO($dsn, $username, $password,
+                    array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_PERSISTENT => true));
+            } catch (PDOException $e) {
                 die ('Database Connection failed in create: ' . $e->getMessage());
             }
         }
