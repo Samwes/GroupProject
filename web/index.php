@@ -60,12 +60,12 @@ $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 //TODO: 2 new services, validator and form service
 
 // Register web profiler if in debug mode
-if ($app['debug']) {
-    $app->register(new Main\WebProfilerServiceProvider(), array(
-        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
-        'profiler.mount_prefix' => '/_profiler', // this is the default
-    ));
-}
+//if ($app['debug']) {
+//    $app->register(new Main\WebProfilerServiceProvider(), array(
+//        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+//        'profiler.mount_prefix' => '/_profiler', // this is the default
+//    ));
+//}
     //TODO: Look at source code for service above, disable useless logging because its spam central
     //fixme seriously this spams the shit out of the log
     //fixme maybe remove cache_dir
