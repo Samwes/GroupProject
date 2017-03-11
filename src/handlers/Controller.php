@@ -4,10 +4,9 @@
 namespace Handler;
 
 use Silex\Application;
-use Silex\Application\SecurityTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Core\User;
+use Main\User;
 use Symfony\Component\HttpFoundation\Request;
 use Database\DBDataMapper;
 
@@ -70,7 +69,8 @@ class Controller
             $app['monolog']->addDebug('making new user no constructor');
         }
 
-        $encoded = $app->encodePassword($user, $password);
+//        $encoded = $app->encodePassword($user, $password);
+        $encoded = $app['security.encoder_factory']->getEncoder($user)->encodePassword($password, $user->getSalt());
 
         $app['monolog']->addDebug('encoded password:' . $encoded);
 
