@@ -182,7 +182,7 @@ $app->get('/login', function(Request $request) use ($app) {
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),
     ));
-});
+})->bind('login');
 
 //TODO: Register a person with the DB done! Its shit
 $app->get('/register', function() use($app) {
