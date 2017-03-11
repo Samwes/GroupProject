@@ -17,8 +17,6 @@ define('DEBUG',true); //future remove this, just for old code. refactor it out
 //$app['controllers']
 //    ->requireHttps();
 
-
-//fixme mysql server has gone away. possible persistance causing error. research cleardb and persistent mode
 //future learn how symfony forms work
 //future cleanup our hosted js
 
@@ -103,16 +101,16 @@ $app['security.firewalls'] = array(
     'login' => array(
         'pattern' => '^/login',  //Match all login pages
     ),
-
+    //future seperate logins or some shit
     'loggedin' => array(
         'pattern' => '^/account',
-        'form' => array('login_path' => '/login', 'check_path' => '/account'),
+        'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
         'users' => $app['user.provider'],
     ),
 
     'admin' => array(
         'pattern' => '^/admin',
-        'form' => array('login_path' => '/login', 'check_path' => '/admin'),
+        'form' => array('login_path' => '/login', 'check_path' => '/admin/login/check'),
         'users' => $app['user.provider'],
     ),
 
@@ -151,12 +149,15 @@ $app->post('/food', 'rest.handler:foodItemPost')
 $app->post('/register/user', 'rest.handler:registerNewUser')
     -> requireHttps();
 
+$app->post('/login/user', 'rest.handler:loginAUser')
+    -> requireHttps();
+
 // ----------------------------
 
 
 
 // -------- WEB PAGES --------
-//note: Web handlers
+//note: Web handlers with controller?
 
 $app->get('/', function() use($app) {
   return $app['twig']->render('index.twig');
@@ -176,11 +177,14 @@ $app->get('/account/userprofile', function() use($app) {
 })->bind('user');
 
 //TODO: Login page that causes you to actually login
-$app->get('/login', function() use($app) {
-    return $app['twig']->render('login.twig');
-})->bind('login')->requireHttps();
+$app->get('/login', function(Request $request) use ($app) {
+    return $app['twig']->render('login.html', array(
+        'error'         => $app['security.last_error']($request),
+        'last_username' => $app['session']->get('_security.last_username'),
+    ));
+});
 
-//TODO: Register a person with the DB
+//TODO: Register a person with the DB done! Its shit
 $app->get('/register', function() use($app) {
     return $app['twig']->render('signup.twig');
 })->bind('register')->requireHttps();
