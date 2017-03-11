@@ -36,9 +36,9 @@ class DBDataMapper
         $this->pdo = $pdo;
     }
 
-    public function getUserByUsername(string $username){
+    public function getUserByUsername(string $username) {
         $query =  'SELECT * FROM `usertable` WHERE username = :un';
-        $result = NULL;
+        $result = false;
         try {
             $stmt = $this->pdo->prepare($query);
 

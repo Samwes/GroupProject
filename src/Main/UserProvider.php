@@ -22,7 +22,7 @@ class UserProvider implements UserProviderInterface
         $this->DB = $DB;
     }
 
-    public function loadUserByUsername($username)
+    public function loadUserByUsername($username) : ?User
     {
         $user = $this->DB->getUserByUsername($username);
 

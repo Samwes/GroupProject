@@ -37,6 +37,15 @@ final class User implements AdvancedUserInterface
         return $this->getUsername();
     }
 
+    public function setPassword($inPass) : bool
+    {
+        if (null === $this->password) {
+            $this->password = $inPass;
+            return true;
+        }
+        return false;
+    }
+
     public function getRoles()
     {
         return $this->roles;
