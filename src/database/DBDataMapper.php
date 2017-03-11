@@ -131,8 +131,8 @@ class DBDataMapper
     //Never call directly, simply inserts values. Use handler
     public function addNewUser($un,$pw,$pic,$email, $roles = 'ROLE_USER')
     {
-        $query = "INSERT INTO usertable (username, password, picture, email, roles) 
-                  VALUES (:un, :pw, :pic, :email, :role)";
+        $query = 'INSERT INTO usertable (username, password, picture, email, roles) 
+                  VALUES (:un, :pw, :pic, :email, :role)';
         $result = true;
         try {
             $stmt = $this->pdo->prepare($query);

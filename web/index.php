@@ -149,8 +149,8 @@ $app->post('/food', 'rest.handler:foodItemPost')
 $app->post('/register/user', 'rest.handler:registerNewUser')
     -> requireHttps();
 
-$app->post('/login/user', 'rest.handler:loginAUser')
-    -> requireHttps();
+//$app->post('/login/user', 'rest.handler:loginAUser')
+//    -> requireHttps();
 
 // ----------------------------
 
