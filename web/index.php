@@ -177,7 +177,7 @@ $app->get('/account/userprofile', function() use($app) {
 })->bind('user');
 
 //TODO: Login page that causes you to actually login
-$app->get('/login', function(Request $request) use ($app) {
+$app->get('/login', function(Request $request) use ($app) { // Use app to get request or use request as well?
     return $app['twig']->render('login.twig', array(
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),

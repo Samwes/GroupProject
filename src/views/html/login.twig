@@ -9,8 +9,9 @@
 	<div class="row">
 		<div class="Absolute-Center is-Responsive">
 			<div class="col-sm-12 col-md-10 col-md-offset-1" style="background-color: white; padding: 2rem;">
-				<form action="{{ path('account_login_check') }}" id="loginForm" method="post">
-					<h3 style="text-align: center; margin-bottom: 0.5em;">{{ error }}</h3>
+				<form action="{{ path('admin_login_check') }}" id="loginForm" method="post">
+					<h3 style="text-align: center; margin-bottom: 0.5em;">Login</h3>
+                    <h4>{{ error }}</h4>
 					<div class="form-group input-group">
 						<span class="input-group-addon square-border"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
 						<input class="form-control square-border" type="text" name='_username' placeholder="Username" value="{{ last_username }}"/>
@@ -20,7 +21,7 @@
 						<input class="form-control square-border" type="password" name='_password' placeholder="Password"/>
 					</div>
 					<div class="form-group">
-						<input type="submit" class="btn btn-def btn-block square-border">Log In</input>
+						<button type="submit" value="login" class="btn btn-def btn-block square-border">Log In</button>
 					</div>
 				</form>
 			</div>
