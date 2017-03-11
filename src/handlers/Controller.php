@@ -39,6 +39,7 @@ class Controller
     }
 
     public function registerNewUser(Request $request, Application $app){
+        return new JsonResponse(array('ok' => 'hmmm'));
         $username = $request->get('username');
         $email = $request->get('email');
         $password = $request->get('password');
