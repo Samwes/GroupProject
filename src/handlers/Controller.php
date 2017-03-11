@@ -64,7 +64,7 @@ class Controller
 
         $app['monolog']->addDebug('All checks passed');
 
-        if (!$this->db.getUserByUsername($username))
+        if (!$this->db->getUserByUsername($username))
 
 //        $token = $app['security.token_storage']->getToken();
 //        if (null !== $token) {
