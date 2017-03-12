@@ -46,6 +46,8 @@ class App extends Application{
 
         $this->registerSecurity();
 
+        $this['route_class'] = 'Main\SecureRouter';
+
         $this->defineBasicRoutes();
 
         $this->accountRoutes();

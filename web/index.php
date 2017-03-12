@@ -16,8 +16,6 @@ $app = new Main\App();
 $app['debug'] = true;
 define('DEBUG',true); //future remove this, just for old code. refactor it out completely
 
-$app['route_class'] = 'Main\SecureRouter';
-
 //TODO: learn and use extend or this wont work (I think you can only assign to controllers once, then its an extend)
 
 //TODO: The javascript files we have are the fulll webkits. Scrub out what we need only
