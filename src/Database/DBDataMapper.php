@@ -11,7 +11,7 @@ class DBDataMapper
     /** @var PDO pdo */
     private $pdo;
 
-    public function __construct(PDO $pdo = null)
+    public function __construct(bool $debug = false, PDO $pdo = null)
     {
         if (null === $pdo) {
             //future Swap on debug to localhost
@@ -28,8 +28,9 @@ class DBDataMapper
             // Create connection
             //future disable persisistent for cleardb likely needed. add request (?reconnect=true) as well 100%
             try {
+                $attributes = $debug ? array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) : null;
                 $pdo = new PDO($dsn, $username, $password,
-                    array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_PERSISTENT => true));
+                    $attributes);
             } catch (PDOException $e) {
                 die ('Database Connection failed in create: ' . $e->getMessage());
             }

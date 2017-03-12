@@ -42,6 +42,8 @@ class App extends Application{
 
         //future YAML config files? We need configs...
 
+        $this['route_class'] = 'SecureRouter';
+
         $this->registerServices();
 
         $this->registerSecurity();
@@ -54,7 +56,7 @@ class App extends Application{
 
         $this->errorHandling();
 
-        $this['route_class'] = 'SecureRouter';
+
     }
 
     private function registerServices(){
@@ -94,7 +96,7 @@ class App extends Application{
 
         // Register web profiler if in debug mode
         if ($this['debug']) {
-            $this->register(new WebProfilerServiceProvider(), array(  //note uses original
+            $this->register(new WebProfilerServiceProvider(), array(
                 'profiler.cache_dir' => __DIR__.'/../cache/profiler',
                 'profiler.mount_prefix' => '/_profiler', // this is the default
             ));
@@ -114,7 +116,7 @@ class App extends Application{
 
         // Register DB provider service
         $this['DB'] = function() {
-            return new DBDataMapper();
+            return new DBDataMapper($debug = $this['debug']);
         };
 
         // Register our routing controllers
@@ -140,7 +142,7 @@ class App extends Application{
             'login' => array(
                 'pattern' => '^/login',  //Match all login pages
             ),
-            //future seperate logins or some shit
+            //future seperate logins or some shit or ?
             'main' => array(
                 'pattern' => '[^/account]|[^admin]',
                 'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),

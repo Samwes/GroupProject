@@ -10,6 +10,7 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
 //TODO: Start extending all their classes with our own exits.
 //TODO: todo filters for each todo (fixme, future) (useful IDE thing) in alt-6 menu
 
+//future can put options here?
 $app = new Main\App();
 //Setting
 $app['debug'] = true;
