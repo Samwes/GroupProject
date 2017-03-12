@@ -23,9 +23,9 @@
   },
   "autoload": {
     "psr-4": {
-      "Handler\\": "src/handlers/",
+      "Handler\\": "src/Handlers/",
       "Main\\" : "src/Main/",
-      "Database\\" : "src/database/"
+      "Database\\" : "src/Database/"
     }
   }
 }

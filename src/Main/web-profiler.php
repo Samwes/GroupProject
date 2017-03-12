@@ -208,7 +208,7 @@ class WebProfilerServiceProvider implements ServiceProviderInterface, Controller
             $app['profiler.templates_path.security'] = function () {
                 $r = new \ReflectionClass('Symfony\Bundle\SecurityBundle\DataCollector\SecurityDataCollector');
 
-                return dirname(dirname($r->getFileName())).'/Resources/views';
+                return dirname(dirname($r->getFileName())).'/Resources/Views';
             };
 
             $app['twig'] = $app->extend('twig', function ($twig, $app) {
@@ -321,7 +321,7 @@ class WebProfilerServiceProvider implements ServiceProviderInterface, Controller
         $app['profiler.templates_path'] = function () {
             $r = new \ReflectionClass('Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener');
 
-            return dirname(dirname($r->getFileName())).'/Resources/views';
+            return dirname(dirname($r->getFileName())).'/Resources/Views';
         };
 
         $app['profiler.templates_path.debug'] = function () {
@@ -331,7 +331,7 @@ class WebProfilerServiceProvider implements ServiceProviderInterface, Controller
                 }
 
                 if ($file = $autoloader[0]->findFile('Symfony\Bundle\DebugBundle\DebugBundle')) {
-                    return dirname($file).'/Resources/views';
+                    return dirname($file).'/Resources/Views';
                 }
             }
         };

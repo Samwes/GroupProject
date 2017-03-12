@@ -22,7 +22,7 @@ use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\AssetServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
-use Handler\Controller;
+use Handler\Requests;
 use Database\DBDataMapper;
 
 //fixme use some\namespace\{ClassA, ClassB, ClassC as C}; todo this
@@ -45,7 +45,30 @@ class App extends Application{
 
         $this->registerSecurity();
 
+        $this->errorHandling();
+
         $this['route_class'] = 'SecureRouter';
+
+    }
+
+    private function errorHandling() {
+        //future handle authentication errors with redirects and messages
+
+        //note need better error handling here
+        $this->error(function (\Exception $e, $code) :?Response {
+            if ($this['debug']) {
+                // in debug mode we want to get the regular error message
+                return null; //fixme check works, could be cause of problems(remove null)
+            }
+            switch ($code) {
+                case 404:
+                    $message = 'The requested page could not be found.';
+                    break;
+                default:
+                    $message = 'We are sorry, but something went terribly wrong.';
+            }
+            return new Response($message);
+        });
 
     }
 
@@ -60,8 +83,8 @@ class App extends Application{
         $this->register(new TwigServiceProvider(), array(
             'twig.path' =>
                 array(
-                    __DIR__ . '/../src/views/html/',
-                    __DIR__ . '/../src/views/html/components',
+                    __DIR__ . '/../src/Views/html/',
+                    __DIR__ . '/../src/Views/html/components',
                 )
         ));
         // Registering service controllers
@@ -110,7 +133,7 @@ class App extends Application{
 
         // Register our routing controllers
         $this['rest.handler'] = function() {
-            return new Controller($this['DB']);
+            return new Requests($this['DB']);
         };
 
         // Register the user provider for security authentication
@@ -123,7 +146,7 @@ class App extends Application{
 
     private function registerSecurity(){
         //future look into the entire security package, make use of it all
-        //example: security.providers for database users and user class instead of users in each firewall
+        //example: security.providers for Database users and user class instead of users in each firewall
         //note eveyrthing is secured 3 times, maybe overkill? can put in our end notes
 
         //future logout

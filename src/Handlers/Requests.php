@@ -10,7 +10,7 @@ use Main\User;
 use Symfony\Component\HttpFoundation\Request;
 use Database\DBDataMapper;
 
-class Controller
+class Requests
 {
 
     /**

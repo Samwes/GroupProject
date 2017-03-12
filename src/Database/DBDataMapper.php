@@ -6,7 +6,7 @@ use PDO;
 
 class DBDataMapper
 {
-    //Provides a data wrapper service for database interactions
+    //Provides a data wrapper service for Database interactions
 
     /** @var PDO pdo */
     private $pdo;

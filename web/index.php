@@ -48,7 +48,7 @@ $app->get('/food/{userID}', 'rest.handler:foodItemsGet')
 
 //future Secure post for registered users only
 $app->post('/food', 'rest.handler:foodItemPost')
-    -> secure('ROLE_USER');
+    -> secure('ROLE_USER'); //future can we remove this error or fix it?
 
 $app->post('/register/user', 'rest.handler:registerNewUser')
     -> requireHttps();
@@ -60,7 +60,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 // -------- WEB PAGES --------
-//future Web handlers with controller as service, seperate class.
+//future Web Handlers with controller as service, seperate class.
 //future Move this all out, app class, router (get/post) classes etc. (split normal/admin/user etc?)
 
 $app->get('/', function() use($app) {
@@ -123,24 +123,7 @@ $app->get('/account', function() use($app) {
 
 
 // -------- ERROR HANDLING --------
-//future handle authentication errors with redirects and messages
-
-//note need better error handling here
-$app->error(function (\Exception $e, $code) use ($app) {
-    if ($app['debug']) {
-        // in debug mode we want to get the regular error message
-        return;
-    }
-    switch ($code) {
-        case 404:
-            $message = 'The requested page could not be found.';
-            break;
-        default:
-            $message = 'We are sorry, but something went terribly wrong.';
-    }
-    return new Response($message);
-});
-
+//note moved to class
 // ----------------------------
 
 //Finally Run
