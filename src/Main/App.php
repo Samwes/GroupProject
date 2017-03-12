@@ -42,8 +42,6 @@ class App extends Application{
 
         //future YAML config files? We need configs...
 
-        $this['route_class'] = 'Main\SecureRouter';
-
         $this->registerServices();
 
         $this->registerSecurity();
