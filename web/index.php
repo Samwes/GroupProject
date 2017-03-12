@@ -7,11 +7,10 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
     $_SERVER['HTTPS']='on';
 }
 
-//TODO: have own app with useful traits
 //TODO: Start extending all their classes with our own exits.
 //TODO: todo filters for each todo (fixme, future) (useful IDE thing) in alt-6 menu
 
-$app = new Silex\Application();
+$app = new Main\App();
 //Setting
 $app['debug'] = true;
 define('DEBUG',true); //future remove this, just for old code. refactor it out completely
@@ -23,127 +22,20 @@ define('DEBUG',true); //future remove this, just for old code. refactor it out c
 //$app['controllers']
 //    ->requireHttps();
 
-//TODO: The javascript files we have are the fulll webkits. Scrub out what we need.
+//TODO: The javascript files we have are the fulll webkits. Scrub out what we need only
 //note maybe change logging at heroku level, dont care about most (successful) connections
 
 // -------- SERVICES --------
-
-// Register the monolog logging service
-$app->register(new Silex\Provider\MonologServiceProvider(), array(
-    'monolog.logfile' => 'php://stderr',
-    'monolog.level' => 'WARNING',  //note change to debug if you want messages everywhere
-));
-
-// Register view rendering
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' =>
-    array(
-        __DIR__ . '/../src/views/html/',
-        __DIR__ . '/../src/views/html/components',
-    )
-));
-// Registering service controllers
-$app->register(new Silex\Provider\ServiceControllerServiceProvider());
-
-// Register session storage for between request data store
-$app->register(new Silex\Provider\SessionServiceProvider());
-
-// Register security service
-$app->register(new Silex\Provider\SecurityServiceProvider());
-//TODO: remember me
-
-// Generate urls from bound names
-$app->register(new Silex\Provider\RoutingServiceProvider());
-
-//note what is this
-$app->register(new Silex\Provider\HttpFragmentServiceProvider());
-
-//future: 2 new services, validator and form service? bootstrap forms?
-//TODO: emailing and account validation
-
-// Register web profiler if in debug mode
-if ($app['debug']) {
-    $app->register(new Main\WebProfilerServiceProvider(), array(
-        'profiler.cache_dir' => __DIR__.'/../cache/profiler',
-        'profiler.mount_prefix' => '/_profiler', // this is the default
-    ));
-}
-
-// Register asset rerouting
-$app->register(new Silex\Provider\AssetServiceProvider(), array(
-    'assets.version' => 'v1',
-    'assets.version_format' => '%s?version=%s',
-    'assets.named_packages' => array(
-        'css' => array('version' => 'css3', 'base_path' => 'stylesheets/'),
-        'images' => array('base_path' => 'images/'),
-        'food' => array('base_path' => 'images/food/'),
-        'javascript' => array('base_path' => 'js/'),
-    ),
-));
-
-// Register DB provider service
-$app['DB'] = function() {
-    return new \Database\DBDataMapper();
-};
-
-// Register our routing controllers
-$app['rest.handler'] = function() use ($app) {
-    return new \Handler\Controller($app['DB']);
-};
-
-// Register the user provider for security authentication
-//future use converters that input username and output a user class, either security or otherwise
-$app['user.provider'] = function () use ($app) {
-    return new \Main\UserProvider($app['DB']);
-};
-
+//note moved to class
 // ----------------------------
 
 
 // -------- SECURITY --------
-//future look into the entire security package, make use of it all
-//example: security.providers for database users and user class instead of users in each firewall
-//note eveyrthing is secured 3 times, maybe overkill? can put in our end notes
-
-//future logout
-
-$app['route_class'] = '\Main\SecureRouter';
-
-$app['security.firewalls'] = array(
-    'login' => array(
-        'pattern' => '^/login',  //Match all login pages
-    ),
-    //future seperate logins or some shit
-    'loggedin' => array(
-        'pattern' => '^/account',
-        'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
-        'users' => $app['user.provider'],
-    ),
-
-    'admin' => array( //note no idea if this works (the login check part for admin accounts)
-        'pattern' => '^/admin',
-        'form' => array('login_path' => '/login', 'check_path' => '/admin/login/check'),
-        'users' => $app['user.provider'],
-    ),
-
-    'unsecured' => array(
-        'anonymous' => true,
-        'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
-    ),
-);
-
-$app['security.role_hierarchy'] = array(
-    'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
-);
-
-$app['security.access_rules'] = array(
-    array('^/admin', 'ROLE_ADMIN', 'https'),
-    array('^/account', 'ROLE_USER', 'https'),
-);
-
+//note moved to class
 // ----------------------------
 
 
+//future decide where these will go. Own classes, app class, new controllers. whatever. todo
 
 // -------- REST API --------
 //note: All get/posts

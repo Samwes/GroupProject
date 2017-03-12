@@ -1,4 +1,8 @@
-<?php
+<?ph
+
+// fixme refactor out, maybe still need guid command (image names), into service or controller
+//future store image original name ot let them set one? as well as guid
+//note or could just use autoID ....? have a image table with id and path
 
 function checkAuth(){
     $continue = true;
