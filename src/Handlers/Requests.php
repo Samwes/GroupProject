@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Handler;
 
 use Silex\Application;
@@ -47,16 +46,11 @@ class Requests
         $email = $request->get('email');
         $password = $request->get('password');
 
-        //Check Vars
-        //TODO: Clean this up. Use -> assert instead, don't repeat checks
+        //todo JS error handling? password length, valid email etc.
         // More JS handling before send off or properly implementing form with symfony form stuff
 
-        if (!is_string($username)) {
-            return new JsonResponse(array('error' => 'no usernamed'));
-        } elseif (!is_string($email)) {
-            return new JsonResponse(array('error' => 'no email'));
-        } elseif (!is_string($password)) {
-            return new JsonResponse(array('error' => 'no password'));
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new JsonResponse(array('error' => 'email invalid'));
         }
 
         if (!$user = $this->db->getUserByUsername($username)) {
@@ -66,13 +60,13 @@ class Requests
             //todo: now log them in
             //todo: emailing and account validation
         } else {
-            return new RedirectResponse($app['url_generator']->generate('failure')); //future different failures or messages or raise exceptions
+            return new RedirectResponse($app['url_generator']->generate('login')); //future different failures or messages or raise exceptions
         }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
             return new RedirectResponse($app['url_generator']->generate('index'));
         } else {
-            return new RedirectResponse($app['url_generator']->generate('failure'));
+            throw new \RuntimeException(sprintf('Cant create user %s', $username)); //future just database error or?
         }
     }
 

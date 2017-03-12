@@ -12,7 +12,6 @@ use Silex\Provider\FormServiceProvider;
 use Silex\Provider\HttpCacheServiceProvider;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
-use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Silex\Provider\RememberMeServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\MonologServiceProvider;
@@ -22,6 +21,8 @@ use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\AssetServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Handler\Requests;
 use Database\DBDataMapper;
 
@@ -45,31 +46,15 @@ class App extends Application{
 
         $this->registerSecurity();
 
+        $this->defineBasicRoutes();
+
+        $this->accountRoutes();
+
+        $this->restAPI();
+
         $this->errorHandling();
 
         $this['route_class'] = 'SecureRouter';
-
-    }
-
-    private function errorHandling() {
-        //future handle authentication errors with redirects and messages
-
-        //note need better error handling here
-        $this->error(function (\Exception $e, $code) :?Response {
-            if ($this['debug']) {
-                // in debug mode we want to get the regular error message
-                return null; //fixme check works, could be cause of problems(remove null)
-            }
-            switch ($code) {
-                case 404:
-                    $message = 'The requested page could not be found.';
-                    break;
-                default:
-                    $message = 'We are sorry, but something went terribly wrong.';
-            }
-            return new Response($message);
-        });
-
     }
 
     private function registerServices(){
@@ -96,6 +81,7 @@ class App extends Application{
         // Register security service
         $this->register(new SecurityServiceProvider());
         //TODO: remember me
+        //TODO: ValidatorServiceProvider
 
         // Generate urls from bound names
         $this->register(new RoutingServiceProvider());
@@ -146,26 +132,19 @@ class App extends Application{
 
     private function registerSecurity(){
         //future look into the entire security package, make use of it all
-        //example: security.providers for Database users and user class instead of users in each firewall
-        //note eveyrthing is secured 3 times, maybe overkill? can put in our end notes
 
         //future logout
 
-
+        //fixme only one firewall? cant authenticate to two
         $this['security.firewalls'] = array(
             'login' => array(
                 'pattern' => '^/login',  //Match all login pages
             ),
             //future seperate logins or some shit
-            'loggedin' => array(
-                'pattern' => '^/account',
+            'main' => array(
+                'pattern' => '[^/account]|[^admin]',
                 'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
-                'users' => $this['user.provider'],
-            ),
-
-            'admin' => array( //note no idea if this works (the login check part for admin accounts)
-                'pattern' => '^/admin',
-                'form' => array('login_path' => '/login', 'check_path' => '/admin/login/check'),
+                'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
                 'users' => $this['user.provider'],
             ),
 
@@ -185,4 +164,89 @@ class App extends Application{
         );
 
     }
+
+    private function errorHandling() {
+        //future handle authentication errors with redirects and messages
+
+        //note need better error handling here
+        $this->error(function (\Exception $e, $code) :?Response {
+            if ($this['debug']) {
+                // in debug mode we want to get the regular error message
+                return null; //fixme check works, could be cause of problems(remove null)
+            }
+            switch ($code) {
+                case 404:
+                    $message = 'The requested page could not be found.';
+                    break;
+                default:
+                    $message = 'We are sorry, but something went terribly wrong.';
+            }
+            return new Response($message);
+        });
+
+    }
+
+    private function defineBasicRoutes() {
+        $this->get('/', function() {
+            return $this['twig']->render('index.twig');
+        })->bind('index');
+        
+        $this->get('/index', function()  {
+            return new RedirectResponse($this['url_generator']->generate('index'));
+        });
+
+        $this->get('/login', function(Request $request) {
+            return $this['twig']->render('login.twig', array(
+                'error'         => $this['security.last_error']($request),
+                'last_username' => $this['session']->get('_security.last_username'),
+            ));
+        })->bind('login');
+
+        $this->get('/register', function() {
+            return $this['twig']->render('signup.twig');
+        })->bind('register')->requireHttps();
+
+        $this->get('/item/{id}', function($id) {
+            return $this['twig']->render('itemPage.twig', array (
+                'itemid' => $id,
+                )
+            );
+        });
+        //})->bind('item');
+
+    }
+
+    private function accountRoutes(){
+        $account = $this['controllers_factory'];
+
+        $account->get('/scanner', function() {
+            return $this['twig']->render('scanner.twig');
+        })->bind('scanner');
+
+        $account->get('/userprofile', function(){
+            return $this['twig']->render('userProfile.twig');
+        })->bind('user');
+
+        $this->mount('/account', $account);
+    }
+
+    private function restAPI(){
+        $this->get('/food/{foodID}', 'rest.handler:foodItemGet')
+            -> assert('foodID', '\d+');
+
+        $this->get('/food/{userID}', 'rest.handler:foodItemsGet')
+            -> assert('userID', '\d+');
+
+        //future Secure post for registered users only
+        $this->post('/food', 'rest.handler:foodItemPost')
+            -> secure('ROLE_USER');
+
+        $this->post('/register/user', 'rest.handler:registerNewUser')
+            -> requireHttps()
+            -> assert('username', '^[a-zA-Z0-9_]+$')
+            -> assert('password','^[\w]+$');
+
+    }
+
+    //future admin routes
 }

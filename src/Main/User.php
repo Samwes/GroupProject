@@ -22,6 +22,7 @@ final class User implements AdvancedUserInterface
             throw new \InvalidArgumentException('The username cannot be empty.');
         }
         //future exceptions? no null id/pw ?
+        //future activate with email, add to database is_allowed
 
         $this->userID = $userid;
         $this->username = $username;
