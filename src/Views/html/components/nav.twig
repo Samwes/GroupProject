@@ -143,9 +143,9 @@ $(function() {
 
 // For launching panels and switching between register/login
 $("#login-form-link").click(function(e) {
-  if($("#login-form-link").hasClass("active")) {
-    $("#login-submit").click();
-  } else {
+  //if($("#login-form-link").hasClass("active")) {
+  //  $("#login-submit").click();
+  //} else {
     $("#registerForm").addClass('hidden-xs-up');
     $("#loginForm").removeClass('hidden-xs-up');
     $("#login-form-link").addClass("active");
@@ -153,9 +153,9 @@ $("#login-form-link").click(function(e) {
   }
 });
 $("#register-form-link").click(function(e) {
-  if($("#register-form-link").hasClass("active")) {
-    $("#register").click();
-  } else {
+  //if($("#register-form-link").hasClass("active")) {
+  //  $("#register").click();
+  //} else {
     $("#loginForm").addClass('hidden-xs-up');
     $("#registerForm").removeClass('hidden-xs-up');
     $("#register-form-link").addClass("active");
