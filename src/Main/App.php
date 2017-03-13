@@ -70,7 +70,7 @@ class App extends Application{
         $this->register(new TwigServiceProvider(), array(
             'twig.path' =>
                 array(
-                    '/../src/Views/html/',
+                    $this->get('kernel')->getRootDir().'src/Views/html/',
                     '/../src/Views/html/components',
                 )
         ));
