@@ -1,3 +1,7 @@
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    {% redirect path('index') %}
+{% endif %}
+
 {% extends 'layout.twig' %}
 
 {% block head %}

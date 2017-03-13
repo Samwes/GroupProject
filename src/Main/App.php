@@ -126,19 +126,13 @@ class App extends Application{
 
         //fixme only one firewall? cant authenticate to two
         $this['security.firewalls'] = array(
-//            'login' => array(
-//                'pattern' => '^/login',  //Match all login pages
-//            ),
-            //future seperate logins or some shit or ?
             'main' => array(
                 'anonymous' => true,
-//                'pattern' => '^/account|^/admin',
                 'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
                 'logout' => array('logout_path' => '/account/logout', 'invalidate_session' => true),
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
                 'users' => $this['user.provider'],
             ),
-
         );
 
         $this['security.role_hierarchy'] = array(
