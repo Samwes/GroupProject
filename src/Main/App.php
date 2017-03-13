@@ -70,8 +70,8 @@ class App extends Application{
         $this->register(new TwigServiceProvider(), array(
             'twig.path' =>
                 array(
-                    $this->get('kernel')->getRootDir().'src/Views/html/',
-                    '/../src/Views/html/components',
+                    ROOT . '/../src/Views/html/',
+                    ROOT . '/../src/Views/html/components',
                 )
         ));
         // Registering service controllers
@@ -97,7 +97,7 @@ class App extends Application{
         // Register web profiler if in debug mode
         if ($this['debug']) {
             $this->register(new WebProfilerServiceProvider(), array(
-                'profiler.cache_dir' => __DIR__.'/../cache/profiler',
+                'profiler.cache_dir' => ROOT . '/../cache/profiler',
                 'profiler.mount_prefix' => '/_profiler', // this is the default
             ));
         }

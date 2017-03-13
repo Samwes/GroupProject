@@ -1,6 +1,9 @@
 <?php
 
-require __DIR__. '/../vendor/autoload.php';
+define('DEBUG',true); //future remove this, just for old code. refactor it out completely
+define('ROOT',__DIR__);
+
+require ROOT . '/../vendor/autoload.php';
 
 //This took a solid 2-3 hours to fix due to heroku being cunts future maybe remove this wording
 if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'){
@@ -14,7 +17,7 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
 $app = new Main\App();
 //Setting
 $app['debug'] = true;
-define('DEBUG',true); //future remove this, just for old code. refactor it out completely
+
 
 //TODO: learn and use extend or this wont work (I think you can only assign to controllers once, then its an extend)
 
