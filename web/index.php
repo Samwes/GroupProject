@@ -1,6 +1,6 @@
 <?php
 
-define('DEBUG',true); //future remove this, just for old code. refactor it out completely
+define('DEBUG',true);
 define('ROOT',__DIR__);
 
 require ROOT . '/../vendor/autoload.php';
@@ -10,7 +10,7 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
     $_SERVER['HTTPS']='on';
 }
 
-//TODO: Start extending all their classes with our own.
+//future Start extending all their classes with our own.
 //TODO: todo filters for each todo (fixme, future) (useful IDE thing) in alt-6 menu
 
 $app = new Main\App(array ( 'debug' => DEBUG));
