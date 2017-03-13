@@ -101,7 +101,7 @@
               <div class="form-group">
                 <div class="row">
                   <div class="col-sm-6 col-sm-offset-3">
-                    <button type="submit" value="register" name="register" id="register" tabindex="4" class="form-control btn btn-login">Register</button>
+                    <button type="submit" value="register" name="register" id="register" tabindex="4" class="form-control btn btn-login hidden-xs-up">Register</button>
                   </div>
                 </div>
               </div>
@@ -143,16 +143,24 @@ $(function() {
 
 // For launching panels and switching between register/login
 $("#login-form-link").click(function(e) {
-  $("#registerForm").addClass('hidden-xs-up');
-  $("#loginForm").removeClass('hidden-xs-up');
-  $("#login-form-link").addClass("active");
-  $("#register-form-link").removeClass("active");
+  if($("#login-form-link").hasClass("active")) {
+    $("#login-submit").click();
+  } else {
+    $("#registerForm").addClass('hidden-xs-up');
+    $("#loginForm").removeClass('hidden-xs-up');
+    $("#login-form-link").addClass("active");
+    $("#register-form-link").removeClass("active");
+  }
 });
 $("#register-form-link").click(function(e) {
-  $("#loginForm").addClass('hidden-xs-up');
-  $("#registerForm").removeClass('hidden-xs-up');
-  $("#register-form-link").addClass("active");
-  $("#login-form-link").removeClass("active");
+  if($("#register-form-link").hasClass("active")) {
+    $("#register").click();
+  } else {
+    $("#loginForm").addClass('hidden-xs-up');
+    $("#registerForm").removeClass('hidden-xs-up');
+    $("#register-form-link").addClass("active");
+    $("#login-form-link").removeClass("active");
+  }
 });
 $(function() {
   $('#login-form-link').click(function(e) {
