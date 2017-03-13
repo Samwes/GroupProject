@@ -174,14 +174,18 @@ class App extends Application{
         })->bind('index');
 
         $this->get('/index', function()  {
-            return new RedirectResponse($this->generate('index'));
+            return new RedirectResponse($this->url('index'));
         });
 
         $this->get('/login', function(Request $request) {
+            if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+                return new RedirectResponse($this->url('index'));
+            }
+            else {
             return $this['twig']->render('login.twig', array(
                 'error'         => $this['security.last_error']($request),
                 'last_username' => $this['session']->get('_security.last_username'),
-            ));
+            ));}
         })->bind('login');
 
         $this->get('/register', function() {
