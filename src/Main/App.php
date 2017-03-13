@@ -144,7 +144,7 @@ class App extends Application{
             ),
             //future seperate logins or some shit or ?
             'main' => array(
-                'pattern' => '[^/account]|[^admin]',
+                'pattern' => '^/account|^/admin',
                 'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
                 'users' => $this['user.provider'],
