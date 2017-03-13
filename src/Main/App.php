@@ -146,7 +146,7 @@ class App extends Application{
             'main' => array(
                 'pattern' => '^/account|^/admin',
                 'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
-                'logout' => array('logout_path' => '/account/logout/', 'invalidate_session' => true),
+                'logout' => array('logout_path' => '/account/logout', 'invalidate_session' => true),
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
                 'users' => $this['user.provider'],
             ),
