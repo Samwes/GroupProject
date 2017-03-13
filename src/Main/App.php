@@ -151,10 +151,10 @@ class App extends Application{
                 'users' => $this['user.provider'],
             ),
 
-            'unsecured' => array(
-                'anonymous' => true,
-                'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
-            ),
+//            'unsecured' => array(
+//                'anonymous' => true,
+//                'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
+//            ),
         );
 
         $this['security.role_hierarchy'] = array(
