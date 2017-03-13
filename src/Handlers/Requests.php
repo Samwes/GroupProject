@@ -62,17 +62,17 @@ class Requests
             //todo: now log them in
             //todo: emailing and account validation
         } else {
-            return new RedirectResponse($app->generate('login')); //future different failures or messages or raise exceptions
+            return new RedirectResponse($app->path('login')); //future different failures or messages or raise exceptions
         }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
 
             $user = $app['user.provider']->loadUserByUsername($username);
-            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $token = new UsernamePasswordToken($user, $encoded, 'main', $user->getRoles());
             $app['security.token_storage']->setToken($token);
             $app['session']->set('_security_main', serialize($token));
 
-            return new RedirectResponse($app->generate('user'));
+            return new RedirectResponse($app->path('user'));
         } else {
             throw new \RuntimeException(sprintf('Cant create user %s', $username)); //future just database error or?
         }
