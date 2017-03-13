@@ -27,7 +27,8 @@ class Requests
     //note: Request handling functions go here
 
     public function foodItemsGet(Request $request, App $app, $userID) {
-        die(var_dump($app['security.authentication_providers'] ));
+
+        //fixme needs new route {} as param just accepts all, name irrelevant (not in query string)
         $toEncode = $this->db->getFoodItemsByUserID($userID);
         if ($toEncode === null){
             $toEncode = array('error' => 'failed');}
@@ -37,6 +38,7 @@ class Requests
 
     public function foodItemGet(Request $request, App $app, $foodID)
     {
+        die(var_dump($app['security.authentication_providers'] ));
         $toEncode = $this->db->getFoodItemByID($foodID);
         if ($toEncode === null){
             $toEncode = array('error' => 'failed');}
