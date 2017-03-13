@@ -4,23 +4,11 @@
 namespace Main;
 
 use Silex\Application;
-use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\SessionServiceProvider;
-use Silex\Provider\ValidatorServiceProvider;
-use Silex\Provider\FormServiceProvider;
-use Silex\Provider\HttpCacheServiceProvider;
-use Silex\Provider\HttpFragmentServiceProvider;
-use Silex\Provider\SecurityServiceProvider;
-use Silex\Provider\RememberMeServiceProvider;
-use Silex\Provider\SwiftmailerServiceProvider;
-use Silex\Provider\MonologServiceProvider;
-use Silex\Provider\RoutingServiceProvider;
+use Silex\Provider\{TwigServiceProvider, UrlGeneratorServiceProvider, SessionServiceProvider, ValidatorServiceProvider};
+use Silex\Provider\{FormServiceProvider,HttpCacheServiceProvider,HttpFragmentServiceProvider,SecurityServiceProvider};
+use Silex\Provider\{RememberMeServiceProvider,SwiftmailerServiceProvider,MonologServiceProvider,RoutingServiceProvider};
+use Silex\Provider\{DoctrineServiceProvider,ServiceControllerServiceProvider,AssetServiceProvider,WebProfilerServiceProvider};
 use Symfony\Component\Translation\Loader\YamlFileLoader;
-use Silex\Provider\DoctrineServiceProvider;
-use Silex\Provider\ServiceControllerServiceProvider;
-use Silex\Provider\AssetServiceProvider;
-use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Handler\Requests;
