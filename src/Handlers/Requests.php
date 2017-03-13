@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Main\User;
+use Main\App;
 use Symfony\Component\HttpFoundation\Request;
 use Database\DBDataMapper;
 
@@ -25,7 +26,7 @@ class Requests
 
     //note: Request handling functions go here
 
-    public function foodItemsGet(Request $request, Application $app, $userID) {
+    public function foodItemsGet(Request $request, App $app, $userID) {
         $toEncode = $this->db->getFoodItemsByUserID($userID);
         if ($toEncode === null){
             $toEncode = array('error' => 'failed');}
@@ -33,7 +34,7 @@ class Requests
         return new JsonResponse($toEncode);
     }
 
-    public function foodItemGet(Request $request, Application $app, $foodID)
+    public function foodItemGet(Request $request, App $app, $foodID)
     {
         $toEncode = $this->db->getFoodItemByID($foodID);
         if ($toEncode === null){
@@ -42,7 +43,7 @@ class Requests
         return new JsonResponse($toEncode);
     }
 
-    public function registerNewUser(Request $request, Application $app){
+    public function registerNewUser(Request $request, App $app){
         $username = $request->get('username');
         $email = $request->get('email');
         $password = $request->get('password');
