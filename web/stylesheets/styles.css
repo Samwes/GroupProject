@@ -25,6 +25,11 @@
   border: 0;
 }
 
+.card-img-top {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
 .square-border {
   border-radius: 0;
   border: 1px solid #cccccc;
@@ -45,6 +50,26 @@
 
 .no-padding {
   padding: 0;
+}
+
+.bg-faded {
+  background-color: #FAFAFA;
+}
+
+.btn-option {
+  height: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  background-color: #FAFAFA;
+  /*background-color: #E8E9EC;*/
+  border: 0;
+  border-left: 1px solid #dce0e0;
+  color: #55595c;
+}
+
+.btn-option:hover {
+  background-color: #2D3B55;
+  color: white;
 }
 
 i.fa-user-circle {
@@ -203,10 +228,11 @@ color: grey !important;
 .btn-login {
   background-color: #E8E9EC;
   outline: none;
-  color: #2D3B55;
+  color: #55595c;
   height: auto;
   font-weight: normal;
   padding: 16px;
+  text-align: center;
   /*text-transform: uppercase;*/
   border: none;
   border-radius: 0px;
@@ -234,8 +260,43 @@ color: grey !important;
 .tabs {
   padding: 0!important;
 }
+.custom-control-description {
+  color: #55595c;
+}
+.panel-title {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #55595c;
+}
 
 /* X-editable */
 .editable-click {
   border-bottom: 0!important;
+}
+
+/* Buttons */
+.fake-button-new:hover, .fake-button-new:focus {
+  background-color: #FAFAFA;
+  color: #55595c;
+  cursor: default;
+}
+.btn-signup, .btn-signup:hover, .btn-signup:focus {
+  border: 0;
+  background-color: #FAFAFA;
+  color: #55595c;
+}
+
+/* Popovers */
+.popover {
+  border-radius: 0;
+  /*border-color: #dce0e0;*/
+}
+
+.popover::after, .popover::before {
+  border-style: hidden;
+}
+
+.popover.bs-tether-element-attached-top, .popover.popover-bottom {
+  margin-top: 0;
 }
