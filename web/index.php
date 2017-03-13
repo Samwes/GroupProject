@@ -14,9 +14,8 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
 //TODO: todo filters for each todo (fixme, future) (useful IDE thing) in alt-6 menu
 
 //future can put options here?
-$app = new Main\App();
-//Setting
-$app['debug'] = true;
+$app = new Main\App(array ( 'debug' => DEBUG));
+
 
 
 //TODO: learn and use extend or this wont work (I think you can only assign to controllers once, then its an extend)
