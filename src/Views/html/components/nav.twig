@@ -27,13 +27,25 @@
     </ul>
 
     <ul class="nav navbar-nav float-xs-right">
+      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
       <li class="nav-item" style="height: 63px;">
         <button id="register-button" class="btn btn-option btn-signup square-border" style="margin-right: -16px;" type="button" data-toggle="modal" data-target="#loginModal" onclick="$('#register-form-link').click();">Register</button>
       </li>
       <li class="nav-item" style="height: 63px;">
         <button id="login-button" class="btn btn-option btn-signup square-border" type="button" data-toggle="modal" data-target="#loginModal" onclick="$('#login-form-link').click();">Login</button>
       </li>
+      {% else %}
+      <li class="nav-item" style="height: 63px;">
+        <button class="btn btn-link" id="user-popover" style="padding: 0; font-size:1.1rem;"  data-container="body" data-toggle="popover" data-placement="bottom" data-content="Content">
+          <i class="fa fa-user-circle fa-2x" aria-hidden="true">
+            <span class="fa fa-circle"></span>
+            <span class="notif-num">3</span>
+          </i>
+        </button>
+      </li>
+      {% endif %}
     </ul>
+
 
   </div>
 </nav>
