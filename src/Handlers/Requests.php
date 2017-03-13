@@ -27,6 +27,7 @@ class Requests
     //note: Request handling functions go here
 
     public function foodItemsGet(Request $request, App $app, $userID) {
+        die(var_dump($app['security.authentication_providers'] ));
         $toEncode = $this->db->getFoodItemsByUserID($userID);
         if ($toEncode === null){
             $toEncode = array('error' => 'failed');}

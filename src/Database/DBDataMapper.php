@@ -19,6 +19,8 @@ class DBDataMapper
 
 //            die (var_dump($url));
 
+            //TODO: remove userid and just have username?
+
             $servername = $url["host"];
             $username = $url["user"];
             $password = $url["pass"];
