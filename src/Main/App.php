@@ -44,7 +44,6 @@ class App extends Application{
 
         $this->errorHandling();
 
-
     }
 
     private function registerServices(){
@@ -127,9 +126,9 @@ class App extends Application{
 
         //fixme only one firewall? cant authenticate to two
         $this['security.firewalls'] = array(
-            'login' => array(
-                'pattern' => '^/login',  //Match all login pages
-            ),
+//            'login' => array(
+//                'pattern' => '^/login',  //Match all login pages
+//            ),
             //future seperate logins or some shit or ?
             'main' => array(
                 'anonymous' => true,
@@ -140,10 +139,6 @@ class App extends Application{
                 'users' => $this['user.provider'],
             ),
 
-//            'unsecured' => array(
-//                'anonymous' => true,
-//                'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
-//            ),
         );
 
         $this['security.role_hierarchy'] = array(
