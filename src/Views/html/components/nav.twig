@@ -36,7 +36,7 @@
           </i>
         </button>
         <div id="user-popover-content" class="hidden-xs-up">
-          <button class="btn btn-primary" href="{{ path('account_logout') }}">Logout</button>
+          <button class="btn btn-primary" href="www.google.co.uk">Logout</button>
         </div>
       </li>
       {% else %}
@@ -77,7 +77,7 @@
                 </label>
               </div>
               <div class="col-xs-6 form-group">
-                <button type="submit" value="login" name="login" id="login-submit" tabindex="4" class="form-control btn btn-login">Login</button>
+                <button type="submit" value="login" name="login" id="login-submit" tabindex="4" class="form-control btn btn-login hidden-xs-up">Login</button>
               </div>
             </form>
             <form id="registerForm" class="hidden-xs-up" action="{{ path('account_login_check') }}" method="post">
