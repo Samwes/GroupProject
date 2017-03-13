@@ -152,7 +152,7 @@ class App extends Application{
             ),
 
             'unsecured' => array(
-                'anonymous' => false,
+                'anonymous' => true,
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
             ),
         );
