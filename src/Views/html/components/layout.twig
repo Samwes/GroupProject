@@ -2,15 +2,13 @@
 <html>
 <head>
   {% include 'header.twig' %}
-  
+
   {% block head %}{% endblock %}
 </head>
 
 <body onResize=resize()>
 
     {% include 'nav.twig' %}
-
-    {% include 'categorybar.twig' %}
 
     {% block content %}{% endblock %}
 

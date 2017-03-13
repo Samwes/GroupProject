@@ -2,11 +2,12 @@
 
 namespace Handler;
 
-use Main\Application;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Main\User;
+use Main\App;
 use Symfony\Component\HttpFoundation\Request;
 use Database\DBDataMapper;
 
@@ -25,7 +26,9 @@ class Requests
 
     //note: Request handling functions go here
 
-    public function foodItemsGet(Request $request, Application $app, $userID) {
+    public function foodItemsGet(Request $request, App $app, $userID) {
+
+        //fixme needs new route {} as param just accepts all, name irrelevant (not in query string)
         $toEncode = $this->db->getFoodItemsByUserID($userID);
         if ($toEncode === null){
             $toEncode = array('error' => 'failed');}
@@ -33,7 +36,7 @@ class Requests
         return new JsonResponse($toEncode);
     }
 
-    public function foodItemGet(Request $request, Application $app, $foodID)
+    public function foodItemGet(Request $request, App $app, $foodID)
     {
         $toEncode = $this->db->getFoodItemByID($foodID);
         if ($toEncode === null){
@@ -42,7 +45,7 @@ class Requests
         return new JsonResponse($toEncode);
     }
 
-    public function registerNewUser(Request $request, Application $app){
+    public function registerNewUser(Request $request, App $app){
         $username = $request->get('username');
         $email = $request->get('email');
         $password = $request->get('password');
@@ -56,22 +59,23 @@ class Requests
 
         if (!$user = $this->db->getUserByUsername($username)) {
             //todo test this maybe broke it should be k
-            $encoded = $app['security.default_encoder']->encodePassword($password);
+            $encoded = $app['security.default_encoder']->encodePassword($password,null);
 
-            //todo: now log them in
+            //todo: storage (rememberme)
             //todo: emailing and account validation
         } else {
-            return new RedirectResponse($app->generate('login')); //future different failures or messages or raise exceptions
+//            return new RedirectResponse($app->path('user')); //future different failures or messages or raise exceptions
+            throw new \RuntimeException(sprintf('Cant create user %s', $username)); //future just database error or?
         }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
 
-            $user = $this['user.provider']->loadUserByUsername($username);
-            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-            $app->get('security.token_storage')->setToken($token);
-            $app->get('session')->set('_security_main', serialize($token));
+            $user = $app['user.provider']->loadUserByUsername($username);
+            $token = new UsernamePasswordToken($username, null, 'main', $user->getRoles());
+//            $app['security.token_storage']->setToken($token);  //note doesnt work?
+            $app['session']->set('_security_main', serialize($token));
 
-            return new RedirectResponse($app->generate('user'));
+            return new RedirectResponse($app->path('user'));
         } else {
             throw new \RuntimeException(sprintf('Cant create user %s', $username)); //future just database error or?
         }
