@@ -146,7 +146,7 @@ class App extends Application{
             'main' => array(
                 'pattern' => '^/account|^/admin',
                 'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
-                //'logout' => array('logout_path' => '/logout/', 'invalidate_session' => true),
+                'logout' => array('logout_path' => '/account/logout/', 'invalidate_session' => true),
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
                 'users' => $this['user.provider'],
             ),
@@ -194,7 +194,7 @@ class App extends Application{
         $this->get('/', function() {
             return $this['twig']->render('index.twig');
         })->bind('index');
-        
+
         $this->get('/index', function()  {
             return new RedirectResponse($this->generate('index'));
         });
