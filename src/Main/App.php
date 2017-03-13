@@ -70,8 +70,8 @@ class App extends Application{
         $this->register(new TwigServiceProvider(), array(
             'twig.path' =>
                 array(
-                    __DIR__ . '/../src/Views/html/',
-                    __DIR__ . '/../src/Views/html/components',
+                    '/../src/Views/html/',
+                    '/../src/Views/html/components',
                 )
         ));
         // Registering service controllers
