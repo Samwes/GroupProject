@@ -2,9 +2,10 @@
 
 namespace Handler;
 
-use Silex\Application;
+use Main\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Main\User;
 use Symfony\Component\HttpFoundation\Request;
 use Database\DBDataMapper;
@@ -60,17 +61,23 @@ class Requests
             //todo: now log them in
             //todo: emailing and account validation
         } else {
-            return new RedirectResponse($app['url_generator']->generate('login')); //future different failures or messages or raise exceptions
+            return new RedirectResponse($app->generate('login')); //future different failures or messages or raise exceptions
         }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
-            return new RedirectResponse($app['url_generator']->generate('index'));
+
+            $user = $this['user.provider']->loadUserByUsername($username);
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $app->get('security.token_storage')->setToken($token);
+            $app->get('session')->set('_security_main', serialize($token));
+
+            return new RedirectResponse($app->generate('user'));
         } else {
             throw new \RuntimeException(sprintf('Cant create user %s', $username)); //future just database error or?
         }
     }
 
-    public function foodItemPost(Request $request, Application $app)
+    public function foodItemPst(Request $request, Application $app)
     {
         //fixme yeah dont think this works. Check it, fix it
         $toEncode = array("error" => "failed to add");
