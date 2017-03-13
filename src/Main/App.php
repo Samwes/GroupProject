@@ -170,6 +170,7 @@ class App extends Application{
 
     private function errorHandling() {
         //future handle authentication errors with redirects and messages
+        //future includes admin pages (which raise AccessDeniedHttpException)
 
         //note need better error handling here
         $this->error(function (\Exception $e, $code) :?Response {
@@ -252,4 +253,5 @@ class App extends Application{
     }
 
     //future admin routes
+
 }

@@ -38,7 +38,6 @@ class Requests
 
     public function foodItemGet(Request $request, App $app, $foodID)
     {
-        die(var_dump($app['security.authentication_providers'] ));
         $toEncode = $this->db->getFoodItemByID($foodID);
         if ($toEncode === null){
             $toEncode = array('error' => 'failed');}
@@ -62,7 +61,7 @@ class Requests
             //todo test this maybe broke it should be k
             $encoded = $app['security.default_encoder']->encodePassword($password,null);
 
-            //todo: now log them in
+            //todo: storage (rememberme)
             //todo: emailing and account validation
         } else {
 //            return new RedirectResponse($app->path('user')); //future different failures or messages or raise exceptions
@@ -73,7 +72,7 @@ class Requests
 
             $user = $app['user.provider']->loadUserByUsername($username);
             $token = new UsernamePasswordToken($username, null, 'main', $user->getRoles());
-//            $app['security.token_storage']->setToken($token);
+//            $app['security.token_storage']->setToken($token);  //note doesnt work?
             $app['session']->set('_security_main', serialize($token));
 
             return new RedirectResponse($app->path('user'));
