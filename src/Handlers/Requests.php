@@ -66,7 +66,7 @@ class Requests
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
 
-            $user = $this['user.provider']->loadUserByUsername($username);
+            $user = $app['user.provider']->loadUserByUsername($username);
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
             $app->get('security.token_storage')->setToken($token);
             $app->get('session')->set('_security_main', serialize($token));
