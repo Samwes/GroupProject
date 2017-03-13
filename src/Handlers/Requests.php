@@ -56,7 +56,7 @@ class Requests
 
         if (!$user = $this->db->getUserByUsername($username)) {
             //todo test this maybe broke it should be k
-            $encoded = $app['security.default_encoder']->encodePassword($password);
+            $encoded = $app['security.default_encoder']->encodePassword($password,null);
 
             //todo: now log them in
             //todo: emailing and account validation
