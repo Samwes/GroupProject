@@ -10,12 +10,12 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
     $_SERVER['HTTPS']='on';
 }
 
-//future Start extending all their classes with our own.
-//TODO: todo filters for each todo (fixme, future) (useful IDE thing) in alt-6 menu
+//future git mergetool and difftool. git templates?
+//note extending classes with our own.
+//TODO: todo filters for each (fixme, future) (useful IDE thing) in alt-6 menu
 
 $app = new Main\App(array ( 'debug' => DEBUG));
 
-//TODO: The javascript files we have are the fulll webkits. Scrub out what we need only
 //note maybe change logging at heroku level, dont care about most (successful) connections
 
 // -------- SERVICES --------
