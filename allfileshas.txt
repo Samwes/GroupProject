@@ -5,6 +5,7 @@
 04d50e259c700d86c11422dcd8fcbda76ffbf87c
 05408675871d1bd239783cd72500b8bd62878838
 05b5cea785623b8f95295fc2e8e98f0df81d442e
+06e51820564e39bc2a3f52e9c902844cc2928a98
 0703d8cb073235893aec04a4195368fb932697d6
 070f80859429a36b8a48d97371ce007ba9993a08
 07e3a96425d0e47cd9b3b3f9de59b8c0b35a563c
@@ -391,6 +392,7 @@ a83885ec8386ad7b58caf8ddfdfad55752a75f89
 ab32867655a08bacf0def95d43ef9b36611a621f 
 ab50517daf51d9f7677676165f1714d46f7545b9 
 ac74338fb704dd282c66b63c61ec51d6cc41d068 
+b002b86120495b71210ece72c450cff1a4d225bd 
 b068184ec060172938b00345ae5b221e7d679914 
 b07ece00056cf496dc74f904c6af9ced491537c2 
 b23972c73d5352e39d35ec53f684da82084a11e0 
@@ -475,12 +477,15 @@ ace72cf73f30337ccd3fbdcd2e46749cc7e7679f .gitignore
 deaf3941cb1881527d57ddb6c1556aa30e919943 .gitignore
 7f96fe6f3213de0b17bd67d141f5cbe8132b6174 .jshintrc
 1f6fcc52da268d9ea9d64957c54692dc67117644 allfileshas.txt
+c2472db96ac83aa19f1a91d3db1de440719947f5 allfileshas.txt
 da6ecc70ac5d67cb2e0c3eee1ef0d2c6aa13e6f2 allfileshas.txt
 a99252a0c6f6f8cf84ac9c771e82b38412b18c58 app.json
 32bd318afed217062bd265d2cf58e3cafc5a3138 bigobjects.txt
 740d7afb74905f8ebd8ded7aa73c180a57f393da bigobjects.txt
+a89f93f0bfde0b2071c20dc11fe43ca0e40f1a53 bigobjects.txt
 7a7c7698766e06cf7bb53607508dd1b6b69b172c bigtosmall.txt
 bbdebb281c03a852cc171113f5ee1e146b601fd7 bigtosmall.txt
+f84986813e974c43a2d3c6ac375457d9f0fbdebf bigtosmall.txt
 004070ce553d296179970d772ae1fb9059723b91 composer.json
 058a47e3a2b4f01316195db9d1de6eda062a7145 composer.json
 2537fd37552de3b11edda016ade42dd18d9efaed composer.json
@@ -660,6 +665,7 @@ f6122d5dd176af45c8519e95613c7f6b05fc2ce4 src
 f6ac4818764cbd7b4952097a9a9a79f667792acf src
 f72c2ed63bbce4c8d395f7b6c40c5b85ec75ae61 src
 f7733ffba7e55ca0714845c0c386d926cead5d75 src
+f7d384bc031c81a3834ef5f35aa13553c6937fbd src
 f87c26b9c2e19a0405affeac81f91a1455e808b6 src
 fcfea480cae50e7d6d8c05e494eae242e024eefe src
 fdd0e3575b420ec84781f9917f590d77c904e371 src
@@ -981,6 +987,7 @@ fe6ba21602634075e1ca9c283ddd319f54bb50c3 src/views
 90d1cb7940af6f08cd629a434ee547558bdcde12 src/Views
 ab59a5e610210355ad5388d9500800be43acc027 src/Views
 af04e08b3d84b7e281a53e67f91b2e0742668754 src/Views
+bcfa7885567abbf86feb00a670350fc15696dc32 src/Views
 c83d4e124bedc68778000c36a39903b924ab7711 src/Views
 cbb62ab77c77799a233a60bd196f53450f8568d2 src/Views
 d6c9259fcfae539a34b62f3cc282141ac78c2da1 src/Views
@@ -1031,6 +1038,7 @@ f03ca5caa03b1295a0eb9f54c353e8221739d979 src/views/html
 80dec440ef1070a4ff8ffedb0171468cf6cd6bde src/Views/html
 83d1174ce297b005d4409ea899f632fd4268fcb3 src/Views/html
 8a99de7926814737fa9a6610a494c0a46cb6b60f src/Views/html
+978ccb635f37dccaa53fb144fb19997945820085 src/Views/html
 a1aabd37d783eccd8e1e8ea2f12d226f089e5068 src/Views/html
 b0f293dee5ff6692954704e4c6c9fd27322f406f src/Views/html
 bb35999d65c26959a6ea83eb95ea48ba4bfdb668 src/Views/html
@@ -1053,6 +1061,7 @@ fadae9f5965f1ddfd034049843d8145cdc0b75a7 src/Views/html
 c9f1bb6fcb45c6e61dbbfaaa6769c0412392b4b2 src/views/html/components
 04b73e7bc6d648fc2c3c85d34687fbd6eb4cd515 src/Views/html/components
 1ae3a2424df6331d33728ac379764d1642d4abcb src/Views/html/components
+1b82adc10ffe83f6a91daf3f74250ab571a94572 src/Views/html/components
 26910473e81c9b1638ffa928ecb96f8ccea27558 src/Views/html/components
 2e000dd9399d5f696a4379d0b8dc5911744d5b79 src/Views/html/components
 37ad1cc0a7d1cfc1b00cae588c8803d96009f010 src/Views/html/components
@@ -1083,6 +1092,7 @@ c98c05585dcfd2da1232f742863c27e3c585fc39 src/Views/html/components/categorybar.t
 52641126dbf755f229e1c3f4e87f8aee0c04f106 src/views/html/components/header.twig
 601183b1cf9b65362f823e6e6e3c6ad92820776f src/views/html/components/header.twig
 402d38d692a3ccf9c632423e98a29e7b8e1911b7 src/Views/html/components/header.twig
+83dfcd4c84d2f062fab15cc84585c78c5da8c13b src/Views/html/components/header.twig
 0d4c9633806772fee7117812dccac82cf2cb11c8 src/views/html/components/layout.twig
 12793f3e4e924ea80802c35ce22025a2535bf202 src/Views/html/components/layout.twig
 851c10c606221b11786e08da277734d9ebb77d96 src/Views/html/components/layout.twig
@@ -1185,6 +1195,7 @@ b792902c9c567dd0da21fed979b3a0fd12d68aa4 src/views/html/userProfile.twig
 5269cec0b48419caaff9352f85aedf95f1c0dc42 web
 5541c18187bf6382a1fdcbde6d70fe4c93c3b5f2 web
 563abbf8d55b552c3aff9029e90be3c9f5ecd246 web
+57e8abda57750419c8557b76776a799eaf237037 web
 5b051d616a8e52080f1492d5a8ded533e821e3ab web
 5b5f72eefe8df726229811cdb6730b84caf570e2 web
 5f209968451f2ca32857fd0a46e7052948a96024 web
@@ -1404,6 +1415,7 @@ dfbacf0aac7597d81d70c47c2870b2f939ad41e6 web/javascript
 95aebeb8b1f6d2cbc647c0eb3f6b1966f9e33f6f web/javascript/wrappers.js
 27a453fd36ec8912889c10e706366ae406d79341 web/js
 4e4fdeb4640020cc2ab6873f143e29114a705ad0 web/js
+7947541e341f62f238c293b1d91c9b126b66c287 web/js
 89c0b0880cd9f56c578f26985335ea9b2445759b web/js
 8f39cf832c5c40ecc16c8a8d522018c375727bdb web/js
 a7f7b24aca1e37eac8e6fd7c6240055a3aad0840 web/js
@@ -1420,6 +1432,7 @@ eaef0de969cca4b6990c3472450d4cd6bde456f5 web/js/bootstrap3-editable/css/bootstra
 dd8138568e29426a6219d36a938124b5c6a4f161 web/js/bootstrap3-editable/js/bootstrap-editable.js
 e2703aee8d832ee1feae2d9a276489ae8610aff4 web/js/bootstrap3-editable/js/bootstrap-editable.min.js
 b0bab5af341d1bb040ab3b4f43bcfa607536e6b7 web/js/cropit-master
+f6c6997fa092825c349e98ca9efb630a20bf8a39 web/js/cropit-master
 0bc7c7177f21027b44e6145aa858e3fb360db088 web/js/cropit-master/.gitignore
 0d26cf47179eaf3a31379a7e8c6958fd01ea76ea web/js/cropit-master/.jshintrc
 920ac7f0155f12676dd2b18bf2c93ae9779c68f0 web/js/cropit-master/bower.json
@@ -1452,6 +1465,7 @@ ce2038faba2eef134dfd55d381fa77a5d6f0a4ed web/js/cropit-master/update_version.js
 d8def19752ff413a9e116c7d1a3a3c825af59652 web/js/cropit-master/webpack.config.js
 31fec610ab776af559153155c358ef82de8631a5 web/js/functions.js
 b7fc00464e697ec805692325fee25a52a0f957bd web/js/functions.js
+1121b32a0c3407e3b0ae7a5069b1aa608be82b90 web/js/quaggaJS-master
 b09bd63ec9aa2b00c206d687b6624c13f6e3785a web/js/quaggaJS-master
 09b5e3c373a08e20d6f312deb75fcc31a514ebb2 web/js/quaggaJS-master/.babelrc
 628f484665123474b641547dbcce3dadcdf42961 web/js/quaggaJS-master/.eslintrc
