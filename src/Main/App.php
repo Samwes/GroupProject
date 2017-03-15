@@ -223,8 +223,8 @@ class App extends Application{
             -> assert('userID', '\d+');
 
         $this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
-            -> assert('category', '^[a-zA-Z0-9_%]')
-            -> assert('search', '^[a-zA-Z0-9_%]');
+            -> assert('category', '[a-zA-Z0-9_%]*')
+            -> assert('search', '[a-zA-Z0-9_%]*');
 
         //future Secure post for registered users only
         $this->post('/food', 'rest.handler:foodItemPost')
