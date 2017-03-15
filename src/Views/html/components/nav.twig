@@ -27,22 +27,25 @@
     </ul>
 
     <ul class="nav navbar-nav float-xs-right">
-      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <li class="nav-item" style="height: 63px;">
-          <button class="btn btn-link" id="user-popover" style="padding: 0; font-size:1.1rem;"  data-container="body" data-toggle="popover" data-placement="bottom" data-content="Content">
-            <i class="fa fa-user-circle fa-2x" aria-hidden="true">
-              <span class="fa fa-circle"></span>
-              <span class="notif-num">3</span>
-            </i>
-          </button>
-        </li>
+      {% if is_granted('ROLE_USER') %}
+      <li class="nav-item" style="height: 63px;">
+        <button class="btn btn-link" id="user-popover" style="padding: 0; font-size:1.1rem; height: 100%;"  data-container="body" data-toggle="popover" data-placement="bottom">
+          <i class="fa fa-user-circle fa-2x" aria-hidden="true">
+            <span class="fa fa-circle"></span>
+            <span class="notif-num">3</span>
+          </i>
+        </button>
+        <div id="user-popover-content" class="hidden-xs-up">
+          <a class="btn btn-primary" href="{{ path('account_logout')}}">Logout</a>
+        </div>
+      </li>
       {% else %}
-        <li class="nav-item" style="height: 63px;">
-          <button id="register-button" class="btn btn-option btn-signup square-border" style="margin-right: -16px;" type="button" data-toggle="modal" data-target="#loginModal" onclick="$('#register-form-link').click();">Register</button>
-        </li>
-        <li class="nav-item" style="height: 63px;">
-          <button id="login-button" class="btn btn-option btn-signup square-border" type="button" data-toggle="modal" data-target="#loginModal" onclick="$('#login-form-link').click();">Login</button>
-        </li>
+      <li class="nav-item" style="height: 63px;">
+        <button id="register-button" class="btn btn-option btn-signup square-border" style="margin-right: -16px;" type="button" data-toggle="modal" data-target="#loginModal" onclick="changeToRegisterForm();">Register</button>
+      </li>
+      <li class="nav-item" style="height: 63px;">
+        <button id="login-button" class="btn btn-option btn-signup square-border" type="button" data-toggle="modal" data-target="#loginModal" onclick="changeToLoginForm();">Login</button>
+      </li>
       {% endif %}
     </ul>
   </div>
@@ -72,7 +75,7 @@
                 </label>
               </div>
               <div class="col-xs-6 form-group">
-                <button type="submit" value="login" name="login" id="login-submit" tabindex="4" class="form-control btn btn-login">Login</button>
+                <button type="submit" value="login" name="login" id="login-submit" tabindex="4" class="form-control btn btn-login hidden-xs-up">Login</button>
               </div>
             </form>
             <form id="registerForm" class="hidden-xs-up" action="{{ path('account_login_check') }}" method="post">
@@ -96,7 +99,7 @@
               <div class="form-group">
                 <div class="row">
                   <div class="col-sm-6 col-sm-offset-3">
-                    <button type="submit" value="register" name="register" id="register" tabindex="4" class="form-control btn btn-login">Register</button>
+                    <button type="submit" value="register" name="register" id="register" tabindex="4" class="form-control btn btn-login hidden-xs-up">Register</button>
                   </div>
                 </div>
               </div>
@@ -138,32 +141,48 @@ $(function() {
 
 // For launching panels and switching between register/login
 $("#login-form-link").click(function(e) {
-  $("#registerForm").addClass('hidden-xs-up');
-  $("#loginForm").removeClass('hidden-xs-up');
-  $("#login-form-link").addClass("active");
-  $("#register-form-link").removeClass("active");
+  if($("#login-form-link").hasClass("active")) {
+    $("#login-submit").click();
+  } else {
+    $("#registerForm").addClass('hidden-xs-up');
+    $("#loginForm").removeClass('hidden-xs-up');
+    $("#login-form-link").addClass("active");
+    $("#register-form-link").removeClass("active");
+  }
 });
 $("#register-form-link").click(function(e) {
-  $("#loginForm").addClass('hidden-xs-up');
-  $("#registerForm").removeClass('hidden-xs-up');
-  $("#register-form-link").addClass("active");
-  $("#login-form-link").removeClass("active");
+  if($("#register-form-link").hasClass("active")) {
+    $("#register").click();
+  } else {
+    $("#loginForm").addClass('hidden-xs-up');
+    $("#registerForm").removeClass('hidden-xs-up');
+    $("#register-form-link").addClass("active");
+    $("#login-form-link").removeClass("active");
+  }
 });
 $(function() {
   $('#login-form-link').click(function(e) {
+    changeToLoginForm();
+  });
+  $('#register-form-link').click(function(e) {
+    changeToRegisterForm();
+  });
+
+  function changeToLoginForm() {
     $("#login-form").delay(100).fadeIn(100);
     $("#register-form").fadeOut(100);
     $('#register-form-link').removeClass('active');
     $(this).addClass('active');
     e.preventDefault();
-  });
-  $('#register-form-link').click(function(e) {
+  }
+
+  function changeToRegisterForm() {
     $("#register-form").delay(100).fadeIn(100);
     $("#login-form").fadeOut(100);
     $('#login-form-link').removeClass('active');
     $(this).addClass('active');
     e.preventDefault();
-  });
+  }
 });
 </script>
 
@@ -177,4 +196,14 @@ function resize() {
   $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
   $('#search-navbar-group').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
 }
+</script>
+
+<script>
+// User Login Popover
+$('#user-popover').popover({
+  html : true,
+  content: function() {
+    return $("#user-popover-content").html();
+  }
+});
 </script>

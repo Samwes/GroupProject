@@ -19,6 +19,8 @@ class DBDataMapper
 
 //            die (var_dump($url));
 
+            //TODO: remove userid and just have username?
+
             $servername = $url["host"];
             $username = $url["user"];
             $password = $url["pass"];
@@ -59,7 +61,7 @@ class DBDataMapper
     public function getFoodItemsByUserID(int $id)
     {
         $query = 'SELECT `expirydate`,`category`,`foodid`,`name`,`description`,`latit`,`longit`,`amount`,
-                  `weight` ,`image`,`active`,`hidden` 
+                  `weight` ,`image`,`active`,`hidden`
                     FROM `itemtable`
                     WHERE `userid` = :id';
         $result = NULL;
@@ -81,7 +83,7 @@ class DBDataMapper
     public function getFoodItemByID($id)
     {
         $query = 'SELECT `expirydate`,`category`,`userid`,`name`,`description`,`latit`,`longit`,`amount`,
-                  `weight` ,`image`,`active`,`hidden` 
+                  `weight` ,`image`,`active`,`hidden`
                     FROM `itemtable`
                     WHERE `foodid` = :id';
         $result = NULL;
@@ -102,7 +104,7 @@ class DBDataMapper
 
     public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image)
     {
-        $query = 'INSERT INTO itemtable (name, expirydate, category,userid,description,latit,longit,amount,weight,image) 
+        $query = 'INSERT INTO itemtable (name, expirydate, category,userid,description,latit,longit,amount,weight,image)
         VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)';
         $result = true;
         try {
@@ -116,7 +118,7 @@ class DBDataMapper
                 ':desc' => $desc,
                 ':lat' => $lat,
                 ':long' => $long,
-                ':amount' => $amount,               
+                ':amount' => $amount,
                 ':weight' => $weight,
                 ':image' => $image
             ));
@@ -131,7 +133,7 @@ class DBDataMapper
     //Never call directly, simply inserts values. Use handler
     public function addNewUser($un,$pw,$pic,$email, $roles = 'ROLE_USER')
     {
-        $query = 'INSERT INTO usertable (username, password, picture, email, roles) 
+        $query = 'INSERT INTO usertable (username, password, picture, email, roles)
                   VALUES (:un, :pw, :pic, :email, :role)';
         $result = true;
         try {
@@ -198,7 +200,7 @@ class DBDataMapper
 
     public function addAuthToken($un,$pw,$pic,$email,$salt)
     {
-        $query = "INSERT INTO authtable (username, password, picture, email, salt) 
+        $query = "INSERT INTO authtable (username, password, picture, email, salt)
                   VALUES (:un, :pw, :pic, :email, :salt)";
         $result = true;
         try {
@@ -382,6 +384,28 @@ class DBDataMapper
             if (DEBUG) echo 'Getting requests by ID failed: ' . $e->getMessage();
         }
         $stmt = NULL;
+        return $result;
+    }
+
+		public function mainSearch($category, $search)
+    {
+        // Simple Search
+        $query = "SELECT *
+                    FROM `itemtable`
+                    WHERE `category` = :category AND `name` LIKE :search";
+        $result = NULL;
+        try {
+            $stmt = $this->pdo->prepare($query);
+
+            $stmt->execute(array(
+                ':category' => $category
+            ));
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Search by category and search text failed: ' . $e->getMessage();
+        }
+        stmt = NULL;
         return $result;
     }
 

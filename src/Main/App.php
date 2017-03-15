@@ -4,23 +4,11 @@
 namespace Main;
 
 use Silex\Application;
-use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\SessionServiceProvider;
-use Silex\Provider\ValidatorServiceProvider;
-use Silex\Provider\FormServiceProvider;
-use Silex\Provider\HttpCacheServiceProvider;
-use Silex\Provider\HttpFragmentServiceProvider;
-use Silex\Provider\SecurityServiceProvider;
-use Silex\Provider\RememberMeServiceProvider;
-use Silex\Provider\SwiftmailerServiceProvider;
-use Silex\Provider\MonologServiceProvider;
-use Silex\Provider\RoutingServiceProvider;
+use Silex\Provider\{TwigServiceProvider, UrlGeneratorServiceProvider, SessionServiceProvider, ValidatorServiceProvider};
+use Silex\Provider\{FormServiceProvider,HttpCacheServiceProvider,HttpFragmentServiceProvider,SecurityServiceProvider};
+use Silex\Provider\{RememberMeServiceProvider,SwiftmailerServiceProvider,MonologServiceProvider,RoutingServiceProvider};
+use Silex\Provider\{DoctrineServiceProvider,ServiceControllerServiceProvider,AssetServiceProvider,WebProfilerServiceProvider};
 use Symfony\Component\Translation\Loader\YamlFileLoader;
-use Silex\Provider\DoctrineServiceProvider;
-use Silex\Provider\ServiceControllerServiceProvider;
-use Silex\Provider\AssetServiceProvider;
-use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Handler\Requests;
@@ -55,7 +43,6 @@ class App extends Application{
         $this->restAPI();
 
         $this->errorHandling();
-
 
     }
 
@@ -139,20 +126,12 @@ class App extends Application{
 
         //fixme only one firewall? cant authenticate to two
         $this['security.firewalls'] = array(
-            'login' => array(
-                'pattern' => '^/login',  //Match all login pages
-            ),
-            //future seperate logins or some shit or ?
             'main' => array(
-                'pattern' => '^/account|^/admin',
+                'anonymous' => true,
                 'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
+                'logout' => array('logout_path' => '/account/logout', 'invalidate_session' => true),
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
                 'users' => $this['user.provider'],
-            ),
-
-            'unsecured' => array(
-                'anonymous' => true,
-                'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
             ),
         );
 
@@ -169,6 +148,7 @@ class App extends Application{
 
     private function errorHandling() {
         //future handle authentication errors with redirects and messages
+        //future includes admin pages (which raise AccessDeniedHttpException)
 
         //note need better error handling here
         $this->error(function (\Exception $e, $code) :?Response {
@@ -192,16 +172,19 @@ class App extends Application{
         $this->get('/', function() {
             return $this['twig']->render('index.twig');
         })->bind('index');
-        
+
         $this->get('/index', function()  {
-            return new RedirectResponse($this['url_generator']->generate('index'));
+            return new RedirectResponse($this->url('index'));
         });
 
         $this->get('/login', function(Request $request) {
+            if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+                return new RedirectResponse($this->url('index'));
+            } else {
             return $this['twig']->render('login.twig', array(
                 'error'         => $this['security.last_error']($request),
                 'last_username' => $this['session']->get('_security.last_username'),
-            ));
+            ));}
         })->bind('login');
 
         $this->get('/register', function() {
@@ -239,6 +222,10 @@ class App extends Application{
         $this->get('/food/{userID}', 'rest.handler:foodItemsGet')
             -> assert('userID', '\d+');
 
+        $this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
+            -> assert('category', '\d+')
+            -> assert('search', '\d+');
+
         //future Secure post for registered users only
         $this->post('/food', 'rest.handler:foodItemPost')
             -> secure('ROLE_USER');
@@ -251,4 +238,5 @@ class App extends Application{
     }
 
     //future admin routes
+
 }
