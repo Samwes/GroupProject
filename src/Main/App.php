@@ -221,13 +221,12 @@ class App extends Application{
 
         $this->get('/food/html/{foodID}', function($foodID) {
           $foodData = $this['DB']->getFoodItemByID($foodID);
-          print_r($foodData);
           return $this->renderView('foodcard.twig', array (
-              'name' => foodData['name'],
-              'description' => foodData['description'],
-              'expiry' => foodData['expiry'],
-              'amount' => foodData['amount'],
-              'weight' => foodData['weight']
+              'name' => $foodData['name'],
+              'description' => $foodData['description'],
+              'expiry' => $foodData['expiry'],
+              'amount' => $foodData['amount'],
+              'weight' => $foodData['weight']
               )
           );
         }) -> assert('foodID', '\d+');
