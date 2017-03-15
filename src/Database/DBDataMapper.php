@@ -392,14 +392,12 @@ class DBDataMapper
         // Simple Search
         $query = "SELECT *
                     FROM `itemtable`
-                    WHERE `category` = :category AND `name` LIKE :search";
+                    WHERE `category` = ? AND `name` LIKE ?";
+        $params = array("$category", "%$search%");
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
-
-            $stmt->execute(array(
-                ':category' => $category
-            ));
+            $stmt->execute($params);
 
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
