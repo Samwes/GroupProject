@@ -403,7 +403,7 @@ class DBDataMapper
         } catch (PDOException $e) {
             if (DEBUG) echo 'Search by category and search text failed: ' . $e->getMessage();
         }
-        stmt = NULL;
+        $stmt = NULL;
         return $result;
     }
 
