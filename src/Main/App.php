@@ -221,7 +221,7 @@ class App extends Application{
 
         $this->get('/food/html/{foodID}', function($foodID) {
           $foodData = $this['DB']->getFoodItemByID($foodID);
-          return $this['twig']->renderView('foodcard.twig', array (
+          return $this->renderView('foodcard.twig', array (
               'name' => foodData['name'],
               'description' => foodData['description'],
               'expiry' => foodData['expiry'],
