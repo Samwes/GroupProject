@@ -219,6 +219,18 @@ class App extends Application{
         $this->get('/food/{foodID}', 'rest.handler:foodItemGet')
             -> assert('foodID', '\d+');
 
+        $this->get('/food/html/{foodID}', function($foodID) {
+          $foodData = $this['DB']->getFoodItemByID($foodID);
+          return $this['twig']->renderView('foodcard.twig', array (
+              'name' => foodData['name'],
+              'description' => foodData['description'],
+              'expiry' => foodData['expiry'],
+              'amount' => foodData['amount'],
+              'weight' => foodData['weight']
+              )
+          );
+        }) -> assert('foodID', '\d+');
+
         $this->get('/food/{userID}', 'rest.handler:foodItemsGet')
             -> assert('userID', '\d+');
 
