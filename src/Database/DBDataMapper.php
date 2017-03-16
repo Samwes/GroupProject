@@ -389,11 +389,22 @@ class DBDataMapper
 
 		public function mainSearch($category, $search)
     {
+        /*
+        SELECT * FROM course
+        WHERE description LIKE '%university%' OR description LIKE '%history%'
+        ORDER BY IF(description LIKE '%university%' and description LIKE '%history%', 0, 1)
+        LIMIT 0, 20
+        */
         // Simple Search
+        /*$query = "SELECT *
+                    FROM `itemtable`
+                    WHERE `category` = ? AND `name` LIKE ?";*/
         $query = "SELECT *
                     FROM `itemtable`
-                    WHERE `category` = ? AND `name` LIKE ?";
-        $params = array("$category", "%$search%");
+                    WHERE `category` = ? AND (`name` LIKE ? OR `description` LIKE ?)
+                    ORDER BY IF(`name` LIKE ? AND `description` LIKE ?, 0, 1)
+                    LIMIT 0, 12"
+        $params = array("$category", "%$search%", "%$search%", "%$search%", "%$search%");
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);

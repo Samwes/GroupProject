@@ -81,7 +81,7 @@ class Requests
         }
     }
 
-    public function foodItemPst(Request $request, Application $app)
+    public function foodItemPost(Request $request, Application $app)
     {
         //fixme yeah dont think this works. Check it, fix it
         $toEncode = array("error" => "failed to add");
@@ -92,7 +92,7 @@ class Requests
             $expirDate = $request->get('expiredate');
             $category = $request->get('category');
             $desc = $request->get('description');
-            $lat = $request->get('laitutde');
+            $lat = $request->get('latitude');
             $long = $request->get('longitude');
             $amount = $request->get('amount');
             $weight = $request->get('weight');
