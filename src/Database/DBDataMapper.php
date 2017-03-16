@@ -28,7 +28,7 @@ class DBDataMapper
             $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername;  //. '/' .$url['query'];
 
             // Create connection
-            //future disable persisistent for cleardb likely needed. add request (?reconnect=true) as well 100%
+            // add request (?reconnect=true) as well 100%
             try {
                 $attributes = $debug ? array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) : null;
                 $pdo = new PDO($dsn, $username, $password,
@@ -61,7 +61,7 @@ class DBDataMapper
     public function getFoodItemsByUserID(int $id)
     {
         $query = 'SELECT `expirydate`,`category`,`foodid`,`name`,`description`,`latit`,`longit`,`amount`,
-                  `weight` ,`image`,`active`,`hidden`
+                  `weight` ,`image`,`active`,`hidden` 
                     FROM `itemtable`
                     WHERE `userid` = :id';
         $result = NULL;

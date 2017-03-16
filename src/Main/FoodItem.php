@@ -11,5 +11,7 @@ namespace Main;
 
 class FoodItem
 {
-
+    private $id;
+    private $expir;
+    private $category;
 }

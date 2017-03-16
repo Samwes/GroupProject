@@ -219,6 +219,18 @@ class App extends Application{
         $this->get('/food/{foodID}', 'rest.handler:foodItemGet')
             -> assert('foodID', '\d+');
 
+        //fixme why ever use renderView. what does render do different - returns response? do we need just render
+        //fixme download plugins
+        //fixme ORM in silex? seems useful (fuck databases)
+        //fixme database generate php class? or just use ORM
+        //fixme twig render for ajax instead of return details
+        //fixme converters, wtf is this code
+        //fixme food, item class etc if cant do auto
+        //fixme git difftools
+        //fixme composer cookbook ?
+        //fixme use different pdo loading options for into class? le load into class
+
+
         $this->get('/food/html/{foodID}', function($foodID) {
           $foodData = $this['DB']->getFoodItemByID($foodID);
           return $this->renderView('foodcard.twig', array (
