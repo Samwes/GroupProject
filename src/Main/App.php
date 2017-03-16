@@ -213,13 +213,13 @@ class App extends Application{
         })->bind('user');
 
         $account->get('/userprofiletest', function($user) {
-            return $this['twig']->render('userProfileTest.twig', array(
+            return $this['twig']->render('userProfileTest.twig'/*, array(
                 'username' => $user->getUsername()
-                )
+                )*/
             );
-        })->convert('user', function() {
+        })/*->convert('user', function() {
             return $this['user.provider']->loadUserByUsername($this['session']->get('security.token_storage')->getToken()->getUser()->getUsername());
-        })->bind('usertest');
+        })*/->bind('usertest');
 
         $this->mount('/account', $account);
     }
