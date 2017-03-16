@@ -218,7 +218,7 @@ class App extends Application{
                 )
             );
         })->convert('user', function() {
-            return $this['user.provider']->loadUserByUsername($this->get('security.token_storage')->getToken()->getUser()->getUsername());
+            return $this['user.provider']->loadUserByUsername($this['session']->get('security.token_storage')->getToken()->getUser()->getUsername());
         })->bind('usertest');
 
         $this->mount('/account', $account);
