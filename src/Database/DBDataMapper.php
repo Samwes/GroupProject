@@ -401,10 +401,8 @@ class DBDataMapper
                     WHERE `category` = ? AND `name` LIKE ?";*/
         $query = "SELECT *
                     FROM `itemtable`
-                    WHERE `category` = ? AND (`name` LIKE ? OR `description` LIKE ?)
-                    ORDER BY IF(`name` LIKE ? AND `description` LIKE ?, 0, 1)
-                    LIMIT 0, 12"
-        $params = array("$category", "%$search%", "%$search%", "%$search%", "%$search%");
+                    WHERE `category` = ? AND `name` LIKE ?";
+        $params = array("$category", "%$search%");
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
