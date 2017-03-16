@@ -218,7 +218,7 @@ class App extends Application{
                 )
             );
         })->convert('user', function() {
-            return $this['user.provider']->loadUserByUsername($this['session']->get('_security.last_username'));
+            return $this['user.provider']->loadUserByUsername($this->getUser()->getUsername());
         })->bind('usertest');
 
         $this->mount('/account', $account);
