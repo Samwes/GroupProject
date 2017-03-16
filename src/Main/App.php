@@ -212,7 +212,7 @@ class App extends Application{
             return $this['twig']->render('userProfile.twig');
         })->bind('user');
 
-        $account->get('/userprofiletest', function($user) {
+      $account->get('/userprofiletest', function(/*$user*/) {
             return $this['twig']->render('userProfileTest.twig'/*, array(
                 'username' => $user->getUsername()
                 )*/
