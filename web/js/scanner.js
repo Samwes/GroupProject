@@ -233,11 +233,13 @@ $(function() {
 
         getDataOpenFoodFacts(code, function(data) {
           console.log(data);
-        	$("#name").text("Name: " + data["name"]);
-          $("#description").text("Description: " + data["description"]);
-          $("#category").text("Category: " + data["categoriesHierarchy"][0].substring(3));
-          $("#weight").text("Weight: " + data["weight"]);
-          $("#image").attr("src", data["image"]);
+        	$("#nameTextInput").val(toTitleCase(data["name"]));
+          $("#tempCategory").text(data["categoriesHierarchy"][0].substring(3));
+          $("#weightNumberInput").val(data["weight"].replace(/\D/g,''));
+          $("#descriptionTextarea").text(capitalizeFirstLetter(data["description"]));
+          if($('.image-editor').cropit('imageSrc') == "") {
+            $(".image-editor").cropit('imageSrc', data["image"]);
+          }
         });
     });
 });
