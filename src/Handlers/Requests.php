@@ -96,7 +96,8 @@ class Requests
             $long = $request->get('longitude');
             $amount = $request->get('amount');
             $weight = $request->get('weight');
-            $imagedir = null;
+            //$imagedir = null;
+            $imagedir = "none";
 
             //Check Vars
             if (!is_numeric($userID)) {
