@@ -21,7 +21,7 @@
 			<!-- INPUT A BARCODE -->
 			<h5>Scan A Barcode</h5>
 			<label class="custom-file">
-				<input type="file" accept="image/*" capture="camera" class="custom-file-input form-control-file" aria-describedby="fileHelp">
+				<input id="barcode-input" type="file" accept="image/*" capture="camera" class="custom-file-input form-control-file" aria-describedby="fileHelp">
 				<span class="custom-file-control"></span>
 			</label>
 			<small id="fileHelp" class="form-text text-muted">Uses camera on mobile device</small>
@@ -89,6 +89,9 @@
 					<input name="longitude" class="form-control mr-sm-2 square-border" type="number" step="any" onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 190' id="longitudeNumberInput">
 				</div>
 
+				<!-- HIDDEN IMAGE TO UPLOAD -->
+				<input type="hidden" name="image" class="hidden-image-data" />
+
 				<!-- SUBMIT BUTTON -->
 				<button type="submit" class="btn btn-primary">Add Food</button>
 			</form>
@@ -119,6 +122,10 @@
 <script>
 
 	function validateForm() {
+		// First set hidden image to be cropped one
+		var imageData = $('.image-editor').cropit('export');
+		$('.hidden-image-data').val(imageData);
+
 		var allValid = true;
 		if ($("#nameTextInput").val() == "") {
 			$("label[for='nameTextInput']").css({"color": "red"});
@@ -203,10 +210,6 @@ $(function() {
 		if($('.image-editor').cropit('imageSrc') == "") {
 			$('.cropit-image-input').click();
 		}
-	});
-	$('.export').click(function() {
-		var imageData = $('.image-editor').cropit('export');
-		window.open(imageData);
 	});
 });
 </script>

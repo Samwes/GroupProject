@@ -6,7 +6,7 @@ $(function() {
         attachListeners: function() {
             var self = this;
 
-            $("input[type=file]").on("change", function(e) {
+            $("#barcode-input").on("change", function(e) {
                 if (e.target.files && e.target.files.length) {
                     // Set Default Settings
                     self.setState(self._convertNameToState("decoder_readers"), "ean"); // Set barcode type to EAN
@@ -83,7 +83,7 @@ $(function() {
         },
         detachListeners: function() {
 						// Stop listening for events
-            $("input[type=file]").off("change");
+            $("#barcode-input").off("change");
             /*$(".controls .reader-config-group").off("change", "input, select");
             $(".controls button").off("click");*/
         },
