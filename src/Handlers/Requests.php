@@ -169,7 +169,9 @@ class Requests
             }
         }
 
-        echo json_encode($toEncode);
+        //echo json_encode($toEncode);
+
+        return new RedirectResponse($app->path('user'));
 
     }
 
