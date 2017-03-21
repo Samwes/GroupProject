@@ -212,9 +212,13 @@ class App extends Application{
             return $this['twig']->render('userProfile.twig');
         })->bind('user');
 
-      $account->get('/userprofiletest', function() {
+        $account->get('/userprofiletest', function() {
             return $this['twig']->render('userProfileTest.twig');
         })->bind('usertest');
+
+        $account->get('/useritems', function() {
+          return $this['twig']->render('userItems.twig');
+        })->bind('useritems');
 
         $this->mount('/account', $account);
     }

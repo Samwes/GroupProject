@@ -36,7 +36,9 @@
           </i>
         </button>
         <div id="user-popover-content" class="hidden-xs-up">
-          <a class="btn btn-primary" href="{{ path('account_logout')}}">Logout</a>
+          <a class="btn btn-primary" href="{{ path('user') }}">Your Account</a>
+          <a class="btn btn-primary" href="{{ path('useritems') }}">Your Items</a>
+          <a class="btn btn-primary" href="{{ path('account_logout') }}">Logout</a>
         </div>
       </li>
       {% else %}
