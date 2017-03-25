@@ -557,6 +557,32 @@
 
 
 {% block scripts %}
+<!-- SEARCH FUNCTIONALITY -->
+<script>
+  $(document).ready(function() {
+    // Make sure columns are empty
+    $("#item-cards").empty();
+    // Get URL Parameters
+    var category = GetURLParameter("category");
+    var search = GetURLParameter("search");
+    var query = "/search/" + category + "/" + search;
+
+    // Check both parameters exist
+    if(category != "" && search != "") {
+      $.getJSON(query, function(data) {
+        // Data is list of relevant items
+        $.each(data, function(index, foodid) {
+          $.get("/food/html/" + foodid, function(html) {
+            $("#item-cards").append(html);
+          });
+        });
+    });
+    }
+
+  });
+</script>
+
+
 <!-- CORRECT SIZES OF ELEMENTS -->
 <script>
   $(document).ready(function() {

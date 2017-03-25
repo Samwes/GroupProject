@@ -399,7 +399,7 @@ class DBDataMapper
         /*$query = "SELECT *
                     FROM `itemtable`
                     WHERE `category` = ? AND `name` LIKE ?";*/
-        $query = "SELECT *
+        $query = "SELECT `foodid`
                     FROM `itemtable`
                     WHERE `category` = ? AND `name` LIKE ?";
         $params = array("$category", "%$search%");
