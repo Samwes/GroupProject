@@ -568,8 +568,8 @@
     if(category && search) {
       var query = "/search/" + category.replace("+", " ") + "/" + search.replace("+", " ");
       // Set Category and Search on page
-      $("#main-search-input").val(search);
-      $("#categories-dropdown").val(category);
+      $("#main-search-input").val(search.replace("+", " "));
+      $("#categories-dropdown").val(category.replace("+", " "));
 
       // Make sure columns are empty
       $("#item-cards").empty();
@@ -577,7 +577,6 @@
         // Data is list of relevant items
         $.each(data, function(index, array) {
           $.get("/food/html/" + array["foodid"], function(html) {
-            console.log("adding html")
             $("#item-cards").append(html);
           });
         });
