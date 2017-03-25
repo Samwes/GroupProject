@@ -567,12 +567,18 @@
 
     // Check both parameters exist
     if(category && search) {
+      // Set Category and Search on page
+      $("#main-search-input").val(search);
+      $("#categories-dropdown").val(category);
+
       // Make sure columns are empty
       $("#item-cards").empty();
       $.getJSON(query, function(data) {
+        console.log(data);
         // Data is list of relevant items
         $.each(data, function(index, foodid) {
           $.get("/food/html/" + foodid, function(html) {
+            console.log("adding html")
             $("#item-cards").append(html);
           });
         });
