@@ -566,7 +566,7 @@
     var query = "/search/" + category + "/" + search;
 
     // Check both parameters exist
-    if(category != "" && search != "") {
+    if(category && search) {
       // Make sure columns are empty
       $("#item-cards").empty();
       $.getJSON(query, function(data) {
@@ -577,7 +577,7 @@
           });
         });
       });
-    } 
+    }
   });
 </script>
 
