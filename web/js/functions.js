@@ -47,4 +47,4 @@ function GetURLParameter(sParam) {
 			return sParameterName[1];
 		}
 	}
-}​
+}
