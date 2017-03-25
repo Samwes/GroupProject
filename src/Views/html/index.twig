@@ -561,8 +561,8 @@
 <script>
   $(document).ready(function() {
     // Get URL Parameters
-    var category = GetURLParameter("category");
-    var search = GetURLParameter("search");
+    var category = GetURLParameter("category").replace("+", " ");
+    var search = GetURLParameter("search").replace("+", " ");
     var query = "/search/" + category + "/" + search;
 
     // Check both parameters exist
