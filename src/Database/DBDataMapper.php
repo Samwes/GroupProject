@@ -396,13 +396,18 @@ class DBDataMapper
         LIMIT 0, 20
         */
         // Simple Search
-        /*$query = "SELECT *
-                    FROM `itemtable`
-                    WHERE `category` = ? AND `name` LIKE ?";*/
-        $query = "SELECT `foodid`
-                    FROM `itemtable`
-                    WHERE `category` = ? AND `name` LIKE ?";
-        $params = array("$category", "%$search%");
+        if ($category != "") {
+            $query = "SELECT `foodid`
+                        FROM `itemtable`
+                        WHERE `category` = ? AND `name` LIKE ?";
+            $params = array("$category", "%$search%");
+        } else {
+            $query = "SELECT `foodid`
+                        FROM `itemtable`
+                        WHERE `name` LIKE ?";
+            $params = array("%$search%");
+        }
+
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
