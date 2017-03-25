@@ -565,7 +565,10 @@
     var search = GetURLParameter("search");
 
     // Check both parameters exist
-    if(category && search) {
+    if(search) {
+      if(!category) {
+        category = "";
+      }
       var query = "/search/" + category.replace("+", " ") + "/" + search.replace("+", " ");
       // Set Category and Search on page
       $("#main-search-input").val(search.replace("+", " "));
