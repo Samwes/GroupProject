@@ -187,7 +187,7 @@ class Requests
 
     public function searchExtra(Request $request, App $app, $category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort)
     {
-      $toEncode = $this->db->searchExtra($category, $category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort);
+      $toEncode = $this->db->searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort);
       if ($toEncode === null) {
           $toEncode = array('error' => 'failed');
       }
