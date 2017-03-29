@@ -60,7 +60,7 @@ function refreshSearch() {
 	var maxQuantity = GetURLParameter("maxQuantity");
 	var minWeight = GetURLParameter("minWeight");
 	var maxWeight = GetURLParameter("maxWeight");
-	var sort = "radius";
+	var sort = "amount";
 
 	if(search) {
 		// If not exist then set to "" else replace "+" with " "
