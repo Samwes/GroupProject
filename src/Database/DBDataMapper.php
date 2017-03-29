@@ -428,7 +428,7 @@ class DBDataMapper
       $weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
 
       $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE :search";
-      $params = array(':search' => $search, ":sort" => '%'.$sort.'%');
+      $params = array(':search' => '%'.$search.'%', ":sort" => $sort);
 
       if ($category != "") {
           $params[':category'] = $category;
