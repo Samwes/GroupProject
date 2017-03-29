@@ -452,14 +452,14 @@ class DBDataMapper
       }
 
       if ($sort == 'radius') {
-          $query = $query . "ORDER BY SQUARE(`latit` - :latit) + SQUARE(`longit` - :longit) LIMIT 120";
+          $query = $query . " ORDER BY SQUARE(`latit` - :latit) + SQUARE(`longit` - :longit) LIMIT 120";
       } else {
           $params[":sort"] = $sort;
-          $query = $query . "ORDER BY :sort LIMIT 120";
+          $query = $query . " ORDER BY :sort LIMIT 120";
       }
 
-      print_r($params);
-      print $query;
+      //print_r($params);
+      //print $query;
 
       $result = NULL;
       try {
