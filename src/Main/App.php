@@ -246,16 +246,17 @@ class App extends Application{
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*');
 
+        // /search//orange////////radius
         $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*')
             -> assert('latit', '[0-9.]*')
             -> assert('longit', '[0-9.]*')
-            -> assert('radius', '\d+')
-            -> assert('minAmount', '\d+')
-            -> assert('maxAmount', '\d+')
-            -> assert('minWeight', '\d+')
-            -> assert('maxWeight', '\d+')
+            -> assert('radius', '[0-9]*')
+            -> assert('minAmount', '[0-9]*')
+            -> assert('maxAmount', '[0-9]*')
+            -> assert('minWeight', '[0-9]*')
+            -> assert('maxWeight', '[0-9]*')
             -> assert('sort', '[a-z]*');
 
         //future Secure post for registered users only
