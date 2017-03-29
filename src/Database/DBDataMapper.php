@@ -427,8 +427,8 @@ class DBDataMapper
       $quantityQuery = "`amount` <= :maxAmount AND `amount` >= :minAmount";
       $weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
 
-      $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE CONCAT('%', :search, '%')";
-      $params = array(':search' => $search, ":sort" => $sort);
+      $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE :search";
+      $params = array(':search' => $search, ":sort" => '%'.$sort.'%');
 
       if ($category != "") {
           $params[':category'] = $category;
