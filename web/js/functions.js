@@ -67,7 +67,7 @@ function refreshSearch() {
 		search = search.replace("+", " ");
 		(!category) ? category = "" : category = category.replace("+", " ");
 		if(!latitude) latitude = "";
-		if(!longitude) longitudee = "";
+		if(!longitude) longitude = "";
 		(!radius) ? radius = "" : $("#radius-popover").val("Radius: " + radius + "km ");
 		if(!minQuantity) minQuantity = "";
 		if(!maxQuantity) maxQuantity = "";
