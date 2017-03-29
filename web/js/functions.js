@@ -48,3 +48,82 @@ function GetURLParameter(sParam) {
 		}
 	}
 }
+
+function refreshSearch() {
+	resultsSoFar = 0;
+	var search = GetURLParameter("search");
+	var category = GetURLParameter("category");
+	var latitude = GetURLParameter("latitude");
+	var longitude = GetURLParameter("longitude");
+	var radius = GetURLParameter("radius");
+	var minQuantity = GetURLParameter("minQuantity");
+	var maxQuantity = GetURLParameter("maxQuantity");
+	var minWeight = GetURLParameter("minWeight");
+	var maxWeight = GetURLParameter("maxWeight");
+	var sort = "radius";
+
+	if(search) {
+		// If not exist then set to "" else replace "+" with " "
+		search = search.replace("+", " ");
+		(!category) ? category = "" : category = category.replace("+", " ");
+		(!latitude) ? latitude = "";
+		(!longitude) ? longitudee = "";
+		(!radius) ? radius = "" : $("#radius-popover").val("Radius: " + radius + "km ");
+		(!minQuantity) ? minQuantity = "";
+		(!maxQuantity) ? maxQuantity = "";
+		(!minWeight) ? minWeight = "";
+		(!maxWeight) ? maxWeight = "";
+
+		// Update Button Text
+		if(minQuantity && maxQuantity) {
+			$("#quantity-popover").val(minQuantity + " - " + maxQuantity + " ");
+		} else if(minWeight) {
+			$("#quantity-popover").val(minQuantity + "+ ");
+		} else if(maxQuantity) {
+			$("#quantity-popover").val("Up to" + maxQuantity + " ");
+		} else {
+			$("#quantity-popover").val("Quantity ");
+		}
+
+		if(minWeight && maxWeight) {
+			$("#weight-popover").val(minWeight + "g - " + maxWeight + "g ");
+		} else if(minWeight) {
+			$("#weight-popover").val(minWeight + "g+ ");
+		} else if(maxWeight) {
+			$("#weight-popover").val("Up to" + maxWeight + "g ");
+		} else {
+			$("#weight-popover").val("Weight ");
+		}
+
+		var query = "/search/" + category + "/" + search + "/" + latitude + "/" + longitude + "/" + radius + "/" + minQuantity + "/" + maxQuantity + "/" + minWeight + "/" + maxWeight + "/" + sort;
+		// Set Category and Search on page
+		$("#main-search-input").val(search);
+		$("#categories-dropdown").val(category);
+
+		// Make sure columns are empty
+		$("#item-cards").empty();
+		resultsSoFar = 0;
+		$.getJSON(query, function(data) {
+			results = data;
+			// Data is list of relevant items
+			$.each(data, function(index, array) {
+				$.get("/food/html/" + array["foodid"], function(html) {
+					$("#item-cards").append(html);
+				});
+			});
+		});
+	}
+}
+
+function addMoreItems() {
+	$("#loading-icon").removeClass("hidden-xs-up");
+	for(var i = resultsSoFar; i < 12; i++) {
+		if(i < results.length && !$("#loading-icon").hasClass("hidden-xs-up")) {
+			$.get("/food/html/" + results[i]["foodid"], function(html) {
+				$("#item-cards").append(html);
+			});
+			resultsSoFar += 1;
+		}
+	}
+	$("#loading-icon").addClass("hidden-xs-up");
+}

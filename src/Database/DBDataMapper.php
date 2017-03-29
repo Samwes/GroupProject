@@ -421,4 +421,51 @@ class DBDataMapper
         return $result;
     }
 
+    public function searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort) {
+      $categoryQuery = "`category` = :category";
+      $distanceQuery = "`latit` <= :latit + :radius AND `latit` >= :latit - :radius AND `longit` <= :longit + :radius AND `longit` >= :longit - :radius";
+      $quantityQuery = "`amount` <= :maxAmount AND `amount` >= :minAmount";
+      $weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
+
+      $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE :search";
+      $params = array(':search' => "%$search%", ":sort" => $sort);
+
+      if ($category != "") {
+          $params[':category'] = $category;
+          $query = $query . " AND " . $categoryQuery;
+      } else if ($latit != "" && $longit != "" && $radius != "") {
+          $params[':latit'] = $latit;
+          $params[':longit'] = $longit;
+          $params[':radius'] = $radius;
+          $query = $query . " AND " . $distanceQuery;
+      } else if ($minAmount != "" && $maxAmount != "") {
+          $params[':minAmount'] = $minAmount;
+          $params[':maxAmount'] = $maxAmount;
+          $query = $query . " AND " . $quantityQuery;
+      } else if ($minWeight != "" && $maxWeight != "") {
+          $params[':minWeight'] = $minWeight;
+          $params[':maxWeight'] = $maxWeight;
+          $query = $query . " AND " . $weightQuery;
+      }
+
+      if ($sort == "radius") {
+          $query = $query . "ORDER BY SQUARE(`latit` - :latit) + SQUARE(`longit` - :longit) LIMIT 120";
+      } else {
+          $query = $query . "ORDER BY :sort LIMIT 120";
+      }
+
+      $result = NULL;
+      try {
+          $stmt = $this->pdo->prepare($query);
+          $stmt->execute($params);
+
+          $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      } catch (PDOException $e) {
+          if (DEBUG) echo 'Search by category and search text failed: ' . $e->getMessage();
+      }
+      $stmt = NULL;
+      return $result;
+
+    }
+
 }

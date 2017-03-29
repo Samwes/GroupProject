@@ -246,6 +246,18 @@ class App extends Application{
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*');
 
+        $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minAmount}/{maxWeight}/{sort}')
+            -> assert('category', '[a-zA-Z0-9_ ]*')
+            -> assert('search', '[a-zA-Z0-9_ ]*')
+            -> assert('latit', '[0-9.]*')
+            -> assert('longit', '[0-9.]*')
+            -> assert('radius', '\d+')
+            -> assert('minAmount', '\d+')
+            -> assert('maxAmount', '\d+')
+            -> assert('minAmount', '\d+')
+            -> assert('maxAmount', '\d+')
+            -> asser('sort', '[a-z]*');
+
         //future Secure post for registered users only
         $this->post('/food', 'rest.handler:foodItemPost')
             -> secure('ROLE_USER');
