@@ -10,6 +10,7 @@
       <secret-storage>master_key</secret-storage>
       <user-name>gptest</user-name>
       <resolve-scope>gpmain:</resolve-scope>
+      <unqualified-resolve-schemas>gpmain:</unqualified-resolve-schemas>
     </data-source>
     <data-source name="MySQL - heroku_0b846d9fc2212c5@eu-cdbr-west-01.cleardb.com" uuid="ac2134d8-18f7-4abf-a899-157999c01cbd">
       <database-info product="MySQL" version="5.5.40-log" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.35 ( Revision: 5fb9c5849535c13917c2cf9baaece6ef9693ef27 )">
@@ -20,6 +21,7 @@
       <secret-storage>master_key</secret-storage>
       <user-name>b1d28eefe0b0d1</user-name>
       <resolve-scope>heroku_0b846d9fc2212c5:</resolve-scope>
+      <unqualified-resolve-schemas>heroku_0b846d9fc2212c5:</unqualified-resolve-schemas>
     </data-source>
   </component>
 </project>
