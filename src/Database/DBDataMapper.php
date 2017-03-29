@@ -433,16 +433,19 @@ class DBDataMapper
       if ($category != "") {
           $params[':category'] = $category;
           $query = $query . " AND " . $categoryQuery;
-      } else if ($latit != "" && $longit != "" && $radius != "") {
+      }
+      if ($latit != "" && $longit != "" && $radius != "") {
           $params[':latit'] = $latit;
           $params[':longit'] = $longit;
           $params[':radius'] = $radius;
           $query = $query . " AND " . $distanceQuery;
-      } else if ($minAmount != "" && $maxAmount != "") {
+      }
+      if ($minAmount != "" && $maxAmount != "") {
           $params[':minAmount'] = $minAmount;
           $params[':maxAmount'] = $maxAmount;
           $query = $query . " AND " . $quantityQuery;
-      } else if ($minWeight != "" && $maxWeight != "") {
+      }
+      if ($minWeight != "" && $maxWeight != "") {
           $params[':minWeight'] = $minWeight;
           $params[':maxWeight'] = $maxWeight;
           $query = $query . " AND " . $weightQuery;
