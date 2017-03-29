@@ -247,7 +247,7 @@ class App extends Application{
             -> assert('search', '[a-zA-Z0-9_ ]*');
 
         // /search//orange////////radius
-        $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}')
+        $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*')
             -> assert('latit', '[0-9.]*')
