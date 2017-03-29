@@ -66,13 +66,13 @@ function refreshSearch() {
 		// If not exist then set to "" else replace "+" with " "
 		search = search.replace("+", " ");
 		(!category) ? category = "" : category = category.replace("+", " ");
-		(!latitude) ? latitude = "";
-		(!longitude) ? longitudee = "";
+		if(!latitude) latitude = "";
+		if(!longitude) longitudee = "";
 		(!radius) ? radius = "" : $("#radius-popover").val("Radius: " + radius + "km ");
-		(!minQuantity) ? minQuantity = "";
-		(!maxQuantity) ? maxQuantity = "";
-		(!minWeight) ? minWeight = "";
-		(!maxWeight) ? maxWeight = "";
+		if(!minQuantity) minQuantity = "";
+		if(!maxQuantity) maxQuantity = "";
+		if(!minWeight) minWeight = "";
+		if(!maxWeight) maxWeight = "";
 
 		// Update Button Text
 		if(minQuantity && maxQuantity) {
