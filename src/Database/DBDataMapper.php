@@ -458,6 +458,9 @@ class DBDataMapper
           $query = $query . "ORDER BY :sort LIMIT 120";
       }
 
+      print_r($params);
+      print $query;
+
       $result = NULL;
       try {
           $stmt = $this->pdo->prepare($query);
