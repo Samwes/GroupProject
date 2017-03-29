@@ -21,7 +21,7 @@
           <form>
             <div class="form-group">
               <label for="radiusMinInput">Radius</label>
-              <input type="number" class="form-control" id="radiusMinInput" placeholder="Min">
+              <input type="number" class="form-control" id="radiusInput" placeholder="Radius">
             </div>
             <button id="radiusApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
           </form>
@@ -780,7 +780,7 @@ $('#weight-popover').popover({
 
           history.pushState('Location updated', 'Location updated', document.location.href + "&latitude=" + place.geometry.location.lat() + "&longitude" + place.geometry.location.lng());
           refreshSearch();
-          
+
         });
       });
     }
