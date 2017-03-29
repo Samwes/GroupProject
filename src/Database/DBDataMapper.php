@@ -389,11 +389,25 @@ class DBDataMapper
 
 		public function mainSearch($category, $search)
     {
+        /*
+        SELECT * FROM course
+        WHERE description LIKE '%university%' OR description LIKE '%history%'
+        ORDER BY IF(description LIKE '%university%' and description LIKE '%history%', 0, 1)
+        LIMIT 0, 20
+        */
         // Simple Search
-        $query = "SELECT *
-                    FROM `itemtable`
-                    WHERE `category` = ? AND `name` LIKE ?";
-        $params = array("$category", "%$search%");
+        if ($category != "") {
+            $query = "SELECT `foodid`
+                        FROM `itemtable`
+                        WHERE `category` = ? AND `name` LIKE ?";
+            $params = array("$category", "%$search%");
+        } else {
+            $query = "SELECT `foodid`
+                        FROM `itemtable`
+                        WHERE `name` LIKE ?";
+            $params = array("%$search%");
+        }
+
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -405,6 +419,57 @@ class DBDataMapper
         }
         $stmt = NULL;
         return $result;
+    }
+
+    public function searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort) {
+      $categoryQuery = "`category` = :category";
+      $distanceQuery = "`latit` <= :latit + :radius AND `latit` >= :latit - :radius AND `longit` <= :longit + :radius AND `longit` >= :longit - :radius";
+      $quantityQuery = "`amount` <= :maxAmount AND `amount` >= :minAmount";
+      $weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
+
+      $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE '%' || :search || '%'";
+      $params = array(':search' => $search);
+
+      if ($category != "") {
+          $params[':category'] = $category;
+          $query = $query . " AND " . $categoryQuery;
+      }
+      if ($latit != "" && $longit != "" && $radius != "") {
+          $params[':latit'] = $latit;
+          $params[':longit'] = $longit;
+          $params[':radius'] = $radius;
+          $query = $query . " AND " . $distanceQuery;
+      }
+      if ($minAmount != "" && $maxAmount != "") {
+          $params[':minAmount'] = $minAmount;
+          $params[':maxAmount'] = $maxAmount;
+          $query = $query . " AND " . $quantityQuery;
+      }
+      if ($minWeight != "" && $maxWeight != "") {
+          $params[':minWeight'] = $minWeight;
+          $params[':maxWeight'] = $maxWeight;
+          $query = $query . " AND " . $weightQuery;
+      }
+
+      if ($sort == 'radius') {
+          $query = $query . " ORDER BY SQUARE(`latit` - :latit) + SQUARE(`longit` - :longit) LIMIT 120";
+      } else {
+          $params[":sort"] = $sort;
+          $query = $query . " ORDER BY :sort LIMIT 120";
+      }
+
+      $result = NULL;
+      try {
+          $stmt = $this->pdo->prepare($query);
+          $stmt->execute($params);
+
+          $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      } catch (PDOException $e) {
+          if (DEBUG) echo 'Search by category and search text failed: ' . $e->getMessage();
+      }
+      $stmt = NULL;
+      return $result;
+
     }
 
 }

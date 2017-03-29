@@ -8,6 +8,12 @@
 {% block content %}
 <br>
 
+<div class="container">
+	<h2>Add Item</h2>
+</div>
+
+<br>
+
 <!-- MAIN FORM SECTION -->
 <div class="container">
 	<div class="row">
@@ -15,12 +21,9 @@
 			<!-- INPUT A BARCODE -->
 			<h5>Scan A Barcode</h5>
 			<label class="custom-file">
-				<input type="file" accept="image/*" capture="camera" class="custom-file-input form-control-file" aria-describedby="fileHelp">
+				<input id="barcode-input" type="file" accept="image/*" capture="camera" class="custom-file-input form-control-file" aria-describedby="fileHelp">
 				<span class="custom-file-control"></span>
 			</label>
-			<!--<label class="">
-				<input type="file" accept="image/*" capture="camera" class="form-control-file" aria-describedby="fileHelp">
-			</label>-->
 			<small id="fileHelp" class="form-text text-muted">Uses camera on mobile device</small>
 			<br>
 		</div>
@@ -28,28 +31,17 @@
 
 	<div class="row">
 		<div class="col-md-6">
-			<form>
+			<form action="/food" onsubmit="return validateForm()" method="post">
 				<!-- NAME INPUT -->
 				<div class="form-group">
 					<label for="nameTextInput">Name</label>
-					<input class="form-control mr-sm-2 square-border" type="text" placeholder="Name" id="nameTextInput">
+					<input name="name" class="form-control mr-sm-2 square-border" type="text" placeholder="Name" id="nameTextInput">
 				</div>
 
 				<div class="form-group">
 					<label for="categorySelect">Category</label>
 					<!-- Category INPUT -->
-					<select class="form-control square-border" id="categorySelect">
-						<!--
-						<a class="dropdown-item" href="#">Fresh Food</a>
-						<a class="dropdown-item" href="#">Bakery</a>
-						<a class="dropdown-item" href="#">Food Cupboard</a>
-						<a class="dropdown-item" href="#">Frozen Food</a>
-						<a class="dropdown-item" href="#">Drinks</a>
-						<a class="dropdown-item" href="#">Baby</a>
-						<a class="dropdown-item" href="#">Personal</a>
-						<a class="dropdown-item" href="#">Pet Care</a>
-						<a class="dropdown-item" href="#">Household</a>
-						-->
+					<select name="category" class="form-control square-border" id="categorySelect">
 						<option>Fresh Food</option>
 						<option>Bakery</option>
 						<option>Food Cupboard</option>
@@ -66,26 +58,39 @@
 				<!-- EXPIRY INPUT -->
 				<div class="form-group">
 					<label for="dateInput">Expiry Date</label>
-					<input class="form-control mr-sm-2 square-border" type="date" id="dateInput">
+					<input name="expiredate" class="form-control mr-sm-2 square-border" type="date" id="dateInput">
 				</div>
 
 				<!-- AMOUNT INPUT -->
 				<div class="form-group">
 					<label for="amountNumberInput">Amount</label>
-					<input class="form-control mr-sm-2 square-border" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="amountNumberInput">
+					<input name="amount" class="form-control mr-sm-2 square-border" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="amountNumberInput">
 				</div>
 
 				<!-- WEIGHT INPUT -->
 				<div class="form-group">
 					<label for="weightNumberInput">Weight (g)</label>
-					<input class="form-control mr-sm-2 square-border" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="weightNumberInput">
+					<input name="weight" class="form-control mr-sm-2 square-border" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="weightNumberInput">
 				</div>
 
 				<!-- DESCRIPTION INPUT -->
 				<div class="form-group">
 					<label for="descriptionTextarea">Description</label>
-					<textarea class="form-control square-border" id="descriptionTextarea" rows="3"></textarea>
+					<textarea name="description" class="form-control square-border" id="descriptionTextarea" rows="3"></textarea>
 				</div>
+
+				<!-- HAVE MAP HERE -->
+				<div class="form-group">
+					<label for="latitudeNumberInput">Latitude</label>
+					<input name="latitude" class="form-control mr-sm-2 square-border" type="number" step="any" onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 190' id="latitudeNumberInput">
+				</div>
+				<div class="form-group">
+					<label for="latitudeNumberInput">Longitude</label>
+					<input name="longitude" class="form-control mr-sm-2 square-border" type="number" step="any" onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 190' id="longitudeNumberInput">
+				</div>
+
+				<!-- HIDDEN IMAGE TO UPLOAD -->
+				<input type="file" name="image" class="hidden-image-data hidden-xs-up" />
 
 				<!-- SUBMIT BUTTON -->
 				<button type="submit" class="btn btn-primary">Add Food</button>
@@ -106,7 +111,6 @@
 				<i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;" ></i>
 				<input class="cropit-image-zoom-input" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
 				<i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i>
-
 			</div>
 
 		</div>
@@ -115,6 +119,55 @@
 {% endblock %}
 
 {% block scripts %}
+<script>
+
+	function validateForm() {
+		// First set hidden image to be cropped one
+		var imageData = $('.image-editor').cropit('export');
+		$('.hidden-image-data').val(imageData);
+
+		var allValid = true;
+		if ($("#nameTextInput").val() == "") {
+			$("label[for='nameTextInput']").css({"color": "red"});
+			allValid = false;
+		} else {
+			$("label[for='nameTextInput']").css({"color": "black"});
+		}
+
+		// Can't check SELECT
+
+		if ($("#dateInput").val() == "") {
+			$("label[for='dateInput']").css({"color": "red"});
+			allValid = false;
+		} else {
+			$("label[for='dateInput']").css({"color": "black"});
+		}
+
+		if ($("#amountNumberInput").val() == "") {
+			$("label[for='amountNumberInput']").css({"color": "red"});
+			allValid = false;
+		} else {
+			$("label[for='amountNumberInput']").css({"color": "black"});
+		}
+
+		if ($("#weightNumberInput").val() == "") {
+			$("label[for='weightNumberInput']").css({"color": "red"});
+			allValid = false;
+		} else {
+			$("label[for='weightNumberInput']").css({"color": "black"});
+		}
+
+		if ($("#descriptionTextarea").val() == "") {
+			$("label[for='descriptionTextarea']").css({"color": "red"});
+			allValid = false;
+		} else {
+			$("label[for='descriptionTextarea']").css({"color": "black"});
+		}
+
+		return allValid;
+	}
+</script>
+
 <!-- CORRECT SIZES OF ELEMENTS -->
 <script>
 	$(document).ready(function() {
@@ -157,10 +210,6 @@ $(function() {
 		if($('.image-editor').cropit('imageSrc') == "") {
 			$('.cropit-image-input').click();
 		}
-	});
-	$('.export').click(function() {
-		var imageData = $('.image-editor').cropit('export');
-		window.open(imageData);
 	});
 });
 </script>

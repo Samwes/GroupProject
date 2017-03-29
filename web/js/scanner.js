@@ -6,7 +6,7 @@ $(function() {
         attachListeners: function() {
             var self = this;
 
-            $("input[type=file]").on("change", function(e) {
+            $("#barcode-input").on("change", function(e) {
                 if (e.target.files && e.target.files.length) {
                     // Set Default Settings
                     self.setState(self._convertNameToState("decoder_readers"), "ean"); // Set barcode type to EAN
@@ -83,7 +83,7 @@ $(function() {
         },
         detachListeners: function() {
 						// Stop listening for events
-            $("input[type=file]").off("change");
+            $("#barcode-input").off("change");
             /*$(".controls .reader-config-group").off("change", "input, select");
             $(".controls button").off("click");*/
         },
@@ -233,11 +233,23 @@ $(function() {
 
         getDataOpenFoodFacts(code, function(data) {
           console.log(data);
-        	$("#name").text("Name: " + data["name"]);
-          $("#description").text("Description: " + data["description"]);
-          $("#category").text("Category: " + data["categoriesHierarchy"][0].substring(3));
-          $("#weight").text("Weight: " + data["weight"]);
-          $("#image").attr("src", data["image"]);
+        	$("#nameTextInput").val(toTitleCase(data["name"]));
+          $("#tempCategory").text(data["categoriesHierarchy"][0].substring(3));
+          $("#weightNumberInput").val(data["weight"].replace(/\D/g,''));
+          $("#descriptionTextarea").text(capitalizeFirstLetter(data["description"]));
+          if($('.image-editor').cropit('imageSrc') == "") {
+            $(".image-editor").cropit('imageSrc', data["image"]);
+          }
         });
     });
 });
+
+// Taken From Stack Overflow
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
+
+// Taken From Stack Overflow
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}

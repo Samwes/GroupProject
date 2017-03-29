@@ -212,6 +212,14 @@ class App extends Application{
             return $this['twig']->render('userProfile.twig');
         })->bind('user');
 
+        $account->get('/userprofiletest', function() {
+            return $this['twig']->render('userProfileTest.twig');
+        })->bind('usertest');
+
+        $account->get('/useritems', function() {
+          return $this['twig']->render('userItems.twig');
+        })->bind('useritems');
+
         $this->mount('/account', $account);
     }
 
@@ -249,6 +257,19 @@ class App extends Application{
         $this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*');
+
+        // /search//orange////////radius
+        $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
+            -> assert('category', '[a-zA-Z0-9_ ]*')
+            -> assert('search', '[a-zA-Z0-9_ ]*')
+            -> assert('latit', '[0-9.]*')
+            -> assert('longit', '[0-9.]*')
+            -> assert('radius', '[0-9]*')
+            -> assert('minAmount', '[0-9]*')
+            -> assert('maxAmount', '[0-9]*')
+            -> assert('minWeight', '[0-9]*')
+            -> assert('maxWeight', '[0-9]*')
+            -> assert('sort', '[a-z]*');
 
         //future Secure post for registered users only
         $this->post('/food', 'rest.handler:foodItemPost')

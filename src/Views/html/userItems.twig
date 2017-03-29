@@ -1,0 +1,241 @@
+{% extends 'layout.twig' %}
+
+{% block head %}
+<title>Your Items</title>
+{% endblock %}
+
+{%  block content %}
+
+<br>
+
+<div class="container">
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active" href="#" style="border-radius: 0;" data-toggle="tab" role="tab">Current Items</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#" style="border-radius: 0;" data-toggle="tab" role="tab">Past Items</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#" style="border-radius: 0;" data-toggle="tab" role="tab">Cancelled Items</a>
+		</li>
+
+		<li class="nav-item float-xs-right">
+			<form class="form-inline">
+				<input type="text" class="form-control mr-sm-2 mb-sm-0 square-border" placeholder="Search">
+			</form>
+		</li>
+
+	</ul>
+</div>
+
+<br>
+
+<div class="container">
+	<div class="row">
+		<div class="card-columns" style="column-gap: 0.4rem;">
+			<div class="card" style="">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item" style="background-color: #f6f6f6; border: 1px solid #e0e0e0; border-radius: 0; padding: 0;">
+						<div class="row" style="height: 4.2rem;">
+							<div class="col-md-4" style="padding: 0.7rem; margin-left: 1rem;">
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">POSTED ON</p>
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">21 March 2017</p>
+							</div>
+							<div class="col-md-4" style="padding: 0.7rem;">
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">TRADE LIKELIHOOD</p>
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">80%</p>
+							</div>
+							<div class="col-md-4" style="margin-left: -1rem; height: 100%;">
+								<button class="btn btn-option square-border float-xs-right" style="background-color: #E8E9EC; border-left: 1px solid #dce0e0; width: 6rem;">EDIT</button>
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item" style="border: 1px solid #e0e0e0; border-radius: 0; padding: 0;">
+						<div class="row">
+							<div class="col-xs-4">
+								<img class="card-img-top" src="../res/oranges.jpg" alt="Card image cap" style="width:100%;">
+							</div>
+							<div class="col-xs-8">
+								<div class="card-block" style="padding: 0.5rem; padding-top: 0.5rem; padding-bottom: 0; margin-bottom: -0.5rem;">
+									<h5 class="card-title">Oranges</h5>
+									<p style="font-size:0.9em; margin-bottom:5px">Some lovely and tasty oranges for all to enjoy ♥</p>
+									<table class="table table-sm">
+										<tbody style="font-size: 0.9em">
+											<tr>
+												<td scope="row" style="padding-left: 0;">Expiry Date:</th>
+												<td>21/03/2017</td>
+											</tr>
+											<tr>
+												<td scope="row"  style="padding-left: 0;">Amount:</th>
+												<td>5</td>
+											</tr>
+											<tr>
+												<td scope="row"  style="padding-left: 0;">Weight:</th>
+												<td>500g</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="card" style="">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item" style="background-color: #f6f6f6; border: 1px solid #e0e0e0; border-radius: 0; padding: 0;">
+						<div class="row" style="height: 4.2rem;">
+							<div class="col-md-4" style="padding: 0.7rem; margin-left: 1rem;">
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">POSTED ON</p>
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">21 March 2017</p>
+							</div>
+							<div class="col-md-4" style="padding: 0.7rem;">
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">TRADE LIKELIHOOD</p>
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">80%</p>
+							</div>
+							<div class="col-md-4" style="margin-left: -1rem; height: 100%;">
+								<button class="btn btn-option square-border float-xs-right" style="background-color: #E8E9EC; border-left: 1px solid #dce0e0; width: 6rem;">EDIT</button>
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item" style="border: 1px solid #e0e0e0; border-radius: 0; padding: 0;">
+						<div class="row">
+							<div class="col-xs-4">
+								<img class="card-img-top" src="../res/oranges.jpg" alt="Card image cap" style="width:100%;">
+							</div>
+							<div class="col-xs-8">
+								<div class="card-block" style="padding: 0.5rem; padding-top: 0.5rem; padding-bottom: 0; margin-bottom: -0.5rem;">
+									<h5 class="card-title">Oranges</h5>
+									<p style="font-size:0.9em; margin-bottom:5px">Some lovely and tasty oranges for all to enjoy ♥</p>
+									<table class="table table-sm">
+										<tbody style="font-size: 0.9em">
+											<tr>
+												<td scope="row" style="padding-left: 0;">Expiry Date:</th>
+												<td>21/03/2017</td>
+											</tr>
+											<tr>
+												<td scope="row"  style="padding-left: 0;">Amount:</th>
+												<td>5</td>
+											</tr>
+											<tr>
+												<td scope="row"  style="padding-left: 0;">Weight:</th>
+												<td>500g</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="card" style="">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item" style="background-color: #f6f6f6; border: 1px solid #e0e0e0; border-radius: 0; padding: 0;">
+						<div class="row" style="height: 4.2rem;">
+							<div class="col-md-4" style="padding: 0.7rem; margin-left: 1rem;">
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">POSTED ON</p>
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">21 March 2017</p>
+							</div>
+							<div class="col-md-4" style="padding: 0.7rem;">
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">TRADE LIKELIHOOD</p>
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">80%</p>
+							</div>
+							<div class="col-md-4" style="margin-left: -1rem; height: 100%;">
+								<button class="btn btn-option square-border float-xs-right" style="background-color: #E8E9EC; border-left: 1px solid #dce0e0; width: 6rem;">EDIT</button>
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item" style="border: 1px solid #e0e0e0; border-radius: 0; padding: 0;">
+						<div class="row">
+							<div class="col-xs-4">
+								<img class="card-img-top" src="../res/oranges.jpg" alt="Card image cap" style="width:100%;">
+							</div>
+							<div class="col-xs-8">
+								<div class="card-block" style="padding: 0.5rem; padding-top: 0.5rem; padding-bottom: 0; margin-bottom: -0.5rem;">
+									<h5 class="card-title">Oranges</h5>
+									<p style="font-size:0.9em; margin-bottom:5px">Some lovely and tasty oranges for all to enjoy ♥</p>
+									<table class="table table-sm">
+										<tbody style="font-size: 0.9em">
+											<tr>
+												<td scope="row" style="padding-left: 0;">Expiry Date:</th>
+												<td>21/03/2017</td>
+											</tr>
+											<tr>
+												<td scope="row"  style="padding-left: 0;">Amount:</th>
+												<td>5</td>
+											</tr>
+											<tr>
+												<td scope="row"  style="padding-left: 0;">Weight:</th>
+												<td>500g</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="card" style="">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item" style="background-color: #f6f6f6; border: 1px solid #e0e0e0; border-radius: 0; padding: 0;">
+						<div class="row" style="height: 4.2rem;">
+							<div class="col-md-4" style="padding: 0.7rem; margin-left: 1rem;">
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">POSTED ON</p>
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">21 March 2017</p>
+							</div>
+							<div class="col-md-4" style="padding: 0.7rem;">
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">TRADE LIKELIHOOD</p>
+								<p style="margin-bottom: 0.1rem; font-size: 0.9em;">80%</p>
+							</div>
+							<div class="col-md-4" style="margin-left: -1rem; height: 100%;">
+								<button class="btn btn-option square-border float-xs-right" style="background-color: #E8E9EC; border-left: 1px solid #dce0e0; width: 6rem;">EDIT</button>
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item" style="border: 1px solid #e0e0e0; border-radius: 0; padding: 0;">
+						<div class="row">
+							<div class="col-xs-4">
+								<img class="card-img-top" src="../res/oranges.jpg" alt="Card image cap" style="width:100%;">
+							</div>
+							<div class="col-xs-8">
+								<div class="card-block" style="padding: 0.5rem; padding-top: 0.5rem; padding-bottom: 0; margin-bottom: -0.5rem;">
+									<h5 class="card-title">Oranges</h5>
+									<p style="font-size:0.9em; margin-bottom:5px">Some lovely and tasty oranges for all to enjoy ♥</p>
+									<table class="table table-sm">
+										<tbody style="font-size: 0.9em">
+											<tr>
+												<td scope="row" style="padding-left: 0;">Expiry Date:</th>
+												<td>21/03/2017</td>
+											</tr>
+											<tr>
+												<td scope="row"  style="padding-left: 0;">Amount:</th>
+												<td>5</td>
+											</tr>
+											<tr>
+												<td scope="row"  style="padding-left: 0;">Weight:</th>
+												<td>500g</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+
+{% endblock %}

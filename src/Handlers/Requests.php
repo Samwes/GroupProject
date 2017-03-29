@@ -81,7 +81,7 @@ class Requests
         }
     }
 
-    public function foodItemPst(Request $request, Application $app)
+    public function foodItemPost(Request $request, Application $app)
     {
         //fixme yeah dont think this works. Check it, fix it
         $toEncode = array("error" => "failed to add");
@@ -92,11 +92,12 @@ class Requests
             $expirDate = $request->get('expiredate');
             $category = $request->get('category');
             $desc = $request->get('description');
-            $lat = $request->get('laitutde');
+            $lat = $request->get('latitude');
             $long = $request->get('longitude');
             $amount = $request->get('amount');
             $weight = $request->get('weight');
-            $imagedir = null;
+            //$imagedir = null;
+            $imagedir = "none";
 
             //Check Vars
             if (!is_numeric($userID)) {
@@ -168,7 +169,9 @@ class Requests
             }
         }
 
-        echo json_encode($toEncode);
+        //echo json_encode($toEncode);
+
+        return new RedirectResponse($app->path('user'));
 
     }
 
@@ -180,6 +183,16 @@ class Requests
         }
 
         return new JsonResponse($toEncode);
+    }
+
+    public function searchExtra(Request $request, App $app, $category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort)
+    {
+      $toEncode = $this->db->searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort);
+      if ($toEncode === null) {
+          $toEncode = array('error' => 'failed');
+      }
+
+      return new JsonResponse($toEncode);
     }
 
 }

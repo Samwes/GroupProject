@@ -20,14 +20,10 @@
         <div id="radius-popover-content" class="hidden-xs-up">
           <form>
             <div class="form-group">
-              <label for="radiusMinInput">Min Radius</label>
-              <input type="number" class="form-control" id="radiusMinInput" placeholder="Min">
+              <label for="radiusMinInput">Radius</label>
+              <input type="number" class="form-control" id="radiusInput" placeholder="Radius">
             </div>
-            <div class="form-group">
-              <label for="radiusMaxInput">Max Radius</label>
-              <input type="number" class="form-control" id="radiusMaxInput" placeholder="Max">
-            </div>
-            <button class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
+            <button id="radiusApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
           </form>
         </div>
       </li>
@@ -38,13 +34,13 @@
           <form>
             <div class="form-group">
               <label for="quantityMinInput">Min Quantity</label>
-              <input type="number" class="form-control" id="radiusMinInput" placeholder="Min">
+              <input type="number" class="form-control" id="quantityMinInput" placeholder="Min">
             </div>
             <div class="form-group">
               <label for="quantityMaxInput">Max Quantity</label>
-              <input type="number" class="form-control" id="radiusMaxInput" placeholder="Max">
+              <input type="number" class="form-control" id="quantityMaxInput" placeholder="Max">
             </div>
-            <button class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
+            <button id="QuantityApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
           </form>
         </div>
       </li>
@@ -55,13 +51,13 @@
           <form>
             <div class="form-group">
               <label for="weightMinInput">Min Weight</label>
-              <input type="number" class="form-control" id="radiusMinInput" placeholder="Min">
+              <input type="number" class="form-control" id="weightMinInput" placeholder="Min">
             </div>
             <div class="form-group">
               <label for="weightMaxInput">Max Weight</label>
-              <input type="number" class="form-control" id="radiusMaxInput" placeholder="Max">
+              <input type="number" class="form-control" id="weightMaxInput" placeholder="Max">
             </div>
-            <button class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
+            <button id="WeightApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
           </form>
         </div>
       </li>
@@ -75,10 +71,10 @@
         <button id="radius-sort" class="btn btn-option square-border" style="">Radius <i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i></button>
       </li>
       <li class="nav-item" style="height: 46px; margin-left: -6px;">
-        <button id="weight-sort" class="btn btn-option square-border" style="">Weight <i id="weight-sort-icon" class="" aria-hidden="true"></i></button>
+        <button id="quantity-sort" class="btn btn-option square-border" style="">Quantity <i id="quantity-sort-icon" class="" aria-hidden="true"></i></button>
       </li>
       <li class="nav-item" style="height: 46px; margin-left: -6px;">
-        <button id="expiry-sort" class="btn btn-option square-border" style="">Expiry <i id="expiry-sort-icon" class="" aria-hidden="true"></i></button>
+        <button id="weight-sort" class="btn btn-option square-border" style="">Weight <i id="weight-sort-icon" class="" aria-hidden="true"></i></button>
       </li>
     </ul>
   </div>
@@ -541,6 +537,8 @@
           </div>
 
         </div>
+
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw hidden-xs-up" id="loading-icon"></i>
       </div>
     </div>
     <!-- MAP -->
@@ -557,6 +555,47 @@
 
 
 {% block scripts %}
+<!-- SEARCH FUNCTIONALITY -->
+<script>
+  var resultsSoFar = 0;
+  var results;
+  $(document).ready(refreshSearch());
+</script>
+
+<script>
+  $(function($) {
+    $('#items').on('scroll', function() {
+      if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+        addMoreItems();
+      }
+    })
+  });
+</script>
+
+<script>
+  // Sub-Search Applys
+  // Location is with google api
+
+  $("#radiusApply").click(function() {
+    // Replace state instead of push state?
+    history.pushState('Radius updated', 'Radius updated', document.location.href + "&radius=" + $("#radiusInput").val());
+    refreshSearch();
+  });
+
+  $("#quantityApply").click(function() {
+    // Replace state instead of push state?
+    history.pushState('Quantity updated', 'Quantity updated', document.location.href + "&minQuantity=" + $("#minQuantityInput").val() + "&maxQuantity=" + $("#maxQuantityInput").val());
+    refreshSearch();
+  });
+
+  $("#weightApply").click(function() {
+    // Replace state instead of push state?
+    history.pushState('Weight updated', 'Weight updated', document.location.href + "&minWeight=" + $("#minWeightInput").val() + "&maxWeight=" + $("#maxWeightInput").val());
+    refreshSearch();
+  });
+</script>
+
+
 <!-- CORRECT SIZES OF ELEMENTS -->
 <script>
   $(document).ready(function() {
@@ -587,38 +626,6 @@
     $('#items').height($(window).height() - $('#search-navbar').height() - $('#options-navbar').height() - 14);
     $('#map').height($(window).height() - $('#search-navbar').height() - $('#options-navbar').height() - 14);
   }
-</script>
-
-<script>
-$("#login-form-link").click(function(e) {
-  $("#registerForm").addClass('hidden-xs-up');
-  $("#loginForm").removeClass('hidden-xs-up');
-  $("#login-form-link").addClass("active");
-  $("#register-form-link").removeClass("active");
-});
-$("#register-form-link").click(function(e) {
-  $("#loginForm").addClass('hidden-xs-up');
-  $("#registerForm").removeClass('hidden-xs-up');
-  $("#register-form-link").addClass("active");
-  $("#login-form-link").removeClass("active");
-});
-
-$(function() {
-  $('#login-form-link').click(function(e) {
-    $("#login-form").delay(100).fadeIn(100);
-    $("#register-form").fadeOut(100);
-    $('#register-form-link').removeClass('active');
-    $(this).addClass('active');
-    e.preventDefault();
-  });
-  $('#register-form-link').click(function(e) {
-    $("#register-form").delay(100).fadeIn(100);
-    $("#login-form").fadeOut(100);
-    $('#login-form-link').removeClass('active');
-    $(this).addClass('active');
-    e.preventDefault();
-  });
-});
 </script>
 
 <script>
@@ -668,7 +675,7 @@ $('#weight-popover').popover({
       // Sort Items
     }
     $("#weight-sort-icon").attr('class', '');
-    $("#expiry-sort-icon").attr('class', '');
+    $("#quantity-sort-icon").attr('class', '');
   });
 
   // Weight
@@ -685,20 +692,20 @@ $('#weight-popover').popover({
       // Sort Items
     }
     $("#radius-sort-icon").attr('class', '');
-    $("#expiry-sort-icon").attr('class', '');
+    $("#quantity-sort-icon").attr('class', '');
   });
 
   // Expiry
-  $("#expiry-sort").click(function() {
+  $("#quantity-sort").click(function() {
     // Change Icon
-    if ($("#expiry-sort-icon").hasClass("fa-sort-asc")) {
-      $("#expiry-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+    if ($("#quantity-sort-icon").hasClass("fa-sort-asc")) {
+      $("#quantity-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
       // Sort Items
-    } else if ($("#expiry-sort").hasClass("fa-sort-desc")) {
-      $("#expiry-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+    } else if ($("#quantity-sort").hasClass("fa-sort-desc")) {
+      $("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
       // Sort Items
     } else {
-      $("#expiry-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+      $("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
       // Sort Items
     }
     $("#radius-sort-icon").attr('class', '');
@@ -770,6 +777,10 @@ $('#weight-popover').popover({
           console.log(icon);*/
           $("#pac-input").attr("latitude", place.geometry.location.lat());
           $("#pac-input").attr("longitude", place.geometry.location.lng());
+
+          history.pushState('Location updated', 'Location updated', document.location.href + "&latitude=" + place.geometry.location.lat() + "&longitude" + place.geometry.location.lng());
+          refreshSearch();
+
         });
       });
     }
