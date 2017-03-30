@@ -60,14 +60,14 @@ function refreshSearch() {
 	var maxQuantity = GetURLParameter("maxQuantity");
 	var minWeight = GetURLParameter("minWeight");
 	var maxWeight = GetURLParameter("maxWeight");
-	var sort = "amount";
+	var sort = "amount-des";
 
-	if($("#radius-sort").hasClass('fa')) {
+	if($("#radius-sort-icon").hasClass('fa')) {
 		// Check if asc or desc
-		$("#radius-sort").hasClass('fa-sort-asc') ? sort = "radius-asc" : sort = "radius-des";
-	} else if($("#quantity-sort").hasClass('fa')) {
-		$("#quantity-sort").hasClass('fa-sort-asc') ? sort = "amount-asc" : sort = "amount-des";
-	} else if($("#weight-sort").hasClass('fa')) {
+		$("#radius-sort-icon").hasClass('fa-sort-asc') ? sort = "radius-asc" : sort = "radius-des";
+	} else if($("#quantity-sort-icon").hasClass('fa')) {
+		$("#quantity-sort-icon").hasClass('fa-sort-asc') ? sort = "amount-asc" : sort = "amount-des";
+	} else if($("#weight-sort-icon").hasClass('fa')) {
 		$("#weight-sort").hasClass('fa-sort-asc') ? sort = "weight-asc" : sort = "weight-des";
 	}
 
