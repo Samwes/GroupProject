@@ -461,9 +461,9 @@ class DBDataMapper
       }
 
       if(substr($sort, -3) == "asc") {
-          $query = $query . " ASC LIMIT 120"
+          $query = $query . " ASC LIMIT 120";
       } else {
-          $query = $query . " DESC LIMIT 120"
+          $query = $query . " DESC LIMIT 120";
       }
 
       $result = NULL;
