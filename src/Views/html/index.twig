@@ -575,21 +575,30 @@
       // Show loading-icon?
       // Replace state instead of push state?
       history.pushState('Radius updated', 'Radius updated', document.location.href + "&radius=" + $("#radiusInput").val());
+      hideAllPopovers()
       refreshSearch();
     });
 
     $("#quantityApply").click(function() {
       // Replace state instead of push state?
       history.pushState('Quantity updated', 'Quantity updated', document.location.href + "&minQuantity=" + $("#minQuantityInput").val() + "&maxQuantity=" + $("#maxQuantityInput").val());
+      hideAllPopovers()
       refreshSearch();
     });
 
     $("#weightApply").click(function() {
       // Replace state instead of push state?
       history.pushState('Weight updated', 'Weight updated', document.location.href + "&minWeight=" + $("#minWeightInput").val() + "&maxWeight=" + $("#maxWeightInput").val());
+      hideAllPopovers()
       refreshSearch();
     });
   });
+
+  function hideAllPopovers() {
+    $('#radius-popover').popover('hide');
+    $('#quantity-popover').popover('hide');
+    $('#weight-popover').popover('hide');
+  }
 </script>
 
 
@@ -636,6 +645,10 @@ $('#radius-popover').popover({
     return $("#radius-popover-content").html();
   }
 });
+$('#radius-popover').click(function() {
+  $('#quantity-popover').popover('hide');
+  $('#weight-popover').popover('hide');
+});
 $('#quantity-popover').popover({
   html : true,
   title: function() {
@@ -645,6 +658,10 @@ $('#quantity-popover').popover({
     return $("#quantity-popover-content").html();
   }
 });
+$('#quantity-popover').click(function() {
+  $('#radius-popover').popover('hide');
+  $('#weight-popover').popover('hide');
+});
 $('#weight-popover').popover({
   html : true,
   title: function() {
@@ -653,6 +670,10 @@ $('#weight-popover').popover({
   content: function() {
     return $("#weight-popover-content").html();
   }
+});
+$('#weight-popover').click(function() {
+  $('#radius-popover').popover('hide');
+  $('#quantity-popover').popover('hide');
 });
 </script>
 
