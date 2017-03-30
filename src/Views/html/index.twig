@@ -569,23 +569,24 @@
 <script>
   // Sub-Search Applys
   // Location is with google api
+  $(document).ready(function() {
+    $("#radiusApply").click(function() {
+      // Replace state instead of push state?
+      history.pushState('Radius updated', 'Radius updated', document.location.href + "&radius=" + $("#radiusInput").val());
+      refreshSearch();
+    });
 
-  $("#radiusApply").click(function() {
-    // Replace state instead of push state?
-    history.pushState('Radius updated', 'Radius updated', document.location.href + "&radius=" + $("#radiusInput").val());
-    refreshSearch();
-  });
+    $("#quantityApply").click(function() {
+      // Replace state instead of push state?
+      history.pushState('Quantity updated', 'Quantity updated', document.location.href + "&minQuantity=" + $("#minQuantityInput").val() + "&maxQuantity=" + $("#maxQuantityInput").val());
+      refreshSearch();
+    });
 
-  $("#quantityApply").click(function() {
-    // Replace state instead of push state?
-    history.pushState('Quantity updated', 'Quantity updated', document.location.href + "&minQuantity=" + $("#minQuantityInput").val() + "&maxQuantity=" + $("#maxQuantityInput").val());
-    refreshSearch();
-  });
-
-  $("#weightApply").click(function() {
-    // Replace state instead of push state?
-    history.pushState('Weight updated', 'Weight updated', document.location.href + "&minWeight=" + $("#minWeightInput").val() + "&maxWeight=" + $("#maxWeightInput").val());
-    refreshSearch();
+    $("#weightApply").click(function() {
+      // Replace state instead of push state?
+      history.pushState('Weight updated', 'Weight updated', document.location.href + "&minWeight=" + $("#minWeightInput").val() + "&maxWeight=" + $("#maxWeightInput").val());
+      refreshSearch();
+    });
   });
 </script>
 
