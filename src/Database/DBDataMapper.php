@@ -453,11 +453,13 @@ class DBDataMapper
       }
 
       if ($sort == 'radius-asc' || $sort == 'radius-des') {
-          $query = $query . " ORDER BY SQUARE(`latit` - :latit) + SQUARE(`longit` - :longit)";
+          $query = $query . " ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
       } else if ($sort == 'amount-asc' || $sort == 'amount-des') {
           $query = $query . " ORDER BY `amount`";
       } else if ($sort == 'weight-asc' || $sort == 'weight-des') {
           $query = $query . " ORDER BY `weight`";
+      } else {
+          $query = $query . " ORDER BY `amount`";
       }
 
       if(substr($sort, -3) == "asc") {
