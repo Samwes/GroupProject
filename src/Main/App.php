@@ -257,7 +257,7 @@ class App extends Application{
             -> assert('maxAmount', '[0-9]*')
             -> assert('minWeight', '[0-9]*')
             -> assert('maxWeight', '[0-9]*')
-            -> assert('sort', '[a-z]*');
+            -> assert('sort', '[a-z\-]*');
 
         //future Secure post for registered users only
         $this->post('/food', 'rest.handler:foodItemPost')
