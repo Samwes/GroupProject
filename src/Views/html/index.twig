@@ -681,7 +681,6 @@ $('#weight-popover').click(function() {
 <script>
   //  Radius
   $("#radius-sort").click(function() {
-    refreshSearch();
     // Change Icon
     if ($("#radius-sort-icon").hasClass("fa-sort-asc")) {
       $("#radius-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
@@ -695,11 +694,11 @@ $('#weight-popover').click(function() {
     }
     $("#weight-sort-icon").attr('class', '');
     $("#quantity-sort-icon").attr('class', '');
+    refreshSearch();
   });
 
   // Weight
   $("#weight-sort").click(function() {
-    refreshSearch();
     // Change Icon
     if ($("#weight-sort-icon").hasClass("fa-sort-asc")) {
       $("#weight-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
@@ -713,11 +712,11 @@ $('#weight-popover').click(function() {
     }
     $("#radius-sort-icon").attr('class', '');
     $("#quantity-sort-icon").attr('class', '');
+    refreshSearch();
   });
 
   // Expiry
   $("#quantity-sort").click(function() {
-    refreshSearch();
     // Change Icon
     if ($("#quantity-sort-icon").hasClass("fa-sort-asc")) {
       $("#quantity-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
@@ -731,6 +730,7 @@ $('#weight-popover').click(function() {
     }
     $("#radius-sort-icon").attr('class', '');
     $("#weight-sort-icon").attr('class', '');
+    refreshSearch();
   });
 </script>
 
