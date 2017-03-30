@@ -452,12 +452,18 @@ class DBDataMapper
           $query = $query . " AND " . $weightQuery;
       }
 
-      if ($sort == 'radius') {
-          $query = $query . " ORDER BY SQUARE(`latit` - :latit) + SQUARE(`longit` - :longit) LIMIT 120";
-      } else if ($sort == 'amount'){
-          $query = $query . " ORDER BY `amount` LIMIT 120";
+      if ($sort == 'radius-asc' || $sort == 'radius-des') {
+          $query = $query . " ORDER BY SQUARE(`latit` - :latit) + SQUARE(`longit` - :longit)";
+      } else if ($sort == 'amount-asc' || $sort == 'amount-des') {
+          $query = $query . " ORDER BY `amount`";
+      } else if ($sort == 'weight-asc' || $sort == 'weight-des') {
+          $query = $query . " ORDER BY `weight`";
+      }
+
+      if(substr($sort, -3) == "asc") {
+          $query = $query . " ASC LIMIT 120"
       } else {
-        $query = $query . " ORDER BY `weight` LIMIT 120";
+          $query = $query . " DESC LIMIT 120"
       }
 
       $result = NULL;

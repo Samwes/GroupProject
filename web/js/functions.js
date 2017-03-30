@@ -62,6 +62,15 @@ function refreshSearch() {
 	var maxWeight = GetURLParameter("maxWeight");
 	var sort = "amount";
 
+	if($("#radius-sort").hasClass('fa')) {
+		// Check if asc or desc
+		$("#radius-sort").hasClass('fa-sort-asc') ? sort = "radius-asc" : sort = "radius-des";
+	} else if($("#quantity-sort").hasClass('fa')) {
+		$("#quantity-sort").hasClass('fa-sort-asc') ? sort = "amount-asc" : sort = "amount-des";
+	} else if($("#weight-sort").hasClass('fa')) {
+		$("#weight-sort").hasClass('fa-sort-asc') ? sort = "weight-asc" : sort = "weight-des";
+	}
+
 	if(search) {
 		// If not exist then set to "" else replace "+" with " "
 		search = search.replace("+", " ");
