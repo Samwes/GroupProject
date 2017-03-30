@@ -427,8 +427,9 @@ class DBDataMapper
       $quantityQuery = "`amount` <= :maxAmount AND `amount` >= :minAmount";
       $weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
 
-      $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE '%' || :search || '%'";
-      $params = array(':search' => $search);
+      $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE :search";
+      $adaptedSearch = '%' . $search . '%';
+      $params = array(':search' => $adaptedSearch);
 
       if ($category != "") {
           $params[':category'] = $category;
@@ -453,9 +454,10 @@ class DBDataMapper
 
       if ($sort == 'radius') {
           $query = $query . " ORDER BY SQUARE(`latit` - :latit) + SQUARE(`longit` - :longit) LIMIT 120";
+      } else if ($sort == 'amount'){
+          $query = $query . " ORDER BY `amount` LIMIT 120";
       } else {
-          $params[":sort"] = $sort;
-          $query = $query . " ORDER BY :sort LIMIT 120";
+        $query = $query . " ORDER BY `weight` LIMIT 120";
       }
 
       $result = NULL;
