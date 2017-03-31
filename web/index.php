@@ -5,7 +5,6 @@ define('ROOT',__DIR__);
 
 require ROOT . '/../vendor/autoload.php';
 
-//This took a solid 2-3 hours to fix due to heroku being cunts future maybe remove this wording
 if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'){
     $_SERVER['HTTPS']='on';
 }
