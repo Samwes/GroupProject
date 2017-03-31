@@ -177,6 +177,7 @@ class App extends Application{
     }
 
     private function defineBasicRoutes() {
+
         $this->get('/', function() {
             return $this['twig']->render('index.twig');
         })->bind('index');
