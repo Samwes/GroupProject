@@ -19,11 +19,13 @@ class DBDataMapper
 
             //TODO: remove userid and just have username?
 
+            dump($url);
+
             $servername = $url["host"];
             $username = $url["user"];
             $password = $url["pass"];
             $db = substr($url["path"], 1);
-            $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername. '/' .$url['query'];
+            $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername;  //. '/' .$url['query'];
 
             // Create connection
             // add request (?reconnect=true) as well 100%
