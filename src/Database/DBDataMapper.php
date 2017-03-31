@@ -19,16 +19,13 @@ class DBDataMapper
 
             //TODO: remove userid and just have username?
 
-            dump($url);
-
             $servername = $url["host"];
             $username = $url["user"];
             $password = $url["pass"];
             $db = substr($url["path"], 1);
-            $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername;  //. '/' .$url['query'];
+            $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername  . '?' .$url['query'];
 
             // Create connection
-            // add request (?reconnect=true) as well 100%
             try {
                 $attributes = $debug ? array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) : null;
                 $pdo = new PDO($dsn, $username, $password, $attributes);
