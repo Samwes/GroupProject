@@ -200,9 +200,9 @@ class App extends Application{
         })->bind('login');
 
         //note so does this one?
-        $this->get('/register2', function() {
+        $this->get('/register', function() {
             return $this['twig']->render('signup.twig');
-        })->bind('register')->requireHttps();
+        })->bind('registerPage')->requireHttps();
 
         //note move to RESTapi?
         $this->get('/item/{id}', function($id) {
