@@ -3,3 +3,7 @@ vendor/
 .idea/
 ~.*
 app/
+/composer.lock
+/bigobjects.txt
+/allfileshas.txt
+/bigtosmall.txt
