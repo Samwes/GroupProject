@@ -94,16 +94,16 @@
               </div>
               <div class="form-group input-group">
                 <span class="input-group-addon panel-input-symbol"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-                <input type="password" name="password" id="testpw1" tabindex="3" class="form-control panel-input" placeholder="Password">
+                <input type="password" name="password" tabindex="3" class="form-control panel-input" placeholder="Password">
               </div>
               <div class="form-group input-group">
                 <span class="input-group-addon panel-input-symbol"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-                <input type="password" name="confirmpassword" id="testpw2" tabindex="4" class="form-control panel-input" placeholder="Confirm Password">
+                <input type="password" name="confirmpassword" tabindex="4" class="form-control panel-input" placeholder="Confirm Password">
               </div>
               <div class="form-group">
                 <div class="row">
                   <div class="col-sm-6 col-sm-offset-3">
-                    <button type="submit" value="register" name="register" tabindex="4" class="form-control btn btn-login hidden-xs-up">Register</button>
+                    <button type="submit" value="register" name="register" id="register-submit" tabindex="4" class="form-control btn btn-login hidden-xs-up">Register</button>
                   </div>
                 </div>
               </div>
@@ -148,7 +148,7 @@ $("#login-form-link").click(function(e) {
 });
 $("#register-form-link").click(function(e) {
   if($("#register-form-link").hasClass("active")) {
-    $("#register").click();
+    $("#register-submit").click();
   } else {
     $("#loginForm").addClass('hidden-xs-up');
     $("#registerForm").removeClass('hidden-xs-up');
@@ -160,7 +160,7 @@ $("#register-form-link").click(function(e) {
 //Pre submit verification
 function verify(form)
 {
-    if(form.elements['password'] === form.elements['confirmpassword'])
+    if(form.elements['password'].value === form.elements['confirmpassword'].value)
     { return true; }
     else
     { alert('Passwords don\'t match');
