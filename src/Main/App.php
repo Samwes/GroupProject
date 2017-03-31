@@ -14,8 +14,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Handler\Requests;
 use Database\DBDataMapper;
 
-//fixme use some\namespace\{ClassA, ClassB, ClassC as C}; todo this
-
 class App extends Application{
     //TODO: Make use of these. all of them
     use Application\TwigTrait;
@@ -69,7 +67,9 @@ class App extends Application{
 
         // Register security service
         $this->register(new SecurityServiceProvider());
+        $this->register(new RememberMeServiceProvider());
         //TODO: remember me
+
         //TODO: ValidatorServiceProvider
 
         // Generate urls from bound names
@@ -121,15 +121,17 @@ class App extends Application{
 
     private function registerSecurity(){
         //future look into the entire security package, make use of it all
-        //future logout
 
-        //fixme only one firewall? cant authenticate to two
         $this['security.firewalls'] = array(
             'main' => array(
                 'anonymous' => true,
                 'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
                 'logout' => array('logout_path' => '/account/logout', 'invalidate_session' => true),
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
+                'remember_me' => array(
+                    'key'                => '801876fdda6972348a4a0f7c7c07e7e',
+                    'lifetime' => 604800, // 1 week in seconds
+                ),
                 'users' => $this['user.provider'],
             ),
         );
@@ -179,11 +181,12 @@ class App extends Application{
         $this->get('/login', function(Request $request) {
             if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
                 return new RedirectResponse($this->url('index'));
-            } else {
+            }
+
             return $this['twig']->render('login.twig', array(
                 'error'         => $this['security.last_error']($request),
                 'last_username' => $this['session']->get('_security.last_username'),
-            ));}
+            ));
         })->bind('login');
 
         $this->get('/register', function() {
@@ -207,6 +210,7 @@ class App extends Application{
             return $this['twig']->render('scanner.twig');
         })->bind('scanner');
 
+        //future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $account->get('/userprofile', function(){
             return $this['twig']->render('userProfile.twig');
         })->bind('user');
@@ -225,14 +229,6 @@ class App extends Application{
     private function restAPI(){
         $this->get('/food/{foodID}', 'rest.handler:foodItemGet')
             -> assert('foodID', '\d+');
-
-        //note ORM in silex? seems useful (fuck databases)
-        //note twig render for ajax instead of return details
-        //note food, item class etc if cant do auto
-        //note git difftools
-        //note composer cookbook ?
-        //note use different pdo loading options for into class? ie load into class
-
 
         $this->get('/food/html/{foodID}', function($foodID) {
           $foodData = $this['DB']->getFoodItemByID($foodID);
@@ -266,7 +262,6 @@ class App extends Application{
             -> assert('maxWeight', '[0-9]*')
             -> assert('sort', '[a-z\-]*');
 
-        //future Secure post for registered users only
         $this->post('/food', 'rest.handler:foodItemPost')
             -> secure('ROLE_USER');
 

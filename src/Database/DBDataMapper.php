@@ -17,8 +17,6 @@ class DBDataMapper
             //future Swap on debug to localhost
             $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
-//            die (var_dump($url));
-
             //TODO: remove userid and just have username?
 
             $servername = $url["host"];
@@ -31,8 +29,7 @@ class DBDataMapper
             // add request (?reconnect=true) as well 100%
             try {
                 $attributes = $debug ? array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) : null;
-                $pdo = new PDO($dsn, $username, $password,
-                    $attributes);
+                $pdo = new PDO($dsn, $username, $password, $attributes);
             } catch (PDOException $e) {
                 die ('Database Connection failed in create: ' . $e->getMessage());
             }

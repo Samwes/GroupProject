@@ -10,19 +10,25 @@
 		<div class="Absolute-Center is-Responsive">
 			<div class="col-sm-12 col-md-10 col-md-offset-1" style="background-color: white; padding: 2rem;">
 				<form action="{{ path('account_login_check') }}" id="loginForm" method="post">
-					<h3 style="text-align: center; margin-bottom: 0.5em;">Login</h3>
-                    <h4>{{ error }}</h4>
-					<div class="form-group input-group">
-						<span class="input-group-addon square-border"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
-						<input class="form-control square-border" type="text" name='_username' placeholder="Username" value="{{ last_username }}"/>
-					</div>
-					<div class="form-group input-group">
-						<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-						<input class="form-control square-border" type="password" name='_password' placeholder="Password"/>
-					</div>
-					<div class="form-group">
-						<button type="submit" value="login" class="btn btn-def btn-block square-border">Log In</button>
-					</div>
+                    <h3 class="panel-title">Login</h3>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon panel-input-symbol"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
+                        <input type="text" name="_username" id="username" tabindex="1" class="form-control panel-input" placeholder="Username" value="">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon panel-input-symbol"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+                        <input type="password" name="_password" id="password" tabindex="2" class="form-control panel-input" placeholder="Password">
+                    </div>
+                    <div class="col-xs-6 form-group">
+                        <label class="custom-control custom-checkbox" style="margin-top: 0.8rem;">
+                            <input type="checkbox" class="custom-control-input" name="_remember_me">
+                            <span class="custom-control-indicator"></span>
+                            <span class="custom-control-description">Remember Me</span>
+                        </label>
+                    </div>
+                    <div class="col-xs-6 form-group">
+                        <button type="submit" value="login" name="login" id="login-submit" tabindex="4" class="form-control btn btn-login hidden-xs-up">Login</button>
+                    </div>
 				</form>
 			</div>
 		</div>
