@@ -427,8 +427,9 @@ class DBDataMapper
       $quantityQuery = "`amount` <= :maxAmount AND `amount` >= :minAmount";
       $weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
 
-      $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE '%' || :search || '%'";
-      $params = array(':search' => $search);
+      $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE :search";
+      $adaptedSearch = '%' . $search . '%';
+      $params = array(':search' => $adaptedSearch);
 
       if ($category != "") {
           $params[':category'] = $category;
@@ -451,11 +452,20 @@ class DBDataMapper
           $query = $query . " AND " . $weightQuery;
       }
 
-      if ($sort == 'radius') {
-          $query = $query . " ORDER BY SQUARE(`latit` - :latit) + SQUARE(`longit` - :longit) LIMIT 120";
+      if ($sort == 'radius-asc' || $sort == 'radius-des') {
+          $query = $query . " ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
+      } else if ($sort == 'amount-asc' || $sort == 'amount-des') {
+          $query = $query . " ORDER BY `amount`";
+      } else if ($sort == 'weight-asc' || $sort == 'weight-des') {
+          $query = $query . " ORDER BY `weight`";
       } else {
-          $params[":sort"] = $sort;
-          $query = $query . " ORDER BY :sort LIMIT 120";
+          $query = $query . " ORDER BY `amount`";
+      }
+
+      if(substr($sort, -3) == "asc") {
+          $query = $query . " ASC LIMIT 120";
+      } else {
+          $query = $query . " DESC LIMIT 120";
       }
 
       $result = NULL;
