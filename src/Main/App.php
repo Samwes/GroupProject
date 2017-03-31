@@ -4,18 +4,20 @@
 namespace Main;
 
 use Silex\Application;
-use Silex\Provider\{TwigServiceProvider, UrlGeneratorServiceProvider, SessionServiceProvider, ValidatorServiceProvider};
-use Silex\Provider\{FormServiceProvider,HttpCacheServiceProvider,HttpFragmentServiceProvider,SecurityServiceProvider};
+use Silex\Provider\{TwigServiceProvider, UrlGeneratorServiceProvider, SessionServiceProvider};
+use Silex\Provider\{SecurityServiceProvider};
 use Silex\Provider\{RememberMeServiceProvider,SwiftmailerServiceProvider,MonologServiceProvider,RoutingServiceProvider};
-use Silex\Provider\{DoctrineServiceProvider,ServiceControllerServiceProvider,AssetServiceProvider,WebProfilerServiceProvider};
+use Silex\Provider\{ServiceControllerServiceProvider,AssetServiceProvider,WebProfilerServiceProvider};
 use Symfony\Component\Translation\Loader\YamlFileLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Handler\Requests;
 use Database\DBDataMapper;
 
+//future cleanup above
+
 class App extends Application{
-    //TODO: Make use of these. all of them
+    //future Make use of these. all of them
     use Application\TwigTrait;
     use Application\SecurityTrait;
     use Application\FormTrait;
@@ -76,10 +78,7 @@ class App extends Application{
         $this->register(new RoutingServiceProvider());
 
         //note what is this
-        $this->register(new HttpFragmentServiceProvider());
-
-        //future: 2 new services, validator and form service? bootstrap forms?
-        //TODO: emailing and account validation
+//        $this->register(new HttpFragmentServiceProvider());
 
         // Register web profiler if in debug mode
         if ($this['debug']) {
@@ -100,6 +99,18 @@ class App extends Application{
                 'javascript' => array('base_path' => 'js/'),
             ),
         ));
+
+        //TODO: emailing and account validation
+
+        $app['swiftmailer.options'] = array(
+            'host' => getenv('SPARKPOST_SMTP_HOST'),
+            'port' => getenv('SPARKPOST_SMTP_PORT'),
+            'username' => getenv('SPARKPOST_SMTP_USERNAME'),
+            'password' => getenv('SPARKPOST_SMTP_PASSWORD'),
+            'encryption' => null,
+            'auth_mode' => null
+        );
+        $this->register(new SwiftmailerServiceProvider());
 
         // Register DB provider service
         $this['DB'] = function() {
@@ -129,7 +140,7 @@ class App extends Application{
                 'logout' => array('logout_path' => '/account/logout', 'invalidate_session' => true),
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
                 'remember_me' => array(
-                    'key'                => '801876fdda6972348a4a0f7c7c07e7e',
+                    'key'                => '801876fdda6972348a4a0f7c7c07e7ee88557f696f34d00a14ffa0ad97e519c',
                     'lifetime' => 604800, // 1 week in seconds
                 ),
                 'users' => $this['user.provider'],

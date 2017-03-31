@@ -45,10 +45,10 @@
       </li>
       {% else %}
       <li class="nav-item" style="height: 63px;">
-        <button id="register-button" class="btn btn-option btn-signup square-border" style="margin-right: -16px;" type="button" data-toggle="modal" data-target="#loginModal" onclick="changeToRegisterForm();">Register</button>
+        <button id="register-button" class="btn btn-option btn-signup square-border" style="margin-right: -16px;" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(false);">Register</button>
       </li>
       <li class="nav-item" style="height: 63px;">
-        <button id="login-button" class="btn btn-option btn-signup square-border" type="button" data-toggle="modal" data-target="#loginModal" onclick="changeToLoginForm();">Login</button>
+        <button id="login-button" class="btn btn-option btn-signup square-border" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(true);">Login</button>
       </li>
       {% endif %}
     </ul>
@@ -173,30 +173,7 @@ $("#register-form-link").click(function(e) {
     $("#login-form-link").removeClass("active");
   }
 });
-$(function() {
-  $('#login-form-link').click(function(e) {
-    changeToLoginForm();
-  });
-  $('#register-form-link').click(function(e) {
-    changeToRegisterForm();
-  });
 
-  function changeToLoginForm() {
-    $("#login-form").delay(100).fadeIn(100);
-    $("#register-form").fadeOut(100);
-    $('#register-form-link').removeClass('active');
-    $(this).addClass('active');
-    e.preventDefault();
-  }
-
-  function changeToRegisterForm() {
-    $("#register-form").delay(100).fadeIn(100);
-    $("#login-form").fadeOut(100);
-    $('#login-form-link').removeClass('active');
-    $(this).addClass('active');
-    e.preventDefault();
-  }
-});
 </script>
 
 <script>

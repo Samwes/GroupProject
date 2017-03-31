@@ -16,7 +16,8 @@
     "symfony/yaml": "~3.0",
     "symfony/security-bundle": "~3.0",
     "symfony/security-acl": "~3.0",
-    "symfony/var-dumper": "~3.0"
+    "symfony/var-dumper": "~3.0",
+    "swiftmailer/swiftmailer": "^5.4"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
