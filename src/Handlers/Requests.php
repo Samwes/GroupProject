@@ -46,9 +46,11 @@ class Requests
     }
 
     public function verifyToken(App $app, $token){
-        if ($this->db->verifyToken($token)){
-            //Success - future log them in?
-            return new RedirectResponse($app->url('user'));
+        $result = $this->db->verifyToken($token);
+        if (false !== $result){
+            //Success - future log them in? result has their userID  --- $user = $app->user(); ?
+
+            return new RedirectResponse($app->url('login'));
         }
 
         //Failure  future improve this?
@@ -69,7 +71,7 @@ class Requests
 
         } else {
             return new RedirectResponse($app->url('user')); //future different failures or messages or raise exceptions
-//            throw new \RuntimeException(sprintf('Can\'t create user %s', $username)); //future just database error or?
+//            throw new \RuntimeException(sprintf('Can\'t create user %s', $username)); //note just database error or?
         }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
@@ -82,7 +84,7 @@ class Requests
 
             return new RedirectResponse($app->path('user'));
         } else {
-            throw new RuntimeException(sprintf('Cant create user %s', $username)); //future just database error or?
+            throw new RuntimeException(sprintf('Cant create user %s', $username)); //note just database error or?
         }
     }
 
@@ -102,7 +104,7 @@ class Requests
             return new Response('Token Sent!', 201);
         }
 
-        throw new RuntimeException(sprintf('Cant find email for user %s', $userid)); //future just database error or?
+        throw new RuntimeException(sprintf('Cant find email for user %s', $userid)); //note just database error or?
     }
 
     public function foodItemPost(Request $request, Application $app)

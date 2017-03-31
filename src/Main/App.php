@@ -286,7 +286,7 @@ class App extends Application{
             -> assert('password','^[\w]+$');
 
         //future send token + resend option
-        $this->post('/register/validatemail/{token}', 'rest.handler:verifyToken');
+        $this->get('/register/validatemail/{token}', 'rest.handler:verifyToken');
 
     }
 

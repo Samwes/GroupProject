@@ -393,7 +393,6 @@ class DBDataMapper
         $stmt = NULL;
         if (false !== $result){
             $userID = $result['userid'];
-            $result = true;
             if ($this->updateRoles($userID,'ROLE_USER')) {
                 $query = 'DELETE
                     FROM `tokentable`
@@ -408,6 +407,8 @@ class DBDataMapper
                 }
                 $stmt = NULL;
             }
+
+            return $userID;
         }
 
         return $result;
