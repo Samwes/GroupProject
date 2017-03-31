@@ -2,7 +2,6 @@ vendor/
 .env
 .idea/
 ~.*
-/composer.lock
 /bigobjects.txt
 /allfileshas.txt
 /bigtosmall.txt
