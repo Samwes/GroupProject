@@ -121,7 +121,6 @@ class App extends Application{
 
     private function registerSecurity(){
         //future look into the entire security package, make use of it all
-
         //future logout
 
         //fixme only one firewall? cant authenticate to two
