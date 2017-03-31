@@ -200,7 +200,7 @@ class App extends Application{
         })->bind('login');
 
         //note so does this one?
-        $this->get('/register', function() {
+        $this->get('/register2', function() {
             return $this['twig']->render('signup.twig');
         })->bind('register')->requireHttps();
 
