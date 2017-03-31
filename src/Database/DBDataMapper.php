@@ -17,13 +17,11 @@ class DBDataMapper
             //future Swap on debug to localhost
             $url = parse_url(getenv("CLEARDB_DATABASE_URL"));
 
-            //TODO: remove userid and just have username?
-
             $servername = $url["host"];
             $username = $url["user"];
             $password = $url["pass"];
             $db = substr($url["path"], 1);
-            $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername  . '?' .$url['query'];
+            $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername; // . '?' .$url['query'];
 
             // Create connection
             try {
