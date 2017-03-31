@@ -20,23 +20,19 @@
         <div id="radius-popover-title" class="hidden-xs-up"></div>
         <div id="radius-popover-content" class="hidden-xs-up">
           <div class="form-group">
-            <label for="radiusMinInput">Radius</label>
-            <input type="number" class="form-control" id="radiusInput" placeholder="Radius">
+            <label for="radiusSlider">Radius</label>
+              <input id="radiusSlider" data-slider-min="100" data-slider-max="1500" data-slider-step="100" data-slider-value="300"/>
           </div>
-          <button id="radiusApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0;">Apply</button>
+            <button id="radiusApply" class="btn apply btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0;">Apply</button>
         </div>
       </li>
       <li class="nav-item hidden-md-down" style="height: 46px; margin-left: -6px;">
-        <button id="quantity-popover"type="button" class="btn btn-option square-border" data-container="body" data-toggle="popover" data-placement="bottom">Quantity <i class="fa fa-caret-down" aria-hidden="true"></i></button>
+        <button id="quantity-popover" type="button" class="btn btn-option square-border" data-container="body" data-toggle="popover" data-placement="bottom">Quantity <i class="fa fa-caret-down" aria-hidden="true"></i></button>
         <div id="quantity-popover-title" class="hidden-xs-up"></div>
         <div id="quantity-popover-content" class="hidden-xs-up">
           <div class="form-group">
-            <label for="quantityMinInput">Min Quantity</label>
-            <input type="number" class="form-control" id="quantityMinInput" placeholder="Min">
-          </div>
-          <div class="form-group">
-            <label for="quantityMaxInput">Max Quantity</label>
-            <input type="number" class="form-control" id="quantityMaxInput" placeholder="Max">
+            <label for="quantitySlider">Quantity</label>
+              <input id="quantitySlider" data-slider-min="1" data-slider-max="10" data-slider-step="1" data-slider-value="[1,5]"/>
           </div>
           <button id="quantityApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
         </div>
@@ -46,12 +42,8 @@
         <div id="weight-popover-title" class="hidden-xs-up"></div>
         <div id="weight-popover-content" class="hidden-xs-up">
           <div class="form-group">
-            <label for="weightMinInput">Min Weight</label>
-            <input type="number" class="form-control" id="weightMinInput" placeholder="Min">
-          </div>
-          <div class="form-group">
-            <label for="weightMaxInput">Max Weight</label>
-            <input type="number" class="form-control" id="weightMaxInput" placeholder="Max">
+              <label for="weightSlider">Min Weight</label>
+              <input id="weightSlider" data-slider-min="0" data-slider-max="2000" data-slider-step="100" data-slider-value="[0,300]"/>
           </div>
           <button id="weightApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
         </div>
@@ -570,31 +562,70 @@
 <script>
   // Sub-Search Applys
   // Location is with google api
-  $(document).ready(function() {
-    $("#radiusApply").click(function() {
-      // Hide popover
-      // Show loading-icon?
-      // Replace state instead of push state?
-      history.pushState('Radius updated', 'Radius updated', document.location.href + "&radius=" + $("#radiusInput").val());
-      hideAllPopovers()
-      refreshSearch();
-    });
+  $(function(){
+    let obj = {}, i, parts, len, key, value;
+    let _params = window.location.search.substr(1).split('#')[0].split('&');
 
-    $("#quantityApply").click(function() {
-      // Replace state instead of push state?
-      history.pushState('Quantity updated', 'Quantity updated', document.location.href + "&minQuantity=" + $("#minQuantityInput").val() + "&maxQuantity=" + $("#maxQuantityInput").val());
-      hideAllPopovers()
-      refreshSearch();
-    });
+      for (i = 0, len = _params.length; i < len; i++) {
+          parts = _params[i].split('=');
+          if (! parts[0]) {continue;}
+          obj[parts[0]] = parts[1] || true;
+      }
 
-    $("#weightApply").click(function() {
-      // Replace state instead of push state?
-      history.pushState('Weight updated', 'Weight updated', document.location.href + "&minWeight=" + $("#minWeightInput").val() + "&maxWeight=" + $("#maxWeightInput").val());
-      hideAllPopovers()
-      refreshSearch();
-    });
+      if ('radius' in obj){
+          $('#radiusSlider').attr('data-slider-value',obj['radius']);
+      }
+
+      if ('minQuantity' in obj){
+          if('maxQuantity' in obj){
+              $('#quantitySlider').attr('data-slider-value','['+obj['minQuantity']+','+obj['maxQuantity']+']');
+          } else {
+              $('#quantitySlider').attr('data-slider-value','['+obj['minQuantity']+','+$('#quantitySlider').attr('data-slider-max')+']');
+          }
+      } else if('maxQuantity' in obj){
+          $('#quantitySlider').attr('data-slider-value','['+('#quantitySlider').attr('data-slider-min')+','+$obj['maxQuantity']+']');
+      }
+
+      if ('minWeight' in obj){
+          if('maxWeight' in obj){
+              $('#weightSlider').attr('data-slider-value','['+obj['minWeight']+','+obj['maxWeight']+']');
+          } else {
+              $('#weightSlider').attr('data-slider-value','['+obj['minWeight']+','+$('#weightSlider').attr('data-slider-max')+']');
+          }
+      } else if('maxWeight' in obj){
+          $('#weightSlider').attr('data-slider-value','['+$('#weightSlider').attr('data-slider-min')+','+$obj['maxWeight']+']');
+      }
   });
 
+  function UpdateQueryString(key, value, url) {
+      if (!url) url = window.location.href;
+      var re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
+          hash;
+
+      if (re.test(url)) {
+          if (typeof value !== 'undefined' && value !== null)
+              return url.replace(re, '$1' + key + "=" + value + '$2$3');
+          else {
+              hash = url.split('#');
+              url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
+              if (typeof hash[1] !== 'undefined' && hash[1] !== null)
+                  url += '#' + hash[1];
+              return url;
+          }
+      }
+      else {
+          if (typeof value !== 'undefined' && value !== null) {
+              var separator = url.indexOf('?') !== -1 ? '&' : '?';
+              hash = url.split('#');
+              url = hash[0] + separator + key + '=' + value;
+              if (typeof hash[1] !== 'undefined' && hash[1] !== null)
+                  url += '#' + hash[1];
+              return url;
+          }
+          else
+              return url;
+      }
+  }
   function hideAllPopovers() {
     $('#radius-popover').popover('hide');
     $('#quantity-popover').popover('hide');
@@ -637,6 +668,11 @@
 
 <script>
 // Popovers
+
+
+{# todo parse input values from query string #}
+
+
 $('#radius-popover').popover({
   html : true,
   title: function() {
@@ -644,12 +680,28 @@ $('#radius-popover').popover({
   },
   content: function() {
     return $("#radius-popover-content").html();
-  }
+  },
+
+}).on('shown.bs.popover', function () {
+    let aslider = $('.popover').find('#radiusSlider');
+    $('.popover').find('#radiusApply').click(function() {
+        let val = aslider.slider('getValue');
+        $('#radiusSlider').attr('data-slider-value',val);
+        window.history.pushState('Radius updated', 'Radius updated', UpdateQueryString('radius',val));
+        hideAllPopovers();
+        refreshSearch();
+    });
+    aslider.slider({
+        formatter: function (value) {
+            return value+'m';
+        }
+    });
+
+    $('.slider-selection').css('background', '#BABABA');
+    $('#quantity-popover').popover('hide');
+    $('#weight-popover').popover('hide');
 });
-$('#radius-popover').click(function() {
-  $('#quantity-popover').popover('hide');
-  $('#weight-popover').popover('hide');
-});
+
 $('#quantity-popover').popover({
   html : true,
   title: function() {
@@ -658,11 +710,32 @@ $('#quantity-popover').popover({
   content: function() {
     return $("#quantity-popover-content").html();
   }
+}).on('shown.bs.popover', function () {
+    let aslider = $('.popover').find('#quantitySlider');
+    $('.popover').find('#quantityApply').click(function() {
+        let val = aslider.slider('getValue');
+        $('#quantitySlider').attr('data-slider-value','['+val.toString()+']');
+        let query = UpdateQueryString('minQuantity',val[0]);
+        query = UpdateQueryString('maxQuantity',val[1],query);
+        history.pushState('Quantity updated', 'Quantity updated', query);
+        hideAllPopovers();
+        refreshSearch();
+    });
+    aslider.slider({
+        range : true,
+        formatter: function (value) {
+            if (value.constructor === Array){
+                return value[0]+" to "+value[1]+" items";
+            }
+            return value;
+        }
+    });
+
+    $('.slider-selection').css('background', '#BABABA');
+    $('#radius-popover').popover('hide');
+    $('#weight-popover').popover('hide');
 });
-$('#quantity-popover').click(function() {
-  $('#radius-popover').popover('hide');
-  $('#weight-popover').popover('hide');
-});
+
 $('#weight-popover').popover({
   html : true,
   title: function() {
@@ -671,10 +744,33 @@ $('#weight-popover').popover({
   content: function() {
     return $("#weight-popover-content").html();
   }
-});
-$('#weight-popover').click(function() {
-  $('#radius-popover').popover('hide');
-  $('#quantity-popover').popover('hide');
+}).on('shown.bs.popover', function () {
+    let aslider = $('.popover').find('#weightSlider');
+    $('.popover').find('#weightApply').click(function() {
+        let val = aslider.slider('getValue');
+        $('#weightSlider').attr('data-slider-value','['+val.toString()+']');
+        let query = UpdateQueryString('minWeight',val[0]);
+        query = UpdateQueryString('maxWeight',val[1],query);
+        history.pushState('Weight updated', 'Weight updated', query);
+        hideAllPopovers();
+        refreshSearch();
+    });
+    aslider.slider({
+        range : true,
+        formatter: function (value) {
+            if (value.constructor === Array){
+                let result = "";
+                result += value[0]>1000? (value[0]/1000)+"kg":value[0]+"g";
+                result += "-"+ (value[1]>1000 ? (value[1]/1000)+"kg":value[1]+"g");
+                return result;
+            }
+            return value;
+        }
+    });
+
+    $('.slider-selection').css('background', '#BABABA');
+    $('#radius-popover').popover('hide');
+    $('#quantity-popover').popover('hide');
 });
 </script>
 
