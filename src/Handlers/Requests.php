@@ -61,7 +61,6 @@ class Requests
             //todo test this maybe broke it should be k
             $encoded = $app['security.default_encoder']->encodePassword($password,null);
 
-            //todo: storage (rememberme)
             //todo: emailing and account validation
         } else {
 //            return new RedirectResponse($app->path('user')); //future different failures or messages or raise exceptions

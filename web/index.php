@@ -32,10 +32,6 @@ $app->get('/admin', function() use($app) {
     return $app['twig']->render('admin.twig');
 });
 
-//fixme return to login but say why ?
-$app->get('/failed', function() use($app) {
-    return $app['twig']->render('failure.twig');
-})->bind('failure');
 // ----------------------------
 
 

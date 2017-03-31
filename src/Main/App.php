@@ -155,7 +155,7 @@ class App extends Application{
         $this->error(function (\Exception $e, $code) :?Response {
             if ($this['debug']) {
                 // in debug mode we want to get the regular error message
-                return null; //fixme check works, could be cause of problems(remove null)
+                return null;
             }
             switch ($code) {
                 case 404:
@@ -178,6 +178,7 @@ class App extends Application{
             return new RedirectResponse($this->url('index'));
         });
 
+        //note login page differs from modal significantly
         $this->get('/login', function(Request $request) {
             if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
                 return new RedirectResponse($this->url('index'));
