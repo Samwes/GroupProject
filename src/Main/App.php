@@ -71,18 +71,13 @@ class App extends Application{
         $this->register(new SecurityServiceProvider());
         $this->register(new RememberMeServiceProvider());
 
-        //TODO: ValidatorServiceProvider
-
         // Generate urls from bound names
         $this->register(new RoutingServiceProvider());
 
-        //note what is this
-//        $this->register(new HttpFragmentServiceProvider());
+        $this->register(new HttpFragmentServiceProvider());
 
         // Register web profiler if in debug mode
         if ($this['debug']) {
-            $this->register(new HttpFragmentServiceProvider());
-
             $this->register(new WebProfilerServiceProvider(), array(
                 'profiler.cache_dir' => ROOT . '/../cache/profiler',
                 'profiler.mount_prefix' => '/_profiler', // this is the default
@@ -190,9 +185,10 @@ class App extends Application{
             return new RedirectResponse($this->url('index'));
         });
 
+        //future login and register should be inherited from same place?
         //note login page differs from modal significantly
         $this->get('/login', function(Request $request) {
-            if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                 return new RedirectResponse($this->url('index'));
             }
 
@@ -202,10 +198,12 @@ class App extends Application{
             ));
         })->bind('login');
 
+        //note so does this one?
         $this->get('/register', function() {
             return $this['twig']->render('signup.twig');
         })->bind('register')->requireHttps();
 
+        //note move to RESTapi?
         $this->get('/item/{id}', function($id) {
             return $this['twig']->render('itemPage.twig', array (
                 'itemid' => $id,
@@ -240,6 +238,7 @@ class App extends Application{
     }
 
     private function restAPI(){
+        //future move into handlers
         $this->get('/food/{foodID}', 'rest.handler:foodItemGet')
             -> assert('foodID', '\d+');
 
@@ -255,6 +254,7 @@ class App extends Application{
           );
         }) -> assert('foodID', '\d+');
 
+        //fixme never called
         $this->get('/food/{userID}', 'rest.handler:foodItemsGet')
             -> assert('userID', '\d+');
 
@@ -279,7 +279,7 @@ class App extends Application{
             -> secure('ROLE_USER');
 
         $this->post('/register/user', 'rest.handler:registerNewUser')
-            -> requireHttps()
+            -> requireHttps() -> bind('register')
             -> assert('username', '^[a-zA-Z0-9_]+$')
             -> assert('password','^[\w]+$');
 

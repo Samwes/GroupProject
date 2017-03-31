@@ -64,7 +64,7 @@ class Requests
             //todo: emailing and account validation
         } else {
 //            return new RedirectResponse($app->path('user')); //future different failures or messages or raise exceptions
-            throw new \RuntimeException(sprintf('Cant create user %s', $username)); //future just database error or?
+            throw new \RuntimeException(sprintf('Can\'t create user %s', $username)); //future just database error or?
         }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
