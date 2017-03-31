@@ -10,15 +10,7 @@ if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO
     $_SERVER['HTTPS']='on';
 }
 
-//future git mergetool and difftool. git templates? git extensions
-//future entire local js and css hosting
-//future move red to images, seriously
-//TODO: todo filters for each (fixme, future) (useful IDE thing) in alt-6 menu
-
-
 $app = new Main\App(array ( 'debug' => DEBUG));
-
-//note maybe change logging at heroku level, dont care about most (successful) connections
 
 // -------- SERVICES --------
 //note moved to class (app.php)
