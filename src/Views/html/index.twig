@@ -2,6 +2,9 @@
 
 {% block head %}
 <title>Homepage</title>
+    <script src="{{asset('slider.js','javascript')}}"></script>
+    <script src="{{asset('slider.css','css')}}"></script>
+    {#todo TEMP future remove#}
 {% endblock %}
 
 {%  block content %}
@@ -19,8 +22,8 @@
         <div id="radius-popover-title" class="hidden-xs-up"></div>
         <div id="radius-popover-content" class="hidden-xs-up">
           <div class="form-group">
-            <label for="radiusMinInput">Radius</label>
-            <input type="number" class="form-control" id="radiusInput" placeholder="Radius">
+            <label for="radiusSlider">Radius</label>
+            <input id="radiusSlider" type="text" data-slider-min="100" data-slider-max="2000" data-slider-step="100" data-slider-value="500"/>
           </div>
           <button id="radiusApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0;">Apply</button>
         </div>
@@ -570,6 +573,7 @@
   // Sub-Search Applys
   // Location is with google api
   $(document).ready(function() {
+      $("#radiusSlider").slider();
     $("#radiusApply").click(function() {
       // Hide popover
       // Show loading-icon?
