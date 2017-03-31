@@ -5,7 +5,7 @@ namespace Main;
 
 use Silex\Application;
 use Silex\Provider\{TwigServiceProvider, UrlGeneratorServiceProvider, SessionServiceProvider};
-use Silex\Provider\{SecurityServiceProvider};
+use Silex\Provider\{HttpFragmentServiceProvider,SecurityServiceProvider};
 use Silex\Provider\{RememberMeServiceProvider,SwiftmailerServiceProvider,MonologServiceProvider,RoutingServiceProvider};
 use Silex\Provider\{ServiceControllerServiceProvider,AssetServiceProvider,WebProfilerServiceProvider};
 use Symfony\Component\Translation\Loader\YamlFileLoader;
@@ -70,7 +70,6 @@ class App extends Application{
         // Register security service
         $this->register(new SecurityServiceProvider());
         $this->register(new RememberMeServiceProvider());
-        //TODO: remember me
 
         //TODO: ValidatorServiceProvider
 
@@ -82,6 +81,8 @@ class App extends Application{
 
         // Register web profiler if in debug mode
         if ($this['debug']) {
+            $this->register(new HttpFragmentServiceProvider());
+
             $this->register(new WebProfilerServiceProvider(), array(
                 'profiler.cache_dir' => ROOT . '/../cache/profiler',
                 'profiler.mount_prefix' => '/_profiler', // this is the default
