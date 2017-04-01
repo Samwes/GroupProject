@@ -128,4 +128,40 @@ $(document).ready(function() {
 		$('#requests').height($(window).height() - $('#search-navbar').outerHeight() - $('#requests-nav').outerHeight());
 	}
 </script>
+
+<!-- Move messaging scripts into own file> -->
+<script>
+	function fillSentRequests() {
+		$.getJSON('/request/sent', function(data) {
+			// data is all that users requests
+			$.each(data, function(index, value) {
+				// value is requestid, foodid, accepted
+				$("#requests").append(
+				'<div class="card square-border" style="border: 0;">' +
+					'<div class="row">' +
+						'<div class="col-xs-2" style="padding: 0;">' +
+							'<img class="card-img-top circle" src="../res/oranges.jpg" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
+						'</div>' +
+						'<div class="col-xs-10" style="padding: 0;">' +
+							'<div class="card-block" style="padding: 0.5rem;">' +
+								'<p class="card-text">' + value['requestid'] + '</p>' +
+								'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + value['foodid'] + '</p>' +
+								'<small class="text-muted">Last Message</small>' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+				);
+			});
+		});
+	}
+
+	function fillMessages(requestID) {
+		$.getJSON('request/messages/' + value['requestid'], function(messages) {
+			// messages is message, time, sender, receiver
+
+		});
+	}
+</script>
+
 {% endblock %}

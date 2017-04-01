@@ -55,7 +55,7 @@ class DBDataMapper
     public function getFoodItemsByUserID(int $id)
     {
         $query = 'SELECT `expirydate`,`category`,`foodid`,`name`,`description`,`latit`,`longit`,`amount`,
-                  `weight` ,`image`,`active`,`hidden` 
+                  `weight` ,`image`,`active`,`hidden`
                     FROM `itemtable`
                     WHERE `userid` = :id';
         $result = NULL;
@@ -182,6 +182,31 @@ class DBDataMapper
 
             $stmt->execute(array(
                 ':id' => $id
+            ));
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Get user messages failed: ' . $e->getMessage();
+        }
+        $stmt = NULL;
+        return $result;
+    }
+
+    public function getUserMessagesByRequestID($userID, $requestID)
+    {
+        $query = "SELECT `messagetable`.`message`, `messagetable`.`time`, `usermessagetable`.`sender`, `usermessagetable`.`receiver`
+                    FROM `messagetable`, `requestmessagetable`, `usermessagetable`
+                    WHERE `requestmessagetable`.`requestid` = ':requestID'
+                    AND `requestmessagetable`.`messageid` = `messagetable`.`messageid`
+                    AND `requestmessagetable`.`messageid` = `usermessagetable`.`messageid`
+                    AND (`usermessagetable`.`sender` = ':userID' OR `usermessagetable`.`receiver` = ':userID')";
+        $result = NULL;
+        try {
+            $stmt = $this->pdo->prepare($query);
+
+            $stmt->execute(array(
+                ':userID' => $userID,
+                ':requestID' => $requestID
             ));
 
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -360,11 +385,33 @@ class DBDataMapper
         return $result;
     }
 
-    public function getRequestsByUserID($id)
+    public function getRequestsSentByUserID($id)
     {
         $query = "SELECT `requestid`, `foodid`, `accepted`
                     FROM `requesttable`
-                    WHERE `requestid` = :id";
+                    WHERE `requester` = :id";
+        $result = NULL;
+        try {
+            $stmt = $this->pdo->prepare($query);
+
+            $stmt->execute(array(
+                ':id' => $id
+            ));
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Getting requests by ID failed: ' . $e->getMessage();
+        }
+        $stmt = NULL;
+        return $result;
+    }
+
+    public function getRequestsReceivedByUserID($id)
+    {
+        $query = "SELECT `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
+                    FROM `requesttable`, `itemtable`
+                    WHERE `requesttable`.`foodid` = `itemtable`.`foodid`
+                    AND `itemtable`.`userid` = :id";
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);

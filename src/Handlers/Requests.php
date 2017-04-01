@@ -174,6 +174,51 @@ class Requests
 
     }
 
+    public function getRequestsSentByUserID(Request $request, App $app) {
+        $toEncode = null;
+        $token = $app['security.token_storage']->getToken();
+
+        if (null !== $token) {
+            $userID = $token->getUser()->getID();
+            $toEncode = $this->db->getRequestsSentByUserID($userID);
+            if ($toEncode === null) {
+                $toEncode = array('error' => 'failed');
+            }
+        }
+
+        return new JsonResponse($toEncode);
+    }
+
+    public function getRequestsReceivedByUserID(Request $request, App $app) {
+        $toEncode = null;
+        $token = $app['security.token_storage']->getToken();
+
+        if (null !== $token) {
+            $userID = $token->getUser()->getID();
+            $toEncode = $this->db->getRequestsReceivedByUserID($userID);
+            if ($toEncode === null) {
+                $toEncode = array('error' => 'failed');
+            }
+        }
+
+        return new JsonResponse($toEncode);
+    }
+
+    public function getUserMessagesByRequestID(Request $request, App $app, $requestID) {
+        $toEncode = null;
+        $token = $app['security.token_storage']->getToken();
+
+        if (null !== $token) {
+            $userID = $token->getUser()->getID();
+            $toEncode = $this->db->getUserMessagesByRequestID($userID, $requestID);
+            if ($toEncode === null) {
+                $toEncode = array('error' => 'failed');
+              }
+        }
+
+        return new JsonResponse($toEncode);
+    }
+
     public function mainSearch(Request $request, App $app, $category, $search)
     {
         $toEncode = $this->db->mainSearch($category, $search);

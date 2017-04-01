@@ -263,11 +263,20 @@ class App extends Application{
         $this->get('/food/{userID}', 'rest.handler:foodItemsGet')
             -> assert('userID', '\d+');
 
+        $account->get('/request/sent', 'rest.handler:getRequestsSentByUserID')
+            -> secure('ROLE_USER');
+
+        $account->get('/request/received', 'rest.handler:getRequestsReceivedByUserID')
+            -> secure('ROLE_USER');
+
+        $account->get('/request/messages/{requestID}', 'rest.handler:getUserMessagesByRequestID')
+            -> secure('ROLE_USER')
+            -> assert('requestID', '\d+');
+
         $this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*');
 
-        // /search//orange////////radius
         $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*')
