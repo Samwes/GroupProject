@@ -235,6 +235,10 @@ class App extends Application{
           return $this['twig']->render('userItems.twig');
         })->bind('useritems');
 
+        $account->get('/messenger', function() {
+          return $this['twig']->render('messenger.twig');
+        })->bind('messenger');
+
         $this->mount('/account', $account);
     }
 
@@ -279,6 +283,8 @@ class App extends Application{
         $this->post('/food', 'rest.handler:foodItemPost')
             -> secure('ROLE_USER');
 
+        //fixme invalid email returns json error (???)
+        //todo registration failure
         $this->post('/register/user', 'rest.handler:registerNewUser')
             -> requireHttps() -> bind('register')
             -> assert('username', '^[a-zA-Z0-9_]+$')

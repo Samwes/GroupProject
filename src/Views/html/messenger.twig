@@ -1,0 +1,128 @@
+{% extends 'layout.twig' %}
+
+{% block head %}
+<title>Messenger</title>
+
+{% endblock %}
+
+{%  block content %}
+<!-- MAIN SECTION -->
+<div class="container-fluid main">
+	<div class="row row-offcanvas row-offcanvas-left">
+		<div class="col-xs-6 col-sm-3 no-padding sidebar-offcanvas" id="sidebar" role="navigation">
+			<!-- Requests Section -->
+			<nav class="navbar square-border" id="requests-nav" style="background-color: white; border: 1px solid #dce0e0; border-top: 0; height: 3rem;">
+				<h5 style="text-align: center; margin: 4px;">Requests</h5>
+			</nav>
+			<div class="container-fluid" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0; padding-right: 0;">
+				<!-- Requests -->
+				<div class="card square-border" style="border: 0;">
+					<div class="row">
+						<div class="col-xs-2" style="padding: 0;">
+							<img class="card-img-top circle" src="res/oranges.jpg" alt="Card image cap" style="width:100%; padding: 0.5rem;">
+						</div>
+						<div class="col-xs-10" style="padding: 0;">
+							<div class="card-block" style="padding: 0.5rem;">
+								<p class="card-text">Contact Name</p>
+								<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">Item Name</p>
+								<small class="text-muted">Last Message</small>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card square-border" style="border: 0; background-color: #fafafa;">
+					<div class="row">
+						<div class="col-xs-2" style="padding: 0;">
+							<img class="card-img-top circle" src="res/oranges.jpg" alt="Card image cap" style="width:100%; padding: 0.5rem;">
+						</div>
+						<div class="col-xs-10" style="padding: 0;">
+							<div class="card-block" style="padding: 0.5rem;">
+								<p class="card-text">Contact Name Viewing</p>
+								<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">Item Name Viewing</p>
+								<small class="text-muted">Last Message Viewing</small>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card square-border" style="border: 0;">
+					<div class="row">
+						<div class="col-xs-2" style="padding: 0;">
+							<img class="card-img-top circle" src="res/oranges.jpg" alt="Card image cap" style="width:100%; padding: 0.5rem;">
+						</div>
+						<div class="col-xs-10" style="padding-left: 0;">
+							<div class="card-block" style="padding: 0.5rem;">
+								<p class="card-text bold">NEW Contact Name</p>
+								<p class="card-subtitle text-muted bold" style="margin-bottom: -0.25rem;">NEW Item Name</p>
+								<small class="text-muted bold">NEW Last Message</small>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-9 no-padding">
+			<!-- Messaging Section -->
+			<nav class="navbar square-border" style="background-color: white; border: 1px solid #dce0e0; border-left: 0; border-top: 0; height: 3rem;">
+				<button type="button" class="btn btn-secondary hidden-md-up" data-toggle="offcanvas" data-target=".sidebar-nav">Test</button>
+				<ul class="nav navbar-nav float-xs-right">
+					<li class="nav-item">
+						<a class="nav-link" href="#">Reject</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Accept</a>
+					</li>
+				</ul>
+			</nav>
+			<div class="container-fluid" style="overflow: scroll; overflow-x:hidden;">
+				<!-- Message Container -->
+				<div class="row" style="padding: 0.5rem; width: 100%;">
+					<!-- User Image -->
+					<img class="circle" src="res/oranges.jpg" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">
+					<!-- Message -->
+					<div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #fafafa; display: inline-block;">
+						<div class="card-block" style="padding: 0.5rem;">
+							<p class="card-text" style="color: black;">Dear Mister, I would awfully like to take those lovely looking oranges off your hands so that my poor children and I can have a delicious treat.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="row" style="padding: 0.5rem; float: right; width: 100%;">
+					<!-- Message -->
+					<div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #2979FF; display: inline-block; float: right;">
+						<div class="card-block" style="padding: 0.5rem;">
+							<p class="card-text" style="color: white;">Of course dear woman. What fool would I be to refuse you my delicious oranges.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// From Stack Overflow
+$(document).ready(function() {
+	$('[data-toggle=offcanvas]').click(function() {
+		$('.row-offcanvas').toggleClass('active2');
+	});
+});
+</script>
+
+<!-- CORRECT SIZES OF ELEMENTS -->
+<script>
+	$(document).ready(function() {
+		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
+		$('#search-navbar-group').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
+		$('#requests').height($(window).height() - $('#search-navbar').outerHeight() - $('#requests-nav').outerHeight());
+	});
+
+	function resize() {
+		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
+		$('#search-navbar-group').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
+		$('#requests').height($(window).height() - $('#search-navbar').outerHeight() - $('#requests-nav').outerHeight());
+	}
+</script>
+{% endblock %}
