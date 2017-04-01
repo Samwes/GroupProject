@@ -263,13 +263,13 @@ class App extends Application{
         $this->get('/food/{userID}', 'rest.handler:foodItemsGet')
             -> assert('userID', '\d+');
 
-        $account->get('/request/sent', 'rest.handler:getRequestsSentByUserID')
+        $this->get('/request/sent', 'rest.handler:getRequestsSentByUserID')
             -> secure('ROLE_USER');
 
-        $account->get('/request/received', 'rest.handler:getRequestsReceivedByUserID')
+        $this->get('/request/received', 'rest.handler:getRequestsReceivedByUserID')
             -> secure('ROLE_USER');
 
-        $account->get('/request/messages/{requestID}', 'rest.handler:getUserMessagesByRequestID')
+        $this->get('/request/messages/{requestID}', 'rest.handler:getUserMessagesByRequestID')
             -> secure('ROLE_USER')
             -> assert('requestID', '\d+');
 
