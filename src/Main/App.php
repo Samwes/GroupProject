@@ -9,12 +9,9 @@ use Silex\Provider\{HttpFragmentServiceProvider,SecurityServiceProvider};
 use Silex\Provider\{RememberMeServiceProvider,SwiftmailerServiceProvider,MonologServiceProvider,RoutingServiceProvider};
 use Silex\Provider\{ServiceControllerServiceProvider,AssetServiceProvider,WebProfilerServiceProvider};
 use Symfony\Component\Translation\Loader\YamlFileLoader;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\{Request,RedirectResponse};
 use Handler\Requests;
 use Database\DBDataMapper;
-
-//future cleanup above
 
 class App extends Application{
     //future Make use of these. all of them
@@ -28,7 +25,7 @@ class App extends Application{
     public function __construct(array $values = array()) {
         parent::__construct($values);
 
-        //todo modify twig files? repeated js functions etc. in every served page
+        //future cleanup twig files pt.2
 
         $this->registerServices();
 
@@ -83,6 +80,7 @@ class App extends Application{
                 'profiler.cache_dir' => ROOT . '/../cache/profiler',
                 'profiler.mount_prefix' => '/_profiler', // this is the default
             ));
+
         }
 
         // Register asset rerouting
@@ -130,7 +128,7 @@ class App extends Application{
         $this['security.firewalls'] = array(
             'main' => array(
                 'anonymous' => true,
-                'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
+                'form' => array('login_path' => '/login', 'check_path' => '/account/userprofile'),
                 'logout' => array('logout_path' => '/account/logout', 'invalidate_session' => true),
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
                 'remember_me' => array(
@@ -213,8 +211,9 @@ class App extends Application{
 
         //future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $account->get('/userprofile', function(){
-            return $this['twig']->render('userProfile.twig');
-        })->bind('user');
+            $userdata = $this['DB']->getUserByUsername((string)$this['security.token_storage']->getToken()->getUser());
+            return $this['twig']->render('userProfile.twig', array('userData' => $userdata));
+        })->bind('user')-> secure('ROLE_USER');  //Double secured so dont check token exists
 
         $account->get('/userprofiletest', function() {
             return $this['twig']->render('userProfileTest.twig');
@@ -238,20 +237,11 @@ class App extends Application{
 
         $this->get('/food/html/{foodID}', function($foodID) {
               $foodData = $this['DB']->getFoodItemByID($foodID);
-              return $this->renderView('foodcard.twig', array (
-                  'name' => $foodData['name'],
-                  'description' => $foodData['description'],
-                  'expiry' => $foodData['expirydate'],
-                  'amount' => $foodData['amount'],
-                  'weight' => $foodData['weight'],
-                  'image' => $foodData['image']
-              ));
+              return $this->renderView('foodcard.twig', array('foodData' => $foodData));
         }) -> assert('foodID', '\d+');
 
         $this->get('/item/{id}', function($id) {
-            return $this['twig']->render('itemPage.twig', array (
-                    'itemid' => $id,
-            ));
+            return $this['twig']->render('itemPage.twig', array('itemid' => $id,));
         });
 
         $this->get('/foodItems/{userID}', 'rest.handler:foodItemsGet')
@@ -267,10 +257,15 @@ class App extends Application{
             -> secure('ROLE_USER')
             -> assert('requestID', '\d+');
 
+        $this->get('/food/{start}/{num}', 'rest.handler:getFoodBetween')
+            -> assert('start', '[0-9]*')
+            -> assert('num', '[0-9]*');
+
         $this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*');
 
+        //todo add sorting to slider (remove right 3 buttons) add remove button for each slider
         $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*')
@@ -283,11 +278,12 @@ class App extends Application{
             -> assert('maxWeight', '[0-9]*')
             -> assert('sort', '[a-z\-]*');
 
+        //todo default food picture per category
         $this->post('/food', 'rest.handler:foodItemPost')
             -> secure('ROLE_USER');
 
-        //fixme invalid email returns json error (???)
-        //todo registration failure
+
+        //todo registration failure page
         $this->post('/register/user', 'rest.handler:registerNewUser')
             -> requireHttps() -> bind('register')
             -> assert('username', '^[a-zA-Z0-9_]+$')

@@ -105,7 +105,7 @@
 		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').width() - $('#main-search-button').width() - $('#user-popover').width() - 150);
 		$('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
 	});
-	function resize() {
+	resize = function(){
 		$('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
 		$('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
 		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').width() - $('#main-search-button').width() - $('#user-popover').width()  - 150);

@@ -6,9 +6,7 @@
   {% endblock %}
 </head>
 
-<body onResize=resize()>
-
-    {#{% include 'nav.twig' %}#}
+<body onResize=resize>
 
     {% block content %}
         {{ block("content", "nav.twig") }}

@@ -11,7 +11,7 @@
 	<div class="row">
 		<div class="Absolute-Center is-Responsive">
 			<div class="col-sm-12 col-md-10 col-md-offset-1" style="background-color: white; padding: 2rem;">
-				<form action="{{ path('account_login_check') }}" id="loginForm" method="post">
+				<form action="{{ path('account_userprofile') }}" id="loginForm" method="post">
 					<h3 style="text-align: center; margin-bottom: 0.5em;">Login</h3>
                     <h4>{{ error }}</h4>
 					<div class="form-group input-group">
@@ -40,7 +40,7 @@
         $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
         $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
     });
-    function resize() {
+    resize = function(){
         $('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
         $('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
     }

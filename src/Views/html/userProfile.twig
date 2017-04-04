@@ -3,6 +3,8 @@
 {% block head %}
     {{ parent() }}
 <title>Account</title>
+	<link rel="stylesheet" href="{{ asset('bootstrap-slider.min.css','css') }}">
+	<script src="{{asset('bootstrap-slider.min.js','javascript')}}"></script>
 {% endblock %}
 
 {%  block content %}
@@ -44,14 +46,15 @@
 				<tbody>
 					<tr>
 						<td scope="row">Full Name:</th>
-						<td><a href="#" id="fullname" data-type="text" data-pk="1" data-title="Enter Full Name">User's Full Name</a></td>
+						<td><a href="#" id="fullname" data-type="text" data-pk="1" data-title="Enter Full Name">{{ userData.fullname ?? 'No name set'}}</a></td>
 					</tr>
 					<tr>
 						<td scope="row">Username:</th>
-						<td><a href="#" id="username" data-type="text" data-pk="1" data-title="Enter Full Name">User's Username</a></td>
+						<td><a href="#" id="username" data-type="text" data-pk="1" data-title="Enter Full Name">{{ userData.username}}</a></td>
 					</tr>
 					<tr>
 						<td scope="row">Location:</th>
+						{#todo user inputs their location#}
 						<td>Durham, United Kingdom</td>
 					</tr>
 				</tbody>
@@ -76,6 +79,7 @@
 					<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
 					<input type="password" class="form-control square-border" id="confirmNewPassword" placeholder="Confirm New Password">
 				</div>
+				<input type="submit" value="Change">
 			<form>
 
 		</div>
@@ -93,7 +97,7 @@
 		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').width() - $('#main-search-button').width() - $('#user-popover').width() - 150);
 		$('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
 	});
-	function resize() {
+	resize = function(){
 		$('#items').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
 		$('#map').height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
 		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').width() - $('#main-search-button').width() - $('#user-popover').width()  - 150);
@@ -112,13 +116,13 @@
 				}
 			}
 		});
-		$('#username').editable({
-			validate: function(value) {
-				if (value === null || value === '') {
-					return 'Empty values not allowed';
-				}
-			}
-		});
+//		$('#username').editable({
+//			validate: function(value) {
+//				if (value === null || value === '') {
+//					return 'Empty values not allowed';
+//				}
+//			}
+//		});
 	});
 </script>
 
