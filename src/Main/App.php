@@ -228,6 +228,10 @@ class App extends Application{
           return $this['twig']->render('userItems.twig');
         })->bind('useritems');
 
+        $account->get('/messenger', function() {
+          return $this['twig']->render('messenger.twig');
+        })->bind('messenger');
+
         $this->mount('/account', $account);
     }
 
@@ -258,11 +262,20 @@ class App extends Application{
         $this->get('/foodItems/{userID}', 'rest.handler:foodItemsGet')
             -> assert('userID', '\d+');
 
+        $this->get('/request/sent', 'rest.handler:getRequestsSentByUserID')
+            -> secure('ROLE_USER');
+
+        $this->get('/request/received', 'rest.handler:getRequestsReceivedByUserID')
+            -> secure('ROLE_USER');
+
+        $this->get('/request/messages/{requestID}', 'rest.handler:getUserMessagesByRequestID')
+            -> secure('ROLE_USER')
+            -> assert('requestID', '\d+');
+
         $this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*');
 
-        // /search//orange////////radius
         $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*')
