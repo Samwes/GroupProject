@@ -62,6 +62,8 @@ class Requests
         $email = $request->get('email');
         $password = $request->get('password');
 
+        //todo min password length
+
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return new JsonResponse(array('error' => 'email invalid'));
         }
@@ -92,13 +94,16 @@ class Requests
     public function sendVerifyToken(App $app, $userid){
         $bytes = bin2hex(random_bytes(32));
         $this->db->addToken($userid,$bytes);
+        //todo only for USER_BASIC
         if($email = $this->db->getEmailByID($userid)){
-            //todo send email (SEND FULL LINK, NOT JUST TOKEN!??!?)
+            //future link from env setting or similar?
+            //fixme disabled as requires your own email domain
+
             $message = \Swift_Message::newInstance()
                 ->setSubject('Verify your Food Inc. account')
                 ->setFrom(array('noreply@foodinc.com'))
                 ->setTo(array($email))
-                ->setBody('Your verification token: ' . $bytes); //Future tidy up (twig template or whatever)
+                ->setBody('Your verification link: https://gpmain.herokuapp.com/register/validatemail/' . $bytes); //Future tidy up (twig template or whatever)
 
             $app['mailer']->send($message);
 
@@ -124,7 +129,7 @@ class Requests
             $amount = $request->get('amount');
             $weight = $request->get('weight');
             //$imagedir = null;
-            $imagedir = "none";
+            $imagedir = "none";//note ???
 
             //Check Vars
             if (!is_numeric($userID)) {
@@ -198,7 +203,7 @@ class Requests
 
         //echo json_encode($toEncode);
 
-        return new RedirectResponse($app->path('user'));
+        return new RedirectResponse($app->path('user')); //note ???
 
     }
 

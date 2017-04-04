@@ -97,16 +97,16 @@ class App extends Application{
         ));
 
         //TODO: emailing and account validation
-
-        $app['swiftmailer.options'] = array(
-            'host' => getenv('SPARKPOST_SMTP_HOST'),
-            'port' => getenv('SPARKPOST_SMTP_PORT'),
-            'username' => getenv('SPARKPOST_SMTP_USERNAME'),
-            'password' => getenv('SPARKPOST_SMTP_PASSWORD'),
-            'encryption' => null,
-            'auth_mode' => null
-        );
-        $this->register(new SwiftmailerServiceProvider());
+        $this->register(new SwiftmailerServiceProvider(), array(
+            'swiftmailer.options' => array(
+                'host' => getenv('EMAIL_SMTP_HOST'),
+                'port' => getenv('EMAIL_SMTP_PORT'),
+                'username' => getenv('EMAIL_SMTP_USERNAME'),
+                'password' => getenv('EMAIL_SMTP_PASSWORD'),
+                'encryption' => 'tls',
+                'auth_mode' => 'cram-md5'
+            )
+        ));
 
         // Register DB provider service
         $this['DB'] = function() {
@@ -201,6 +201,10 @@ class App extends Application{
         $this->get('/register', function() {
             return $this['twig']->render('signup.twig');
         })->bind('registerPage')->requireHttps();
+
+        $this->get('/test', function() {
+            return $this['rest.handler']->sendVerifyToken($this, 144);
+        });
 
         //note move to RESTapi?
 
