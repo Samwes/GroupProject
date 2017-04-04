@@ -5,7 +5,7 @@
   <div class="container-fluid" id="search-navbar-container">
     <a class="navbar-brand" href="{{ path('index') }}" style="line-height: 50px; border-right: 1px solid #dce0e0; padding-right: 1em; padding-top: 7px; padding-bottom: 7px; margin: 0; color: #55595c">FoodShare</a>
     <ul class="nav navbar-nav">
-      <form id="search-form" action="{{ path('index') }}">
+      <form id="search-form" action="/t/">
         <li class="nav-item hidden-md-down" style="height: 63px;">
           <select name="category" id="categories-dropdown" class="custom-select square-border btn-option" style="border-left: 0; border-right: 1px solid #dce0e0;">
             <option disabled selected value>Categories</option>
@@ -63,7 +63,7 @@
     <div class="modal-content square-border" style="border: 0;">
       <div class="container">
             <div class="container" style="padding: 1rem;">
-            <form id="loginForm" action="{{ path('account_login_check') }}" method="post">
+            <form id="loginForm" action="{{ path('account_userprofile') }}" method="post">
               <h3 class="panel-title">Login</h3>
               <div class="form-group input-group">
                 <span class="input-group-addon panel-input-symbol"><i class="fa fa-fw fa-user" aria-hidden="true"></i></span>
@@ -131,15 +131,6 @@
 {% block scripts %}
 
 <script>
-// Submit Form
-$("#main-search-input").keypress(function (e) {
-  if (e.which == 13) {
-    $("#search-form").submit();
-  }
-});
-</script>
-
-<script>
 // For launching panels and switching between register/login
 $("#login-form-link").click(function(e) {
   if($("#login-form-link").hasClass("active")) {
@@ -199,7 +190,7 @@ $(document).ready(function() {
   $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
   $('#search-navbar-group').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
 });
-function resize() {
+let resize = function() {
   $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
   $('#search-navbar-group').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
 }

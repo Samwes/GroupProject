@@ -25,7 +25,7 @@ class App extends Application{
     public function __construct(array $values = array()) {
         parent::__construct($values);
 
-        //todo modify twig files? repeated js functions etc. in every served page
+        //future cleanup twig files pt.2
 
         $this->registerServices();
 
@@ -127,7 +127,7 @@ class App extends Application{
         $this['security.firewalls'] = array(
             'main' => array(
                 'anonymous' => true,
-                'form' => array('login_path' => '/login', 'check_path' => '/account/login/check'),
+                'form' => array('login_path' => '/login', 'check_path' => '/account/userprofile'),
                 'logout' => array('logout_path' => '/account/logout', 'invalidate_session' => true),
                 'switch_user' => array('parameter' => '_switch_user', 'role' => 'ROLE_ALLOWED_TO_SWITCH'),
                 'remember_me' => array(
@@ -289,6 +289,7 @@ class App extends Application{
         //todo default food picture per category
         $this->post('/food', 'rest.handler:foodItemPost')
             -> secure('ROLE_USER');
+
 
         //todo registration failure page
         $this->post('/register/user', 'rest.handler:registerNewUser')

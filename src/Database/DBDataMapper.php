@@ -268,7 +268,8 @@ class DBDataMapper
     }
 
     public function getEmailByID($id)
-    {      $query = 'SELECT `email`
+    {
+        $query = 'SELECT `email`
                     FROM `usertable`
                     WHERE `userid` = :id';
         $result = NULL;
@@ -288,7 +289,6 @@ class DBDataMapper
             return $result['email'];
         }
         return false;
-
     }
 
     public function addNewRequest($requester, $foodid)
@@ -371,6 +371,29 @@ class DBDataMapper
         }
         $stmt = NULL;
         return $result;
+    }
+
+    public function getRoles($userID){
+        $query = 'SELECT `roles`
+                    FROM `usertable`
+                    WHERE `userid` = :id';
+        $result = NULL;
+        try {
+            $stmt = $this->pdo->prepare($query);
+
+            $stmt->execute(array(
+                ':id' => $userID
+            ));
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Getting roles failed: ' . $e->getMessage();
+        }
+        $stmt = NULL;
+        if (false !== $result){
+            return $result['roles'];
+        }
+        return false;
     }
 
     public function updateRoles($userID, $newRoles){
@@ -549,17 +572,17 @@ class DBDataMapper
           $query = $query . " AND " . $weightQuery;
       }
 
-      if (($sort == 'radius-asc' || $sort == 'radius-des')&& ($latit != "" && $longit != "")) {
+      if (($sort === 'radius-asc' || $sort === 'radius-des')&& ($latit != "" && $longit != "")) {
           $query = $query . " ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
-      } else if ($sort == 'amount-asc' || $sort == 'amount-des') {
+      } else if ($sort === 'amount-asc' || $sort === 'amount-des') {
           $query = $query . " ORDER BY `amount`";
-      } else if ($sort == 'weight-asc' || $sort == 'weight-des') {
+      } else if ($sort === 'weight-asc' || $sort === 'weight-des') {
           $query = $query . " ORDER BY `weight`";
       } else {
           $query = $query . " ORDER BY `amount`";
       }
 
-      if(substr($sort, -3) == "asc") {
+      if(substr($sort, -3) === "asc") {
           $query = $query . " ASC LIMIT 120";
       } else {
           $query = $query . " DESC LIMIT 120";

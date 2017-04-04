@@ -125,7 +125,7 @@ $(document).ready(function() {
 		$('#requests').height($(window).height() - $('#search-navbar').outerHeight() - $('#requests-nav').outerHeight());
 	});
 
-	function resize() {
+	resize = function(){
 		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
 		$('#search-navbar-group').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
 		$('#requests').height($(window).height() - $('#search-navbar').outerHeight() - $('#requests-nav').outerHeight());

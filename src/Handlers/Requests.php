@@ -92,31 +92,30 @@ class Requests
         
     }
 
-    public function sendVerifyToken(App $app, $userid){
-        $bytes = bin2hex(random_bytes(32));
-        $this->db->addToken($userid,$bytes);
-        //todo only for USER_BASIC
-        if($email = $this->db->getEmailByID($userid)){
-            //future link from env setting or similar?
-            //fixme disabled as requires your own email domain
+    public function sendVerifyToken(App $app, $userid)
+    {
+        if ($this->db->getRoles($userid) === 'ROLE_BASIC') {
+            $bytes = bin2hex(random_bytes(32));
+            $this->db->addToken($userid, $bytes);
+            if ($email = $this->db->getEmailByID($userid)) {
+                //future link from env setting or similar?
 
-            $message = \Swift_Message::newInstance()
-                ->setSubject('Verify your Food Inc. account')
-                ->setFrom(array('noreply@foodinc.com'))
-                ->setTo(array($email))
-                ->setBody('Your verification link: https://gpmain.herokuapp.com/register/validatemail/' . $bytes); //Future tidy up (twig template or whatever)
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Verify your Food Inc. account')
+                    ->setFrom(array('noreply@foodinc.com'))
+                    ->setTo(array($email))
+                    ->setBody('Your verification link: https://gpmain.herokuapp.com/register/validatemail/' . $bytes); //Future tidy up (twig template or whatever)
 
-            $app['mailer']->send($message);
+                $app['mailer']->send($message);
 
-            return new Response('Token Sent!', 201);
+                return new Response('Token Sent!', 201);
+            }
+            throw new RuntimeException(sprintf('Cant find email for user %s', $userid)); //note just database error or?
         }
-
-        throw new RuntimeException(sprintf('Cant find email for user %s', $userid)); //note just database error or?
     }
 
     public function foodItemPost(Request $request, Application $app)
     {
-        //fixme yeah dont think this works. Check it, fix it
         $toEncode = array("error" => "failed to add");
 
         die("Disabled");
