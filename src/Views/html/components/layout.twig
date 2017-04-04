@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  {% include 'header.twig' %}
-
-  {% block head %}{% endblock %}
+  {% block head %}
+      {{ block("head", "header.twig") }}
+  {% endblock %}
 </head>
 
 <body onResize=resize()>
 
-    {% include 'nav.twig' %}
+    {#{% include 'nav.twig' %}#}
 
-    {% block content %}{% endblock %}
+    {% block content %}
+        {{ block("content", "nav.twig") }}
+    {% endblock %}
 
     {% block footer %}{% endblock %}
 
     {% block scripts %}
-    <script>
-        function resize() {
-        }
-    </script>
+        {{ block("scripts", "nav.twig") }}
     {% endblock %}
 
 </body>

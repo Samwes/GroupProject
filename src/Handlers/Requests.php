@@ -10,6 +10,7 @@ use Main\App;
 use Symfony\Component\HttpFoundation\Request;
 use Database\DBDataMapper;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Ramsey\Uuid\Uuid;
 
 class Requests
 {
@@ -58,6 +59,8 @@ class Requests
     }
 
     public function registerNewUser(Request $request, App $app){
+        //todo this isn't rest? move somewhere else?
+
         $username = $request->get('username');
         $email = $request->get('email');
         $password = $request->get('password');
@@ -117,6 +120,12 @@ class Requests
     {
         //fixme yeah dont think this works. Check it, fix it
         $toEncode = array("error" => "failed to add");
+        die(array("error" => "not implemented"));
+        //note add GUID+extension into DB (as we know where to get from)
+        //note default GUID from start (i.e. input none.svg or don't add any)
+        //note DB may need notnull removed (it has a default value?) or change DBDataMapper func
+        //note UUID->getHex() for no dashes
+
         $token = $app['security.token_storage']->getToken();
         if (null !== $token) {
             $userID = $token->getUser()->getID();
@@ -128,8 +137,8 @@ class Requests
             $long = $request->get('longitude');
             $amount = $request->get('amount');
             $weight = $request->get('weight');
-            //$imagedir = null;
-            $imagedir = "none";//note ???
+            $imagedir = null;
+//            $imagedir = "none";//note ???
 
             //Check Vars
             if (!is_numeric($userID)) {
@@ -154,7 +163,7 @@ class Requests
 
             if($request->files->has('image')) {
                 $target_dir = 'images/food/';
-                $GUID = GUIDv4();
+                $GUID = Uuid::uuid4()->toString();
                 $imagedir = $target_dir . $GUID;
                 $uploadOk = 1;
 
@@ -196,7 +205,7 @@ class Requests
             }
 
 
-            if ($this->db->addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $imagedir)) {
+            if ($this->db->addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $GUID)) {
                 $toEncode = array("success" => "topic added");
             }
         }

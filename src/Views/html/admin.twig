@@ -1,13 +1,15 @@
 {% extends 'layout.twig' %}
 
 {% block head %}
+    {{ parent() }}
     <title>Admin Page</title>
 {% endblock %}
 
 {% block content %}
+    {{ parent() }}
     <h1> Welcome to the admin page!</h1>
 {% endblock %}
 
 {% block scripts %}
-
+    {{ parent() }}
 {% endblock %}

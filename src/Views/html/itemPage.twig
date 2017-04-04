@@ -3,10 +3,12 @@
 {# note input variable id for item ID (load by REST) #}
 
 {% block head %}
+    {{ parent() }}
 <title>Item Page</title>
 {% endblock %}
 
 {%  block content %}
+    {{ parent() }}
 <br>
 
 <div class="container">
@@ -48,6 +50,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
 <!-- CORRECT SIZES OF ELEMENTS -->
 <script>
 	$(document).ready(function() {

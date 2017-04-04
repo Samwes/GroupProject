@@ -1,5 +1,6 @@
 <!-- Add error message somehow -->
 
+{%  block content %}
 <nav class="navbar navbar-light bg-faded navbar-static-top" id="search-navbar" style="padding: 0; height: 64px; border-bottom: 1px solid #dce0e0;">
   <div class="container-fluid" id="search-navbar-container">
     <a class="navbar-brand" href="{{ path('index') }}" style="line-height: 50px; border-right: 1px solid #dce0e0; padding-right: 1em; padding-top: 7px; padding-bottom: 7px; margin: 0; color: #55595c">FoodShare</a>
@@ -125,6 +126,9 @@
         </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
 
 <script>
 // Submit Form
@@ -210,3 +214,5 @@ $('#user-popover').popover({
   }
 });
 </script>
+
+{% endblock %}

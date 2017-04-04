@@ -1,11 +1,12 @@
 {% extends 'layout.twig' %}
 
 {% block head %}
+    {{ parent() }}
 <title>Your Items</title>
 {% endblock %}
 
 {%  block content %}
-
+    {{ parent() }}
 <br>
 
 <div class="container">
@@ -237,5 +238,5 @@
 
 
 {% block scripts %}
-
+    {{ parent() }}
 {% endblock %}
