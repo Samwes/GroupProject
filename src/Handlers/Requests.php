@@ -123,11 +123,6 @@ class Requests
 
         die("Disabled");
 
-        //note add GUID+extension into DB (as we know where to get from)
-        //note default GUID from start (i.e. input none.svg or don't add any)
-        //note DB may need notnull removed (it has a default value?) or change DBDataMapper func
-        //note UUID->getHex() for no dashes
-
         $token = $app['security.token_storage']->getToken();
         if (null !== $token) {
             $userID = $token->getUser()->getID();
