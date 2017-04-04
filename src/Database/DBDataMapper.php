@@ -101,7 +101,7 @@ class DBDataMapper
 
     public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image)
     {
-        //todo change default image based on category
+        //future change default image based on category
         if ($image === null){
             $image = 'none.svg';
         }

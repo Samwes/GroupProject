@@ -59,8 +59,6 @@ class Requests
     }
 
     public function registerNewUser(Request $request, App $app){
-        //todo this isn't rest? move somewhere else?
-
         $username = $request->get('username');
         $email = $request->get('email');
         $password = $request->get('password');
@@ -156,7 +154,7 @@ class Requests
                 die(json_encode(array("error" => "amount incorrectly defined")));
             } elseif (!is_numeric($weight)) {
                 die(json_encode(array("error" => "weight incorrectly defined")));
-            } //todo image check
+            }
             if ($imageuri === "") {
                 $filename = null;
             } else {
@@ -173,7 +171,7 @@ class Requests
 
         //echo json_encode($toEncode);
 
-        return new RedirectResponse($app->path('user')); //note ???
+        return new RedirectResponse($app->path('user')); //note change redirect on failure/success
 
     }
 
