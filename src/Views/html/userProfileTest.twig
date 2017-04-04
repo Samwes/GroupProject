@@ -1,10 +1,12 @@
 {% extends 'layout.twig' %}
 
 {% block head %}
+    {{ parent() }}
 <title>User Profile</title>
 {% endblock %}
 
 {%  block content %}
+    {{ parent() }}
 <br>
 
 <div class="container">
@@ -94,6 +96,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
 <!-- CORRECT SIZES OF ELEMENTS -->
 <script>
 	$(document).ready(function() {

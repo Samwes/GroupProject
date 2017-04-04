@@ -2,10 +2,12 @@
 {% extends 'layout.twig' %}
 
 {% block head %}
+    {{ parent() }}
 <title>Barcode Scanner</title>
 {% endblock %}
 
 {% block content %}
+    {{ parent() }}
 <br>
 
 <div class="container">
@@ -119,6 +121,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ parent() }}
 <script>
 
 	function validateForm() {

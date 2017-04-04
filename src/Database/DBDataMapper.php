@@ -88,12 +88,15 @@ class DBDataMapper
                 ':id' => $id
             ));
 
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             if (DEBUG) echo 'Getting auth token failed: ' . $e->getMessage();
         }
         $stmt = NULL;
-        return $result;
+        if (false !== $result){
+            return $result;
+        }
+        return false;
     }
 
     public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image)
@@ -260,8 +263,7 @@ class DBDataMapper
     }
 
     public function getEmailByID($id)
-    {
-        $query = 'SELECT `email`
+    {      $query = 'SELECT `email`
                     FROM `usertable`
                     WHERE `userid` = :id';
         $result = NULL;
@@ -274,13 +276,14 @@ class DBDataMapper
 
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            if (DEBUG) echo 'Getting password failed: ' . $e->getMessage();
+            if (DEBUG) echo 'Getting email failed: ' . $e->getMessage();
         }
         $stmt = NULL;
         if (false !== $result){
             return $result['email'];
         }
         return false;
+
     }
 
     public function addNewRequest($requester, $foodid)

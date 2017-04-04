@@ -1,11 +1,13 @@
 {% extends 'layout.twig' %}
 
 {% block head %}
-<title>Homepage</title>
-    {#TODO: slider in every header#}
+    {{ parent() }}
+    <title>Homepage</title>
+    {#TODO: slider repeated in every header#}
 {% endblock %}
 
 {%  block content %}
+    {{ parent() }}
 <nav class="navbar navbar-light bg-faded navbar-static-top hidden-md-down" id="options-navbar" style="padding: 0; height: 47px; border-bottom: 1px solid #dce0e0;">
   <div class="container-fluid" style="height: 100%;">
     <ul class="nav navbar-nav">
@@ -542,6 +544,7 @@
 
 
 {% block scripts %}
+    {{ parent() }}
 <!-- SEARCH FUNCTIONALITY -->
 <script>
   var resultsSoFar = 0;

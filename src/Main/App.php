@@ -28,7 +28,7 @@ class App extends Application{
     public function __construct(array $values = array()) {
         parent::__construct($values);
 
-        //future YAML config files? We need configs...
+        //todo modify twig files? repeated js functions etc. in every served page
 
         $this->registerServices();
 
@@ -61,6 +61,7 @@ class App extends Application{
                     ROOT . '/../src/Views/html/components',
                 )
         ));
+
         // Registering service controllers
         $this->register(new ServiceControllerServiceProvider());
 
@@ -96,7 +97,6 @@ class App extends Application{
             ),
         ));
 
-        //TODO: emailing and account validation
         $this->register(new SwiftmailerServiceProvider(), array(
             'swiftmailer.options' => array(
                 'host' => getenv('EMAIL_SMTP_HOST'),
@@ -202,14 +202,6 @@ class App extends Application{
             return $this['twig']->render('signup.twig');
         })->bind('registerPage')->requireHttps();
 
-        $this->get('/test', function() {
-            return $this['rest.handler']->sendVerifyToken($this, 144);
-        });
-
-        //note move to RESTapi?
-
-        //})->bind('item');
-
     }
 
     private function accountRoutes(){
@@ -245,22 +237,21 @@ class App extends Application{
             -> assert('foodID', '\d+');
 
         $this->get('/food/html/{foodID}', function($foodID) {
-          $foodData = $this['DB']->getFoodItemByID($foodID);
-          return $this->renderView('foodcard.twig', array (
-              'name' => $foodData['name'],
-              'description' => $foodData['description'],
-              'expiry' => $foodData['expiry'],
-              'amount' => $foodData['amount'],
-              'weight' => $foodData['weight']
-              )
-          );
+              $foodData = $this['DB']->getFoodItemByID($foodID);
+              return $this->renderView('foodcard.twig', array (
+                  'name' => $foodData['name'],
+                  'description' => $foodData['description'],
+                  'expiry' => $foodData['expirydate'],
+                  'amount' => $foodData['amount'],
+                  'weight' => $foodData['weight'],
+                  'image' => $foodData['image']
+              ));
         }) -> assert('foodID', '\d+');
 
         $this->get('/item/{id}', function($id) {
             return $this['twig']->render('itemPage.twig', array (
                     'itemid' => $id,
-                )
-            );
+            ));
         });
 
         $this->get('/foodItems/{userID}', 'rest.handler:foodItemsGet')
