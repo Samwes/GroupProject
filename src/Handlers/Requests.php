@@ -120,7 +120,7 @@ class Requests
     {
         //fixme yeah dont think this works. Check it, fix it
         $toEncode = array("error" => "failed to add");
-        die(array("error" => "not implemented"));
+
         //note add GUID+extension into DB (as we know where to get from)
         //note default GUID from start (i.e. input none.svg or don't add any)
         //note DB may need notnull removed (it has a default value?) or change DBDataMapper func
@@ -137,7 +137,7 @@ class Requests
             $long = $request->get('longitude');
             $amount = $request->get('amount');
             $weight = $request->get('weight');
-            $imagedir = null;
+            $imageuri = $request->get('image');
 //            $imagedir = "none";//note ???
 
             //Check Vars
@@ -159,53 +159,17 @@ class Requests
                 die(json_encode(array("error" => "amount incorrectly defined")));
             } elseif (!is_numeric($weight)) {
                 die(json_encode(array("error" => "weight incorrectly defined")));
+            } //todo image check
+            if ($imageuri === "") {
+                $filename = null;
+            } else {
+                $uriPhp = 'data://' . substr($imageuri, 5);
+                $binary = file_get_contents($uriPhp);
+                $filename = Uuid::uuid4()->getHex() . '.png';
+                file_put_contents('images/food/' . $filename, $binary);
             }
 
-            if($request->files->has('image')) {
-                $target_dir = 'images/food/';
-                $GUID = Uuid::uuid4()->toString();
-                $imagedir = $target_dir . $GUID;
-                $uploadOk = 1;
-
-                $file = $request->files->get('image');
-                $imageFileType = pathinfo(basename($file['name']),PATHINFO_EXTENSION);
-
-                $check = getimagesize($file['tmp_name']);
-                if ($check !== false) {
-                    $app['monolog']->debug('File is an image - '. $check["mime"]);
-                    $uploadOk = 1;
-                } else {
-                    if ($app['debug']) echo "File is not an image.";
-                    $uploadOk = 0;
-                }
-                if (file_exists($imagedir)) {
-                    if ($app['debug']) echo "Sorry, file already exists.";
-                    $uploadOk = 0;
-                }
-                if ($file["size"] > 500000) {
-                    if ($app['debug']) echo "Sorry, your file is too large.";
-                    $uploadOk = 0;
-                }
-                if ($imageFileType != 'jpg' && $imageFileType != "png" && $imageFileType != "jpeg"
-                    && $imageFileType != "gif"
-                ) {
-                    if ($app['debug']) echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-                    $uploadOk = 0;
-                }
-                if ($uploadOk == 0) {
-                    if ($app['debug']) echo "Sorry, your file was not uploaded.";
-                    $imgdir = null;
-                } else {
-                    if ($file->move($file["tmp_name"], $imagedir)) {
-                        if ($app['debug']) echo "The file " . basename($file["name"]) . " has been uploaded.";
-                    } else {
-                        if ($app['debug']) echo "Sorry, there was an error uploading your file.";
-                    }
-                }
-            }
-
-
-            if ($this->db->addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $GUID)) {
+            if ($this->db->addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {
                 $toEncode = array("success" => "topic added");
             }
         }

@@ -3,6 +3,8 @@
 {% block head %}
     {{ parent() }}
     <title>Homepage</title>
+    <link rel="stylesheet" href="{{ asset('bootstrap-slider.min.css','css') }}">
+    <script src="{{asset('bootstrap-slider.min.js','javascript')}}"></script>
     {#TODO: slider repeated in every header#}
 {% endblock %}
 

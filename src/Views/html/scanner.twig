@@ -3,7 +3,14 @@
 
 {% block head %}
     {{ parent() }}
-<title>Barcode Scanner</title>
+    <script src="{{asset('quagga.min.js','javascript')}}"></script>
+    <script src="{{asset('moment.js','javascript')}}"></script>
+    <script src="{{asset('bootstrap-datetimepicker.min.js','javascript')}}"></script>
+    <link rel="stylesheet" href="{{ asset('bootstrap-datetimepicker.min.css','css') }}">
+    <link rel="stylesheet" href="{{ asset('bootstrap-slider.min.css','css') }}">
+    <script src="{{asset('bootstrap-slider.min.js','javascript')}}"></script>
+    <script src="{{asset('jquery.cropit.js','javascript')}}"></script>
+	<title>Barcode Scanner</title>
 {% endblock %}
 
 {% block content %}
@@ -63,6 +70,17 @@
 					<input name="expiredate" class="form-control mr-sm-2 square-border" type="date" id="dateInput">
 				</div>
 
+                {#todo firefox date picker#}
+                {#<div class="form-group">#}
+                    {#<div class='input-group date' id='datepicker'>#}
+                        {#<input type='text' class="form-control" id="expiredate" />#}
+                        {#<span class="input-group-addon">#}
+                            {#<span class="glyphicon glyphicon-calendar"></span>#}
+                        {#</span>#}
+                        {#<span class="input-group-addon panel-input-symbol" style="border-bottom: 0; padding: 0; padding-right: 0; background-color: #FAFAFA;"><i class="fa fa-calendar" aria-hidden="true"></i></span>#}
+                    {#</div>#}
+                {#</div>#}
+
 				<!-- AMOUNT INPUT -->
 				<div class="form-group">
 					<label for="amountNumberInput">Amount</label>
@@ -92,7 +110,7 @@
 				</div>
 
 				<!-- HIDDEN IMAGE TO UPLOAD -->
-				<input type="file" name="image" class="hidden-image-data hidden-xs-up" />
+				<input type="hidden" id="imagetoupload" name="image" />
 
 				<!-- SUBMIT BUTTON -->
 				<button type="submit" class="btn btn-primary">Add Food</button>
@@ -111,8 +129,8 @@
 				<button class="btn btn-link rotate-ccw"><i class="fa fa-undo" aria-hidden="true"></i></button>
 				<button class="btn btn-link rotate-cw"><i class="fa fa-repeat" aria-hidden="true"></i></button>
 				<i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;" ></i>
-				<input class="cropit-image-zoom-input" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
-				<i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i>
+				<input class="cropit-image-zoom-input" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide"/>
+                <i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i>
 			</div>
 
 		</div>
@@ -167,6 +185,10 @@
 			$("label[for='descriptionTextarea']").css({"color": "black"});
 		}
 
+        if (allValid){
+		    $('#imagetoupload').val($('.image-editor').cropit('export'));
+        }
+
 		return allValid;
 	}
 </script>
@@ -189,15 +211,20 @@
 
 <script>
 // Slider
-$('#ex1').slider({
-	formatter: function(value) {
-		return 'Current value: ' + value;
-	}
-});
+
 </script>
 
 <script>
 $(function() {
+//    $();
+    $('#ex1').slider({
+        formatter: function(value) {
+            return 'Current value: ' + value;
+        }
+    });
+//Calender:
+//    $('#datepicker').datetimepicker();
+
 	$('.image-editor').cropit();
 
 	$('.rotate-cw').click(function() {

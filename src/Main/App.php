@@ -286,11 +286,11 @@ class App extends Application{
             -> assert('maxWeight', '[0-9]*')
             -> assert('sort', '[a-z\-]*');
 
+        //todo default food picture per category
         $this->post('/food', 'rest.handler:foodItemPost')
             -> secure('ROLE_USER');
 
-        //fixme invalid email returns json error (???)
-        //todo registration failure
+        //todo registration failure page
         $this->post('/register/user', 'rest.handler:registerNewUser')
             -> requireHttps() -> bind('register')
             -> assert('username', '^[a-zA-Z0-9_]+$')

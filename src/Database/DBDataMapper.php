@@ -101,8 +101,13 @@ class DBDataMapper
 
     public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image)
     {
+        //todo change default image based on category
+        if ($image === null){
+            $image = 'none.svg';
+        }
         $query = 'INSERT INTO itemtable (name, expirydate, category,userid,description,latit,longit,amount,weight,image)
         VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)';
+
         $result = true;
         try {
             $stmt = $this->pdo->prepare($query);
