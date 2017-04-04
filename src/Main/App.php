@@ -97,16 +97,16 @@ class App extends Application{
         ));
 
         //TODO: emailing and account validation
-
-        $app['swiftmailer.options'] = array(
-            'host' => getenv('SPARKPOST_SMTP_HOST'),
-            'port' => getenv('SPARKPOST_SMTP_PORT'),
-            'username' => getenv('SPARKPOST_SMTP_USERNAME'),
-            'password' => getenv('SPARKPOST_SMTP_PASSWORD'),
-            'encryption' => null,
-            'auth_mode' => null
-        );
-        $this->register(new SwiftmailerServiceProvider());
+        $this->register(new SwiftmailerServiceProvider(), array(
+            'swiftmailer.options' => array(
+                'host' => getenv('EMAIL_SMTP_HOST'),
+                'port' => getenv('EMAIL_SMTP_PORT'),
+                'username' => getenv('EMAIL_SMTP_USERNAME'),
+                'password' => getenv('EMAIL_SMTP_PASSWORD'),
+                'encryption' => 'tls',
+                'auth_mode' => 'cram-md5'
+            )
+        ));
 
         // Register DB provider service
         $this['DB'] = function() {
@@ -127,8 +127,6 @@ class App extends Application{
     }
 
     private function registerSecurity(){
-        //future look into the entire security package, make use of it all
-
         $this['security.firewalls'] = array(
             'main' => array(
                 'anonymous' => true,
@@ -145,18 +143,21 @@ class App extends Application{
 
         $this['security.role_hierarchy'] = array(
             'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
+            'ROLE_USER' => array('ROLE_BASIC')
         );
 
         $this['security.access_rules'] = array(
             array('^/admin', 'ROLE_ADMIN', 'https'),
-            array('^/account', 'ROLE_USER', 'https'),
+            array('^/account', 'ROLE_BASIC', 'https'),
         );
 
     }
 
     private function errorHandling() {
         //future handle authentication errors with redirects and messages
-        //future includes admin pages (which raise AccessDeniedHttpException)
+        //note includes admin pages (which raise AccessDeniedHttpException)
+        //note include posting food items
+        //future resend auth token to email
 
         //note need better error handling here
         $this->error(function (\Exception $e, $code) :?Response {
@@ -186,8 +187,6 @@ class App extends Application{
             return new RedirectResponse($this->url('index'));
         });
 
-        //future login and register should be inherited from same place?
-        //note login page differs from modal significantly
         $this->get('/login', function(Request $request) {
             if ($this->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                 return new RedirectResponse($this->url('index'));
@@ -199,18 +198,16 @@ class App extends Application{
             ));
         })->bind('login');
 
-        //note so does this one?
         $this->get('/register', function() {
             return $this['twig']->render('signup.twig');
         })->bind('registerPage')->requireHttps();
 
-        //note move to RESTapi?
-        $this->get('/item/{id}', function($id) {
-            return $this['twig']->render('itemPage.twig', array (
-                'itemid' => $id,
-                )
-            );
+        $this->get('/test', function() {
+            return $this['rest.handler']->sendVerifyToken($this, 144);
         });
+
+        //note move to RESTapi?
+
         //})->bind('item');
 
     }
@@ -220,7 +217,7 @@ class App extends Application{
 
         $account->get('/scanner', function() {
             return $this['twig']->render('scanner.twig');
-        })->bind('scanner');
+        })->bind('scanner')->secure('ROLE_USER');
 
         //future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $account->get('/userprofile', function(){
@@ -259,8 +256,14 @@ class App extends Application{
           );
         }) -> assert('foodID', '\d+');
 
-        //fixme never called
-        $this->get('/food/{userID}', 'rest.handler:foodItemsGet')
+        $this->get('/item/{id}', function($id) {
+            return $this['twig']->render('itemPage.twig', array (
+                    'itemid' => $id,
+                )
+            );
+        });
+
+        $this->get('/foodItems/{userID}', 'rest.handler:foodItemsGet')
             -> assert('userID', '\d+');
 
         $this->get('/request/sent', 'rest.handler:getRequestsSentByUserID')
@@ -298,6 +301,9 @@ class App extends Application{
             -> requireHttps() -> bind('register')
             -> assert('username', '^[a-zA-Z0-9_]+$')
             -> assert('password','^[\w]+$');
+
+        //future send token + resend option
+        $this->get('/register/validatemail/{token}', 'rest.handler:verifyToken');
 
     }
 

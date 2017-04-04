@@ -3,13 +3,13 @@
 namespace Handler;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\{JsonResponse,RedirectResponse,Response};
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Main\User;
 use Main\App;
 use Symfony\Component\HttpFoundation\Request;
 use Database\DBDataMapper;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class Requests
 {
@@ -45,39 +45,72 @@ class Requests
         return new JsonResponse($toEncode);
     }
 
+    public function verifyToken(App $app, $token){
+        $result = $this->db->verifyToken($token);
+        if (false !== $result){
+            //Success - future log them in? result has their userID  --- $user = $app->user(); ?
+
+            return new RedirectResponse($app->url('login'));
+        }
+
+        //Failure  future improve this?
+        return new Response('Error - Token not found');
+    }
+
     public function registerNewUser(Request $request, App $app){
         $username = $request->get('username');
         $email = $request->get('email');
         $password = $request->get('password');
 
-        //todo JS error handling? password length, valid email etc.
-        // More JS handling before send off or properly implementing form with symfony form stuff
+        //todo min password length
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return new JsonResponse(array('error' => 'email invalid'));
         }
 
         if (!$user = $this->db->getUserByUsername($username)) {
-            //todo test this maybe broke it should be k
             $encoded = $app['security.default_encoder']->encodePassword($password,null);
 
-            //todo: emailing and account validation
         } else {
-//            return new RedirectResponse($app->path('user')); //future different failures or messages or raise exceptions
-            throw new \RuntimeException(sprintf('Can\'t create user %s', $username)); //future just database error or?
+            return new RedirectResponse($app->url('user')); //future different failures or messages or raise exceptions
+//            throw new \RuntimeException(sprintf('Can\'t create user %s', $username)); //note just database error or?
         }
 
         if ($this->db->addNewUser($username,$encoded,null,$email)) {
-
             $user = $app['user.provider']->loadUserByUsername($username);
             $token = new UsernamePasswordToken($username, null, 'main', $user->getRoles());
-//            $app['security.token_storage']->setToken($token);  //note doesnt work?
+            $app['security.token_storage']->setToken($token);  //note doesnt work?
             $app['session']->set('_security_main', serialize($token));
 
+            $this->sendVerifyToken($app, $user->getID());
+
             return new RedirectResponse($app->path('user'));
-        } else {
-            throw new \RuntimeException(sprintf('Cant create user %s', $username)); //future just database error or?
         }
+
+        throw new RuntimeException(sprintf('Cant create user %s', $username)); //note just database error or?
+        
+    }
+
+    public function sendVerifyToken(App $app, $userid){
+        $bytes = bin2hex(random_bytes(32));
+        $this->db->addToken($userid,$bytes);
+        //todo only for USER_BASIC
+        if($email = $this->db->getEmailByID($userid)){
+            //future link from env setting or similar?
+            //fixme disabled as requires your own email domain
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Verify your Food Inc. account')
+                ->setFrom(array('noreply@foodinc.com'))
+                ->setTo(array($email))
+                ->setBody('Your verification link: https://gpmain.herokuapp.com/register/validatemail/' . $bytes); //Future tidy up (twig template or whatever)
+
+            $app['mailer']->send($message);
+
+            return new Response('Token Sent!', 201);
+        }
+
+        throw new RuntimeException(sprintf('Cant find email for user %s', $userid)); //note just database error or?
     }
 
     public function foodItemPost(Request $request, Application $app)
@@ -96,7 +129,7 @@ class Requests
             $amount = $request->get('amount');
             $weight = $request->get('weight');
             //$imagedir = null;
-            $imagedir = "none";
+            $imagedir = "none";//note ???
 
             //Check Vars
             if (!is_numeric($userID)) {
@@ -170,7 +203,7 @@ class Requests
 
         //echo json_encode($toEncode);
 
-        return new RedirectResponse($app->path('user'));
+        return new RedirectResponse($app->path('user')); //note ???
 
     }
 

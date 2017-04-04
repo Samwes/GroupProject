@@ -125,7 +125,7 @@ class DBDataMapper
     }
 
     //Never call directly, simply inserts values. Use handler
-    public function addNewUser($un,$pw,$pic,$email, $roles = 'ROLE_USER')
+    public function addNewUser($un,$pw,$pic,$email, $roles = 'ROLE_BASIC')
     {
         $query = 'INSERT INTO usertable (username, password, picture, email, roles)
                   VALUES (:un, :pw, :pic, :email, :role)';
@@ -150,8 +150,8 @@ class DBDataMapper
 
     public function addNewUserMessage($message, $sender, $receiver)
     {
-        $query = "INSERT INTO messagetable (message, time) VALUES (:msg, NOW());";
-        $query .= "INSERT INTO usermessagetable (messageid, sender, receiver) VALUES (LAST_INSERT_ID(), :send, :rec)";
+        $query = 'INSERT INTO messagetable (message, time) VALUES (:msg, NOW());';
+        $query .= 'INSERT INTO usermessagetable (messageid, sender, receiver) VALUES (LAST_INSERT_ID(), :send, :rec)';
         $result = true;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -171,11 +171,11 @@ class DBDataMapper
 
     public function getUserMessagesByID($id)
     {
-        $query = "SELECT `messagetable`.`message`,`messagetable`.`time`, `usermessagetable`.`sender`, `usermessagetable`.`receiver`
+        $query = 'SELECT `messagetable`.`message`,`messagetable`.`time`, `usermessagetable`.`sender`, `usermessagetable`.`receiver`
                     FROM `messagetable`
                         INNER JOIN `usermessagetable`
                         ON `messagetable`.`messageid` = `usermessagetable`.`messageid`
-                    WHERE (`sender` = :id) OR (`receiver` = :id)";
+                    WHERE (`sender` = :id) OR (`receiver` = :id)';
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -217,55 +217,11 @@ class DBDataMapper
         return $result;
     }
 
-    public function addAuthToken($un,$pw,$pic,$email,$salt)
-    {
-        $query = "INSERT INTO authtable (username, password, picture, email, salt)
-                  VALUES (:un, :pw, :pic, :email, :salt)";
-        $result = true;
-        try {
-            $stmt = $this->pdo->prepare($query);
-
-            $stmt->execute(array(
-                ':un' => $un,
-                ':pw' => $pw,
-                ':pic' => $pic,
-                ':salt' => $salt,
-                ':email' => $email
-            ));
-        } catch (PDOException $e) {
-            if (DEBUG) echo 'Adding new user failed: ' . $e->getMessage();
-            $result = false;
-        }
-        $stmt = NULL;
-        return $result;
-    }
-
-    public function getAuthTokenByID($id)
-    {
-        $query = "SELECT `authToken`, IF(`expirDate` < NOW(),TRUE,FALSE) as isExpired
-                    FROM `authtable`
-                    WHERE `userid` = :id";
-        $result = NULL;
-        try {
-            $stmt = $this->pdo->prepare($query);
-
-            $stmt->execute(array(
-                ':id' => $id
-            ));
-
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            if (DEBUG) echo 'Getting auth token failed: ' . $e->getMessage();
-        }
-        $stmt = NULL;
-        return $result;
-    }
-
     public function getPasswordByID($id)
     {
-        $query = "SELECT `password`
+        $query = 'SELECT `password`
                     FROM `usertable`
-                    WHERE `userid` = :id";
+                    WHERE `userid` = :id';
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -284,9 +240,9 @@ class DBDataMapper
 
     public function getPictureByID($id)
     {
-        $query = "SELECT `picture`
+        $query = 'SELECT `picture`
                     FROM `usertable`
-                    WHERE `userid` = :id";
+                    WHERE `userid` = :id';
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -305,9 +261,9 @@ class DBDataMapper
 
     public function getEmailByID($id)
     {
-        $query = "SELECT `email`
+        $query = 'SELECT `email`
                     FROM `usertable`
-                    WHERE `userid` = :id";
+                    WHERE `userid` = :id';
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -316,17 +272,20 @@ class DBDataMapper
                 ':id' => $id
             ));
 
-            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             if (DEBUG) echo 'Getting password failed: ' . $e->getMessage();
         }
         $stmt = NULL;
-        return $result;
+        if (false !== $result){
+            return $result['email'];
+        }
+        return false;
     }
 
     public function addNewRequest($requester, $foodid)
     {
-        $query = "INSERT INTO requesttable (requester, foodid) VALUES (:req, :food)";
+        $query = 'INSERT INTO requesttable (requester, foodid) VALUES (:req, :food)';
         $result = true;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -345,8 +304,8 @@ class DBDataMapper
 
     public function addNewRequestMessage($message, $sender, $requestID)
     {
-        $query = "INSERT INTO messagetable (message, time) VALUES (:msg, NOW());";
-        $query .= "INSERT INTO requestmessagetable (messageid, sender, requestid) VALUES (LAST_INSERT_ID(), :send, :reqid)";
+        $query = 'INSERT INTO messagetable (message, time) VALUES (:msg, NOW());';
+        $query .= 'INSERT INTO requestmessagetable (messageid, sender, requestid) VALUES (LAST_INSERT_ID(), :send, :reqid)';
         $result = true;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -368,7 +327,7 @@ class DBDataMapper
     public function setRequestState($requestid, $instate)
     {
         $state = $instate ? 1 : 0;
-        $query = "UPDATE `requesttable` SET `accepted` = :state WHERE `requestid` = :reqid";
+        $query = 'UPDATE `requesttable` SET `accepted` = :state WHERE `requestid` = :reqid';
         $result = true;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -406,6 +365,80 @@ class DBDataMapper
         return $result;
     }
 
+    public function updateRoles($userID, $newRoles){
+        $query = 'UPDATE `usertable` SET `roles` = :roles WHERE `userid` = :uid';
+        $result = true;
+        try {
+            $stmt = $this->pdo->prepare($query);
+
+            $stmt->execute(array(
+                ':uid' => $userID,
+                ':roles' => $newRoles
+            ));
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Update roles failed: ' . $e->getMessage();
+            $result = false;
+        }
+        $stmt = NULL;
+        return $result;
+    }
+
+    public function addToken($userID, $token) :bool {
+        $query = 'INSERT INTO tokentable (`userid`, `token`) VALUES (:un, :token)';
+        $result = true;
+        try {
+            $stmt = $this->pdo->prepare($query);
+
+            $stmt->execute(array(
+                ':un' => $userID,
+                ':token' => $token,
+            ));
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Adding new request message failed: ' . $e->getMessage();
+            $result = false;
+        }
+        $stmt = NULL;
+        return $result;
+    }
+
+    public function verifyToken($token) : bool {
+        $query = 'SELECT `userid`
+                    FROM `tokentable`
+                    WHERE `token` = :token';
+        $result = NULL;
+        try {
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array(
+                ':token' => $token
+            ));
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Getting requests by ID failed: ' . $e->getMessage();
+        }
+        $stmt = NULL;
+        if (false !== $result){
+            $userID = $result['userid'];
+            if ($this->updateRoles($userID,'ROLE_USER')) {
+                $query = 'DELETE
+                    FROM `tokentable`
+                    WHERE `userid` = :uid';
+                try {
+                    $stmt = $this->pdo->prepare($query);
+                    $stmt->execute(array(
+                        ':uid' => $userID
+                    ));
+                } catch (PDOException $e) {
+                    if (DEBUG) echo 'Getting requests by ID failed: ' . $e->getMessage();
+                }
+                $stmt = NULL;
+            }
+
+            return $userID;
+        }
+
+        return $result;
+    }
+
     public function getRequestsReceivedByUserID($id)
     {
         $query = "SELECT `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
@@ -428,7 +461,7 @@ class DBDataMapper
         return $result;
     }
 
-		public function mainSearch($category, $search)
+    public function mainSearch($category, $search)
     {
         /*
         SELECT * FROM course
