@@ -9,12 +9,9 @@ use Silex\Provider\{HttpFragmentServiceProvider,SecurityServiceProvider};
 use Silex\Provider\{RememberMeServiceProvider,SwiftmailerServiceProvider,MonologServiceProvider,RoutingServiceProvider};
 use Silex\Provider\{ServiceControllerServiceProvider,AssetServiceProvider,WebProfilerServiceProvider};
 use Symfony\Component\Translation\Loader\YamlFileLoader;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\{Request,RedirectResponse};
 use Handler\Requests;
 use Database\DBDataMapper;
-
-//future cleanup above
 
 class App extends Application{
     //future Make use of these. all of them
@@ -267,10 +264,16 @@ class App extends Application{
             -> secure('ROLE_USER')
             -> assert('requestID', '\d+');
 
+        $this->get('/food/{start}/{num}', 'rest.handler:getFoodBetween')
+            -> assert('start', '[0-9]*')
+            -> assert('num', '[0-9]*');
+
+        //todo search reloads page?
         $this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*');
 
+        //todo add sorting to slider (remove right 3 buttons)
         $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*')

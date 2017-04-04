@@ -30,7 +30,7 @@ function addItemToPage(name, expiredate, category, userid, description, latitude
 			'</div>');
 	}
 
-	var marker = new google.maps.Marker({
+	let marker = new google.maps.Marker({
 		title: name,
 		position: {lat: latitude, lng: longitude},
 		map: map
@@ -38,73 +38,55 @@ function addItemToPage(name, expiredate, category, userid, description, latitude
 
 }
 
+//todo move to index? or move everything needed in here. Don't split between the two
+
 function GetURLParameter(sParam) {
-	var sPageURL = window.location.search.substring(1);
-	var sURLVariables = sPageURL.split('&');
-	for (var i = 0; i < sURLVariables.length; i++) {
-		var sParameterName = sURLVariables[i].split('=');
-		if (sParameterName[0] == sParam) {
+	let sPageURL = window.location.search.substring(1);
+	let sURLletiables = sPageURL.split('&');
+	for (let i = 0; i < sURLletiables.length; i++) {
+		let sParameterName = sURLletiables[i].split('=');
+		if (sParameterName[0] === sParam) {
 			return sParameterName[1];
 		}
 	}
 }
 
 function refreshSearch() {
-	resultsSoFar = 0;
-	var search = GetURLParameter("search");
-	var category = GetURLParameter("category");
-	var latitude = GetURLParameter("latitude");
-	var longitude = GetURLParameter("longitude");
-	var radius = GetURLParameter("radius");
-	var minQuantity = GetURLParameter("minQuantity");
-	var maxQuantity = GetURLParameter("maxQuantity");
-	var minWeight = GetURLParameter("minWeight");
-	var maxWeight = GetURLParameter("maxWeight");
-	var sort = "amount-des";
-
-	if($("#radius-sort-icon").hasClass('fa')) {
-		// Check if asc or desc
-		$("#radius-sort-icon").hasClass('fa-sort-asc') ? sort = "radius-asc" : sort = "radius-des";
-	} else if($("#quantity-sort-icon").hasClass('fa')) {
-		$("#quantity-sort-icon").hasClass('fa-sort-asc') ? sort = "amount-asc" : sort = "amount-des";
-	} else if($("#weight-sort-icon").hasClass('fa')) {
-		$("#weight-sort").hasClass('fa-sort-asc') ? sort = "weight-asc" : sort = "weight-des";
-	}
+	let search = GetURLParameter("search");
 
 	if(search) {
+        resultsSoFar = 0;
+
+        let category = GetURLParameter("category");
+        let latitude = GetURLParameter("latitude");
+        let longitude = GetURLParameter("longitude");
+        let radius = GetURLParameter("radius");
+        let minQuantity = GetURLParameter("minQuantity");
+        let maxQuantity = GetURLParameter("maxQuantity");
+        let minWeight = GetURLParameter("minWeight");
+        let maxWeight = GetURLParameter("maxWeight");
+        let sort = "amount-des";
+
+        if($("#radius-sort-icon").hasClass('fa')) {
+            // Check if asc or desc
+            sort = $("#radius-sort-icon").hasClass('fa-sort-asc') ?"radius-asc" : "radius-des";
+        } else if($("#quantity-sort-icon").hasClass('fa')) {
+            sort = $("#quantity-sort-icon").hasClass('fa-sort-asc') ? "amount-asc" : "amount-des";
+        } else if($("#weight-sort-icon").hasClass('fa')) {
+            sort =  $("#weight-sort").hasClass('fa-sort-asc') ? "weight-asc" : "weight-des";
+        }
 		// If not exist then set to "" else replace "+" with " "
 		search = search.replace("+", " ");
-		(!category) ? category = "" : category = category.replace("+", " ");
-		if(!latitude) latitude = "";
-		if(!longitude) longitude = "";
-		(!radius) ? radius = "" : $("#radius-popover").val("Radius: " + radius + "km ");
-		if(!minQuantity) minQuantity = "";
-		if(!maxQuantity) maxQuantity = "";
-		if(!minWeight) minWeight = "";
-		if(!maxWeight) maxWeight = "";
+        category = (!category) ?  "" : category.replace("+", " ");
+		if(!latitude) {latitude = "";}
+		if(!longitude) {longitude = "";}
+        radius = (!radius) ? "" : $("#radius-popover").val("Radius: " + radius + "km ");
+		if(!minQuantity) {minQuantity = "";}
+		if(!maxQuantity) {maxQuantity = "";}
+		if(!minWeight) {minWeight = "";}
+		if(!maxWeight) {maxWeight = "";}
 
-		// Update Button Text
-		if(minQuantity && maxQuantity) {
-			$("#quantity-popover").val(minQuantity + " - " + maxQuantity + " ");
-		} else if(minWeight) {
-			$("#quantity-popover").val(minQuantity + "+ ");
-		} else if(maxQuantity) {
-			$("#quantity-popover").val("Up to" + maxQuantity + " ");
-		} else {
-			$("#quantity-popover").val("Quantity ");
-		}
-
-		if(minWeight && maxWeight) {
-			$("#weight-popover").val(minWeight + "g - " + maxWeight + "g ");
-		} else if(minWeight) {
-			$("#weight-popover").val(minWeight + "g+ ");
-		} else if(maxWeight) {
-			$("#weight-popover").val("Up to" + maxWeight + "g ");
-		} else {
-			$("#weight-popover").val("Weight ");
-		}
-
-		var query = "/search/" + category + "/" + search + "/" + latitude + "/" + longitude + "/" + radius + "/" + minQuantity + "/" + maxQuantity + "/" + minWeight + "/" + maxWeight + "/" + sort;
+		let query = "/search/" + category + "/" + search + "/" + latitude + "/" + longitude + "/" + radius + "/" + minQuantity + "/" + maxQuantity + "/" + minWeight + "/" + maxWeight + "/" + sort;
 		// Set Category and Search on page
 		$("#main-search-input").val(search);
 		$("#categories-dropdown").val(category);
@@ -121,18 +103,36 @@ function refreshSearch() {
 				});
 			});
 		});
-	}
+	} else {
+	    addMoreItems();
+    }
 }
 
 function addMoreItems() {
-	$("#loading-icon").removeClass("hidden-xs-up");
-	for(var i = resultsSoFar; i < 12; i++) {
-		if(i < results.length && !$("#loading-icon").hasClass("hidden-xs-up")) {
-			$.get("/food/html/" + results[i]["foodid"], function(html) {
-				$("#item-cards").append(html);
-			});
-			resultsSoFar += 1;
-		}
-	}
-	$("#loading-icon").addClass("hidden-xs-up");
+    let search = GetURLParameter("search");
+    if (search) {
+        $("#loading-icon").removeClass("hidden-xs-up");
+        let target = Math.max(resultsSoFar + 12, results.length);
+        for (let i = resultsSoFar; i < target; i++) {
+            if ((i < results.length) && !$("#loading-icon").hasClass("hidden-xs-up")) {
+                $.get("/food/html/" + results[i]["foodid"], function (html) {
+                    $("#item-cards").append(html);
+                });
+                resultsSoFar += 1;
+            }
+        }
+        $("#loading-icon").addClass("hidden-xs-up");
+    } else {
+        let query = /food/+resultsSoFar+"/12";
+
+        $.getJSON(query, function(data) {
+            results = results.concat(data);
+            // Data is list of relevant items
+            $.each(data, function(index, array) {
+                $.get("/food/html/" + array["foodid"], function(html) {
+                    $("#item-cards").append(html);
+                });
+            });
+        });
+    }
 }

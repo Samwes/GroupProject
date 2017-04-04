@@ -464,15 +464,30 @@ class DBDataMapper
         return $result;
     }
 
+    public function getFoodBetween($start, $num)
+    {
+        $query = 'SELECT `foodid`
+                        FROM `itemtable`
+                    ORDER BY `foodid` DESC
+                    LIMIT :num OFFSET :star;';
+        $result = NULL;
+        try {
+            $stmt = $this->pdo->prepare($query);
+            $stmt->bindValue(':num', (int)$num, PDO::PARAM_INT);
+            $stmt->bindValue(':star', (int)$start, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Getting food between X and Y failed: ' . $e->getMessage();
+        }
+        $stmt = NULL;
+        return $result;
+    }
+
     public function mainSearch($category, $search)
     {
-        /*
-        SELECT * FROM course
-        WHERE description LIKE '%university%' OR description LIKE '%history%'
-        ORDER BY IF(description LIKE '%university%' and description LIKE '%history%', 0, 1)
-        LIMIT 0, 20
-        */
-        // Simple Search
         if ($category != "") {
             $query = "SELECT `foodid`
                         FROM `itemtable`
@@ -529,7 +544,7 @@ class DBDataMapper
           $query = $query . " AND " . $weightQuery;
       }
 
-      if ($sort == 'radius-asc' || $sort == 'radius-des') {
+      if (($sort == 'radius-asc' || $sort == 'radius-des')&& ($latit != "" && $longit != "")) {
           $query = $query . " ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
       } else if ($sort == 'amount-asc' || $sort == 'amount-des') {
           $query = $query . " ORDER BY `amount`";

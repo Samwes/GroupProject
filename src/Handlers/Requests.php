@@ -261,6 +261,15 @@ class Requests
         return new JsonResponse($toEncode);
     }
 
+    public function getFoodBetween(Request $request, App $app, $start, $num){
+        $toEncode = $this->db->getFoodBetween($start, $num);
+        if ($toEncode === null) {
+            $toEncode = array('error' => 'failed');
+        }
+
+        return new JsonResponse($toEncode);
+    }
+
     public function mainSearch(Request $request, App $app, $category, $search)
     {
         $toEncode = $this->db->mainSearch($category, $search);
