@@ -83,9 +83,10 @@ class Requests
             $this->sendVerifyToken($app, $user->getID());
 
             return new RedirectResponse($app->path('user'));
-        } else {
-            throw new RuntimeException(sprintf('Cant create user %s', $username)); //note just database error or?
         }
+
+        throw new RuntimeException(sprintf('Cant create user %s', $username)); //note just database error or?
+        
     }
 
     public function sendVerifyToken(App $app, $userid){
@@ -93,13 +94,13 @@ class Requests
         $this->db->addToken($userid,$bytes);
         if($email = $this->db->getEmailByID($userid)){
             //todo send email (SEND FULL LINK, NOT JUST TOKEN!??!?)
-//            $message = \Swift_Message::newInstance()
-//                ->setSubject('Verify your Food Inc. account')
-//                ->setFrom(array('noreply@foodinc.com'))
-//                ->setTo(array($email))
-//                ->setBody('Your verification token: ' . $bytes); //Future tidy up (twig template or whatever)
-//
-//            $app['mailer']->send($message);
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Verify your Food Inc. account')
+                ->setFrom(array('noreply@foodinc.com'))
+                ->setTo(array($email))
+                ->setBody('Your verification token: ' . $bytes); //Future tidy up (twig template or whatever)
+
+            $app['mailer']->send($message);
 
             return new Response('Token Sent!', 201);
         }
