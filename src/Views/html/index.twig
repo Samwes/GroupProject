@@ -217,60 +217,66 @@
 </script>
 
 <script>
-  // Sub-Search Applys
-  // Location is with google api
-  $(function(){
+    //Do this before page loaded event fires
     let obj = {}, i, parts, len, key, value;
     let _params = window.location.search.substr(1).split('#')[0].split('&');
 
-      for (i = 0, len = _params.length; i < len; i++) {
-          parts = _params[i].split('=');
-          if (! parts[0]) {continue;}
-          obj[parts[0]] = parts[1] || true;
-      }
+    for (i = 0, len = _params.length; i < len; i++) {
+      parts = _params[i].split('=');
+      if (! parts[0]) {continue;}
+      obj[parts[0]] = parts[1] || true;
+    }
 
-      {#todo get search too from query string, remove empty search string (form can submit empty) #}
-      {#todo markers on map <<<<<---------- fixme this #}
+    {#todo markers on map <<<<<---------- fixme this #}
+    {#todo reset min/max button? #}
 
-      if('search' in obj){
-        let searchval = obj['search'];
-        if (searchval === true){
-            window.history.replaceState('', '', UpdateQueryString('search',null));
-        } else {
-            $("#main-search-input").value = searchval;
-        }
+    if('search' in obj){
+    let searchval = obj['search'];
+    if (searchval === true){
+        window.history.replaceState('', '', UpdateQueryString('search',null));
+    } else {
+        $("#main-search-input").value = searchval;
+    }
+    } else {
+      $("#main-search-input").value = "";
+    }
+
+    if ('radius' in obj){
+      $('#radiusSlider').attr('data-slider-value',obj['radius']);
+    }
+
+    if ('minQuantity' in obj){
+      if('maxQuantity' in obj){
+          $('#quantitySlider').attr('data-slider-value','['+obj['minQuantity']+','+obj['maxQuantity']+']');
       } else {
-          $("#main-search-input").value = "";
+          let maxval = $('#quantitySlider').attr('data-slider-max');
+          $('#quantitySlider').attr('data-slider-value','['+obj['minQuantity']+','+maxval+']');
+          window.history.replaceState('', '', UpdateQueryString('maxQuantity',maxval));
       }
+    } else if('maxQuantity' in obj){
+      let minval = $('#quantitySlider').attr('data-slider-min');
+      $('#quantitySlider').attr('data-slider-value','['+minval+','+obj['maxQuantity']+']');
+      window.history.replaceState('', '', UpdateQueryString('minQuantity',minval));
+    }
 
-      if ('radius' in obj){
-          $('#radiusSlider').attr('data-slider-value',obj['radius']);
+    if ('minWeight' in obj){
+      if('maxWeight' in obj){
+          $('#weightSlider').attr('data-slider-value','['+obj['minWeight']+','+obj['maxWeight']+']');
+      } else {
+          let maxval = $('#weightSlider').attr('data-slider-max');
+          $('#weightSlider').attr('data-slider-value','['+obj['minWeight']+','+maxval+']');
+          window.history.replaceState('', '', UpdateQueryString('maxWeight',maxval));
       }
+    } else if('maxWeight' in obj){
+      let minval = $('#weightSlider').attr('data-slider-min');
+      $('#weightSlider').attr('data-slider-value','['+minval+','+obj['maxWeight']+']');
+      window.history.replaceState('', '', UpdateQueryString('minWeight',minval));
+    }
 
-      if ('minQuantity' in obj){
-          if('maxQuantity' in obj){
-              $('#quantitySlider').attr('data-slider-value','['+obj['minQuantity']+','+obj['maxQuantity']+']');
-          } else {
-              $('#quantitySlider').attr('data-slider-value','['+obj['minQuantity']+','+$('#quantitySlider').attr('data-slider-max')+']');
-          }
-      } else if('maxQuantity' in obj){
-          $('#quantitySlider').attr('data-slider-value','['+('#quantitySlider').attr('data-slider-min')+','+$obj['maxQuantity']+']');
-      }
-
-      if ('minWeight' in obj){
-          if('maxWeight' in obj){
-              $('#weightSlider').attr('data-slider-value','['+obj['minWeight']+','+obj['maxWeight']+']');
-          } else {
-              $('#weightSlider').attr('data-slider-value','['+obj['minWeight']+','+$('#weightSlider').attr('data-slider-max')+']');
-          }
-      } else if('maxWeight' in obj){
-          $('#weightSlider').attr('data-slider-value','['+$('#weightSlider').attr('data-slider-min')+','+$obj['maxWeight']+']');
-      }
-  });
 
   function UpdateQueryString(key, value, url) {
       if (!url) url = window.location.href;
-      var re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
+      let re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
           hash;
 
       if (re.test(url)) {

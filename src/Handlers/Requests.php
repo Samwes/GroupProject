@@ -94,6 +94,7 @@ class Requests
 
     public function sendVerifyToken(App $app, $userid)
     {
+        //note maybe broke with this if
         if ($this->db->getRoles($userid) === 'ROLE_BASIC') {
             $bytes = bin2hex(random_bytes(32));
             $this->db->addToken($userid, $bytes);

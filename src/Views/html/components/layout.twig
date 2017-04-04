@@ -8,8 +8,6 @@
 
 <body onResize=resize>
 
-    {#{% include 'nav.twig' %}#}
-
     {% block content %}
         {{ block("content", "nav.twig") }}
     {% endblock %}

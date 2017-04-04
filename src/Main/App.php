@@ -80,6 +80,7 @@ class App extends Application{
                 'profiler.cache_dir' => ROOT . '/../cache/profiler',
                 'profiler.mount_prefix' => '/_profiler', // this is the default
             ));
+
         }
 
         // Register asset rerouting
@@ -210,8 +211,9 @@ class App extends Application{
 
         //future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $account->get('/userprofile', function(){
-            return $this['twig']->render('userProfile.twig');
-        })->bind('user');
+            $userdata = $this['DB']->getUserByUsername((string)$this['security.token_storage']->getToken()->getUser());
+            return $this['twig']->render('userProfile.twig', array('userData' => $userdata));
+        })->bind('user')-> secure('ROLE_USER');  //Double secured so dont check token exists
 
         $account->get('/userprofiletest', function() {
             return $this['twig']->render('userProfileTest.twig');
@@ -235,20 +237,11 @@ class App extends Application{
 
         $this->get('/food/html/{foodID}', function($foodID) {
               $foodData = $this['DB']->getFoodItemByID($foodID);
-              return $this->renderView('foodcard.twig', array (
-                  'name' => $foodData['name'],
-                  'description' => $foodData['description'],
-                  'expiry' => $foodData['expirydate'],
-                  'amount' => $foodData['amount'],
-                  'weight' => $foodData['weight'],
-                  'image' => $foodData['image']
-              ));
+              return $this->renderView('foodcard.twig', array('foodData' => $foodData));
         }) -> assert('foodID', '\d+');
 
         $this->get('/item/{id}', function($id) {
-            return $this['twig']->render('itemPage.twig', array (
-                    'itemid' => $id,
-            ));
+            return $this['twig']->render('itemPage.twig', array('itemid' => $id,));
         });
 
         $this->get('/foodItems/{userID}', 'rest.handler:foodItemsGet')
@@ -268,12 +261,11 @@ class App extends Application{
             -> assert('start', '[0-9]*')
             -> assert('num', '[0-9]*');
 
-        //todo search reloads page?
         $this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*');
 
-        //todo add sorting to slider (remove right 3 buttons)
+        //todo add sorting to slider (remove right 3 buttons) add remove button for each slider
         $this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
             -> assert('category', '[a-zA-Z0-9_ ]*')
             -> assert('search', '[a-zA-Z0-9_ ]*')
