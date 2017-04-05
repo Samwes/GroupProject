@@ -20,9 +20,9 @@
 }
 
 .card {
-  border-radius: 0 !important;
   margin-bottom: 0;
-  border: 0;
+    border: 0;
+  border-radius: 0 !important;
 }
 
 .card-img-top {
@@ -58,13 +58,14 @@
 
 .btn-option {
   height: 100%;
+    padding-right: 1.5rem;
   padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  background-color: #FAFAFA;
-  /*background-color: #E8E9EC;*/
+    color: #55595c;
+  background-color: #fafafa;
+
+  /* background-color: #E8E9EC; */
   border: 0;
   border-left: 1px solid #dce0e0;
-  color: #55595c;
 }
 
 .btn-option:hover {
@@ -314,12 +315,12 @@ color: grey !important;
     -moz-transition: all 0.25s ease-out;
     transition: all 0.25s ease-out;
   }
-  .row-offcanvas-right
+  .row-offcanvas-right,
   .sidebar-offcanvas {
     right: -70%;
   }
 
-  .row-offcanvas-left
+  .row-offcanvas-left,
   .sidebar-offcanvas {
     left: -70%;
   }
@@ -334,8 +335,8 @@ color: grey !important;
     top: 0;
     width: 70%;
   }
-  #sidebar {
-    padding-top:0;
+  .sidebar {
+    padding-top: 0;
   }
 }
 

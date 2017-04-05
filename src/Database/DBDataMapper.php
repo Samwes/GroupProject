@@ -21,7 +21,7 @@ class DBDataMapper
             $username = $url["user"];
             $password = $url["pass"];
             $db = substr($url["path"], 1);
-            $dsn = $url['scheme'].':dbname=' .$db.';host='.$servername; // . '?' .$url['query'];
+            $dsn = $url['scheme'] . ':dbname=' . $db . ';host=' . $servername; // . '?' .$url['query'];
 
             // Create connection
             try {
@@ -34,8 +34,9 @@ class DBDataMapper
         $this->pdo = $pdo;
     }
 
-    public function getUserByUsername(string $username) {
-        $query =  'SELECT * FROM `usertable` WHERE username = :un';
+    public function getUserByUsername(string $username)
+    {
+        $query = 'SELECT * FROM `usertable` WHERE username = :un';
         $result = false;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -93,7 +94,7 @@ class DBDataMapper
             if (DEBUG) echo 'Getting auth token failed: ' . $e->getMessage();
         }
         $stmt = NULL;
-        if (false !== $result){
+        if (false !== $result) {
             return $result;
         }
         return false;
@@ -102,7 +103,7 @@ class DBDataMapper
     public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image)
     {
         //future change default image based on category
-        if ($image === null){
+        if ($image === null) {
             $image = 'none.svg';
         }
         $query = 'INSERT INTO itemtable (name, expirydate, category,userid,description,latit,longit,amount,weight,image)
@@ -133,7 +134,7 @@ class DBDataMapper
     }
 
     //Never call directly, simply inserts values. Use handler
-    public function addNewUser($un,$pw,$pic,$email, $roles = 'ROLE_BASIC')
+    public function addNewUser($un, $pw, $pic, $email, $roles = 'ROLE_BASIC')
     {
         $query = 'INSERT INTO usertable (username, password, picture, email, roles)
                   VALUES (:un, :pw, :pic, :email, :role)';
@@ -285,7 +286,7 @@ class DBDataMapper
             if (DEBUG) echo 'Getting email failed: ' . $e->getMessage();
         }
         $stmt = NULL;
-        if (false !== $result){
+        if (false !== $result) {
             return $result['email'];
         }
         return false;
@@ -373,7 +374,8 @@ class DBDataMapper
         return $result;
     }
 
-    public function getRoles($userID){
+    public function getRoles($userID)
+    {
         $query = 'SELECT `roles`
                     FROM `usertable`
                     WHERE `userid` = :id';
@@ -390,13 +392,14 @@ class DBDataMapper
             if (DEBUG) echo 'Getting roles failed: ' . $e->getMessage();
         }
         $stmt = NULL;
-        if (false !== $result){
+        if (false !== $result) {
             return $result['roles'];
         }
         return false;
     }
 
-    public function updateRoles($userID, $newRoles){
+    public function updateRoles($userID, $newRoles)
+    {
         $query = 'UPDATE `usertable` SET `roles` = :roles WHERE `userid` = :uid';
         $result = true;
         try {
@@ -414,7 +417,8 @@ class DBDataMapper
         return $result;
     }
 
-    public function addToken($userID, $token) :bool {
+    public function addToken($userID, $token): bool
+    {
         $query = 'INSERT INTO tokentable (`userid`, `token`) VALUES (:un, :token)';
         $result = true;
         try {
@@ -432,7 +436,8 @@ class DBDataMapper
         return $result;
     }
 
-    public function verifyToken($token) : bool {
+    public function verifyToken($token): bool
+    {
         $query = 'SELECT `userid`
                     FROM `tokentable`
                     WHERE `token` = :token';
@@ -447,9 +452,9 @@ class DBDataMapper
             if (DEBUG) echo 'Getting requests by ID failed: ' . $e->getMessage();
         }
         $stmt = NULL;
-        if (false !== $result){
+        if (false !== $result) {
             $userID = $result['userid'];
-            if ($this->updateRoles($userID,'ROLE_USER')) {
+            if ($this->updateRoles($userID, 'ROLE_USER')) {
                 $query = 'DELETE
                     FROM `tokentable`
                     WHERE `userid` = :uid';
@@ -541,64 +546,65 @@ class DBDataMapper
         return $result;
     }
 
-    public function searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort) {
-      $categoryQuery = "`category` = :category";
-      $distanceQuery = "`latit` <= :latit + :radius AND `latit` >= :latit - :radius AND `longit` <= :longit + :radius AND `longit` >= :longit - :radius";
-      $quantityQuery = "`amount` <= :maxAmount AND `amount` >= :minAmount";
-      $weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
+    public function searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort)
+    {
+        $categoryQuery = "`category` = :category";
+        $distanceQuery = "`latit` <= :latit + :radius AND `latit` >= :latit - :radius AND `longit` <= :longit + :radius AND `longit` >= :longit - :radius";
+        $quantityQuery = "`amount` <= :maxAmount AND `amount` >= :minAmount";
+        $weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
 
-      $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE :search";
-      $adaptedSearch = '%' . $search . '%';
-      $params = array(':search' => $adaptedSearch);
+        $query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE :search";
+        $adaptedSearch = '%' . $search . '%';
+        $params = array(':search' => $adaptedSearch);
 
-      if ($category != "") {
-          $params[':category'] = $category;
-          $query = $query . " AND " . $categoryQuery;
-      }
-      if ($latit != "" && $longit != "" && $radius != "") {
-          $params[':latit'] = $latit;
-          $params[':longit'] = $longit;
-          $params[':radius'] = $radius;
-          $query = $query . " AND " . $distanceQuery;
-      }
-      if ($minAmount != "" && $maxAmount != "") {
-          $params[':minAmount'] = $minAmount;
-          $params[':maxAmount'] = $maxAmount;
-          $query = $query . " AND " . $quantityQuery;
-      }
-      if ($minWeight != "" && $maxWeight != "") {
-          $params[':minWeight'] = $minWeight;
-          $params[':maxWeight'] = $maxWeight;
-          $query = $query . " AND " . $weightQuery;
-      }
+        if ($category != "") {
+            $params[':category'] = $category;
+            $query = $query . " AND " . $categoryQuery;
+        }
+        if ($latit != "" && $longit != "" && $radius != "") {
+            $params[':latit'] = $latit;
+            $params[':longit'] = $longit;
+            $params[':radius'] = $radius;
+            $query = $query . " AND " . $distanceQuery;
+        }
+        if ($minAmount != "" && $maxAmount != "") {
+            $params[':minAmount'] = $minAmount;
+            $params[':maxAmount'] = $maxAmount;
+            $query = $query . " AND " . $quantityQuery;
+        }
+        if ($minWeight != "" && $maxWeight != "") {
+            $params[':minWeight'] = $minWeight;
+            $params[':maxWeight'] = $maxWeight;
+            $query = $query . " AND " . $weightQuery;
+        }
 
-      if (($sort === 'radius-asc' || $sort === 'radius-des')&& ($latit != "" && $longit != "")) {
-          $query = $query . " ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
-      } else if ($sort === 'amount-asc' || $sort === 'amount-des') {
-          $query = $query . " ORDER BY `amount`";
-      } else if ($sort === 'weight-asc' || $sort === 'weight-des') {
-          $query = $query . " ORDER BY `weight`";
-      } else {
-          $query = $query . " ORDER BY `amount`";
-      }
+        if (($sort === 'radius-asc' || $sort === 'radius-des') && ($latit != "" && $longit != "")) {
+            $query = $query . " ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
+        } else if ($sort === 'amount-asc' || $sort === 'amount-des') {
+            $query = $query . " ORDER BY `amount`";
+        } else if ($sort === 'weight-asc' || $sort === 'weight-des') {
+            $query = $query . " ORDER BY `weight`";
+        } else {
+            $query = $query . " ORDER BY `amount`";
+        }
 
-      if(substr($sort, -3) === "asc") {
-          $query = $query . " ASC LIMIT 120";
-      } else {
-          $query = $query . " DESC LIMIT 120";
-      }
+        if (substr($sort, -3) === "asc") {
+            $query = $query . " ASC LIMIT 120";
+        } else {
+            $query = $query . " DESC LIMIT 120";
+        }
 
-      $result = NULL;
-      try {
-          $stmt = $this->pdo->prepare($query);
-          $stmt->execute($params);
+        $result = NULL;
+        try {
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute($params);
 
-          $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      } catch (PDOException $e) {
-          if (DEBUG) echo 'Search by category and search text failed: ' . $e->getMessage();
-      }
-      $stmt = NULL;
-      return $result;
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            if (DEBUG) echo 'Search by category and search text failed: ' . $e->getMessage();
+        }
+        $stmt = NULL;
+        return $result;
 
     }
 

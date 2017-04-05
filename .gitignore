@@ -5,3 +5,4 @@ vendor/
 /bigobjects.txt
 /allfileshas.txt
 /bigtosmall.txt
+/.stylelintrc
