@@ -296,7 +296,7 @@ class App extends Application{
             -> requireHttps() -> bind('messenger')
             -> assert('message', '[\s\S]*')
             -> assert('fromid', '\d+')
-            -> assert('toid', '\d+')
+            -> assert('toid', '\d+');
 
         //future send token + resend option
         $this->get('/register/validatemail/{token}', 'rest.handler:verifyToken');
