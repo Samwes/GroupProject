@@ -9,7 +9,18 @@
 
 {%  block content %}
     {{ parent() }}
+	<br>
 
+	<div class="container">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link active" href="#" style="border-radius: 0;">Profile</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#" style="border-radius: 0;">Your Items</a>
+			</li>
+		</ul>
+	</div>
 <br>
 
 <div class="container">
@@ -63,7 +74,10 @@
 			<br>
 
 			<h3>Change Password</h3>
-			<form>
+			<div class="row">
+				<div class="col-md-4 offset-md-4"
+			</div>
+			<form onSubmit="return verify(this);">
 				<label for="oldPassword">Enter Old Password</label>
 				<div class="form-group input-group">
 					<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
@@ -79,7 +93,7 @@
 					<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
 					<input type="password" class="form-control square-border" id="confirmNewPassword" placeholder="Confirm New Password">
 				</div>
-				<input type="submit" value="Change">
+				<input type="submit" value="Change" class="btn btn-primary">
 			<form>
 
 		</div>

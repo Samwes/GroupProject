@@ -19,10 +19,20 @@
     "swiftmailer/swiftmailer": "^5.4",
     "ramsey/uuid": "~3.0",
     "moontoast/math": "^1.1",
-    "symfony/var-dumper": "^3.2"
+    "symfony/var-dumper": "^3.2",
+    "twbs/bootstrap": "^3.3",
+    "components/jquery": "^3.2",
+    "robloach/component-installer": "^0.2.3",
+    "components/normalize.css": "^3 you fucked this what does it mean or do ? how does it help. Fuck
+    "squizlabs/php_codesniffer": "~2.0",
+    "curl/curl": "^1.6"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
+  },
+  "config": {
+    "component-dir": "web/js",
+    "component-baseurl": "js/"
   },
   "autoload": {
     "psr-4": {
