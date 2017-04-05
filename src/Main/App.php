@@ -292,7 +292,7 @@ class App extends Application{
             -> assert('username', '^[a-zA-Z0-9_]+$')
             -> assert('password','^[\w]+$');
 
-        $this->post('/messenger', 'rest.handler:messageUser')
+        $this->post('/messenger/message', 'rest.handler:messageUser')
             -> requireHttps() -> bind('messenger')
             -> assert('message', '[\s\S]*')
             -> assert('fromid', '\d+')

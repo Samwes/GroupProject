@@ -151,7 +151,7 @@ $(function () {
 
 $("#sendButton").click(function() {
   //Send message
-  $.post('/messenger', {'message': $("#messageInput").val(), 'fromid': userID, 'toid': currentReceiverID}, function(data) {
+  $.post('/messenger/message', {'message': $("#messageInput").val(), 'fromid': userID, 'toid': currentReceiverID}, function(data) {
     if(!data['success']) {
       // Failed to send message
       console.log("Failed to send message");
