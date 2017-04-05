@@ -78,28 +78,39 @@
 					</li>
 				</ul>
 			</nav>
-			<div class="container-fluid" style="overflow: scroll; overflow-x:hidden;">
-				<!-- Message Container -->
-				<div class="row" style="padding: 0.5rem; width: 100%;">
-					<!-- User Image -->
-					<img class="circle" src="../res/oranges.jpg" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">
-					<!-- Message -->
-					<div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #fafafa; display: inline-block;">
-						<div class="card-block" style="padding: 0.5rem;">
-							<p class="card-text" style="color: black;">Dear Mister, I would awfully like to take those lovely looking oranges off your hands so that my poor children and I can have a delicious treat.</p>
-						</div>
-					</div>
-				</div>
+      <div class="container-fluid" style="overflow: scroll; overflow-x:hidden;" id="messages">
+        <!-- Message Container -->
+        <div class="row" style="padding: 0.5rem; width: 100%;">
+          <!-- User Image -->
+          <img class="circle" src="res/oranges.jpg" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">
+          <!-- Message -->
+          <div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #fafafa; display: inline-block;">
+            <div class="card-block" style="padding: 0.5rem;">
+              <p class="card-text" style="color: black;">Dear Mister, I would awfully like to take those lovely looking oranges off your hands so that my poor children and I can have a delicious treat.</p>
+            </div>
+          </div>
+        </div>
 
-				<div class="row" style="padding: 0.5rem; float: right; width: 100%;">
-					<!-- Message -->
-					<div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #2979FF; display: inline-block; float: right;">
-						<div class="card-block" style="padding: 0.5rem;">
-							<p class="card-text" style="color: white;">Of course dear woman. What fool would I be to refuse you my delicious oranges.</p>
-						</div>
-					</div>
-				</div>
-			</div>
+        <div class="row" style="padding: 0.5rem; float: right; width: 100%;">
+          <!-- Message -->
+          <div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #2979FF; display: inline-block; float: right;">
+            <div class="card-block" style="padding: 0.5rem;">
+              <p class="card-text" style="color: white;">Of course dear woman. What fool would I be to refuse you my delicious oranges.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid" id="input">
+        <!-- Input Container -->
+        <div class="row" style="width: 100%;">
+          <div class="input-group">
+            <input type="text" class="form-control square-border" placeholder="Enter a message here" id="messageInput">
+            <span class="input-group-btn">
+              <button class="btn btn-secondary square-border" type="button" id="sendButton">Send</button>
+            </span>
+          </div>
+        </div>
+      </div>
 		</div>
 	</div>
 </div>
@@ -117,18 +128,52 @@ $(document).ready(function() {
 });
 </script>
 
+<!-- MESSAGING -->
+<script>
+var userID;
+var currentReceiverID = 34; // Temporarily
+
+$(function () {
+  var socket = io("https://gpmainmessaging.herokuapp.com/");
+  socket.on('connect', function(data) {
+    // Get proof of who are from App.php
+    $.getJSON('/messenger/userid', function(data) {
+      userID = data['userID'];
+      var validation = 0;
+      socket.emit('validation', {'validation': validation, 'userid': userID});
+    });
+
+  });
+  socket.on("message", function(data) {
+    console.log(data);
+  });
+});
+
+$("#sendButton").click(function() {
+  //Send message
+  $.post('/messenger', {'message': $("#messageInput").val(), 'fromid': userID, 'toid': currentReceiverID}, function(data) {
+    if(!data['success']) {
+      // Failed to send message
+      console.log("Failed to send message");
+    }
+  });
+});
+</script>
+
 <!-- CORRECT SIZES OF ELEMENTS -->
 <script>
 	$(document).ready(function() {
 		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
 		$('#search-navbar-group').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
 		$('#requests').height($(window).height() - $('#search-navbar').outerHeight() - $('#requests-nav').outerHeight());
+    $('#messages').height($(window).height() - $('#search-navbar').outerHeight() - $('#messages-nav').outerHeight() - $('#input').outerHeight());
 	});
 
 	resize = function(){
 		$('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
 		$('#search-navbar-group').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown').outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
 		$('#requests').height($(window).height() - $('#search-navbar').outerHeight() - $('#requests-nav').outerHeight());
+    $('#messages').height($(window).height() - $('#search-navbar').outerHeight() - $('#messages-nav').outerHeight() - $('#input').outerHeight());
 	}
 </script>
 
@@ -147,6 +192,7 @@ $(document).ready(function() {
 						'</div>' +
 						'<div class="col-xs-10" style="padding: 0;">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
+                '<p class="card-text" userid="' + value['userid'] + '">USERNAME</p>' +
 								'<p class="card-text">' + value['requestid'] + '</p>' +
 								'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + value['foodid'] + '</p>' +
 								'<small class="text-muted">Last Message</small>' +

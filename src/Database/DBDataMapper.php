@@ -354,9 +354,9 @@ class DBDataMapper
 
     public function getRequestsSentByUserID($id)
     {
-        $query = "SELECT `requestid`, `foodid`, `accepted`
-                    FROM `requesttable`
-                    WHERE `requester` = :id";
+        $query = "SELECT `itemtable`.`userid`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
+                    FROM `itemtable`, `requesttable`
+                    WHERE `requester` = :id AND `requesttable`.`foodid` = `itemtable`.`foodid`";
         $result = NULL;
         try {
             $stmt = $this->pdo->prepare($query);
@@ -600,6 +600,10 @@ class DBDataMapper
       $stmt = NULL;
       return $result;
 
+    }
+
+    public function addVerification($userid) {
+        // Add verification code to database in relation to userid
     }
 
 }

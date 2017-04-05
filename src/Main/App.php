@@ -278,6 +278,9 @@ class App extends Application{
             -> assert('maxWeight', '[0-9]*')
             -> assert('sort', '[a-z\-]*');
 
+        $this->get('/messenger/userid', 'rest.handler:userID')
+            -> secure('ROLE_USER');
+
         //todo default food picture per category
         $this->post('/food', 'rest.handler:foodItemPost')
             -> secure('ROLE_USER');
@@ -288,6 +291,12 @@ class App extends Application{
             -> requireHttps() -> bind('register')
             -> assert('username', '^[a-zA-Z0-9_]+$')
             -> assert('password','^[\w]+$');
+
+        $this->post('/messenger', 'rest.handler:messageUser')
+            -> requireHttps() -> bind('messenger')
+            -> assert('message', '[\s\S]*')
+            -> assert('fromid', '\d+')
+            -> assert('toid', '\d+')
 
         //future send token + resend option
         $this->get('/register/validatemail/{token}', 'rest.handler:verifyToken');

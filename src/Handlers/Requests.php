@@ -89,7 +89,7 @@ class Requests
         }
 
         throw new RuntimeException(sprintf('Cant create user %s', $username)); //note just database error or?
-        
+
     }
 
     public function sendVerifyToken(App $app, $userid)
@@ -241,12 +241,51 @@ class Requests
 
     public function searchExtra(Request $request, App $app, $category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort)
     {
-      $toEncode = $this->db->searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort);
-      if ($toEncode === null) {
-          $toEncode = array('error' => 'failed');
-      }
+        $toEncode = $this->db->searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort);
+        if ($toEncode === null) {
+            $toEncode = array('error' => 'failed');
+        }
 
-      return new JsonResponse($toEncode);
+        return new JsonResponse($toEncode);
+    }
+
+    public function messageUser(Request $request, App $app, $message, $fromid, $toid)
+    {
+        $toEncode = $this->db->addNewUserMessage($message, $fromid, $toid);
+
+        $url = 'https://gpmainmessaging.herokuapp.com/message';
+        $data = array('message' => $message, 'fromid' => $fromid, 'toid' => $toid);
+
+        // use key 'http' even if you send the request to https://...
+        $options = array(
+          'http' => array(
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+            )
+        );
+        $context  = stream_context_create($options);
+        $result = file_get_contents($url, false, $context);
+        // Change to check for 200 OK response
+        if ($result === FALSE) {
+          return new JsonResponse(array("success" => false));
+        } else {
+          return new JsonResponse(array("success" => true));
+        }
+
+    }
+
+    public function userID(Request $request, App $app)
+    {
+        $token = $app['security.token_storage']->getToken();
+        $toEncode = array('userID' => 'error');
+
+        if (null !== $token) {
+            $userID = $token->getUser()->getID();
+            $toEncode['userID'] = $userID;
+        }
+
+        return new JsonResponse($toEncode);
     }
 
 }
