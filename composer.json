@@ -1,43 +1,44 @@
 {
-  "require" : {
-    "silex/silex": "~2.0",
-    "monolog/monolog": "^1.4",
-    "twig/twig": "~2.0",
-    "symfony/twig-bridge": "~3.0",
-    "roave/security-advisories": "dev-master",
-    "symfony/security": "~3.0",
-    "symfony/form": "~3.0",
-    "symfony/validator": "~3.0",
-    "symfony/asset": "~3.0",
-    "silex/web-profiler": "^2.0",
-    "symfony/monolog-bridge": "~3.0",
-    "symfony/console": "~3.0",
-    "symfony/config": "~3.0",
-    "symfony/yaml": "~3.0",
-    "symfony/security-bundle": "~3.0",
-    "symfony/security-acl": "~3.0",
-    "swiftmailer/swiftmailer": "^5.4",
-    "ramsey/uuid": "~3.0",
-    "moontoast/math": "^1.1",
-    "symfony/var-dumper": "^3.2",
-    "twbs/bootstrap": "^3.3",
-    "components/jquery": "^3.2",
-    "robloach/component-installer": "^0.2.3",
-    "components/normalize.css": "^3",
-    "curl/curl": "^1.6"
+  "require": {
+	"silex/silex": "~2.0",
+	"monolog/monolog": "^1.4",
+	"twig/twig": "~2.0",
+	"symfony/twig-bridge": "~3.0",
+	"roave/security-advisories": "dev-master",
+	"symfony/security": "~3.0",
+	"symfony/form": "~3.0",
+	"symfony/validator": "~3.0",
+	"symfony/asset": "~3.0",
+	"silex/web-profiler": "^2.0",
+	"symfony/monolog-bridge": "~3.0",
+	"symfony/console": "~3.0",
+	"symfony/config": "~3.0",
+	"symfony/yaml": "~3.0",
+	"symfony/security-bundle": "~3.0",
+	"symfony/security-acl": "~3.0",
+	"swiftmailer/swiftmailer": "^5.4",
+	"ramsey/uuid": "~3.0",
+	"moontoast/math": "^1.1",
+	"symfony/var-dumper": "^3.2",
+	"twbs/bootstrap": "^3.3",
+	"components/jquery": "^3.2",
+	"robloach/component-installer": "^0.2.3",
+	"components/normalize.css": "^3",
+	"curl/curl": "^1.6",
+	"sorien/silex-pimple-dumper": "~2.0"
   },
   "require-dev": {
-    "heroku/heroku-buildpack-php": "*"
+	"heroku/heroku-buildpack-php": "*"
   },
   "config": {
-    "component-dir": "web/js",
-    "component-baseurl": "js/"
+	"component-dir": "web/js",
+	"component-baseurl": "js/"
   },
   "autoload": {
-    "psr-4": {
-      "Handler\\": "src/Handlers/",
-      "Main\\" : "src/Main/",
-      "Database\\" : "src/Database/"
-    }
+	"psr-4": {
+	  "Handler\\": "src/Handlers/",
+	  "Main\\": "src/Main/",
+	  "Database\\": "src/Database/"
+	}
   }
 }

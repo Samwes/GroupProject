@@ -1,0 +1,977 @@
+[
+  {
+	"name": "request.http_port",
+	"type": "int",
+	"value": 80
+  },
+  {
+	"name": "request.https_port",
+	"type": "int",
+	"value": 443
+  },
+  {
+	"name": "debug",
+	"type": "bool",
+	"value": true
+  },
+  {
+	"name": "charset",
+	"type": "string",
+	"value": "UTF-8"
+  },
+  {
+	"name": "logger",
+	"type": "class",
+	"value": "Symfony\\Bridge\\Monolog\\Logger"
+  },
+  {
+	"name": "resolver",
+	"type": "class",
+	"value": "Silex\\ServiceControllerResolver"
+  },
+  {
+	"name": "argument_metadata_factory",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\ControllerMetadata\\ArgumentMetadataFactory"
+  },
+  {
+	"name": "argument_value_resolvers",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "argument_resolver",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\Controller\\ArgumentResolver"
+  },
+  {
+	"name": "kernel",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\HttpKernel"
+  },
+  {
+	"name": "request_stack",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpFoundation\\RequestStack"
+  },
+  {
+	"name": "dispatcher",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\Debug\\TraceableEventDispatcher"
+  },
+  {
+	"name": "callback_resolver",
+	"type": "class",
+	"value": "Silex\\CallbackResolver"
+  },
+  {
+	"name": "route_class",
+	"type": "string",
+	"value": "Main\\SecureRouter"
+  },
+  {
+	"name": "route_factory",
+	"type": "class",
+	"value": "Main\\SecureRouter"
+  },
+  {
+	"name": "routes_factory",
+	"type": "class",
+	"value": "Symfony\\Component\\Routing\\RouteCollection"
+  },
+  {
+	"name": "routes",
+	"type": "class",
+	"value": "Symfony\\Component\\Routing\\RouteCollection"
+  },
+  {
+	"name": "url_generator",
+	"type": "class",
+	"value": "Symfony\\Component\\Routing\\Generator\\UrlGenerator"
+  },
+  {
+	"name": "request_matcher",
+	"type": "class",
+	"value": "Silex\\Provider\\Routing\\RedirectableUrlMatcher"
+  },
+  {
+	"name": "request_context",
+	"type": "class",
+	"value": "Symfony\\Component\\Routing\\RequestContext"
+  },
+  {
+	"name": "controllers",
+	"type": "class",
+	"value": "Silex\\ControllerCollection"
+  },
+  {
+	"name": "controllers_factory",
+	"type": "class",
+	"value": "Silex\\ControllerCollection"
+  },
+  {
+	"name": "routing.listener",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\EventListener\\RouterListener"
+  },
+  {
+	"name": "exception_handler",
+	"type": "class",
+	"value": "Silex\\ExceptionHandler"
+  },
+  {
+	"name": "monolog.handler.debug",
+	"type": "class",
+	"value": "Symfony\\Bridge\\Monolog\\Handler\\DebugHandler"
+  },
+  {
+	"name": "monolog.not_found_activation_strategy",
+	"type": "class",
+	"value": "Symfony\\Bridge\\Monolog\\Handler\\FingersCrossed\\NotFoundActivationStrategy"
+  },
+  {
+	"name": "monolog.logger.class",
+	"type": "string",
+	"value": "Symfony\\Bridge\\Monolog\\Logger"
+  },
+  {
+	"name": "monolog",
+	"type": "class",
+	"value": "Symfony\\Bridge\\Monolog\\Logger"
+  },
+  {
+	"name": "monolog.formatter",
+	"type": "class",
+	"value": "Monolog\\Formatter\\LineFormatter"
+  },
+  {
+	"name": "monolog.handler",
+	"type": "class",
+	"value": "Monolog\\Handler\\StreamHandler"
+  },
+  {
+	"name": "monolog.handlers",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "monolog.level",
+	"type": "string",
+	"value": "WARNING"
+  },
+  {
+	"name": "monolog.listener",
+	"type": "class",
+	"value": "Silex\\EventListener\\LogListener"
+  },
+  {
+	"name": "monolog.name",
+	"type": "string",
+	"value": "app"
+  },
+  {
+	"name": "monolog.bubble",
+	"type": "bool",
+	"value": true
+  },
+  {
+	"name": "monolog.permission",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "monolog.exception.logger_filter",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "monolog.logfile",
+	"type": "string",
+	"value": "php:\/\/stderr"
+  },
+  {
+	"name": "monolog.use_error_handler",
+	"type": "bool",
+	"value": false
+  },
+  {
+	"name": "twig.options",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "twig.form.templates",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "twig.path",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "twig.templates",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "twig",
+	"type": "class",
+	"value": "Twig_Environment"
+  },
+  {
+	"name": "twig.loader.filesystem",
+	"type": "class",
+	"value": "Twig_Loader_Filesystem"
+  },
+  {
+	"name": "twig.loader.array",
+	"type": "class",
+	"value": "Twig_Loader_Array"
+  },
+  {
+	"name": "twig.loader",
+	"type": "class",
+	"value": "Twig_Loader_Chain"
+  },
+  {
+	"name": "twig.environment_factory",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "twig.runtime.httpkernel",
+	"type": "class",
+	"value": "Symfony\\Bridge\\Twig\\Extension\\HttpKernelRuntime"
+  },
+  {
+	"name": "twig.runtimes",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "twig.runtime_loader",
+	"type": "class",
+	"value": "Silex\\Provider\\Twig\\RuntimeLoader"
+  },
+  {
+	"name": "session.test",
+	"type": "bool",
+	"value": false
+  },
+  {
+	"name": "session",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpFoundation\\Session\\Session"
+  },
+  {
+	"name": "session.storage",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpFoundation\\Session\\Storage\\NativeSessionStorage"
+  },
+  {
+	"name": "session.storage.handler",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpFoundation\\Session\\Storage\\Handler\\NativeFileSessionHandler"
+  },
+  {
+	"name": "session.storage.native",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpFoundation\\Session\\Storage\\NativeSessionStorage"
+  },
+  {
+	"name": "session.listener",
+	"type": "class",
+	"value": "Silex\\Provider\\Session\\SessionListener"
+  },
+  {
+	"name": "session.storage.test",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpFoundation\\Session\\Storage\\MockFileSessionStorage"
+  },
+  {
+	"name": "session.listener.test",
+	"type": "class",
+	"value": "Silex\\Provider\\Session\\TestSessionListener"
+  },
+  {
+	"name": "session.storage.options",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "session.default_locale",
+	"type": "string",
+	"value": "en"
+  },
+  {
+	"name": "session.storage.save_path",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "session.attribute_bag",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "session.flash_bag",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "security.role_hierarchy",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "security.access_rules",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "security.hide_user_not_found",
+	"type": "bool",
+	"value": true
+  },
+  {
+	"name": "security.encoder.bcrypt.cost",
+	"type": "int",
+	"value": 13
+  },
+  {
+	"name": "security.authorization_checker",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationChecker"
+  },
+  {
+	"name": "security.token_storage",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Authentication\\Token\\Storage\\TokenStorage"
+  },
+  {
+	"name": "user",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_manager",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Authentication\\AuthenticationProviderManager"
+  },
+  {
+	"name": "security.encoder_factory",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Encoder\\EncoderFactory"
+  },
+  {
+	"name": "security.default_encoder",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Encoder\\BCryptPasswordEncoder"
+  },
+  {
+	"name": "security.encoder.digest",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Encoder\\MessageDigestPasswordEncoder"
+  },
+  {
+	"name": "security.encoder.bcrypt",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Encoder\\BCryptPasswordEncoder"
+  },
+  {
+	"name": "security.encoder.pbkdf2",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Encoder\\Pbkdf2PasswordEncoder"
+  },
+  {
+	"name": "security.user_checker",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\User\\UserChecker"
+  },
+  {
+	"name": "security.access_manager",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Authorization\\AccessDecisionManager"
+  },
+  {
+	"name": "security.voters",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "security.firewall",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall"
+  },
+  {
+	"name": "security.channel_listener",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall\\ChannelListener"
+  },
+  {
+	"name": "security.authentication_listener.factory.logout",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.factory.pre_auth",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.factory.guard",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.factory.form",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.factory.http",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.factory.remember_me",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.factory.anonymous",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.firewall_map",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\FirewallMap"
+  },
+  {
+	"name": "security.access_listener",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall\\AccessListener"
+  },
+  {
+	"name": "security.access_map",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\AccessMap"
+  },
+  {
+	"name": "security.trust_resolver",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Authentication\\AuthenticationTrustResolver"
+  },
+  {
+	"name": "security.session_strategy",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Session\\SessionAuthenticationStrategy"
+  },
+  {
+	"name": "security.http_utils",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\HttpUtils"
+  },
+  {
+	"name": "security.last_error",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.context_listener._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.user_provider.inmemory._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.exception_listener._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication.success_handler._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication.failure_handler._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.guard._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.form._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.http._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.anonymous._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication.logout_handler._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.logout._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.switch_user._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.entry_point.form._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.entry_point.http._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.entry_point.guard._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_provider.dao._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_provider.guard._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_provider.anonymous._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.remember_me.response_listener",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\RememberMe\\ResponseListener"
+  },
+  {
+	"name": "security.remember_me.service._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_listener.remember_me._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "security.authentication_provider.remember_me._proto",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "fragment.handler",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\Fragment\\FragmentHandler"
+  },
+  {
+	"name": "fragment.renderer.inline",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\Fragment\\InlineFragmentRenderer"
+  },
+  {
+	"name": "fragment.renderer.hinclude",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\Fragment\\HIncludeFragmentRenderer"
+  },
+  {
+	"name": "fragment.listener",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\EventListener\\FragmentListener"
+  },
+  {
+	"name": "uri_signer",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\UriSigner"
+  },
+  {
+	"name": "uri_signer.secret",
+	"type": "string",
+	"value": "f14fa454f0970bea43c3c70eb2aedbe6"
+  },
+  {
+	"name": "fragment.path",
+	"type": "string",
+	"value": "\/_fragment"
+  },
+  {
+	"name": "fragment.renderer.hinclude.global_template",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "fragment.renderers",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "profiler.mount_prefix",
+	"type": "string",
+	"value": "\/_profiler"
+  },
+  {
+	"name": "data_collector.templates",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "data_collectors",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "twig.profiler.profile",
+	"type": "class",
+	"value": "Twig_Profiler_Profile"
+  },
+  {
+	"name": "profiler.templates_path.security",
+	"type": "string",
+	"value": "D:\\wamp64\\www\\GroupProject\\vendor\\symfony\\security-bundle\/Resources\/views"
+  },
+  {
+	"name": "web_profiler.controller.profiler",
+	"type": "class",
+	"value": "Symfony\\Bundle\\WebProfilerBundle\\Controller\\ProfilerController"
+  },
+  {
+	"name": "web_profiler.controller.router",
+	"type": "class",
+	"value": "Symfony\\Bundle\\WebProfilerBundle\\Controller\\RouterController"
+  },
+  {
+	"name": "web_profiler.controller.exception",
+	"type": "class",
+	"value": "Symfony\\Bundle\\WebProfilerBundle\\Controller\\ExceptionController"
+  },
+  {
+	"name": "web_profiler.toolbar.listener",
+	"type": "class",
+	"value": "Symfony\\Bundle\\WebProfilerBundle\\EventListener\\WebDebugToolbarListener"
+  },
+  {
+	"name": "profiler",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\Profiler\\Profiler"
+  },
+  {
+	"name": "profiler.storage",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\Profiler\\FileProfilerStorage"
+  },
+  {
+	"name": "profiler.request_matcher",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "profiler.only_exceptions",
+	"type": "bool",
+	"value": false
+  },
+  {
+	"name": "profiler.only_master_requests",
+	"type": "bool",
+	"value": false
+  },
+  {
+	"name": "web_profiler.debug_toolbar.enable",
+	"type": "bool",
+	"value": true
+  },
+  {
+	"name": "web_profiler.debug_toolbar.position",
+	"type": "string",
+	"value": "bottom"
+  },
+  {
+	"name": "web_profiler.debug_toolbar.intercept_redirects",
+	"type": "bool",
+	"value": false
+  },
+  {
+	"name": "profiler.listener",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\EventListener\\ProfilerListener"
+  },
+  {
+	"name": "stopwatch",
+	"type": "class",
+	"value": "Symfony\\Component\\Stopwatch\\Stopwatch"
+  },
+  {
+	"name": "code.file_link_format",
+	"type": "class",
+	"value": "Symfony\\Component\\HttpKernel\\Debug\\FileLinkFormatter"
+  },
+  {
+	"name": "profiler.templates_path",
+	"type": "string",
+	"value": "D:\\wamp64\\www\\GroupProject\\vendor\\symfony\\web-profiler-bundle\/Resources\/views"
+  },
+  {
+	"name": "profiler.templates_path.debug",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "profiler.cache_dir",
+	"type": "string",
+	"value": "D:\\wamp64\\www\\GroupProject\\web\/..\/cache\/profiler"
+  },
+  {
+	"name": "assets.packages",
+	"type": "class",
+	"value": "Symfony\\Component\\Asset\\Packages"
+  },
+  {
+	"name": "assets.default_package",
+	"type": "class",
+	"value": "Symfony\\Component\\Asset\\PathPackage"
+  },
+  {
+	"name": "assets.context",
+	"type": "class",
+	"value": "Symfony\\Component\\Asset\\Context\\RequestStackContext"
+  },
+  {
+	"name": "assets.base_path",
+	"type": "string",
+	"value": ""
+  },
+  {
+	"name": "assets.base_urls",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "assets.version",
+	"type": "string",
+	"value": "v1"
+  },
+  {
+	"name": "assets.version_format",
+	"type": "string",
+	"value": "%s?version=%s"
+  },
+  {
+	"name": "assets.named_packages",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "assets.strategy_factory",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "assets.package_factory",
+	"type": "closure",
+	"value": ""
+  },
+  {
+	"name": "swiftmailer.options",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "swiftmailer.use_spool",
+	"type": "bool",
+	"value": true
+  },
+  {
+	"name": "mailer.initialized",
+	"type": "bool",
+	"value": false
+  },
+  {
+	"name": "mailer",
+	"type": "class",
+	"value": "Swift_Mailer"
+  },
+  {
+	"name": "swiftmailer.spooltransport",
+	"type": "class",
+	"value": "Swift_Transport_SpoolTransport"
+  },
+  {
+	"name": "swiftmailer.spool",
+	"type": "class",
+	"value": "Swift_MemorySpool"
+  },
+  {
+	"name": "swiftmailer.transport",
+	"type": "class",
+	"value": "Swift_Transport_EsmtpTransport"
+  },
+  {
+	"name": "swiftmailer.transport.buffer",
+	"type": "class",
+	"value": "Swift_Transport_StreamBuffer"
+  },
+  {
+	"name": "swiftmailer.transport.authhandler",
+	"type": "class",
+	"value": "Swift_Transport_Esmtp_AuthHandler"
+  },
+  {
+	"name": "swiftmailer.transport.eventdispatcher",
+	"type": "class",
+	"value": "Swift_Events_SimpleEventDispatcher"
+  },
+  {
+	"name": "swiftmailer.sender_address",
+	"type": "null",
+	"value": ""
+  },
+  {
+	"name": "swiftmailer.delivery_addresses",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "swiftmailer.delivery_whitelist",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "DB",
+	"type": "class",
+	"value": "Database\\DBDataMapper"
+  },
+  {
+	"name": "rest.handler",
+	"type": "class",
+	"value": "Handler\\Requests"
+  },
+  {
+	"name": "user.provider",
+	"type": "class",
+	"value": "Main\\UserProvider"
+  },
+  {
+	"name": "security.firewalls",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "security.user_provider.main",
+	"type": "class",
+	"value": "Main\\UserProvider"
+  },
+  {
+	"name": "security.context_listener.main",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall\\ContextListener"
+  },
+  {
+	"name": "security.authentication_listener.main.anonymous",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall\\AnonymousAuthenticationListener"
+  },
+  {
+	"name": "security.authentication_provider.main.anonymous",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Authentication\\Provider\\AnonymousAuthenticationProvider"
+  },
+  {
+	"name": "security.entry_point.main.form",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\EntryPoint\\FormAuthenticationEntryPoint"
+  },
+  {
+	"name": "security.authentication_listener.main.form",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall\\UsernamePasswordFormAuthenticationListener"
+  },
+  {
+	"name": "security.authentication_provider.main.dao",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Authentication\\Provider\\DaoAuthenticationProvider"
+  },
+  {
+	"name": "security.authentication_listener.main.logout",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall\\LogoutListener"
+  },
+  {
+	"name": "security.remember_me.service.main",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\RememberMe\\TokenBasedRememberMeServices"
+  },
+  {
+	"name": "security.authentication_listener.main.remember_me",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall\\RememberMeListener"
+  },
+  {
+	"name": "security.authentication_provider.main.remember_me",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Core\\Authentication\\Provider\\RememberMeAuthenticationProvider"
+  },
+  {
+	"name": "security.switch_user.main",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall\\SwitchUserListener"
+  },
+  {
+	"name": "security.exception_listener.main",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Firewall\\ExceptionListener"
+  },
+  {
+	"name": "security.authentication_providers",
+	"type": "array",
+	"value": ""
+  },
+  {
+	"name": "security.authentication.logout_handler.main",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Logout\\DefaultLogoutSuccessHandler"
+  },
+  {
+	"name": "security.authentication.success_handler.main",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Authentication\\DefaultAuthenticationSuccessHandler"
+  },
+  {
+	"name": "security.authentication.failure_handler.main",
+	"type": "class",
+	"value": "Symfony\\Component\\Security\\Http\\Authentication\\DefaultAuthenticationFailureHandler"
+  },
+  {
+	"name": "twig.app_variable",
+	"type": "class",
+	"value": "Symfony\\Bridge\\Twig\\AppVariable"
+  }
+]
