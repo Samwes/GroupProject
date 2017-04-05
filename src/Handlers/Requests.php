@@ -249,8 +249,12 @@ class Requests
         return new JsonResponse($toEncode);
     }
 
-    public function messageUser(Request $request, App $app, $message, $fromid, $toid)
+    public function messageUser(Request $request, App $app)
     {
+        $message = $request->get('message');
+        $fromid = $request->get('fromid');
+        $toid = $request->get('toid');
+
         $toEncode = $this->db->addNewUserMessage($message, $fromid, $toid);
 
         $url = 'https://gpmainmessaging.herokuapp.com/message';
