@@ -217,7 +217,7 @@ class App extends Application
 		})->assert('foodID', '\d+');
 
 		$this->get('/item/{id}', function ($id) {
-			return $this['twig']->render('itemPage.twig', array('itemid' => $id,));
+			return $this['twig']->render('itemPage.twig', array('itemid' => $id));
 		});
 
 		$this->get('/foodItems/{userID}', 'rest.handler:foodItemsGet')

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ac569cba8cb8a40eac27ce8ffc440ce",
+    "content-hash": "c5efc7830e392af57b048738d93e19b2",
     "packages": [
         {
             "name": "curl/curl",
@@ -687,6 +687,53 @@
             "description": "A WebProfiler for Silex",
             "homepage": "http://silex.sensiolabs.org/",
             "time": "2016-11-21T23:51:53+00:00"
+        },
+        {
+            "name": "sorien/silex-pimple-dumper",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Sorien/silex-pimple-dumper.git",
+                "reference": "2d1677402f3d75cc10cfb71532da9f3726cfba00"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Sorien/silex-pimple-dumper/zipball/2d1677402f3d75cc10cfb71532da9f3726cfba00",
+                "reference": "2d1677402f3d75cc10cfb71532da9f3726cfba00",
+                "shasum": ""
+            },
+            "require-dev": {
+                "silex/silex": "~2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sorien\\Provider\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stanislav Turza",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Pimple File Dumper - Helper Provider for Silex Idea Plugin",
+            "keywords": [
+                "dumper",
+                "idea",
+                "plugin",
+                "silex"
+            ],
+            "time": "2016-05-31T11:15:09+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
