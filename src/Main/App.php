@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Main;
 
 use Database\DBDataMapper;
@@ -17,7 +16,6 @@ use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
-use Sorien\Provider\PimpleDumpProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,8 +29,7 @@ class App extends Application
 	use Application\SwiftmailerTrait;
 	use Application\MonologTrait;
 
-	public function __construct(array $values = array())
-	{
+	public function __construct(array $values = array()) {
 		parent::__construct($values);
 
 		//future cleanup twig files pt.2
@@ -52,8 +49,7 @@ class App extends Application
 		$this->errorHandling();
 	}
 
-	private function registerServices()
-	{
+	private function registerServices() {
 		// Register the monolog logging service
 		$this->register(new MonologServiceProvider(), array(
 			'monolog.logfile' => 'php://stderr',
@@ -64,8 +60,8 @@ class App extends Application
 		$this->register(new TwigServiceProvider(), array(
 			'twig.path' =>
 				array(
-					\ROOT.'/../src/Views/html/',
-					\ROOT.'/../src/Views/html/components',
+					ROOT.'/../src/Views/',
+					ROOT.'/../src/Views/components',
 				),
 		));
 
@@ -87,11 +83,9 @@ class App extends Application
 		// Register web profiler if in debug mode
 		if ($this['debug']) {
 			$this->register(new WebProfilerServiceProvider(), array(
-				'profiler.cache_dir'    => \ROOT.'/../cache/profiler',
+				'profiler.cache_dir'    => ROOT.'/../cache/profiler',
 				'profiler.mount_prefix' => '/_profiler', // this is the default
 			));
-			$this->register(new PimpleDumpProvider());
-			//$this['pimpledump.output_dir'] = '/dump';
 		}
 
 		// Register asset rerouting
@@ -128,14 +122,12 @@ class App extends Application
 		};
 
 		// Register the user provider for security authentication
-		//future use converters that input username and output a user class, either security or otherwise
 		$this['user.provider'] = function () {
 			return new UserProvider($this['DB']);
 		};
 	}
 
-	private function registerSecurity()
-	{
+	private function registerSecurity() {
 		$this['security.firewalls'] = array(
 			'main' => array(
 				'anonymous'   => true,
@@ -161,9 +153,7 @@ class App extends Application
 		);
 	}
 
-	private function defineBasicRoutes()
-	{
-
+	private function defineBasicRoutes() {
 		$this->get('/', function () {
 			return $this['twig']->render('index.twig');
 		})->bind('index');
@@ -188,8 +178,7 @@ class App extends Application
 		})->bind('registerPage')->requireHttps();
 	}
 
-	private function accountRoutes()
-	{
+	private function accountRoutes() {
 		$account = $this['controllers_factory'];
 
 		$account->get('/scanner', function () {
@@ -198,8 +187,7 @@ class App extends Application
 
 		//future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		$account->get('/userprofile', function () {
-			$userdata = $this['DB']->getUserByUsername((string)$this['security.token_storage']->getToken()->getUser());
-
+			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			return $this['twig']->render('userProfile.twig', array('userData' => $userdata));
 		})->bind('user')->secure('ROLE_USER');  //Double secured so dont check token exists
 
@@ -218,8 +206,7 @@ class App extends Application
 		$this->mount('/account', $account);
 	}
 
-	private function restAPI()
-	{
+	private function restAPI() {
 		//future move into handlers
 		$this->get('/food/{foodID}', 'rest.handler:foodItemGet')
 			 ->assert('foodID', '\d+');
@@ -255,8 +242,7 @@ class App extends Application
 			 ->assert('search', '[a-zA-Z0-9_ ]*');
 
 		//todo add sorting to slider (remove right 3 buttons) add remove button for each slider
-		$this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}',
-				   'rest.handler:searchExtra')
+		$this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
 			 ->assert('category', '[a-zA-Z0-9_ ]*')
 			 ->assert('search', '[a-zA-Z0-9_ ]*')
 			 ->assert('latit', '[0-9.]*')
@@ -268,10 +254,12 @@ class App extends Application
 			 ->assert('maxWeight', '[0-9]*')
 			 ->assert('sort', '[a-z\-]*');
 
+		$this->get('/messenger/userid', 'rest.handler:userID')
+			 ->secure('ROLE_USER');
+
 		//todo default food picture per category
 		$this->post('/food', 'rest.handler:foodItemPost')
 			 ->secure('ROLE_USER');
-
 
 		//todo registration failure page
 		$this->post('/register/user', 'rest.handler:registerNewUser')
@@ -279,13 +267,17 @@ class App extends Application
 			 ->assert('username', '^[a-zA-Z0-9_]+$')
 			 ->assert('password', '^[\w]+$');
 
+		$this->post('/messenger/message', 'rest.handler:messageUser')
+			 ->requireHttps()
+			 ->assert('message', '[\s\S]*')
+			 ->assert('fromid', '\d+')
+			 ->assert('toid', '\d+');
+
 		//future send token + resend option
 		$this->get('/register/validatemail/{token}', 'rest.handler:verifyToken');
-
 	}
 
-	private function errorHandling()
-	{
+	private function errorHandling() {
 		//future handle authentication errors with redirects and messages
 		//note includes admin pages (which raise AccessDeniedHttpException)
 		//note include posting food items
@@ -304,11 +296,9 @@ class App extends Application
 				default:
 					$message = 'We are sorry, but something went terribly wrong.';
 			}
-
 			return new Response($message);
 		});
 	}
 
 	//future admin routes
-
 }
