@@ -86,6 +86,7 @@ class App extends Application
 				'profiler.cache_dir'    => ROOT.'/../cache/profiler',
 				'profiler.mount_prefix' => '/_profiler', // this is the default
 			));
+			$this->register(new \Sorien\Provider\PimpleDumpProvider());
 		}
 
 		// Register asset rerouting

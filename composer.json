@@ -20,7 +20,8 @@
     "ramsey/uuid": "~3.0",
     "moontoast/math": "^1.1",
     "symfony/var-dumper": "^3.2",
-    "curl/curl": "^1.6"
+    "curl/curl": "^1.6",
+    "sorien/silex-pimple-dumper": "^2.0"
   },
   "require-dev": {
     "heroku/heroku-buildpack-php": "*"
