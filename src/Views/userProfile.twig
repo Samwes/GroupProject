@@ -1,0 +1,219 @@
+{% extends 'layout.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  <title>Account</title>
+  <link rel="stylesheet" href="{{ asset('bootstrap-slider.min.css','css') }}">
+  <script src="{{ asset('bootstrap-slider.min.js','javascript') }}"></script>
+{% endblock %}
+
+{% block content %}
+  {{ parent() }}
+  <br>
+
+  <div class="container">
+	<ul class="nav nav-tabs">
+	  <li class="nav-item">
+		<a class="nav-link active" href="#" style="border-radius: 0;">Profile</a>
+	  </li>
+	  <li class="nav-item">
+		<a class="nav-link" href="#" style="border-radius: 0;">Your Items</a>
+	  </li>
+	</ul>
+  </div>
+  <br>
+
+  <div class="container">
+	<div class="row">
+	  <div class="col-md-4">
+		<!-- USER PROFILE PICTURE -->
+		<div class="image-editor">
+		  <input type="file" accept="image/*" capture="camera" class="cropit-image-input hidden-xs-up">
+		  <button class="btn btn-primary select-image-btn">Select Image</button>
+		  <div class="cropit-preview">
+		  </div>
+		  <button class="btn btn-link rotate-ccw" style="padding: 8px;"><i class="fa fa-undo" aria-hidden="true"></i></button>
+		  <button class="btn btn-link rotate-cw" style="padding: 8px;"><i class="fa fa-repeat" aria-hidden="true"></i></button>
+		  <i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;"></i>
+		  <input class="cropit-image-zoom-input" style="width: 50%;" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
+		  <i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i>
+		</div>
+
+		<br>
+
+		<div id=map style="border: 1px solid #cccccc; height: 15rem; margin-top: -1px;"></div>
+	  </div>
+	  <div class="col-md-8">
+		<div class="alert alert-info" role="alert">
+		  <h3>User Profile</h3>
+		  <p>Give a brief overview of what the user should put on this page</p>
+		  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id molestie magna, non aliquam dui. Etiam condimentum hendrerit velit in interdum.</p>
+		</div>
+
+		<br>
+
+		<h3>Your Information</h3>
+		<table class="table">
+		  <tbody>
+		  <tr>
+			<td scope="row">Full Name:
+			</th>
+			<td>
+			  <a href="#" id="fullname" data-type="text" data-pk="1" data-title="Enter Full Name">{{ userData.fullname ?? 'No name set' }}</a>
+			</td>
+		  </tr>
+		  <tr>
+			<td scope="row">Username:
+			</th>
+			<td><a href="#" id="username" data-type="text" data-pk="1" data-title="Enter Full Name">{{ userData.username }}</a></td>
+		  </tr>
+		  <tr>
+			<td scope="row">Location:
+			</th>
+			{#todo user inputs their location#}
+			<td>Durham, United Kingdom</td>
+		  </tr>
+		  </tbody>
+		</table>
+
+		<br>
+
+		<h3>Change Password</h3>
+		{#<div class="row">#}
+		{#<div class="col-md-4 offset-md-4">#}
+		{#<h3>Change Password</h3>#}
+		{#</div>#}
+		{#</div>#}
+		{#todo fix#}
+		<form onSubmit="return verify(this);">
+		  <label for="oldPassword">Enter Old Password</label>
+		  <div class="form-group input-group">
+			<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+			<input type="password" class="form-control square-border" id="oldPassword" placeholder="Old Password">
+		  </div>
+		  <label for="newPassword">Enter New Password</label>
+		  <div class="form-group input-group">
+			<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+			<input type="password" class="form-control square-border" id="newPassword" placeholder="New Password">
+		  </div>
+		  <label for="confirmNewPassword">Confirm Old Password</label>
+		  <div class="form-group input-group">
+			<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+			<input type="password" class="form-control square-border" id="confirmNewPassword" placeholder="Confirm New Password">
+		  </div>
+		  <input type="submit" value="Change" class="btn btn-primary">
+		  <form>
+
+	  </div>
+	</div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ parent() }}
+  <!-- CORRECT SIZES OF ELEMENTS -->
+  <script>
+	  $(document).ready(function () {
+		  $('#items')
+			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		  $('#map')
+			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
+				  .width() - $('#main-search-button').width() - $('#user-popover').width() - 150);
+		  $('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
+	  });
+	  resize = function () {
+		  $('#items')
+			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		  $('#map')
+			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
+				  .width() - $('#main-search-button').width() - $('#user-popover').width() - 150);
+		  $('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
+	  };
+  </script>
+
+  <script>
+	  $.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit"><i class="fa fa-fw fa-check"></i></button>' + '<button type="button" class="btn editable-cancel"><i class="fa fa-fw fa-remove"></i></button>';
+	  $.fn.editable.defaults.mode = 'inline';
+	  $(document).ready(function () {
+		  $('#fullname').editable({
+			  validate: function (value) {
+				  if (value === null || value === '') {
+					  return 'Empty values not allowed';
+				  }
+			  },
+		  });
+		  //		$('#username').editable({
+		  //			validate: function(value) {
+		  //				if (value === null || value === '') {
+		  //					return 'Empty values not allowed';
+		  //				}
+		  //			}
+		  //		});
+	  });
+  </script>
+
+  <script>
+	  // Slider
+	  $('#ex1').slider({
+		  formatter: function (value) {
+			  return 'Current value: ' + value;
+		  },
+	  });
+  </script>
+
+  <script>
+	  $(function () {
+		  $('.image-editor').cropit({
+			  imageState: {
+				  src: 'https://au.junkfreejune.org/themes/base/production/images/default-profile.png',
+				  //src: 'your_image_path/to_be_crop_image.jpg',
+			  },
+		  });
+
+		  $('.rotate-cw').click(function () {
+			  $('.image-editor').cropit('rotateCW');
+		  });
+		  $('.rotate-ccw').click(function () {
+			  $('.image-editor').cropit('rotateCCW');
+		  });
+		  $('.select-image-btn').click(function () {
+			  $('.cropit-image-input').click();
+		  });
+		  $('.cropit-preview-image-container').click(function () {
+			  if ($('.image-editor').cropit('imageSrc') == "") {
+				  $('.cropit-image-input').click();
+			  }
+		  });
+		  $('.export').click(function () {
+			  var imageData = $('.image-editor').cropit('export');
+			  window.open(imageData);
+		  });
+	  });
+  </script>
+
+  <script>
+	  var map = null;
+
+	  function initMapElements() {
+		  // 67.9222° N, 26.5046° E
+		  var durham = {lat: 54.7752493, lng: -1.584852};
+		  map = new google.maps.Map(document.getElementById('map'), {
+			  zoom            : 12,
+			  center          : durham,
+			  disableDefaultUI: true,
+		  });
+
+		  var marker = new google.maps.Marker({
+			  position: durham,
+			  map     : map,
+		  });
+
+	  }
+  </script>
+
+  <script async defer
+		  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
+  </script>
+{% endblock %}

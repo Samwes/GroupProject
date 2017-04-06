@@ -5,17 +5,17 @@ namespace Main;
 use Database\DBDataMapper;
 use Handler\Requests;
 use Silex\Application;
+use Silex\Provider\AssetServiceProvider;
+use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\RememberMeServiceProvider;
 use Silex\Provider\RoutingServiceProvider;
-use Silex\Provider\SwiftmailerServiceProvider;
-use Silex\Provider\AssetServiceProvider;
-use Silex\Provider\ServiceControllerServiceProvider;
-use Silex\Provider\WebProfilerServiceProvider;
-use Silex\Provider\SessionServiceProvider;
-use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
+use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\SessionServiceProvider;
+use Silex\Provider\SwiftmailerServiceProvider;
+use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -60,8 +60,8 @@ class App extends Application
 		$this->register(new TwigServiceProvider(), array(
 			'twig.path' =>
 				array(
-					ROOT.'/../src/Views/html/',
-					ROOT.'/../src/Views/html/components',
+					ROOT.'/../src/Views/',
+					ROOT.'/../src/Views/components',
 				),
 		));
 
