@@ -537,19 +537,17 @@
   			zoom  : 12,
   			center: defaultLocation
   		});
+    } else {
+      map = new google.maps.Map(document.getElementById('map'), {
+  			zoom  : 5,
+  			center: {lat: 53.630615, lng: -1.878319}
+  		});
     }
 
-    $("#item-cards").each(function(index) {
+    $("#item-cards > div").each(function(index) {
       // this is card object
       var location = {lat: parseFloat($(this).attr("latit")), lng: parseFloat($(this).attr("longit"))};
 
-      if(!defaultLocation) {
-        // Just set center as first place if not set by user
-        map = new google.maps.Map(document.getElementById('map'), {
-    			zoom  : 12,
-    			center: location
-    		});
-      }
       var marker = new google.maps.Marker({
   			position: location,
   			map     : map,
