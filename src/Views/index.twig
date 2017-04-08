@@ -539,8 +539,8 @@
   		});
     } else {
       map = new google.maps.Map(document.getElementById('map'), {
-  			zoom  : 5,
-  			center: {lat: 53.630615, lng: -1.878319}
+  			zoom  : 6,
+  			center: {lat: 54.512997, lng: -4}
   		});
     }
 
@@ -562,10 +562,10 @@
 
 	function initMapElements() {
 
-		var durham = {lat: 54.7752493, lng: -1.584852};
+		var default = {lat: 54.512997, lng: -4};
 		map = new google.maps.Map(document.getElementById('map'), {
-			zoom  : 12,
-			center: durham,
+			zoom  : 6,
+			center: default,
 		});
 
 		// Create the search box and link it to the UI element.
