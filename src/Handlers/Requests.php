@@ -8,8 +8,8 @@ use Ramsey\Uuid\Uuid;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class Requests
@@ -268,6 +268,28 @@ class Requests
 		} else {
 			return new JsonResponse(array("success" => true));
 		}
+	}
+
+	public function updateName(Request $request, App $app) {
+		$newname = $request->get('newname');
+		$response = array("success" => false);
+
+		//Check Vars
+		if (!is_string($newname)) {
+			$response['error'] = 'newname incorrectly defined';
+			die(json_encode($response));
+		}
+
+		$token = $app['security.token_storage']->getToken(); //future refactor this into its own func?
+
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+			if ($this->db->updateFullName($userID, $newname)) {
+				$response['success'] = true;
+			}
+		}
+
+		return new JsonResponse($response);
 	}
 
 	public function userID(Request $request, App $app) {

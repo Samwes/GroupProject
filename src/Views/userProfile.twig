@@ -60,20 +60,18 @@
 		  <tbody>
 		  <tr>
 			<td scope="row">Full Name:
-			</th>
-			<td>
-			  <a href="#" id="fullname" data-type="text" data-pk="1" data-title="Enter Full Name">{{ userData.fullname ?? 'No name set' }}</a>
+			</td>
+			<td> {#todo test#}
+			  <a href="#" id="newname" data-type="text" data-pk="1" data-url="{{path('updatename')}}" data-title="Enter Full Name">{{ userData.fullname ?? 'No name set!' }}</a>
 			</td>
 		  </tr>
 		  <tr>
-			<td scope="row">Username:
-			</th>
-			<td><a href="#" id="username" data-type="text" data-pk="1" data-title="Enter Full Name">{{ userData.username }}</a></td>
+			<td scope="row">Username:</td>
+			<td><a href="#" id="username" data-type="text" data-pk="1" data-title="Enter Username(?)">{{ userData.username }}</a></td>
 		  </tr>
 		  <tr>
 			<td scope="row">Location:
-			</th>
-			{#todo user inputs their location#}
+			  {#todo user inputs their location#}
 			<td>Durham, United Kingdom</td>
 		  </tr>
 		  </tbody>
@@ -105,7 +103,7 @@
 			<input type="password" class="form-control square-border" id="confirmNewPassword" placeholder="Confirm New Password">
 		  </div>
 		  <input type="submit" value="Change" class="btn btn-primary">
-		  <form>
+		</form>
 
 	  </div>
 	</div>
@@ -114,33 +112,15 @@
 
 {% block scripts %}
   {{ parent() }}
-  <!-- CORRECT SIZES OF ELEMENTS -->
-  <script>
-	  $(document).ready(function () {
-		  $('#items')
-			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-		  $('#map')
-			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-				  .width() - $('#main-search-button').width() - $('#user-popover').width() - 150);
-		  $('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
-	  });
-	  resize = function () {
-		  $('#items')
-			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-		  $('#map')
-			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-				  .width() - $('#main-search-button').width() - $('#user-popover').width() - 150);
-		  $('#main-search-input-mobile').width($('#search-navbar-container-mobile').width() - $('#main-search-button-mobile').width() - 68);
-	  };
-  </script>
 
   <script>
 	  $.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit"><i class="fa fa-fw fa-check"></i></button>' + '<button type="button" class="btn editable-cancel"><i class="fa fa-fw fa-remove"></i></button>';
 	  $.fn.editable.defaults.mode = 'inline';
 	  $(document).ready(function () {
-		  $('#fullname').editable({
+		  $('#newname').editable({
+			  success: function(response, newValue) {
+				  if(response.success === false) return 'Error updating name to'+newValue; //msg will be shown in editable form
+			  },
 			  validate: function (value) {
 				  if (value === null || value === '') {
 					  return 'Empty values not allowed';

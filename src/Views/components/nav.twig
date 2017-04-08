@@ -2,45 +2,46 @@
 
 {% block content %}
   <nav class="navbar navbar-toggleable-md navbar-light bg-faded p-0 align-items-stretch" id="search-navbar" style="border-bottom: 1px solid #dce0e0;">
-	  <a class="navbar-brand mr-0 p-3" href="{{ path('index') }}" style="border-right: 1px solid #dce0e0; color: #55595c">FoodShare</a>
-	  <ul class="navbar-nav flex-last">
-		{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-		  <li class="nav-item my-auto">
-			<button class="btn btn-link h-100" id="user-popover" style="font-size:1.1rem;" data-offset="0 50%" data-toggle="popover" data-placement="bottom">
-			  <i class="fa fa-user-circle fa-2x" aria-hidden="true">
-				<span class="fa fa-circle"></span>
-				<span class="notif-num">3</span>
-			  </i>
-			</button>
-			<div id="user-popover-content" class="hidden-xs-up">
-			  <div class="container-fluid my-0 p-3">
-				<div class="row pb-2">
-				  <div class="col-md-6 pr-2">
-					<a class="btn btn-primary btn-block" href="{{ path('user') }}">Your Account</a>
-				  </div>
-				  <div class="col-md-6 pl-2">
-					<a class="btn btn-primary btn-block" href="{{ path('useritems') }}">Your Items</a>
-				  </div>
+	<a class="navbar-brand mr-0 p-3" href="{{ path('index') }}" style="border-right: 1px solid #dce0e0; color: #55595c">FoodShare</a>
+	<ul class="navbar-nav flex-last">
+	  {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+		<li class="nav-item my-auto">
+		  <button class="btn btn-link h-100" id="user-popover" style="font-size:1.1rem;" data-offset="0 50%" data-toggle="popover" data-placement="bottom">
+			<i class="fa fa-user-circle fa-2x" aria-hidden="true">
+			  <span class="fa fa-circle"></span>
+			  <span class="notif-num">3</span>
+			</i>
+		  </button>
+		  <div id="user-popover-content" class="hidden-xs-up">
+			<div class="container-fluid my-0 p-3">
+			  <div class="row pb-2">
+				<div class="col-md-6 pr-2">
+				  <a class="btn btn-primary btn-block" href="{{ path('user') }}">Your Account</a>
 				</div>
-				<div class="row">
-				  <div class="col-md-6 pr-2">
-					<a class="btn btn-primary btn-block" href="{{ path('messenger') }}">Messenger</a>
-				  </div>
-				  <div class="col-md-6 pl-2">
-					<a class="btn btn-primary btn-block" href="{{ path('account_logout') }}">Logout</a>
-				  </div>
+				<div class="col-md-6 pl-2">
+				  <a class="btn btn-primary btn-block" href="{{ path('useritems') }}">Your Items</a>
 				</div>
+			  </div>
+			  <div class="row">
+				<div class="col-md-6 pr-2">
+				  <a class="btn btn-primary btn-block" href="{{ path('messenger') }}">Messenger</a>
+				</div>
+				<div class="col-md-6 pl-2">
+				  <a class="btn btn-primary btn-block" href="{{ path('account_logout') }}">Logout</a>
+				</div>
+			  </div>
 			</div>
-		  </li>
-		{% else %}
-		  <li class="nav-item flex-last">
-			<button id="register-button" class="btn btn-option btn-signup square-border" style="margin-right: -16px;" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(false);">Register</button>
-		  </li>
-		  <li class="nav-item flex-last">
-			<button id="login-button" class="btn btn-option btn-signup square-border" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(true);">Login</button>
-		  </li>
-		{% endif %}
-	  </ul>
+		  </div>
+		</li>
+	  {% else %}
+		<li class="nav-item flex-last">
+		  <button id="register-button" class="btn btn-option btn-signup square-border" style="margin-right: -16px;" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(false);">Register</button>
+		</li>
+		<li class="nav-item flex-last">
+		  <button id="login-button" class="btn btn-option btn-signup square-border" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(true);">Login</button>
+		</li>
+	  {% endif %}
+	</ul>
 
 	<form class="form-inline w-100" id="search-form" action="">
 	  <div class="input-group hidden-md-down h-100">
@@ -81,14 +82,14 @@
 				<span class="input-group-addon panel-input-symbol"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
 				<input type="password" name="_password" id="password" tabindex="2" class="form-control panel-input" placeholder="Password">
 			  </div>
-			  <div class="col-xs-6 form-group">
+			  <div class="col-6 form-group">
 				<label class="custom-control custom-checkbox" style="margin-top: 0.8rem;">
 				  <input type="checkbox" class="custom-control-input" name="_remember_me">
 				  <span class="custom-control-indicator"></span>
 				  <span class="custom-control-description">Remember Me</span>
 				</label>
 			  </div>
-			  <div class="col-xs-6 form-group">
+			  <div class="col-6 form-group">
 				<button type="submit" value="login" name="login" id="login-submit" tabindex="4" class="form-control btn btn-login hidden-xs-up">Login</button>
 			  </div>
 			</form>
@@ -122,11 +123,11 @@
 		  <!-- Bottom Buttons -->
 		  <div class="panel-heading">
 			<div class="row">
-			  <div class="col-xs-6 tabs">
-				<button class="btn btn-login square-border active" id="login-form-link" style="width: 100%;">Login</button>
+			  <div class="col-6 tabs">
+				<button class="btn btn-login square-border active w-100" id="login-form-link">Login</button>
 			  </div>
-			  <div class="col-xs-6 tabs">
-				<button class="btn btn-login square-border" id="register-form-link" style="width: 100%;">Register</button>
+			  <div class="col-6 tabs">
+				<button class="btn btn-login square-border w-100" id="register-form-link">Register</button>
 			  </div>
 			</div>
 		  </div>
@@ -193,9 +194,9 @@
   <script>
 	  // User Login Popover
 	  $('#user-popover').popover({
-		  html   : true,
+		  html     : true,
 		  container: 'body',
-		  content: function () {
+		  content  : function () {
 			  return $("#user-popover-content").html();
 		  },
 	  });

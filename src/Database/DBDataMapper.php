@@ -26,7 +26,7 @@ class DBDataMapper
 			try {
 				$attributes = $debug ? array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) : null;
 				$pdo = new PDO($dsn, $username, $password, $attributes);
-			} catch (PDOException $e) {
+			} catch (\PDOException $e) {
 				die('Database Connection failed in create: '.$e->getMessage());
 			}
 		}
@@ -44,7 +44,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting user failed: '.$e->getMessage();
             }
 		}
@@ -66,7 +66,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting auth token failed: '.$e->getMessage();
             }
 		}
@@ -88,7 +88,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting auth token failed: '.$e->getMessage();
             }
 		}
@@ -123,7 +123,7 @@ class DBDataMapper
 							   ':weight' => $weight,
 							   ':image'  => $image,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new user failed: '.$e->getMessage();
             }
 			$result = false;
@@ -147,7 +147,7 @@ class DBDataMapper
 							   ':email' => $email,
 							   ':role'  => $roles,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new user failed: '.$e->getMessage();
             }
 			$result = false;
@@ -168,7 +168,7 @@ class DBDataMapper
 							   ':send' => $sender,
 							   ':rec'  => $receiver,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new user failed: '.$e->getMessage();
             }
 			$result = false;
@@ -192,7 +192,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Get user messages failed: '.$e->getMessage();
             }
 		}
@@ -217,7 +217,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Get user messages failed: '.$e->getMessage();
             }
 		}
@@ -238,7 +238,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting password failed: '.$e->getMessage();
             }
 		}
@@ -259,7 +259,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting password failed: '.$e->getMessage();
             }
 		}
@@ -280,7 +280,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting email failed: '.$e->getMessage();
             }
 		}
@@ -301,7 +301,7 @@ class DBDataMapper
 							   ':req'  => $requester,
 							   ':food' => $foodid,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new request failed: '.$e->getMessage();
             }
 			$result = false;
@@ -322,7 +322,7 @@ class DBDataMapper
 							   ':send'  => $sender,
 							   ':reqid' => $requestID,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new request message failed: '.$e->getMessage();
             }
 			$result = false;
@@ -343,7 +343,7 @@ class DBDataMapper
 							   ':reqid' => $requestid,
 							   ':state' => $state,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Set request state failed: '.$e->getMessage();
             }
 			$result = false;
@@ -365,7 +365,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
             }
 		}
@@ -386,7 +386,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting roles failed: '.$e->getMessage();
             }
 		}
@@ -407,7 +407,7 @@ class DBDataMapper
 							   ':un'    => $userID,
 							   ':token' => $token,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new request message failed: '.$e->getMessage();
             }
 			$result = false;
@@ -427,7 +427,7 @@ class DBDataMapper
 							   ':token' => $token,
 						   ));
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
             }
 		}
@@ -443,7 +443,7 @@ class DBDataMapper
 					$stmt->execute(array(
 									   ':uid' => $userID,
 								   ));
-				} catch (PDOException $e) {
+				} catch (\PDOException $e) {
 					if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
                     }
 				}
@@ -466,8 +466,27 @@ class DBDataMapper
 							   ':uid'   => $userID,
 							   ':roles' => $newRoles,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Update roles failed: '.$e->getMessage();
+            }
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
+
+	public function updateFullName($userID, $newName) {
+		$query = 'UPDATE `usertable` SET `fullname` = :name WHERE `userid` = :uid';
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':uid'   => $userID,
+							   ':name' => $newName,
+						   ));
+		} catch (\PDOException $e) {
+			if (DEBUG) { echo 'Updating username failed: '.$e->getMessage();
             }
 			$result = false;
 		}
@@ -489,7 +508,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
             }
 		}
@@ -511,7 +530,7 @@ class DBDataMapper
 			$stmt->execute();
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting food between X and Y failed: '.$e->getMessage();
             }
 		}
@@ -538,7 +557,7 @@ class DBDataMapper
 			$stmt->execute($params);
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Search by category and search text failed: '.$e->getMessage();
             }
 		}
@@ -599,7 +618,7 @@ class DBDataMapper
 			$stmt->execute($params);
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Search by category and search text failed: '.$e->getMessage();
             }
 		}

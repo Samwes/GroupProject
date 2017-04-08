@@ -203,6 +203,10 @@ class App extends Application
 			return $this['twig']->render('messenger.twig');
 		})->bind('messenger');
 
+		$account->post('/update/fullname', 'rest.handler:updateName')
+			->bind('updatename')
+				->secure('IS_AUTHENTICATED_FULLY');
+
 		$this->mount('/account', $account);
 	}
 
