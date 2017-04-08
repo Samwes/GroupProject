@@ -197,7 +197,7 @@
 			  $.each(data, function (index, value) {
 				  // value is requestid, foodid, accepted
 				  $("#requests").append(
-					  '<div class="card square-border" style="border: 0;" receiverid="' + value['userid'] + ' requestid="' + value['requestid'] + '"">' +
+					  '<div class="card square-border" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
 					       '<div class="row">' +
 					            '<div class="col-xs-2" style="padding: 0;">' +
 					                 '<img class="card-img-top circle" src="../../images/food/none.svg" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
@@ -217,9 +217,11 @@
 	  }
 
 	  function fillMessages(requestID) {
-		  $.getJSON('request/messages/' + value['requestid'], function (messages) {
+		  $.getJSON('request/messages/1', function (messages) {
 			  // messages is message, time, sender, receiver
-
+        $.each(messages, function(index, value) {
+          // value = ["message", "time", "sender", "receiver"];
+        });
 		  });
 	  }
   </script>

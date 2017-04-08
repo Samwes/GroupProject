@@ -205,10 +205,10 @@ class DBDataMapper
 	public function getUserMessagesByRequestID($userID, $requestID) {
 		$query = "SELECT `messagetable`.`message`, `messagetable`.`time`, `usermessagetable`.`sender`, `usermessagetable`.`receiver`
                     FROM `messagetable`, `requestmessagetable`, `usermessagetable`
-                    WHERE `requestmessagetable`.`requestid` = ':requestID'
+                    WHERE `requestmessagetable`.`requestid` = :requestID
                     AND `requestmessagetable`.`messageid` = `messagetable`.`messageid`
                     AND `requestmessagetable`.`messageid` = `usermessagetable`.`messageid`
-                    AND (`usermessagetable`.`sender` = ':userID' OR `usermessagetable`.`receiver` = ':userID')";
+                    AND (`usermessagetable`.`sender` = :userID OR `usermessagetable`.`receiver` = :userID)";
 		$result = null;
 		try {
 			$stmt = $this->pdo->prepare($query);
@@ -220,8 +220,9 @@ class DBDataMapper
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		} catch (PDOException $e) {
-			if (DEBUG) { echo 'Get user messages failed: '.$e->getMessage();
-            }
+			if (DEBUG) {
+				echo 'Get user messages failed: '.$e->getMessage();
+      }
 		}
 		$stmt = null;
 		return $result;
