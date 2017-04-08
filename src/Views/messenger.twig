@@ -16,12 +16,14 @@
 		<!-- Requests Section -->
 		<nav class="navbar square-border" id="requests-nav" style="background-color: white; border: 1px solid #dce0e0; border-top: 0; height: 3rem; padding: 0;">
 		  <div class="btn-group" role="group" aria-label="Basic example" style="width: 100%; height: 100%;">
-			<button class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-right: 1px solid #ccc;">Your Requests</button>
-			<button class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-left: 1px solid #ccc;">Their Requests</button>
+			<button id="sentRequestsBtn" class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-right: 1px solid #ccc;">Sent Requests</button>
+			<button id="receivedRequestsBtn" class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-left: 1px solid #ccc;">Received Requests</button>
 		  </div>
 		</nav>
 		<div class="container-fluid" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0; padding-right: 0;">
 		  <!-- Requests -->
+      <div class="" id="sentRequests"></div>
+      <div class="hidden-xs-up" id="receivedRequests"></div>
 		</div>
 	  </div>
 	  <div class="col-xs-12 col-sm-9 no-padding">
@@ -71,7 +73,7 @@
   <!-- MESSAGING -->
   <script>
 	  var userID;
-	  var currentReceiverID = 34; // Temporarily
+	  var currentReceiverID;
     var currentRequestID = 1; // Temporarily
 
 	  $(function () {
@@ -91,10 +93,8 @@
 			  var message = data['message'];
         var date = data['date']
         if (fromid == currentReceiverID || toid == currentReceiverID) {
-          console.log("is from current receiver");
           // Add to page right away and bring contact to top
           if (fromid == userID) {
-            console.log("from myself");
             // Send by user
             $("#messages").append(
               '<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
@@ -106,7 +106,6 @@
         		  '</div>'
             );
           } else {
-            console.log("from other")
             // Received by user
             $("#messages").append(
         		  '<div class="row" style="padding: 0.5rem; width: 100%;">' +
@@ -149,9 +148,27 @@
       fillMessages($(this).attr("requestid"));
     });
 
-    $(document).ready(function() {
-      fillSentRequests();
-    });
+    fillSentRequests();
+    fillReceivedRequests();
+  </script>
+
+  <!-- REQUEST TAB CHANGING -->
+  <script>
+  $("#sentRequestsBtn").click(function() {
+    // Hide Received Requests
+    $("#sentRequests").removeClass("hidden-xs-up");
+    $("#receivedRequests").addClass("hidden-xs-up");
+    $("#sentRequestsBtn").css("background-color", "#e6e6e6");
+    $("#receivedRequestsBtn").css("background-color", "");
+  });
+
+  $("#receivedRequestsBtn").click(function() {
+    // Hide Sent Requests
+    $("#receivedRequests").removeClass("hidden-xs-up");
+    $("#sentRequests").addClass("hidden-xs-up");
+    $("#receivedRequestsBtn").css("background-color", "#e6e6e6");
+    $("#sentRequestsBtn").css("background-color", "");
+  });
   </script>
 
   <!-- CORRECT SIZES OF ELEMENTS -->
@@ -186,7 +203,32 @@
 			  // data is all that users requests
 			  $.each(data, function (index, value) {
 				  // value is requestid, foodid, accepted
-				  $("#requests").append(
+				  $("#sentRequests").append(
+					  '<div class="card square-border contact" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
+					       '<div class="row">' +
+					            '<div class="col-xs-2" style="padding: 0;">' +
+					                 '<img class="card-img-top circle" src="../../images/food/none.svg" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
+					            '</div>' +
+					            '<div class="col-xs-10" style="padding: 0;">' +
+					                 '<div class="card-block" style="padding: 0.5rem;">' +
+					                      '<p class="card-text">USERNAME</p>' +
+					                      '<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + value['foodid'] + '</p>' +
+					                      '<small class="text-muted">Last Message</small>' +
+					                 '</div>' +
+					            '</div>' +
+					       '</div>' +
+					  '</div>'
+				  );
+			  });
+		  });
+	  }
+
+    function fillReceivedRequests() {
+		  $.getJSON('/request/received', function (data) {
+			  // data is all that users requests
+			  $.each(data, function (index, value) {
+				  // value is requestid, foodid, accepted
+				  $("#receivedRequests").append(
 					  '<div class="card square-border contact" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
 					       '<div class="row">' +
 					            '<div class="col-xs-2" style="padding: 0;">' +
