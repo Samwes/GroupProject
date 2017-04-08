@@ -362,3 +362,29 @@ input, .export {
 .contact:hover {
 	cursor: pointer;
 }
+
+.message {
+	border-radius: 1rem !important;
+	display: inline-block;
+}
+
+/* MOBILE */
+@media screen and (min-width: 544px) {
+	.message {
+		max-width: 90%;
+	}
+}
+
+/* TABLETS */
+@media screen and (min-width: 768px) {
+	.message {
+		max-width: 75%;
+	}
+}
+
+/* DESKTOP */
+@media screen and (min-width: 992px) {
+	.message {
+		max-width: 60%;
+	}
+}

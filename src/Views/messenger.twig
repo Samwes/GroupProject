@@ -16,8 +16,8 @@
 		<!-- Requests Section -->
 		<nav class="navbar square-border" id="requests-nav" style="background-color: white; border: 1px solid #dce0e0; border-top: 0; height: 3rem; padding: 0;">
 		  <div class="btn-group" role="group" aria-label="Basic example" style="width: 100%; height: 100%;">
-			<button id="sentRequestsBtn" class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-right: 1px solid #ccc;">Sent Requests</button>
-			<button id="receivedRequestsBtn" class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-left: 1px solid #ccc;">Received Requests</button>
+			<button id="sentRequestsBtn" class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-right: 1px solid #ccc;">Sent</button>
+			<button id="receivedRequestsBtn" class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-left: 1px solid #ccc;">Received</button>
 		  </div>
 		</nav>
 		<div class="container-fluid" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0; padding-right: 0;">
@@ -29,7 +29,7 @@
 	  <div class="col-xs-12 col-sm-9 no-padding">
 		<!-- Messaging Section -->
 		<nav class="navbar square-border" style="background-color: white; border: 1px solid #dce0e0; border-left: 0; border-top: 0; height: 3rem;" id="messages-nav">
-		  <button type="button" class="btn btn-secondary hidden-md-up" data-toggle="offcanvas" data-target=".sidebar-nav">Test</button>
+		  <button type="button" class="btn btn-secondary hidden-md-up" data-toggle="offcanvas" data-target=".sidebar-nav">Contacts</button>
 		  <ul class="nav navbar-nav float-xs-right">
 			<li class="nav-item">
 			  <a class="nav-link" href="#">Reject</a>
@@ -98,7 +98,7 @@
             // Send by user
             $("#messages").append(
               '<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
-        			'<div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #2979FF; display: inline-block; float: right;" title="Sent at ' + date + '">' +
+        			'<div class="card message" style="background-color: #2979FF; float: right;" title="Sent at ' + date + '">' +
         			  '<div class="card-block" style="padding: 0.5rem;">' +
         				'<p class="card-text" style="color: white;">' + message +'</p>' +
         			  '</div>' +
@@ -110,7 +110,7 @@
             $("#messages").append(
         		  '<div class="row" style="padding: 0.5rem; width: 100%;">' +
         			'<img class="circle" src="../images/food/none.svg" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">' +
-        			'<div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #fafafa; display: inline-block;" title="Sent at ' + date + '">' +
+        			'<div class="card message" style="background-color: #fafafa;" title="Sent at ' + date + '">' +
         			  '<div class="card-block" style="padding: 0.5rem;">' +
         				'<p class="card-text" style="color: black;">' + message + '</p>' +
         			  '</div>' +
