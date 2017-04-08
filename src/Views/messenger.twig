@@ -148,8 +148,10 @@
       fillMessages($(this).attr("requestid"));
     });
 
-    fillSentRequests();
-    fillReceivedRequests();
+    $(document).ready(function() {
+      fillSentRequests();
+      fillReceivedRequests();
+    });
   </script>
 
   <!-- REQUEST TAB CHANGING -->
