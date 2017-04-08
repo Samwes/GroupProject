@@ -530,7 +530,7 @@
   function addMapMarkers() {
     var defaultLocation;
     if($("#pac-input").attr("latitude")) {
-      defaultLocation = {lat: $("#pac-input").attr("latitude"), lng: $("#pac-input").attr("longitude")}
+      defaultLocation = {lat: parseFloat($("#pac-input").attr("latitude")), lng: parseFloat($("#pac-input").attr("longitude"))}
     }
     if(defaultLocation) {
       map = new google.maps.Map(document.getElementById('map'), {
@@ -541,7 +541,7 @@
 
     $("#item-cards").each(function(index) {
       // this is card object
-      var location = {lat: $(this).attr("latit"), lng: $(this).attr("longit")};
+      var location = {lat: parseFloat($(this).attr("latit")), lng: parseFloat($(this).attr("longit"))};
 
       if(!defaultLocation) {
         // Just set center as first place if not set by user
