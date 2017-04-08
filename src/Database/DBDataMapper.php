@@ -159,7 +159,7 @@ class DBDataMapper
 	public function addNewUserMessage($message, $sender, $receiver, $requestid) {
 		$query = 'INSERT INTO `messagetable` (`message`, `time`) VALUES (:msg, NOW());';
 		$query .= 'INSERT INTO usermessagetable (messageid, sender, receiver) VALUES (LAST_INSERT_ID(), :send, :rec);';
-		$query .= 'INSERT INTO requestmessagetable (messageid, sender, requestid) VALUES (LAST_INSERT_ID(), :send, :req)'
+		$query .= 'INSERT INTO requestmessagetable (messageid, sender, requestid) VALUES (LAST_INSERT_ID(), :send, :req)';
 		$result = true;
 		try {
 			$stmt = $this->pdo->prepare($query);
