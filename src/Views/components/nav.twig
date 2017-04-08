@@ -209,7 +209,11 @@
 		  content: function () {
 			  return $("#user-popover-content").html();
 		  },
-	  });
+	  }).click(function(e) {
+      e.preventDefault();
+      $(this).popover('show');
+      $('.popover').css('left', '-3rem');
+    });
   </script>
 
 {% endblock %}
