@@ -1,60 +1,68 @@
 <!-- Add error message somehow -->
 
 {% block content %}
-  <nav class="navbar navbar-light bg-faded navbar-static-top" id="search-navbar" style="padding: 0; height: 64px; border-bottom: 1px solid #dce0e0;">
-	<div class="container-fluid" id="search-navbar-container">
-	  <a class="navbar-brand" href="{{ path('index') }}" style="line-height: 50px; border-right: 1px solid #dce0e0; padding-right: 1em; padding-top: 7px; padding-bottom: 7px; margin: 0; color: #55595c">FoodShare</a>
-	  <ul class="nav navbar-nav">
-		<form id="search-form" action="/t/">
-		  <li class="nav-item hidden-md-down" style="height: 63px;">
-			<select name="category" id="categories-dropdown" class="custom-select square-border btn-option" style="border-left: 0; border-right: 1px solid #dce0e0;">
-			  <option disabled selected value>Categories</option>
-			  <option value="Fresh Food">Fresh Food</option>
-			  <option value="Bakery">Bakery</option>
-			  <option value="Food Cupboard">Food Cupboard</option>
-			  <option value="Frozen Food">Frozen Food</option>
-			  <option value="Drinks">Drinks</option>
-			  <option value="Baby">Baby</option>
-			  <option value="Personal">Personal</option>
-			  <option value="Pet Care">Pet Care</option>
-			  <option value="Household">Household</option>
-			</select>
-		  </li>
-		  <li class="nav-item hidden-md-down" style="height: 63px;">
-			<div id="search-navbar-group" class="form-group input-group" style="height: 100%; width: 200px;">
-			  <span class="input-group-addon panel-input-symbol" style="border-bottom: 0; padding: 1em; padding-right: 0; background-color: #FAFAFA;"><i class="fa fa-search" aria-hidden="true"></i></span>
-			  <input type="text" name="search" id="main-search-input" class="form-control mr-sm-2 square-border" style="width: 200px; height: 100%; border: 0; background-color: #FAFAFA;" placeholder="Search" value="">
-			</div>
-		  </li>
-		</form>
-	  </ul>
-
-	  <ul class="nav navbar-nav float-xs-right">
+  <nav class="navbar navbar-toggleable-md navbar-light bg-faded p-0 align-items-stretch" id="search-navbar" style="border-bottom: 1px solid #dce0e0;">
+	  <a class="navbar-brand mr-0 p-3" href="{{ path('index') }}" style="border-right: 1px solid #dce0e0; color: #55595c">FoodShare</a>
+	  <ul class="navbar-nav flex-last">
 		{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-		  <li class="nav-item" style="height: 63px;">
-			<button class="btn btn-link" id="user-popover" style="padding: 0; font-size:1.1rem; height: 100%;" data-container="body" data-toggle="popover" data-placement="bottom">
+		  <li class="nav-item my-auto">
+			<button class="btn btn-link h-100" id="user-popover" style="font-size:1.1rem;" data-offset="0 50%" data-toggle="popover" data-placement="bottom">
 			  <i class="fa fa-user-circle fa-2x" aria-hidden="true">
 				<span class="fa fa-circle"></span>
 				<span class="notif-num">3</span>
 			  </i>
 			</button>
 			<div id="user-popover-content" class="hidden-xs-up">
-			  <a class="btn btn-primary" href="{{ path('user') }}">Your Account</a>
-			  <a class="btn btn-primary" href="{{ path('useritems') }}">Your Items</a>
-			  <a class="btn btn-primary" href="{{ path('messenger') }}">Messenger</a>
-			  <a class="btn btn-primary" href="{{ path('account_logout') }}">Logout</a>
+			  <div class="container-fluid my-1 p-1">
+				<div class="row pb-2">
+				  <div class="col-6">
+					<a class="btn btn-primary btn-block" href="{{ path('user') }}">Your Account</a>
+				  </div>
+				  <div class="col-6">
+					<a class="btn btn-primary btn-block" href="{{ path('useritems') }}">Your Items</a>
+				  </div>
+				</div>
+				<div class="row">
+				  <div class="col-6">
+					<a class="btn btn-primary btn-block" href="{{ path('messenger') }}">Messenger</a>
+				  </div>
+				  <div class="col-6">
+					<a class="btn btn-primary btn-block" href="{{ path('account_logout') }}">Logout</a>
+				  </div>
+				</div>
 			</div>
 		  </li>
 		{% else %}
-		  <li class="nav-item" style="height: 63px;">
+		  <li class="nav-item">
 			<button id="register-button" class="btn btn-option btn-signup square-border" style="margin-right: -16px;" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(false);">Register</button>
 		  </li>
-		  <li class="nav-item" style="height: 63px;">
+		  <li class="nav-item">
 			<button id="login-button" class="btn btn-option btn-signup square-border" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(true);">Login</button>
 		  </li>
 		{% endif %}
 	  </ul>
-	</div>
+
+	<form class="form-inline w-100" id="search-form" action="">
+	  <div class="input-group hidden-md-down h-100">
+		<select name="category" id="categories-dropdown" class="custom-select square-border btn-option border-left-0 py-3" style="border-right: 1px solid #dce0e0;">
+		  <option disabled selected hidden value="">Categories</option>
+		  <option value="Fresh Food">Fresh Food</option>
+		  <option value="Bakery">Bakery</option>
+		  <option value="Food Cupboard">Food Cupboard</option>
+		  <option value="Frozen Food">Frozen Food</option>
+		  <option value="Drinks">Drinks</option>
+		  <option value="Baby">Baby</option>
+		  <option value="Personal">Personal</option>
+		  <option value="Pet Care">Pet Care</option>
+		</select>
+	  </div>
+
+	  <div class="input-group" style="flex: 1 0 auto">
+		<span class="input-group-addon panel-input-symbol border-bottom-0 p-4" style="background-color: #FAFAFA;"><i class="fa fa-search" aria-hidden="true"></i></span>
+		<input type="text" name="search" id="main-search-input" class="form-control border-0" style="background-color: #FAFAFA;" placeholder="Search" value="">
+	  </div>
+	</form>
+
   </nav>
 
   <!-- LOGIN MODAL -->
@@ -183,27 +191,10 @@
   </script>
 
   <script>
-	  // Resizing
-	  $(document).ready(function () {
-		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-				  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#search-navbar-group')
-			  .width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-					  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-	  });
-	  let resize = function () {
-		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-				  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#search-navbar-group')
-			  .width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-					  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-	  };
-  </script>
-
-  <script>
 	  // User Login Popover
 	  $('#user-popover').popover({
 		  html   : true,
+		  container: 'body',
 		  content: function () {
 			  return $("#user-popover-content").html();
 		  },
