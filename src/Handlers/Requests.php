@@ -247,11 +247,12 @@ class Requests
 		$fromid = $request->get('fromid');
 		$toid = $request->get('toid');
 		$requestid = $request->get('requestid');
+		$date = date('Y-m-d h:i:s', time());
 
 		$toEncode = $this->db->addNewUserMessage($message, $fromid, $toid, $requestid);
 
 		$url = 'https://gpmainmessaging.herokuapp.com/message';
-		$data = array('message' => $message, 'fromid' => $fromid, 'toid' => $toid);
+		$data = array('message' => $message, 'fromid' => $fromid, 'toid' => $toid, 'date' => $date);
 
 		// use key 'http' even if you send the request to https://...
 		$options = array(
