@@ -376,6 +376,28 @@ class DBDataMapper
 		return $result;
 	}
 
+	public function getRequestsReceivedByUserID($id) {
+		$query = "SELECT `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
+                    FROM `requesttable`, `itemtable`
+                    WHERE `requesttable`.`foodid` = `itemtable`.`foodid`
+                    AND `itemtable`.`userid` = :id";
+		$result = null;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':id' => $id,
+						   ));
+
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $e) {
+			if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
+            }
+		}
+		$stmt = null;
+		return $result;
+	}
+
 	public function getRoles($userID) {
 		$query = 'SELECT `roles`
                     FROM `usertable`
@@ -473,28 +495,6 @@ class DBDataMapper
 			if (DEBUG) { echo 'Update roles failed: '.$e->getMessage();
             }
 			$result = false;
-		}
-		$stmt = null;
-		return $result;
-	}
-
-	public function getRequestsReceivedByUserID($id) {
-		$query = "SELECT `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
-                    FROM `requesttable`, `itemtable`
-                    WHERE `requesttable`.`foodid` = `itemtable`.`foodid`
-                    AND `itemtable`.`userid` = :id";
-		$result = null;
-		try {
-			$stmt = $this->pdo->prepare($query);
-
-			$stmt->execute(array(
-							   ':id' => $id,
-						   ));
-
-			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
-			if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
-            }
 		}
 		$stmt = null;
 		return $result;
