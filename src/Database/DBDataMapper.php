@@ -358,7 +358,8 @@ class DBDataMapper
 	public function getRequestsSentByUserID($id) {
 		$query = "SELECT `itemtable`.`userid`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
                     FROM `itemtable`, `requesttable`
-                    WHERE `requester` = :id AND `requesttable`.`foodid` = `itemtable`.`foodid`";
+                    WHERE `requester` = :id
+										AND `requesttable`.`foodid` = `itemtable`.`foodid`";
 		$result = null;
 		try {
 			$stmt = $this->pdo->prepare($query);
@@ -377,7 +378,7 @@ class DBDataMapper
 	}
 
 	public function getRequestsReceivedByUserID($id) {
-		$query = "SELECT `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
+		$query = "SELECT `itemtable`.`userid`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
                     FROM `requesttable`, `itemtable`
                     WHERE `requesttable`.`foodid` = `itemtable`.`foodid`
                     AND `itemtable`.`userid` = :id";
