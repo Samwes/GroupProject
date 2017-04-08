@@ -197,7 +197,7 @@
 			  $.each(data, function (index, value) {
 				  // value is requestid, foodid, accepted
 				  $("#requests").append(
-					  '<div class="card square-border" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
+					  '<div class="card square-border contact" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
 					       '<div class="row">' +
 					            '<div class="col-xs-2" style="padding: 0;">' +
 					                 '<img class="card-img-top circle" src="../../images/food/none.svg" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
@@ -217,10 +217,36 @@
 	  }
 
 	  function fillMessages(requestID) {
-		  $.getJSON('request/messages/1', function (messages) {
+		  $.getJSON('/request/messages/1', function (messages) {
 			  // messages is message, time, sender, receiver
         $.each(messages, function(index, value) {
-          // value = ["message", "time", "sender", "receiver"];
+          // value = ["message": message, "time": time, "sender": sender, "receiver": receiver];
+          if (value["sender"] == parseInt(userID)) {
+            // Send by user
+            $("#messages").append(
+              '<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
+        			'<div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #2979FF; display: inline-block; float: right;" title="Sent at ' + value["time"] + '">' +
+        			  '<div class="card-block" style="padding: 0.5rem;">' +
+        				'<p class="card-text" style="color: white;">' + value["message"] +'</p>' +
+        			  '</div>' +
+        			'</div>' +
+        		  '</div>'
+            );
+          } else if (value["receiver"] == parseInt(userID)) {
+            // Received by user
+            $("#messages").append(
+        		  '<div class="row" style="padding: 0.5rem; width: 100%;">' +
+        			'<img class="circle" src="../images/food/none.svg" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">' +
+        			'<div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #fafafa; display: inline-block;" title="Sent at ' + value["time"] + '">' +
+        			  '<div class="card-block" style="padding: 0.5rem;">' +
+        				'<p class="card-text" style="color: black;">' + value["message"] + '</p>' +
+        			  '</div>' +
+        			'</div>' +
+        		  '</div>'
+            );
+          } else {
+            console.log("ERROR: incorrect messages received.")
+          }
         });
 		  });
 	  }
