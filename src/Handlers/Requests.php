@@ -246,8 +246,9 @@ class Requests
 		$message = $request->get('message');
 		$fromid = $request->get('fromid');
 		$toid = $request->get('toid');
+		$requestid = $request->get('requestid');
 
-		$toEncode = $this->db->addNewUserMessage($message, $fromid, $toid);
+		$toEncode = $this->db->addNewUserMessage($message, $fromid, $toid, $requestid);
 
 		$url = 'https://gpmainmessaging.herokuapp.com/message';
 		$data = array('message' => $message, 'fromid' => $fromid, 'toid' => $toid);

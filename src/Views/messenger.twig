@@ -83,7 +83,7 @@
 		  <!-- Message Container -->
 		  <div class="row" style="padding: 0.5rem; width: 100%;">
 			<!-- User Image -->
-			<img class="circle" src="images/food/none.svg" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">
+			<img class="circle" src="../images/food/none.svg" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">
 			<!-- Message -->
 			<div class="card" style="max-width: 60%; border-radius: 1rem!important; background-color: #fafafa; display: inline-block;">
 			  <div class="card-block" style="padding: 0.5rem;">
@@ -133,6 +133,7 @@
   <script>
 	  var userID;
 	  var currentReceiverID = 34; // Temporarily
+    var currentRequestID = 1; // Temporarily
 
 	  $(function () {
 		  var socket = io("https://gpmainmessaging.herokuapp.com/");
@@ -154,7 +155,7 @@
 
 	  $("#sendButton").click(function () {
 		  //Send message
-		  $.post('/messenger/message', {'message': $("#messageInput").val(), 'fromid': userID, 'toid': currentReceiverID}, function (data) {
+		  $.post('/messenger/message', {'message': $("#messageInput").val(), 'fromid': userID, 'toid': currentReceiverID, 'requestid': currentRequestID}, function (data) {
 			  if (!data['success']) {
 				  // Failed to send message
 				  console.log("Failed to send message");
@@ -196,21 +197,20 @@
 			  $.each(data, function (index, value) {
 				  // value is requestid, foodid, accepted
 				  $("#requests").append(
-					  '<div class="card square-border" style="border: 0;" userid="' + value['userid'] + '">' +
-					  '<div class="row">' +
-					  '<div class="col-xs-2" style="padding: 0;">' +
-					  '<img class="card-img-top circle" src="../../images/food/none.svg" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
-					  '</div>' +
-					  '<div class="col-xs-10" style="padding: 0;">' +
-					  '<div class="card-block" style="padding: 0.5rem;">' +
-					  '<p class="card-text">USERNAME</p>' +
-					  '<p class="card-text">' + value['requestid'] + '</p>' +
-					  '<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + value['foodid'] + '</p>' +
-					  '<small class="text-muted">Last Message</small>' +
-					  '</div>' +
-					  '</div>' +
-					  '</div>' +
-					  '</div>',
+					  '<div class="card square-border" style="border: 0;" receiverid="' + value['userid'] + ' requestid="' + value['requestid'] + '"">' +
+					       '<div class="row">' +
+					            '<div class="col-xs-2" style="padding: 0;">' +
+					                 '<img class="card-img-top circle" src="../../images/food/none.svg" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
+					            '</div>' +
+					            '<div class="col-xs-10" style="padding: 0;">' +
+					                 '<div class="card-block" style="padding: 0.5rem;">' +
+					                      '<p class="card-text">USERNAME</p>' +
+					                      '<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + value['foodid'] + '</p>' +
+					                      '<small class="text-muted">Last Message</small>' +
+					                 '</div>' +
+					            '</div>' +
+					       '</div>' +
+					  '</div>'
 				  );
 			  });
 		  });

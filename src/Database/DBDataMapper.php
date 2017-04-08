@@ -156,9 +156,10 @@ class DBDataMapper
 		return $result;
 	}
 
-	public function addNewUserMessage($message, $sender, $receiver) {
+	public function addNewUserMessage($message, $sender, $receiver, $requestid) {
 		$query = 'INSERT INTO `messagetable` (`message`, `time`) VALUES (:msg, NOW());';
-		$query .= 'INSERT INTO usermessagetable (messageid, sender, receiver) VALUES (LAST_INSERT_ID(), :send, :rec)';
+		$query .= 'INSERT INTO usermessagetable (messageid, sender, receiver) VALUES (LAST_INSERT_ID(), :send, :rec);';
+		$query .= 'INSERT INTO requestmessagetable (messageid, sender, requestid) VALUES (LAST_INSERT_ID(), :send, :req)'
 		$result = true;
 		try {
 			$stmt = $this->pdo->prepare($query);
@@ -167,6 +168,7 @@ class DBDataMapper
 							   ':msg'  => $message,
 							   ':send' => $sender,
 							   ':rec'  => $receiver,
+								 ':req'  => $requestid
 						   ));
 		} catch (PDOException $e) {
 			if (DEBUG) { echo 'Adding new user failed: '.$e->getMessage();
