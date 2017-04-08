@@ -371,7 +371,7 @@ input, .export {
 /* MOBILE */
 @media screen and (min-width: 544px) {
 	.message {
-		max-width: 90%;
+		max-width: 85%;
 	}
 }
 
@@ -385,6 +385,6 @@ input, .export {
 /* DESKTOP */
 @media screen and (min-width: 992px) {
 	.message {
-		max-width: 60%;
+		max-width: 65%;
 	}
 }
