@@ -2,6 +2,7 @@
 @media screen and (min-width: 544px) {
 	.card-columns {
 		column-count: 1;
+		-moz-column-count: 1;
 	}
 }
 
@@ -9,6 +10,7 @@
 @media screen and (min-width: 768px) {
 	.card-columns {
 		column-count: 1;
+		-moz-column-count: 1;
 	}
 }
 
@@ -16,6 +18,7 @@
 @media screen and (min-width: 992px) {
 	.card-columns {
 		column-count: 2;
+		-moz-column-count: 2;
 	}
 }
 
@@ -364,14 +367,15 @@ input, .export {
 }
 
 .message {
+	max-width: 80%;
 	border-radius: 1rem !important;
 	display: inline-block;
 }
 
 /* MOBILE */
-@media screen and (min-width: 544px) {
+@media screen and (min-width: 0px) {
 	.message {
-		max-width: 85%;
+		max-width: 80%;
 	}
 }
 
