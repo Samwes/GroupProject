@@ -87,10 +87,10 @@
 		  });
 		  socket.on("message", function (data) {
 			  var fromid = data['fromid'];
+        var toid = data['toid'];
 			  var message = data['message'];
         var date = data['date']
-        console.log("message received");
-        if (fromid == currentReceiverID) {
+        if (fromid == currentReceiverID || toid == currentReceiverID) {
           console.log("is from current receiver");
           // Add to page right away and bring contact to top
           if (fromid == userID) {
@@ -141,6 +141,8 @@
 
     $("body").on("click", ".contact", function() {
       // Change colour and fill messages
+      currentRequestID = $(this).attr("requestid");
+      currentReceiverID = $(this).attr("receiverid");
       $(this).removeClass("bold");
       $(".contact").css("background-color", "white");
       $(this).css("background-color", "#fafafa");
