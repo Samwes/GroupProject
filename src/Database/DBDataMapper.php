@@ -378,7 +378,7 @@ class DBDataMapper
 	}
 
 	public function getRequestsReceivedByUserID($id) {
-		$query = "SELECT `itemtable`.`userid`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
+		$query = "SELECT `requesttable`.`requester`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
                     FROM `requesttable`, `itemtable`
                     WHERE `requesttable`.`foodid` = `itemtable`.`foodid`
                     AND `itemtable`.`userid` = :id";
