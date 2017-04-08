@@ -314,6 +314,10 @@ input, .export {
 	/*border-color: #dce0e0;*/
 }
 
+.popover-content {
+	padding: 0;
+}
+
 .popover::after, .popover::before {
 	border-style: hidden;
 }

@@ -13,30 +13,30 @@
 			  </i>
 			</button>
 			<div id="user-popover-content" class="hidden-xs-up">
-			  <div class="container-fluid my-1 p-1">
+			  <div class="container-fluid my-0 p-3">
 				<div class="row pb-2">
-				  <div class="col-6">
+				  <div class="col-md-6 pr-2">
 					<a class="btn btn-primary btn-block" href="{{ path('user') }}">Your Account</a>
 				  </div>
-				  <div class="col-6">
+				  <div class="col-md-6 pl-2">
 					<a class="btn btn-primary btn-block" href="{{ path('useritems') }}">Your Items</a>
 				  </div>
 				</div>
 				<div class="row">
-				  <div class="col-6">
+				  <div class="col-md-6 pr-2">
 					<a class="btn btn-primary btn-block" href="{{ path('messenger') }}">Messenger</a>
 				  </div>
-				  <div class="col-6">
+				  <div class="col-md-6 pl-2">
 					<a class="btn btn-primary btn-block" href="{{ path('account_logout') }}">Logout</a>
 				  </div>
 				</div>
 			</div>
 		  </li>
 		{% else %}
-		  <li class="nav-item">
+		  <li class="nav-item flex-last">
 			<button id="register-button" class="btn btn-option btn-signup square-border" style="margin-right: -16px;" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(false);">Register</button>
 		  </li>
-		  <li class="nav-item">
+		  <li class="nav-item flex-last">
 			<button id="login-button" class="btn btn-option btn-signup square-border" type="button" data-toggle="modal" data-target="#loginModal" onclick="loginForm(true);">Login</button>
 		  </li>
 		{% endif %}
