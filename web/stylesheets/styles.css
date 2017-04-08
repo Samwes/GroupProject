@@ -364,3 +364,6 @@ input, .export {
 	color: black !important;
 }
 
+.contact:hover {
+	cursor: pointer;
+}

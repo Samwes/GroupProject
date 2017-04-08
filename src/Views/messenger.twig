@@ -149,6 +149,16 @@
 		  socket.on("message", function (data) {
 			  var fromid = data['fromid'];
 			  var message = data['message'];
+        if (fromid == currentReceiverID) {
+          // Add to page right away and bring contact to top
+          if (fromid == userID) {
+            // Sent by self
+          } else {
+            // Sent by other
+          }
+        } else {
+          // Make contact bold and bring to top
+        }
 
 		  });
 	  });
@@ -162,6 +172,18 @@
 			  }
 		  });
 	  });
+
+    $(".contact").click(function() {
+      // Change colour and fill messages
+      $(this).addClass("bold");
+      $(".contact").css("background-color", "white");
+      $(this).css("background-color", "#fafafa");
+      fillMessages($(this).attr("requestid"));
+    });
+
+    $(document).ready(function() {
+      fillSentRequests();
+    });
   </script>
 
   <!-- CORRECT SIZES OF ELEMENTS -->
