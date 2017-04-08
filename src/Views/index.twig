@@ -245,8 +245,8 @@
 		  obj[parts[0]] = parts[1] || true;
 	  }
 
-	  {#todo markers on map <<<<<---------- fixme this #}
-	  {#todo reset min/max button? #}
+	  //todo markers on map <<<<<---------- fixme this
+	  //todo reset min/max button?
 
 	  if ('search' in obj) {
 		  let searchval = obj['search'];
@@ -525,24 +525,42 @@
   </script>
 
   <script>
-	/*var map = null;
+  var map = null;
+  // Map markers
+  function addMapMarkers() {
+    var defaultLocation;
+    if($("#pac-input").attr("latitude")) {
+      defaultLocation = {lat: $("#pac-input").attr("latitude"), lng: $("#pac-input").attr("longitude")}
+    }
+    if(defaultLocation) {
+      map = new google.maps.Map(document.getElementById('map'), {
+  			zoom  : 12,
+  			center: defaultLocation
+  		});
+    }
 
-	 function initMapElements() {
-	 // 67.9222° N, 26.5046° E
-	 var durham = {lat: 54.7752493, lng: -1.584852};
-	 map = new google.maps.Map(document.getElementById('map'), {
-	 zoom: 12,
-	 center: durham,
-	 disableDefaultUI: true
-	 });
+    $("#item-cards").each(function(index) {
+      // this is card object
+      var location = {lat: $(this).attr("latit"), lng: $(this).attr("longit")};
 
-	 var marker = new google.maps.Marker({
-	 position: durham,
-	 map: map
-	 });
+      if(!defaultLocation) {
+        // Just set center as first place if not set by user
+        map = new google.maps.Map(document.getElementById('map'), {
+    			zoom  : 12,
+    			center: location
+    		});
+      }
+      var marker = new google.maps.Marker({
+  			position: location,
+  			map     : map,
+  		});
 
-	 }*/
-	var map = null;
+    });
+  }
+
+  </script>
+
+  <script>
 
 	function initMapElements() {
 
@@ -550,10 +568,6 @@
 		map = new google.maps.Map(document.getElementById('map'), {
 			zoom  : 12,
 			center: durham,
-		});
-		var marker = new google.maps.Marker({
-			position: durham,
-			map     : map,
 		});
 
 		// Create the search box and link it to the UI element.

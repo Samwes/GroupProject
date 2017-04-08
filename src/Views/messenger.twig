@@ -92,12 +92,9 @@
         var toid = data['toid'];
 			  var message = data['message'];
         var date = data['date']
-        console.log("Message Received")
         if (fromid == currentReceiverID || toid == currentReceiverID) {
-          console.log("Current Receiver")
           // Add to page right away and bring contact to top
           if (fromid == userID) {
-            console.log("From Us")
             // Send by user
             $("#messages").append(
               '<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
@@ -109,7 +106,6 @@
         		  '</div>'
             );
           } else {
-            console.log("From Them")
             // Received by user
             $("#messages").append(
         		  '<div class="row" style="padding: 0.5rem; width: 100%;">' +
