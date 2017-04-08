@@ -313,46 +313,41 @@ input, .export {
 }
 
 #sidebar {
-	height: 100%;
-	padding-right: 0;
+  height: 100%;
+  padding-right: 0;
 }
 
 /* collapsed sidebar styles */
 @media screen and (max-width: 767px) {
-	.row-offcanvas {
-		position: relative;
-		-webkit-transition: all 0.25s ease-out;
-		-moz-transition: all 0.25s ease-out;
-		transition: all 0.25s ease-out;
-	}
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all 0.25s ease-out;
+    -moz-transition: all 0.25s ease-out;
+    transition: all 0.25s ease-out;
+  }
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -70%;
+  }
 
-	.row-offcanvas-right,
-	.sidebar-offcanvas {
-		right: -70%;
-	}
-
-	.row-offcanvas-left,
-	.sidebar-offcanvas {
-		left: -70%;
-	}
-
-	.row-offcanvas-right.active2 {
-		right: 75%;
-	}
-
-	.row-offcanvas-left.active2 {
-		left: 75%;
-	}
-
-	.sidebar-offcanvas {
-		position: absolute;
-		top: 0;
-		width: 70%;
-	}
-
-	.sidebar {
-		padding-top: 0;
-	}
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -70%;
+  }
+  .row-offcanvas-right.active2 {
+    right: 75%;
+  }
+  .row-offcanvas-left.active2 {
+    left: 75%;
+  }
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 70%;
+  }
+  #sidebar {
+    padding-top:0;
+  }
 }
 
 .circle {
