@@ -22,6 +22,14 @@
 	}
 }
 
+html, body {
+	height: 100vh;
+}
+
+.flex-auto {
+	flex: 1;
+}
+
 .card {
 	margin-bottom: 0;
 	border: 0;
