@@ -518,6 +518,25 @@ class DBDataMapper
 		$stmt = null;
 		return $result;
 	}
+	public function updatePass($userID, $newPass) {
+		//future extra token check here?
+		$query = 'UPDATE `usertable` SET `password` = :pass WHERE `userid` = :uid';
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':uid'   => $userID,
+							   ':name' => $newPass,
+						   ));
+		} catch (\PDOException $e) {
+			if (DEBUG) { echo 'Updating password failed: '.$e->getMessage();
+            }
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
 
 	public function getFoodBetween($start, $num) {
 		$query = 'SELECT `foodid`

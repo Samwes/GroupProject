@@ -35,10 +35,10 @@
 		  <button class="btn btn-primary select-image-btn">Select Image</button>
 		  <div class="cropit-preview">
 		  </div>
-		  <button class="btn btn-link rotate-ccw" style="padding: 8px;"><i class="fa fa-undo" aria-hidden="true"></i></button>
-		  <button class="btn btn-link rotate-cw" style="padding: 8px;"><i class="fa fa-repeat" aria-hidden="true"></i></button>
+		  <button class="btn btn-link rotate-ccw p-2"><i class="fa fa-undo" aria-hidden="true"></i></button>
+		  <button class="btn btn-link rotate-cw p-2"><i class="fa fa-repeat" aria-hidden="true"></i></button>
 		  <i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;"></i>
-		  <input class="cropit-image-zoom-input" style="width: 50%;" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
+		  <input class="cropit-image-zoom-input w-50" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
 		  <i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i>
 		</div>
 
@@ -58,22 +58,22 @@
 		<h3>Your Information</h3>
 		<table class="table">
 		  <tbody>
-		  <tr>
-			<td scope="row">Full Name:
-			</td>
-			<td> {#todo test#}
-			  <a href="#" id="newname" data-type="text" data-pk="1" data-url="{{path('updatename')}}" data-title="Enter Full Name">{{ userData.fullname ?? 'No name set!' }}</a>
-			</td>
-		  </tr>
-		  <tr>
-			<td scope="row">Username:</td>
-			<td><a href="#" id="username" data-type="text" data-pk="1" data-title="Enter Username(?)">{{ userData.username }}</a></td>
-		  </tr>
-		  <tr>
-			<td scope="row">Location:
-			  {#todo user inputs their location#}
-			<td>Durham, United Kingdom</td>
-		  </tr>
+			<tr>
+			  <td scope="row">Full Name:
+			  </td>
+			  <td> {#todo test#}
+				<a href="#" id="newname" data-type="text" data-pk="1" data-url="{{ path('updatename') }}" data-title="Enter Full Name">{{ userData.fullname ?? 'No name set!' }}</a>
+			  </td>
+			</tr>
+			<tr>
+			  <td scope="row">Username:</td>
+			  <td><a href="#" id="username" data-type="text" data-pk="1" data-title="Enter Username(?)">{{ userData.username }}</a></td>
+			</tr>
+			<tr>
+			  <td scope="row">Location:
+				{#todo user inputs their location#}
+			  <td>Durham, United Kingdom</td>
+			</tr>
 		  </tbody>
 		</table>
 
@@ -86,7 +86,7 @@
 		{#</div>#}
 		{#</div>#}
 		{#todo fix#}
-		<form onSubmit="return verify(this);">
+		<form onSubmit="updatepass(this);" method="post">
 		  <label for="oldPassword">Enter Old Password</label>
 		  <div class="form-group input-group">
 			<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
@@ -95,12 +95,12 @@
 		  <label for="newPassword">Enter New Password</label>
 		  <div class="form-group input-group">
 			<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-			<input type="password" class="form-control square-border" id="newPassword" placeholder="New Password">
+			<input type="password" class="form-control square-border" id="password" placeholder="New Password">
 		  </div>
 		  <label for="confirmNewPassword">Confirm Old Password</label>
 		  <div class="form-group input-group">
 			<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-			<input type="password" class="form-control square-border" id="confirmNewPassword" placeholder="Confirm New Password">
+			<input type="password" class="form-control square-border" id="confirmpassword" placeholder="Confirm New Password">
 		  </div>
 		  <input type="submit" value="Change" class="btn btn-primary">
 		</form>
@@ -118,8 +118,10 @@
 	  $.fn.editable.defaults.mode = 'inline';
 	  $(document).ready(function () {
 		  $('#newname').editable({
-			  success: function(response, newValue) {
-				  if(response.success === false) return 'Error updating name to'+newValue; //msg will be shown in editable form
+			  success : function (response, newValue) {
+				  if (response.success === false) {
+					  return 'Error updating name to' + newValue;
+				  } //msg will be shown in editable form
 			  },
 			  validate: function (value) {
 				  if (value === null || value === '') {
@@ -135,6 +137,32 @@
 		  //			}
 		  //		});
 	  });
+
+	  function updatepass(form) {
+		  form.preventDefault();
+		  if (form.elements['password'].value === form.elements['confirmpassword'].value) {
+			  let url  = $(this).closest('form').attr('action'),
+				  data = $(this).closest('form').serialize();
+			  $.ajax({
+				  url : url,
+				  type: 'post',
+				  data: data,
+			  }).done(updatepassresult(result));
+		  } else {
+			  alert('Passwords don\'t match');
+			  form.elements['password'].focus();
+		  }
+	  }
+
+	  function updatepassresult(result){
+	  	if (result.success === true){
+
+		}
+
+		setTimeout(removepassresult, 5000)
+	  }
+
+	  function removepassresult{}
   </script>
 
   <script>
@@ -150,9 +178,10 @@
 	  $(function () {
 		  $('.image-editor').cropit({
 			  imageState: {
-				  src: 'https://au.junkfreejune.org/themes/base/production/images/default-profile.png',
-				  //src: 'your_image_path/to_be_crop_image.jpg',
+				  src: '{{ userData.picture | default(asset('profile_default.jpg','users')) }}',
 			  },
+			  smallImage: 'stretch',
+			  //			  {#todo#} imageBackground: true,
 		  });
 
 		  $('.rotate-cw').click(function () {

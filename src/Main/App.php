@@ -15,8 +15,8 @@ use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\WebProfilerServiceProvider;
 use Silex\Provider\VarDumperServiceProvider;
+use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -100,6 +100,7 @@ class App extends Application
 				'css'        => array('version' => 'css3', 'base_path' => 'stylesheets/'),
 				'images'     => array('base_path' => 'images/'),
 				'food'       => array('base_path' => 'images/food/'),
+				'users'      => array('base_path' => 'images/people/'),
 				'javascript' => array('base_path' => 'js/'),
 			),
 		));
@@ -175,7 +176,7 @@ class App extends Application
 				'error'         => $this['security.last_error']($request),
 				'last_username' => $this['session']->get('_security.last_username'),
 			));
-		})->bind('login');
+		})->bind('login'); //future remember me on here
 
 		$this->get('/register', function () {
 			return $this['twig']->render('signup.twig');
@@ -208,7 +209,11 @@ class App extends Application
 		})->bind('messenger');
 
 		$account->post('/update/fullname', 'rest.handler:updateName')
-			->bind('updatename')
+				->bind('updatename')
+				->secure('IS_AUTHENTICATED_FULLY');
+
+		$account->post('/update/password', 'rest.handler:updatePass')
+				->bind('updatepass')
 				->secure('IS_AUTHENTICATED_FULLY');
 
 		$this->mount('/account', $account);
@@ -310,4 +315,5 @@ class App extends Application
 	}
 
 	//future admin routes
+	//todo improved error messages throughout
 }

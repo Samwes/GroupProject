@@ -294,6 +294,36 @@ class Requests
 		return new JsonResponse($response);
 	}
 
+	public function updatePass(Request $request, App $app) {
+		$oldpass = $request->get('oldPpassword');
+		$newpass = $request->get('password');
+		$response = array("success" => false);
+
+		//Check Vars
+		if (!is_string($newpass)) {
+			$response['error'] = 'newpass incorrectly defined';
+			die(json_encode($response));
+		}
+		if (!is_string($oldpass)) {
+			$response['error'] = 'oldpass incorrectly defined';
+			die(json_encode($response));
+		}
+
+		$token = $app['security.token_storage']->getToken(); //future refactor this into its own func?
+
+		if (null !== $token) {
+			$user = $token->getUser();
+			$userID = $user->getID();
+			$password = $user->getPassword();
+			$encoded = $app['security.default_encoder']->encodePassword($newpass, null);
+			if (password_verify($oldpass, $password) && $this->db->updatePass($userID, $encoded)) {
+				$response['success'] = true;
+			}
+		}
+
+		return new JsonResponse($response);
+	}
+
 	public function userID(Request $request, App $app) {
 		$token = $app['security.token_storage']->getToken();
 		$toEncode = array('userID' => 'error');

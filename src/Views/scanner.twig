@@ -230,7 +230,10 @@
 		  //Calender:
 		  //    $('#datepicker').datetimepicker();
 
-		  $('.image-editor').cropit();
+		  $('.image-editor').cropit({
+			  smallImage: 'stretch',
+
+		  });
 
 		  $('.rotate-cw').click(function () {
 			  $('.image-editor').cropit('rotateCW');

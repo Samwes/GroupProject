@@ -53,11 +53,7 @@ final class User implements AdvancedUserInterface
 	}
 
 	public function setPassword($inPass): bool {
-		if (null === $this->password) {
-			$this->password = $inPass;
-			return true;
-		}
-		return false;
+		return null;
 	}
 
 	public function getSalt() {
