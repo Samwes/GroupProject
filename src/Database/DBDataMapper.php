@@ -158,7 +158,8 @@ class DBDataMapper
 
 	public function addNewUserMessage($message, $sender, $receiver) {
 		$query = 'INSERT INTO `messagetable` (`message`, `time`) VALUES (:msg, NOW());';
-		$query .= 'INSERT INTO usermessagetable (messageid, sender, receiver) VALUES (LAST_INSERT_ID(), :send, :rec)';
+		$query .= 'INSERT INTO usermessagetable (messageid, sender, receiver) VALUES (LAST_INSERT_ID(), :send, :rec);';
+		$query .= 'INSERT INTO requestmessagetable (messageid, sender, requestid) VALUES (LAST_INSERT_ID(), :send, :req)';
 		$result = true;
 		try {
 			$stmt = $this->pdo->prepare($query);
@@ -203,10 +204,10 @@ class DBDataMapper
 	public function getUserMessagesByRequestID($userID, $requestID) {
 		$query = "SELECT `messagetable`.`message`, `messagetable`.`time`, `usermessagetable`.`sender`, `usermessagetable`.`receiver`
                     FROM `messagetable`, `requestmessagetable`, `usermessagetable`
-                    WHERE `requestmessagetable`.`requestid` = ':requestID'
+                    WHERE `requestmessagetable`.`requestid` = :requestID
                     AND `requestmessagetable`.`messageid` = `messagetable`.`messageid`
                     AND `requestmessagetable`.`messageid` = `usermessagetable`.`messageid`
-                    AND (`usermessagetable`.`sender` = ':userID' OR `usermessagetable`.`receiver` = ':userID')";
+                    AND (`usermessagetable`.`sender` = :userID OR `usermessagetable`.`receiver` = :userID)";
 		$result = null;
 		try {
 			$stmt = $this->pdo->prepare($query);
@@ -218,8 +219,9 @@ class DBDataMapper
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		} catch (\PDOException $e) {
-			if (DEBUG) { echo 'Get user messages failed: '.$e->getMessage();
-            }
+			if (DEBUG) {
+				echo 'Get user messages failed: '.$e->getMessage();
+      }
 		}
 		$stmt = null;
 		return $result;
@@ -355,7 +357,30 @@ class DBDataMapper
 	public function getRequestsSentByUserID($id) {
 		$query = "SELECT `itemtable`.`userid`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
                     FROM `itemtable`, `requesttable`
-                    WHERE `requester` = :id AND `requesttable`.`foodid` = `itemtable`.`foodid`";
+                    WHERE `requester` = :id
+										AND `requesttable`.`foodid` = `itemtable`.`foodid`";
+		$result = null;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':id' => $id,
+						   ));
+
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		} catch (PDOException $e) {
+			if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
+            }
+		}
+		$stmt = null;
+		return $result;
+	}
+
+	public function getRequestsReceivedByUserID($id) {
+		$query = 'SELECT `requesttable`.`requester`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
+                    FROM `requesttable`, `itemtable`
+                    WHERE `requesttable`.`foodid` = `itemtable`.`foodid`
+                    AND `itemtable`.`userid` = :id';
 		$result = null;
 		try {
 			$stmt = $this->pdo->prepare($query);
@@ -489,28 +514,6 @@ class DBDataMapper
 			if (DEBUG) { echo 'Updating username failed: '.$e->getMessage();
             }
 			$result = false;
-		}
-		$stmt = null;
-		return $result;
-	}
-
-	public function getRequestsReceivedByUserID($id) {
-		$query = "SELECT `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
-                    FROM `requesttable`, `itemtable`
-                    WHERE `requesttable`.`foodid` = `itemtable`.`foodid`
-                    AND `itemtable`.`userid` = :id";
-		$result = null;
-		try {
-			$stmt = $this->pdo->prepare($query);
-
-			$stmt->execute(array(
-							   ':id' => $id,
-						   ));
-
-			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (\PDOException $e) {
-			if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
-            }
 		}
 		$stmt = null;
 		return $result;

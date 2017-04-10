@@ -246,8 +246,8 @@
 		  obj[parts[0]] = parts[1] || true;
 	  }
 
-	  {#todo markers on map <<<<<---------- fixme this #}
-	  {#todo reset min/max button? #}
+	  //todo markers on map <<<<<---------- fixme this
+	  //todo reset min/max button?
 
 	  if ('search' in obj) {
 		  let searchval = obj['search'];
@@ -526,35 +526,47 @@
   </script>
 
   <script>
-	/*var map = null;
+  var map = null;
+  // Map markers
+  function addMapMarkers() {
+    var defaultLocation;
+    if($("#pac-input").attr("latitude")) {
+      defaultLocation = {lat: parseFloat($("#pac-input").attr("latitude")), lng: parseFloat($("#pac-input").attr("longitude"))}
+    }
+    if(defaultLocation) {
+      map = new google.maps.Map(document.getElementById('map'), {
+  			zoom  : 12,
+  			center: defaultLocation
+  		});
+    } else {
+      map = new google.maps.Map(document.getElementById('map'), {
+  			zoom  : 6,
+  			center: {lat: 54.512997, lng: -4}
+  		});
+    }
 
-	 function initMapElements() {
-	 // 67.9222° N, 26.5046° E
-	 var durham = {lat: 54.7752493, lng: -1.584852};
-	 map = new google.maps.Map(document.getElementById('map'), {
-	 zoom: 12,
-	 center: durham,
-	 disableDefaultUI: true
-	 });
+    $("#item-cards > div").each(function(index) {
+      // this is card object
+      var location = {lat: parseFloat($(this).attr("latit")), lng: parseFloat($(this).attr("longit"))};
 
-	 var marker = new google.maps.Marker({
-	 position: durham,
-	 map: map
-	 });
+      var marker = new google.maps.Marker({
+  			position: location,
+  			map     : map,
+  		});
 
-	 }*/
-	var map = null;
+    });
+  }
+
+  </script>
+
+  <script>
 
 	function initMapElements() {
 
-		var durham = {lat: 54.7752493, lng: -1.584852};
+		var defaultLocation = {lat: 54.512997, lng: -4.0};
 		map = new google.maps.Map(document.getElementById('map'), {
-			zoom  : 12,
-			center: durham,
-		});
-		var marker = new google.maps.Marker({
-			position: durham,
-			map     : map,
+			zoom  : 6,
+			center: defaultLocation,
 		});
 
 		// Create the search box and link it to the UI element.
