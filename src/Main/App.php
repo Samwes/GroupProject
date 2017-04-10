@@ -16,6 +16,7 @@ use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
+use Silex\Provider\VarDumperServiceProvider;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,6 +29,8 @@ class App extends Application
 	use Application\UrlGeneratorTrait;
 	use Application\SwiftmailerTrait;
 	use Application\MonologTrait;
+
+	//fixme each request created a database connection = v. bad as we'ere limited to 10. HAVE to clear them
 
 	public function __construct(array $values = array()) {
 		parent::__construct($values);
@@ -86,6 +89,7 @@ class App extends Application
 				'profiler.cache_dir'    => ROOT.'/../cache/profiler',
 				'profiler.mount_prefix' => '/_profiler', // this is the default
 			));
+			$this->register(new VarDumperServiceProvider());
 		}
 
 		// Register asset rerouting
