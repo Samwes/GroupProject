@@ -30,16 +30,17 @@
 	<div class="row">
 	  <div class="col-md-4">
 		<!-- USER PROFILE PICTURE -->
-		<div class="image-editor">
+		<div class="image-editor d-flex flex-column align-items-center">
 		  <input type="file" accept="image/*" capture="camera" class="cropit-image-input hidden-xs-up">
 		  <button class="btn btn-primary select-image-btn">Select Image</button>
-		  <div class="cropit-preview">
+		  <div class="cropit-preview d-flex">
 		  </div>
-		  <button class="btn btn-link rotate-ccw p-2"><i class="fa fa-undo" aria-hidden="true"></i></button>
-		  <button class="btn btn-link rotate-cw p-2"><i class="fa fa-repeat" aria-hidden="true"></i></button>
-		  <i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;"></i>
-		  <input class="cropit-image-zoom-input w-50" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
-		  <i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i>
+		  <div class="row d-flex flex-nowrap mw-100">
+			<button class="btn btn-link rotate-ccw p-1"><i class="fa fa-undo" aria-hidden="true"></i></button>
+			<button class="btn btn-link rotate-cw p-1"><i class="fa fa-repeat" aria-hidden="true"></i></button>
+			<i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;"></i>
+			<input class="cropit-image-zoom-input" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
+			<i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i></div>
 		</div>
 
 		<br>
@@ -76,35 +77,40 @@
 			</tr>
 		  </tbody>
 		</table>
-
-		<br>
-
-		<h3>Change Password</h3>
+		<hr>
 		{#<div class="row">#}
 		{#<div class="col-md-4 offset-md-4">#}
 		{#<h3>Change Password</h3>#}
 		{#</div>#}
 		{#</div>#}
 		{#todo fix#}
-		<form onSubmit="updatepass(this);" method="post">
-		  <label for="oldPassword">Enter Old Password</label>
-		  <div class="form-group input-group">
-			<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-			<input type="password" class="form-control square-border" id="oldPassword" placeholder="Old Password">
+		<form id="changepass" onsubmit="event.preventDefault(); updatepass(this);" method="post">
+		  <div id="passfeedback" class="form-control-feedback text-center h4" style="display:none;"></div>
+
+		  <h3>Change Password</h3>
+		  <div class="form-group" id="oldpass">
+			<label for="oldPassword">Enter Old Password</label>
+			<div class="input-group">
+			  <span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+			  <input type="password" class="form-control square-border" id="oldPassword" name="oldPassword" placeholder="Old Password" required>
+			</div>
 		  </div>
-		  <label for="newPassword">Enter New Password</label>
-		  <div class="form-group input-group">
-			<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-			<input type="password" class="form-control square-border" id="password" placeholder="New Password">
+		  <div class="form-group" id="newpass">
+			<label for="password">Enter New Password</label>
+			<div class="input-group">
+			  <span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+			  <input type="password" class="form-control square-border" id="password" name="password" placeholder="New Password" required>
+			</div>
 		  </div>
-		  <label for="confirmNewPassword">Confirm Old Password</label>
-		  <div class="form-group input-group">
-			<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-			<input type="password" class="form-control square-border" id="confirmpassword" placeholder="Confirm New Password">
+		  <div class="form-group" id="confpass">
+			<label for="confirmpassword">Confirm New Password</label>
+			<div class="input-group">
+			  <span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+			  <input type="password" class="form-control square-border" id="confirmpassword" name="conf" placeholder="Confirm New Password" required>
+			</div>
 		  </div>
 		  <input type="submit" value="Change" class="btn btn-primary">
 		</form>
-
 	  </div>
 	</div>
   </div>
@@ -129,40 +135,43 @@
 				  }
 			  },
 		  });
-		  //		$('#username').editable({
-		  //			validate: function(value) {
-		  //				if (value === null || value === '') {
-		  //					return 'Empty values not allowed';
-		  //				}
-		  //			}
-		  //		});
 	  });
 
-	  function updatepass(form) {
-		  form.preventDefault();
+	  let updatepass = function (form) {
 		  if (form.elements['password'].value === form.elements['confirmpassword'].value) {
-			  let url  = $(this).closest('form').attr('action'),
-				  data = $(this).closest('form').serialize();
+			  let data = $("#changepass").serialize();
+			  console.log(data);
 			  $.ajax({
-				  url : url,
+				  url : '{{ path('updatepass') }}',
 				  type: 'post',
 				  data: data,
-			  }).done(updatepassresult(result));
+			  }).done(updatepassresult);
 		  } else {
-			  alert('Passwords don\'t match');
-			  form.elements['password'].focus();
+			  let theclass = "has-danger";
+			  $("#passfeedback").addClass(theclass).html('Input passwords don\'t match').slideDown("slow");
+			  $("#newpass").addClass(theclass);
+			  $("#confpass").addClass(theclass);
+			  setTimeout(removepassresult, 5000);
 		  }
+	  };
+
+	  function updatepassresult(result) {
+		  if (result.success === true) {
+			  $("#passfeedback").addClass("has-success").html('Password successfully updated!').slideDown("slow");
+		  } else if (result.error === 'Incorret password entered') {
+			  $("#passfeedback").addClass("has-danger").html('Current Password Incorrect').slideDown("slow");
+			  $("#oldpass").addClass("has-danger");
+		  } else {
+			  $("#passfeedback").addClass("has-danger").html('Unknown error occured').slideDown("slow");
+		  }
+		  setTimeout(removepassresult, 5000);
 	  }
 
-	  function updatepassresult(result){
-	  	if (result.success === true){
-
-		}
-
-		setTimeout(removepassresult, 5000)
+	  function removepassresult() {
+		  $("#changepass").find('.has-danger').removeClass("has-danger");
+		  $("#changepass").find('.has-success').removeClass("has-success");
+		  $("#passfeedback").slideUp("fast");
 	  }
-
-	  function removepassresult{}
   </script>
 
   <script>
@@ -172,6 +181,7 @@
 			  return 'Current value: ' + value;
 		  },
 	  });
+	  $('#ex1Slider').addClass('d-inline-flex');
   </script>
 
   <script>

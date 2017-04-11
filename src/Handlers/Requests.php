@@ -295,7 +295,7 @@ class Requests
 	}
 
 	public function updatePass(Request $request, App $app) {
-		$oldpass = $request->get('oldPpassword');
+		$oldpass = $request->get('oldPassword');
 		$newpass = $request->get('password');
 		$response = array("success" => false);
 
@@ -316,9 +316,17 @@ class Requests
 			$userID = $user->getID();
 			$password = $user->getPassword();
 			$encoded = $app['security.default_encoder']->encodePassword($newpass, null);
-			if (password_verify($oldpass, $password) && $this->db->updatePass($userID, $encoded)) {
-				$response['success'] = true;
+			if (password_verify($oldpass, $password)) {
+				if ($this->db->updatePass($userID, $encoded)) {
+					$response['success'] = true;
+				} else {
+					$response['error'] = 'Database error encountered';
+				}
+			} else {
+				$response['error'] = 'Incorret password entered';
 			}
+		} else {
+			$response['error'] = 'Unknown error occured';
 		}
 
 		return new JsonResponse($response);
