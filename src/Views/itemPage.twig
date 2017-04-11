@@ -1,7 +1,5 @@
 {% extends 'layout.twig' %}
 
-{# note input variable id for item ID (load by REST) #}
-
 {% block head %}
   {{ parent() }}
   <title>Item Page</title>
@@ -9,34 +7,39 @@
 
 {% block content %}
   {{ parent() }}
-  <br>
+  <div class="container py-lg-5 py-md-3 py-sm-0" ></div>
 
   <div class="container">
 	<div class="row d-flex flex-nowrap">
 	  <div class="col">
-		<div class="d-flex flex-column square-border">
+		<div class="d-flex flex-column square-border" style="min-height: 50%;">
 		  <div class="d-flex">
 			<ul class="nav nav-tabs nav-fill w-100">
 			  <li class="nav-item active">
-				<a class="nav-link rounded-0" data-toggle="tab" href="#imgtab"><i class="fa fa-camera mr-1" aria-hidden="true"></i> Picture</a>
+				<a class="nav-link rounded-0" data-toggle="tab" id="imgtab" href="#imgdisplay"><i class="fa fa-camera mr-1" aria-hidden="true"></i> Picture</a>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link rounded-0" data-toggle="tab" href="#maptab"><i class="fa fa-map-marker mr-1" aria-hidden="true"></i> Map</a>
+				<a class="nav-link rounded-0" data-toggle="tab" id="maptab" href="#mapdisplay"><i class="fa fa-map-marker mr-1" aria-hidden="true"></i> Map</a>
 			  </li>
 			</ul>
 		  </div>
 		  <!-- IMAGE -->
-		  <div class="tab-content clearfix">
-			<div class="tab-pane mx-auto active" id="imgtab">
-			  <img class="img-rounded mx-auto p-4" src="{{ asset('coal.jpg','food') }}" alt="Card image cap">
+		  <div class="tab-content d-flex justify-content-center clearfix p-lg-4 p-sm-2">
+			<div class="tab-pane active" id="imgdisplay">
+			  <div class="d-flex">
+				<img class="img-rounded mx-auto p-lg-4 p-sm-2" src="{{ asset('coal.jpg','food') }}" alt="Card image cap">
+			  </div>
 			</div>
-			<div class="tab-pane mx-auto" id="maptab">
-			  <h3>We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>
+			<!-- MAP -->
+			<div class="tab-pane w-100" id="mapdisplay">
+			  <div class="d-block flex-auto" id=map style="border: 1px solid #cccccc; height: 15rem; margin-top: -1px;"></div>
 			</div>
 		  </div>
 		</div>
+
+		<!-- ITEM INFORMATION -->
 		<div class="d-block">
-		  <!-- ITEM INFORMATION -->
+
 		  <h4>Block Of Coal</h4>
 		  <p>Some lovely and tasty coal for all to enjoy ♥</p>
 		  <br>
@@ -48,6 +51,7 @@
 		  <p><strong>Postage: </strong>No cost, I'll get one of my elves to hand deliver it ♥</p>
 		</div>
 	  </div>
+
 	  <div class="col-md-5">
 		<div class="card" style="border: 1px solid #cccccc">
 		  <div class="card-block">
@@ -64,7 +68,6 @@
 			</div>
 		  </div>
 		</div>
-		<div id=map style="border: 1px solid #cccccc; height: 15rem; margin-top: -1px;"></div>
 	  </div>
 	</div>
   </div>
@@ -78,11 +81,19 @@
 		  $('#user-popover').popover({
 			  trigger: 'focus',
 		  });
+
+		  $('#maptab').on('shown.bs.tab', function () {
+			  google.maps.event.trigger(map, 'resize');
+		  })
+
+
 	  });
   </script>
 
+  {#todo: store map marker(s) in array, redraw each time#}
+
   <script>
-	  var map = null;
+	  map = null;
 
 	  function initMapElements() {
 		  // 67.9222° N, 26.5046° E

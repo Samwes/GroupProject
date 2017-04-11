@@ -190,11 +190,11 @@
 
   <div class="container-fluid" style="height: 14px;"></div>
 
-  <div class="container-fluid my-2">
-	<div class="row">
+  <div class="container-fluid my-2 h-100">
+	<div class="row no-gutters h-100">
 	  <!-- FOOD ITEMS -->
 	  <!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
-	  <div class="col-md-7 no-gutters" style="overflow: scroll; overflow-x:hidden;" id="items">
+	  <div class="d-flex flex-column flex-auto" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
 		<div class="container p-0">
 		  <div class="card-columns" id="item-cards" style="column-gap: 0.4rem;">
 
@@ -204,8 +204,8 @@
 		</div>
 	  </div>
 	  <!-- MAP -->
-	  <div class="col-md-5 no-gutters">
-		<div id="map" style="width: 100%; height: 900px;"></div>
+	  <div class="d-block col-md-5" >
+		<div id="map" class="w-100 h-100"></div>
 	  </div>
 
 	</div>
@@ -219,11 +219,115 @@
 {% block scripts %}
   {{ parent() }}
   <!-- SEARCH FUNCTIONALITY -->
+  {#todo move all search in single file + keep track of already gotten items#}
+  {# todo - user inputs location on profile then ask browser then IP geolocation backup #}
   <script>
 	  var resultsSoFar = 0;
 	  var results = [];
 	  $(document).ready(refreshSearch());
   </script>
+
+  <script>
+//	  var map = null;
+//	  var mapmarkers = [];
+	  // Map markers
+
+	  {# future either use this method to refresh map (has to remove + add all markers but recovers much better from total wipe) #}
+	  {# future or add them onto the map as we get them from jquery #}
+	  {# note 100% should be keeping a list of their ID's in an array? array of ID => location seems pretty good #}
+
+
+	  function addMapMarkers() {
+		  var defaultLocation;
+		  if($("#pac-input").attr("latitude")) {
+			  defaultLocation = {lat: parseFloat($("#pac-input").attr("latitude")), lng: parseFloat($("#pac-input").attr("longitude"))}
+		  }
+		  if(defaultLocation) {
+			  map = new google.maps.Map(document.getElementById('map'), {
+				  zoom  : 12,
+				  center: defaultLocation
+			  });
+		  } else {
+			  map = new google.maps.Map(document.getElementById('map'), {
+				  zoom  : 6,
+				  center: {lat: 54.512997, lng: -4}
+			  });
+		  }
+
+		  $("#item-cards").find("div").each(function(index) {
+			  // this is card object
+			  var location = {lat: parseFloat($(this).attr("data-latit")), lng: parseFloat($(this).attr("data-longit"))};
+
+			  var marker = new google.maps.Marker({
+				  position: location,
+				  map     : map,
+			  });
+
+		  });
+	  }
+
+  </script>
+
+  <script>
+
+	  function initMapElements() {
+		  let element = document.getElementById('map');
+
+		  var defaultLocation = {lat: 54.512997, lng: -4.0};
+		  let map = new google.maps.Map(element, {
+			  zoom  : 6,
+			  center: defaultLocation,
+		  });
+
+
+		  element.gMap = map; //Yeah this works. Some god found it on stack overflow. Now just getelementbyid('map').gMap to get it, no globals
+
+
+		  // Create the search box and link it to the UI element.
+		  var input = document.getElementById('pac-input');
+		  var searchBox = new google.maps.places.SearchBox(input);
+
+		  // Listen for the event fired when the user selects a prediction and retrieve
+		  // more details for that place.
+		  searchBox.addListener('places_changed', function () {
+			  var places = searchBox.getPlaces();
+
+			  if (places.length == 0) {
+				  return;
+			  }
+
+			  // For each place, get the icon, name and location.
+			  var bounds = new google.maps.LatLngBounds();
+			  places.forEach(function (place) {
+				  if (!place.geometry) {
+					  console.log("Returned place contains no geometry");
+					  return;
+				  }
+
+				/*var icon = {
+				 url: place.icon,
+				 size: new google.maps.Size(71, 71),
+				 origin: new google.maps.Point(0, 0),
+				 anchor: new google.maps.Point(17, 34),
+				 scaledSize: new google.maps.Size(25, 25)
+				 };
+
+				 console.log(icon);*/
+				  $("#pac-input").attr("latitude", place.geometry.location.lat());
+				  $("#pac-input").attr("longitude", place.geometry.location.lng());
+
+				  history.pushState('Location updated', 'Location updated', document.location.href + "&latitude=" + place.geometry.location.lat() + "&longitude" + place.geometry.location.lng());
+				  refreshSearch();
+
+			  });
+		  });
+	  }
+  </script>
+
+  <script async defer
+		  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
+  </script>
+
 
   <script>
 	  $(function ($) {
@@ -337,13 +441,6 @@
   <!-- CORRECT SIZES OF ELEMENTS -->
   <script>
 	  $(document).ready(function () {
-		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-				  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#search-navbar-group')
-			  .width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-					  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#items').height($(window).height() - $('#search-navbar').height() - $('#options-navbar').height() - 14);
-		  $('#map').height($(window).height() - $('#search-navbar').height() - $('#options-navbar').height() - 14);
 		  $("#search-form").submit(function (e) {
 			  clearTimeout(refreshSearch());
 			  refreshSearch();
@@ -354,15 +451,6 @@
 			  setTimeout(refreshSearch, 2000);
 		  }));
 	  });
-	  resize = function () {
-		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-				  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#search-navbar-group')
-			  .width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-					  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#items').height($(window).height() - $('#search-navbar').height() - $('#options-navbar').height() - 14);
-		  $('#map').height($(window).height() - $('#search-navbar').height() - $('#options-navbar').height() - 14);
-	  };
   </script>
 
   <script>
@@ -523,95 +611,6 @@
 		  $("#weight-sort-icon").attr('class', '');
 		  refreshSearch();
 	  });
-  </script>
-
-  <script>
-  var map = null;
-  // Map markers
-  function addMapMarkers() {
-    var defaultLocation;
-    if($("#pac-input").attr("latitude")) {
-      defaultLocation = {lat: parseFloat($("#pac-input").attr("latitude")), lng: parseFloat($("#pac-input").attr("longitude"))}
-    }
-    if(defaultLocation) {
-      map = new google.maps.Map(document.getElementById('map'), {
-  			zoom  : 12,
-  			center: defaultLocation
-  		});
-    } else {
-      map = new google.maps.Map(document.getElementById('map'), {
-  			zoom  : 6,
-  			center: {lat: 54.512997, lng: -4}
-  		});
-    }
-
-    $("#item-cards > div").each(function(index) {
-      // this is card object
-      var location = {lat: parseFloat($(this).attr("latit")), lng: parseFloat($(this).attr("longit"))};
-
-      var marker = new google.maps.Marker({
-  			position: location,
-  			map     : map,
-  		});
-
-    });
-  }
-
-  </script>
-
-  <script>
-
-	function initMapElements() {
-
-		var defaultLocation = {lat: 54.512997, lng: -4.0};
-		map = new google.maps.Map(document.getElementById('map'), {
-			zoom  : 6,
-			center: defaultLocation,
-		});
-
-		// Create the search box and link it to the UI element.
-		var input = document.getElementById('pac-input');
-		var searchBox = new google.maps.places.SearchBox(input);
-
-		// Listen for the event fired when the user selects a prediction and retrieve
-		// more details for that place.
-		searchBox.addListener('places_changed', function () {
-			var places = searchBox.getPlaces();
-
-			if (places.length == 0) {
-				return;
-			}
-
-			// For each place, get the icon, name and location.
-			var bounds = new google.maps.LatLngBounds();
-			places.forEach(function (place) {
-				if (!place.geometry) {
-					console.log("Returned place contains no geometry");
-					return;
-				}
-
-			  /*var icon = {
-			   url: place.icon,
-			   size: new google.maps.Size(71, 71),
-			   origin: new google.maps.Point(0, 0),
-			   anchor: new google.maps.Point(17, 34),
-			   scaledSize: new google.maps.Size(25, 25)
-			   };
-
-			   console.log(icon);*/
-				$("#pac-input").attr("latitude", place.geometry.location.lat());
-				$("#pac-input").attr("longitude", place.geometry.location.lng());
-
-				history.pushState('Location updated', 'Location updated', document.location.href + "&latitude=" + place.geometry.location.lat() + "&longitude" + place.geometry.location.lng());
-				refreshSearch();
-
-			});
-		});
-	}
-  </script>
-
-  <script async defer
-		  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
   </script>
 
 {% endblock %}

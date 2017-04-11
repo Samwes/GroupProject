@@ -115,8 +115,6 @@ class Requests
 	public function foodItemPost(Request $request, Application $app) {
 		$toEncode = array("error" => "failed to add");
 
-		die("Disabled");
-
 		$token = $app['security.token_storage']->getToken();
 		if (null !== $token) {
 			$userID = $token->getUser()->getID();

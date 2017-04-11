@@ -31,7 +31,8 @@ class App extends Application
 	use Application\SwiftmailerTrait;
 	use Application\MonologTrait;
 
-	//fixme each request created a database connection = v. bad as we'ere limited to 10. HAVE to clear them
+	//future smaller item cards (for smaller screens) with bare essentials
+	//future sort by radius etc in dropdown
 
 	public function __construct(array $values = array()) {
 		parent::__construct($values);
