@@ -39,6 +39,7 @@ function addItemToPage(name, expiredate, category, userid, description, latitude
 }
 
 //todo move to index? or move everything needed in here. Don't split between the two
+//todo fix so it works with only 1 param etc.
 
 function GetURLParameter(sParam) {
 	let sPageURL = window.location.search.substring(1);
@@ -53,9 +54,11 @@ function GetURLParameter(sParam) {
 
 function refreshSearch() {
 	let search = GetURLParameter("search");
+	resultsSoFar = 0;
+	results = [];
+	$("#item-cards").empty();
 
 	if (search) {
-		resultsSoFar = 0;
 
 		let category = GetURLParameter("category");
 		let latitude = GetURLParameter("latitude");
@@ -88,12 +91,10 @@ function refreshSearch() {
 
 		let query = "/search/" + category + "/" + search + "/" + latitude + "/" + longitude + "/" + radius + "/" + minQuantity + "/" + maxQuantity + "/" + minWeight + "/" + maxWeight + "/" + sort;
 		// Set Category and Search on page
-		$("#main-search-input").val(search);
 		$("#categories-dropdown").val(category);
 
 		// Make sure columns are empty
 		$("#item-cards").empty();
-		resultsSoFar = 0;
 		$.getJSON(query, function (data) {
 			results = data;
 			// Data is list of relevant items

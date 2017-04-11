@@ -73,7 +73,9 @@
 			<tr>
 			  <td scope="row">Location:
 				{#todo user inputs their location#}
-			  <td>Durham, United Kingdom</td>
+			  <td>
+					<a href="#" id="pac-input" data-type="text" data-title="Enter A Location To Search For">Durham, United Kingdom</a>
+				</td>
 			</tr>
 		  </tbody>
 		</table>
@@ -113,8 +115,29 @@
 
 {% block scripts %}
   {{ parent() }}
+	{{ block("main", "map.twig") }}
+	{{ block("searchableMap", "map.twig") }}
 
   <script>
+	  function placesIter(place) {
+		  if (!place.geometry) {
+			  console.log("Returned place contains no geometry");
+			  return;
+		  }
+		  clearMarkers();
+
+		  let loc = place.geometry.location, input = $("#pac-input");
+		  input.attr("data-latitude", loc.lat());
+		  input.attr("data-longitude", loc.lng());
+
+		  addMarker(loc.lat(),loc.lng(),);
+		  mapPanTo(loc.lat(),loc.lng());
+	  }
+
+	  $("#map").one("maploaded", function() {
+		  initSingleSear{#fixme yo add a map and input to this#} Map(placesIter);
+	  });
+
 	  $.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit"><i class="fa fa-fw fa-check"></i></button>' + '<button type="button" class="btn editable-cancel"><i class="fa fa-fw fa-remove"></i></button>';
 	  $.fn.editable.defaults.mode = 'inline';
 	  $(document).ready(function () {
@@ -210,29 +233,5 @@
 			  window.open(imageData);
 		  });
 	  });
-  </script>
-
-  <script>
-	  var map = null;
-
-	  function initMapElements() {
-		  // 67.9222° N, 26.5046° E
-		  var durham = {lat: 54.7752493, lng: -1.584852};
-		  map = new google.maps.Map(document.getElementById('map'), {
-			  zoom            : 12,
-			  center          : durham,
-			  disableDefaultUI: true,
-		  });
-
-		  var marker = new google.maps.Marker({
-			  position: durham,
-			  map     : map,
-		  });
-
-	  }
-  </script>
-
-  <script async defer
-		  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
   </script>
 {% endblock %}

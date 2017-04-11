@@ -194,7 +194,7 @@
 		<div class="row no-gutters h-100">
 			<!-- FOOD ITEMS -->
 			<!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
-			<div class="d-flex flex-column flex-auto" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
+			<div class="d-flex flex-column flex-auto" id="items" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
 				<div class="container p-0">
 					<div class="card-columns" id="item-cards" style="column-gap: 0.4rem;">
 
@@ -389,13 +389,13 @@
 	<script>
 	  $(document).ready(function () {
 		  $("#search-form").submit(function (e) {
-			  clearTimeout(refreshSearch());
+			  clearTimeout(searchtimeout);
 			  refreshSearch();
 			  return false;
 		  });
 
 		  $("#main-search-input").keypress((function (e) {
-			  setTimeout(refreshSearch, 2000);
+			  searchtimeout = setTimeout(refreshSearch, 2000);
 		  }));
 	  });
 	</script>
