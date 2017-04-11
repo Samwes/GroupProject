@@ -1991,16 +1991,16 @@
         },
         {
             "name": "silex/web-profiler",
-            "version": "v2.0.7",
+            "version": "v2.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silexphp/Silex-WebProfiler.git",
-                "reference": "5497bd2be84bf31a11bea9f15f72280b9ab06c5d"
+                "reference": "77823025d684ffcb8800382f7a38894aebd1e693"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silexphp/Silex-WebProfiler/zipball/5497bd2be84bf31a11bea9f15f72280b9ab06c5d",
-                "reference": "5497bd2be84bf31a11bea9f15f72280b9ab06c5d",
+                "url": "https://api.github.com/repos/silexphp/Silex-WebProfiler/zipball/77823025d684ffcb8800382f7a38894aebd1e693",
+                "reference": "77823025d684ffcb8800382f7a38894aebd1e693",
                 "shasum": ""
             },
             "require": {
@@ -2044,7 +2044,7 @@
             ],
             "description": "A WebProfiler for Silex",
             "homepage": "http://silex.sensiolabs.org/",
-            "time": "2017-04-08T17:23:38+00:00"
+            "time": "2017-04-08T17:30:17+00:00"
         },
         {
             "name": "sorien/silex-pimple-dumper",
