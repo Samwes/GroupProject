@@ -1,6 +1,6 @@
 {% block main %}
 	{#Inserts a map into the div with id 'map' accessable by js only (not jquery)#}
-	{#todo test if works inline#}
+	{#todo load maps on server then send to client (hides key?)#}
 	<script>
 	  function initMapElements() {
 		  let element = document.getElementById('map');
@@ -11,6 +11,8 @@
 		  });
 
 		  element.gMarkers = [];
+
+		  $(element).trigger('maploaded');
 	  }
 
 	  function getMapElement() {
@@ -33,8 +35,9 @@
 			});
 	  }
 
-	  function setMapCenter(lat, long) {
+	  function mapPanTo(lat, long) {
 		  let element = getMapElement(), map = element.gMap;
+		  map.panTo({lat: lat, lng: long});
 	  }
 
 	  function addMarker(lat, long, info) {
@@ -64,7 +67,7 @@
 
 {% endblock %}
 
-{% block searchable-map %}
+{% block searchableMap %}
 
 <script>
 		{# future either use this method to refresh map (has to remove + add all markers but recovers much better from total wipe) #}
@@ -86,17 +89,18 @@
 	  });
 
 		// Listen for the event fired when the user selects a prediction and retrieve
-		// more details for that place.
-		searchBox.addListener('places_changed', function () {
+		  // more details for that place.
+		 searchBox.addListener('places_changed', function () {
 			let places = searchBox.getPlaces();
 
 			if (places.length === 0) {
 				return;
 			}
-
+		 places.forEach(placesIterator);
 			// For each place, get the icon, name and location.
 //			let bounds = new google.maps.LatLngBounds(); {# note commeted #}
-			places.forEach(placesIterator(place));
+
+
 		});
 	};
 </script>

@@ -1,531 +1,563 @@
 {% extends 'layout.twig' %}
 
 {% block head %}
-  {{ parent() }}
-  <title>Homepage</title>
-  <link rel="stylesheet" href="{{ asset('bootstrap-slider.min.css','css') }}">
-  <script src="{{ asset('bootstrap-slider.min.js','javascript') }}"></script>
+	{{ parent() }}
+	<title>Homepage</title>
+	<link rel="stylesheet" href="{{ asset('bootstrap-slider.min.css','css') }}">
+	<script src="{{ asset('bootstrap-slider.min.js','javascript') }}"></script>
 {% endblock %}
 
 {% block content %}
-  {{ parent() }}
-  <nav class="navbar navbar-toggleable-md navbar-light bg-faded p-0 align-items-stretch" id="options-navbar" style="height: 47px; border-bottom: 1px solid #dce0e0;">
-	<ul class="nav navbar-nav">
-	  <li class="nav-item hidden-md-down h-100 px-2">
-		<div class="form-group input-group h-100" style="width: 220px;">
-		  <span class="input-group-addon panel-input-symbol p-0 border-bottom-0" style="background-color: #FAFAFA;"><i class="fa fa-globe" aria-hidden="true"></i></span>
-		  <input type="text" title="Location" class="form-control h-100 border-0" id="pac-input" style="width: 210px; background-color: #FAFAFA;" placeholder="Location"{# fixme latitude="" longitude=""#}>
+	{{ parent() }}
+	<nav class="navbar navbar-toggleable-md navbar-light bg-faded p-0 align-items-stretch" id="options-navbar" style="height: 47px; border-bottom: 1px solid #dce0e0;">
+		<ul class="nav navbar-nav">
+			<li class="nav-item hidden-md-down h-100 px-2">
+				<div class="form-group input-group h-100" style="width: 220px;">
+					<span class="input-group-addon panel-input-symbol p-0 border-bottom-0" style="background-color: #FAFAFA;"><i class="fa fa-globe" aria-hidden="true"></i></span>
+					<input type="text" title="Location" class="form-control h-100 border-0" id="pac-input" data-longitude="" data-latitutde="" style="width: 210px; background-color: #FAFAFA;" placeholder="Location">
+				</div>
+			</li>
+			<li class="nav-item hidden-md-down" style="height: 46px;">
+				<button id="radius-popover" type="button" class="btn btn-option square-border" data-container="body" data-toggle="popover" data-placement="bottom">Radius
+					<i class="fa fa-caret-down" aria-hidden="true"></i></button>
+				<div id="radius-popover-title" class="hidden-xs-up"></div>
+				<div id="radius-popover-content" class="hidden-xs-up">
+					<div class="form-group">
+						<label for="radiusSlider">Radius</label>
+						<input id="radiusSlider" data-slider-min="100" data-slider-max="1500" data-slider-step="100" data-slider-value="300"/>
+					</div>
+					<button id="radiusApply" class="btn apply btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0;">Apply</button>
+				</div>
+			</li>
+			<li class="nav-item hidden-md-down" style="height: 46px; margin-left: -6px;">
+				<button id="quantity-popover" type="button" class="btn btn-option square-border" data-container="body" data-toggle="popover" data-placement="bottom">Quantity
+					<i class="fa fa-caret-down" aria-hidden="true"></i></button>
+				<div id="quantity-popover-title" class="hidden-xs-up"></div>
+				<div id="quantity-popover-content" class="hidden-xs-up">
+					<div class="form-group">
+						<label for="quantitySlider">Quantity</label>
+						<input id="quantitySlider" data-slider-min="1" data-slider-max="10" data-slider-step="1" data-slider-value="[1,5]"/>
+					</div>
+					<button id="quantityApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
+				</div>
+			</li>
+			<li class="nav-item hidden-md-down" style="height: 46px; margin-left: -6px;">
+				<button id="weight-popover" type="button" class="btn btn-option square-border" style="border-right: 1px solid #dce0e0" data-container="body" data-toggle="popover" data-placement="bottom">Weight
+					<i class="fa fa-caret-down" aria-hidden="true"></i></button>
+				<div id="weight-popover-title" class="hidden-xs-up"></div>
+				<div id="weight-popover-content" class="hidden-xs-up">
+					<div class="form-group">
+						<label for="weightSlider">Min Weight</label>
+						<input id="weightSlider" data-slider-min="0" data-slider-max="2000" data-slider-step="100" data-slider-value="[0,300]"/>
+					</div>
+					<button id="weightApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
+				</div>
+			</li>
+		</ul>
+
+		<div class="container" id="searchbreaker"></div>
+
+		<ul class="nav navbar-nav align-self-end">
+			<li class="nav-item" style="height: 46px; margin-left: -6px;">
+				<button class="btn btn-option square-border fake-button-new" style="">Sort By:</button>
+			</li>
+			<li class="nav-item" style="height: 46px; margin-left: -6px;">
+				<button id="radius-sort" class="btn btn-option square-border" style="">Radius
+					<i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i></button>
+			</li>
+			<li class="nav-item" style="height: 46px; margin-left: -6px;">
+				<button id="quantity-sort" class="btn btn-option square-border" style="">Quantity
+					<i id="quantity-sort-icon" class="" aria-hidden="true"></i></button>
+			</li>
+			<li class="nav-item" style="height: 46px; margin-left: -6px;">
+				<button id="weight-sort" class="btn btn-option square-border" style="">Weight
+					<i id="weight-sort-icon" class="" aria-hidden="true"></i></button>
+			</li>
+		</ul>
+	</nav>
+
+	{#todo collapsable#}
+	{#<nav class="navbar navbar-light bg-faded navbar-static-top hidden-lg-up" id="options-navbar" style="padding: 0; height: 47px; border-bottom: 1px solid #dce0e0;">#}
+	{#<div class="container-fluid" style="height: 100%;">#}
+	{#<ul class="nav navbar-nav">#}
+	{#<li class="nav-item" style="width: 33.333%; height: 46px; margin-left: -6px;">#}
+	{#<button class="btn btn-option square-border" style="border-left: 0; width: 100%;" type="button" data-toggle="collapse" data-target="#collapseSearchSearch" aria-expanded="false" aria-controls="collapseExample">Search</button>#}
+	{#</li>#}
+	{#<li class="nav-item" style="width: 33.333%; height: 46px; margin-left: -6px;">#}
+	{#<button class="btn btn-option square-border" style="width: 100%;" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseExample">Filter</button>#}
+	{#</li>#}
+	{#<li class="nav-item" style="width: 33.333%; height: 46px; margin-left: -6px;">#}
+	{#<button class="btn btn-option square-border" style="width: 100%;" type="button" data-toggle="collapse" data-target="#collapseSort" aria-expanded="false" aria-controls="collapseExample">Sort</button>#}
+	{#</li>#}
+	{#</ul>#}
+	{#</div>#}
+	{#</nav>#}
+
+	<div class="collapse" id="collapseFilter">
+		<!-- FILTER OPTIONS -->
+		<div class="card card-block">
+			<form class="form-group" id="options">
+				<h5>Category</h5>
+				<div class="dropdown">
+					<button class="btn btn-secondary dropdown-toggle index square-border" style="margin-right: -17px;" type="button" id="categories-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Categories
+					</button>
+					<div class="dropdown-menu" id="topic-dropdown" aria-labelledby="categories-dropdown">
+						<a class="dropdown-item" href="#">Fresh Food</a>
+						<a class="dropdown-item" href="#">Bakery</a>
+						<a class="dropdown-item" href="#">Food Cupboard</a>
+						<a class="dropdown-item" href="#">Frozen Food</a>
+						<a class="dropdown-item" href="#">Drinks</a>
+						<a class="dropdown-item" href="#">Baby</a>
+						<a class="dropdown-item" href="#">Personal</a>
+						<a class="dropdown-item" href="#">Pet Care</a>
+						<a class="dropdown-item" href="#">Household</a>
+					</div>
+				</div>
+
+				<br>
+
+				<h5>Location</h5>
+				<label class="sr-only" for="locationInputGroup">Location</label>
+				<div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
+					<div class="input-group-addon square-border"><i class="fa fa-search" aria-hidden="true"></i></div>
+					<input type="text" title="Location" class="form-control square-border" id="pac-input" placeholder="Location">
+				</div>
+
+				<br>
+
+				<h5>Amount</h5>
+				<label class="sr-only" for="amountInputGroup">Amount</label>
+				<div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
+					<div class="input-group-addon square-border"><i class="fa fa-hashtag" aria-hidden="true"></i></div>
+					<input type="number" title="Quantity" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
+					<input type="number" title="Quantity" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
+				</div>
+
+				<br>
+
+				<h5>Weight</h5>
+				<label class="sr-only" for="weightInputGroup">Weight</label>
+				<div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
+					<div class="input-group-addon square-border"><i class="fa fa-balance-scale" aria-hidden="true"></i></div>
+					<input type="number" title="Weight" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
+					<input type="number" title="Weight" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
+				</div>
+
+				<br>
+
+				<button type="button" class="btn square-border">Refresh</button>
+
+			</form>
 		</div>
-	  </li>
-	  <li class="nav-item hidden-md-down" style="height: 46px;">
-		<button id="radius-popover" type="button" class="btn btn-option square-border" data-container="body" data-toggle="popover" data-placement="bottom">Radius
-		  <i class="fa fa-caret-down" aria-hidden="true"></i></button>
-		<div id="radius-popover-title" class="hidden-xs-up"></div>
-		<div id="radius-popover-content" class="hidden-xs-up">
-		  <div class="form-group">
-			<label for="radiusSlider">Radius</label>
-			<input id="radiusSlider" data-slider-min="100" data-slider-max="1500" data-slider-step="100" data-slider-value="300"/>
-		  </div>
-		  <button id="radiusApply" class="btn apply btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0;">Apply</button>
-		</div>
-	  </li>
-	  <li class="nav-item hidden-md-down" style="height: 46px; margin-left: -6px;">
-		<button id="quantity-popover" type="button" class="btn btn-option square-border" data-container="body" data-toggle="popover" data-placement="bottom">Quantity
-		  <i class="fa fa-caret-down" aria-hidden="true"></i></button>
-		<div id="quantity-popover-title" class="hidden-xs-up"></div>
-		<div id="quantity-popover-content" class="hidden-xs-up">
-		  <div class="form-group">
-			<label for="quantitySlider">Quantity</label>
-			<input id="quantitySlider" data-slider-min="1" data-slider-max="10" data-slider-step="1" data-slider-value="[1,5]"/>
-		  </div>
-		  <button id="quantityApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
-		</div>
-	  </li>
-	  <li class="nav-item hidden-md-down" style="height: 46px; margin-left: -6px;">
-		<button id="weight-popover" type="button" class="btn btn-option square-border" style="border-right: 1px solid #dce0e0" data-container="body" data-toggle="popover" data-placement="bottom">Weight
-		  <i class="fa fa-caret-down" aria-hidden="true"></i></button>
-		<div id="weight-popover-title" class="hidden-xs-up"></div>
-		<div id="weight-popover-content" class="hidden-xs-up">
-		  <div class="form-group">
-			<label for="weightSlider">Min Weight</label>
-			<input id="weightSlider" data-slider-min="0" data-slider-max="2000" data-slider-step="100" data-slider-value="[0,300]"/>
-		  </div>
-		  <button id="weightApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
-		</div>
-	  </li>
-	</ul>
-
-	<div class="container" id="searchbreaker"></div>
-
-	<ul class="nav navbar-nav align-self-end">
-	  <li class="nav-item" style="height: 46px; margin-left: -6px;">
-		<button class="btn btn-option square-border fake-button-new" style="">Sort By:</button>
-	  </li>
-	  <li class="nav-item" style="height: 46px; margin-left: -6px;">
-		<button id="radius-sort" class="btn btn-option square-border" style="">Radius
-		  <i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i></button>
-	  </li>
-	  <li class="nav-item" style="height: 46px; margin-left: -6px;">
-		<button id="quantity-sort" class="btn btn-option square-border" style="">Quantity
-		  <i id="quantity-sort-icon" class="" aria-hidden="true"></i></button>
-	  </li>
-	  <li class="nav-item" style="height: 46px; margin-left: -6px;">
-		<button id="weight-sort" class="btn btn-option square-border" style="">Weight
-		  <i id="weight-sort-icon" class="" aria-hidden="true"></i></button>
-	  </li>
-	</ul>
-  </nav>
-
-  {#todo collapsable#}
-  {#<nav class="navbar navbar-light bg-faded navbar-static-top hidden-lg-up" id="options-navbar" style="padding: 0; height: 47px; border-bottom: 1px solid #dce0e0;">#}
-  {#<div class="container-fluid" style="height: 100%;">#}
-  {#<ul class="nav navbar-nav">#}
-  {#<li class="nav-item" style="width: 33.333%; height: 46px; margin-left: -6px;">#}
-  {#<button class="btn btn-option square-border" style="border-left: 0; width: 100%;" type="button" data-toggle="collapse" data-target="#collapseSearchSearch" aria-expanded="false" aria-controls="collapseExample">Search</button>#}
-  {#</li>#}
-  {#<li class="nav-item" style="width: 33.333%; height: 46px; margin-left: -6px;">#}
-  {#<button class="btn btn-option square-border" style="width: 100%;" type="button" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseExample">Filter</button>#}
-  {#</li>#}
-  {#<li class="nav-item" style="width: 33.333%; height: 46px; margin-left: -6px;">#}
-  {#<button class="btn btn-option square-border" style="width: 100%;" type="button" data-toggle="collapse" data-target="#collapseSort" aria-expanded="false" aria-controls="collapseExample">Sort</button>#}
-  {#</li>#}
-  {#</ul>#}
-  {#</div>#}
-  {#</nav>#}
-
-  <div class="collapse" id="collapseFilter">
-	<!-- FILTER OPTIONS -->
-	<div class="card card-block">
-	  <form class="form-group" id="options">
-		<h5>Category</h5>
-		<div class="dropdown">
-		  <button class="btn btn-secondary dropdown-toggle index square-border" style="margin-right: -17px;" type="button" id="categories-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			Categories
-		  </button>
-		  <div class="dropdown-menu" id="topic-dropdown" aria-labelledby="categories-dropdown">
-			<a class="dropdown-item" href="#">Fresh Food</a>
-			<a class="dropdown-item" href="#">Bakery</a>
-			<a class="dropdown-item" href="#">Food Cupboard</a>
-			<a class="dropdown-item" href="#">Frozen Food</a>
-			<a class="dropdown-item" href="#">Drinks</a>
-			<a class="dropdown-item" href="#">Baby</a>
-			<a class="dropdown-item" href="#">Personal</a>
-			<a class="dropdown-item" href="#">Pet Care</a>
-			<a class="dropdown-item" href="#">Household</a>
-		  </div>
-		</div>
-
-		<br>
-
-		<h5>Location</h5>
-		<label class="sr-only" for="locationInputGroup">Location</label>
-		<div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
-		  <div class="input-group-addon square-border"><i class="fa fa-search" aria-hidden="true"></i></div>
-		  <input type="text" title="Location" class="form-control square-border" id="pac-input" placeholder="Location">
-		</div>
-
-		<br>
-
-		<h5>Amount</h5>
-		<label class="sr-only" for="amountInputGroup">Amount</label>
-		<div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
-		  <div class="input-group-addon square-border"><i class="fa fa-hashtag" aria-hidden="true"></i></div>
-		  <input type="number" title="Quantity" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
-		  <input type="number" title="Quantity" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
-		</div>
-
-		<br>
-
-		<h5>Weight</h5>
-		<label class="sr-only" for="weightInputGroup">Weight</label>
-		<div class="input-group mb-0 mr-sm-2 mb-sm-0" style="margin-right: -6px;">
-		  <div class="input-group-addon square-border"><i class="fa fa-balance-scale" aria-hidden="true"></i></div>
-		  <input type="number" title="Weight" class="form-control square-border" placeholder="Min" style="width: 4rem; margin-right: -1px;" onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
-		  <input type="number" title="Weight" class="form-control square-border" placeholder="Max" style="width: 4rem;" onkeypress='return event.charCode >= 48 && event.charCode <= 57;'>
-		</div>
-
-		<br>
-
-		<button type="button" class="btn square-border">Refresh</button>
-
-	  </form>
 	</div>
-  </div>
-  <div class="collapse" id="collapseSort">
-	<!-- SORT OPTIONS -->
-	<div class="card card-block">
-	  <div class="btn-group mr-1" role="group" aria-label="First group" style="margin: 0 !important;">
-		<div class="container">
-		  <div class="row">
-			<div class="col-4">
-			  <button id="radius-sort" type="button" class="btn btn-secondary square-border">
-				<i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i> Radius
-			  </button>
+	<div class="collapse" id="collapseSort">
+		<!-- SORT OPTIONS -->
+		<div class="card card-block">
+			<div class="btn-group mr-1" role="group" aria-label="First group" style="margin: 0 !important;">
+				<div class="container">
+					<div class="row">
+						<div class="col-4">
+							<button id="radius-sort" type="button" class="btn btn-secondary square-border">
+								<i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i> Radius
+							</button>
+						</div>
+						<div class="col-4">
+							<button id="weight-sort" type="button" class="btn btn-secondary square-border">
+								<i id="weight-sort-icon" class="" aria-hidden="true"></i> Weight
+							</button>
+						</div>
+						<div class="col-4">
+							<button id="expiry-sort" type="button" class="btn btn-secondary square-border">
+								<i id="expiry-sort-icon" class="" aria-hidden="true"></i> Expiry
+							</button>
+						</div>
+					</div>
+				</div>
+				<br>
+				<button id="radius-sort" type="button" class="btn btn-secondary square-border" style="width:33%;">
+					<i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i> Radius
+				</button>
+				<button id="weight-sort" type="button" class="btn btn-secondary" style="width:33%;">
+					<i id="weight-sort-icon" class="" aria-hidden="true"></i> Weight
+				</button>
+				<button id="expiry-sort" type="button" class="btn btn-secondary square-border" style="width:33%;">
+					<i id="expiry-sort-icon" class="" aria-hidden="true"></i> Expiry
+				</button>
 			</div>
-			<div class="col-4">
-			  <button id="weight-sort" type="button" class="btn btn-secondary square-border">
-				<i id="weight-sort-icon" class="" aria-hidden="true"></i> Weight
-			  </button>
-			</div>
-			<div class="col-4">
-			  <button id="expiry-sort" type="button" class="btn btn-secondary square-border">
-				<i id="expiry-sort-icon" class="" aria-hidden="true"></i> Expiry
-			  </button>
-			</div>
-		  </div>
 		</div>
-		<br>
-		<button id="radius-sort" type="button" class="btn btn-secondary square-border" style="width:33%;">
-		  <i id="radius-sort-icon" class="fa fa-sort-asc" aria-hidden="true"></i> Radius
-		</button>
-		<button id="weight-sort" type="button" class="btn btn-secondary" style="width:33%;">
-		  <i id="weight-sort-icon" class="" aria-hidden="true"></i> Weight
-		</button>
-		<button id="expiry-sort" type="button" class="btn btn-secondary square-border" style="width:33%;">
-		  <i id="expiry-sort-icon" class="" aria-hidden="true"></i> Expiry
-		</button>
-	  </div>
 	</div>
-  </div>
 
-  <div class="container-fluid" style="height: 14px;"></div>
+	<div class="container-fluid" style="height: 14px;"></div>
 
-  <div class="container-fluid my-2 h-100">
-	<div class="row no-gutters h-100">
-	  <!-- FOOD ITEMS -->
-	  <!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
-	  <div class="d-flex flex-column flex-auto" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
-		<div class="container p-0">
-		  <div class="card-columns" id="item-cards" style="column-gap: 0.4rem;">
+	<div class="container-fluid my-2 h-100">
+		<div class="row no-gutters h-100">
+			<!-- FOOD ITEMS -->
+			<!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
+			<div class="d-flex flex-column flex-auto" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
+				<div class="container p-0">
+					<div class="card-columns" id="item-cards" style="column-gap: 0.4rem;">
 
-		  </div>
+					</div>
 
-		  <i class="fa fa-spinner fa-pulse fa-3x fa-fw hidden-xs-up" id="loading-icon"></i>
+					<i class="fa fa-spinner fa-pulse fa-3x fa-fw hidden-xs-up" id="loading-icon"></i>
+				</div>
+			</div>
+			<!-- MAP -->
+			<div class="d-block col-md-5">
+				<div id="map" class="w-100" style="height: 90%; "></div>
+			</div>
+
 		</div>
-	  </div>
-	  <!-- MAP -->
-	  <div class="d-block col-md-5">
-		<div id="map" class="w-100 h-100"></div>
-	  </div>
-
 	</div>
-  </div>
 
-  <br>
+	<br>
 
 {% endblock %}
 
 
 {% block scripts %}
-  {{ parent() }}
-  <!-- SEARCH FUNCTIONALITY -->
-  {#todo move all search in single file + keep track of already gotten items#}
-  {# todo - user inputs location on profile then ask browser then IP geolocation backup #}
-  <script>
-		var resultsSoFar = 0;
-		var results = [];
-		$(document).ready(refreshSearch());
+	{{ parent() }}
+	{{ block("main", "map.twig") }}
+	{{ block("searchableMap", "map.twig") }}
 
-	function placesIter (place) {
-		if (!place.geometry) {
-			console.log("Returned place contains no geometry");
-			return;
-		}
-		let loc=place.geometry.location, input = $("#pac-input");
-	  input.attr("data-latitude", loc.lat);
-	  input.attr("data-longitude", loc.lng);
+	<!-- SEARCH FUNCTIONALITY -->
+	{#todo move all search in single file + keep track of already gotten items#}
+	{# todo - user inputs location on profile then ask browser then IP geolocation backup #}
+	<script>
+	  var resultsSoFar = 0;
+	  var results = [];
+	  $(document).ready(refreshSearch());
 
-	  let query = UpdateQueryString('latitude', loc.lat);
-	  query = UpdateQueryString('longitude', loc.lng, query);
-	  history.pushState('Location updated', 'Location updated', query);
-		refreshSearch();
-	}
-  </script>
+	  function placesIter(place) {
+		  if (!place.geometry) {
+			  console.log("Returned place contains no geometry");
+			  return;
+		  }
+		  clearMarkers();
 
+		  let loc = place.geometry.location, input = $("#pac-input");
+		  input.attr("data-latitude", loc.lat());
+		  input.attr("data-longitude", loc.lng());
 
+		  mapPanTo(loc.lat(),loc.lng());
 
-  <script>
-		$(function ($) {
-			$('#items').on('scroll', function () {
-				if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-					addMoreItems();
-				}
+		  let query = UpdateQueryString('latitude', loc.lat());
+		  query = UpdateQueryString('longitude', loc.lng(), query);
+		  history.pushState('Location updated', 'Location updated', query);
+		  refreshSearch();
+	  }
+
+		  $("#map").one("maploaded", function() {
+		  initSingleSearchMap(placesIter);
 			});
-		});
-  </script>
-
-  <script>
-		//Do this before page loaded event fires
-		let obj = {}, i, parts, len, key, value;
-		let _params = window.location.search.substr(1).split('#')[0].split('&');
-
-		for (i = 0, len = _params.length; i < len; i++) {
-			parts = _params[i].split('=');
-			if (!parts[0]) {continue;}
-			obj[parts[0]] = parts[1] || true;
-		}
-
-		//todo markers on map <<<<<---------- fixme this
-		//todo reset min/max button?
-
-		if ('search' in obj) {
-			let searchval = obj['search'];
-			if (searchval === true) {
-				window.history.replaceState('', '', UpdateQueryString('search', null));
-			} else {
-				$("#main-search-input").value = searchval;
-			}
-		} else {
-			$("#main-search-input").value = "";
-		}
-
-		if ('radius' in obj) {
-			$('#radiusSlider').attr('data-slider-value', obj['radius']);
-		}
-
-		if ('minQuantity' in obj) {
-			if ('maxQuantity' in obj) {
-				$('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + obj['maxQuantity'] + ']');
-			} else {
-				let maxval = $('#quantitySlider').attr('data-slider-max');
-				$('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + maxval + ']');
-				window.history.replaceState('', '', UpdateQueryString('maxQuantity', maxval));
-			}
-		} else if ('maxQuantity' in obj) {
-			let minval = $('#quantitySlider').attr('data-slider-min');
-			$('#quantitySlider').attr('data-slider-value', '[' + minval + ',' + obj['maxQuantity'] + ']');
-			window.history.replaceState('', '', UpdateQueryString('minQuantity', minval));
-		}
-
-		if ('minWeight' in obj) {
-			if ('maxWeight' in obj) {
-				$('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + obj['maxWeight'] + ']');
-			} else {
-				let maxval = $('#weightSlider').attr('data-slider-max');
-				$('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + maxval + ']');
-				window.history.replaceState('', '', UpdateQueryString('maxWeight', maxval));
-			}
-		} else if ('maxWeight' in obj) {
-			let minval = $('#weightSlider').attr('data-slider-min');
-			$('#weightSlider').attr('data-slider-value', '[' + minval + ',' + obj['maxWeight'] + ']');
-			window.history.replaceState('', '', UpdateQueryString('minWeight', minval));
-		}
-
-		function UpdateQueryString(key, value, url) {
-			if (!url) {
-				url = window.location.href;
-			}
-			let re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
-					hash;
-
-			if (re.test(url)) {
-				if (typeof value !== 'undefined' && value !== null) {
-					return url.replace(re, '$1' + key + "=" + value + '$2$3');
-				} else {
-					hash = url.split('#');
-					url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
-					if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
-						url += '#' + hash[1];
-					}
-					return url;
-				}
-			}
-			else {
-				if (typeof value !== 'undefined' && value !== null) {
-					var separator = url.indexOf('?') !== -1 ? '&' : '?';
-					hash = url.split('#');
-					url = hash[0] + separator + key + '=' + value;
-					if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
-						url += '#' + hash[1];
-					}
-					return url;
-				}
-				else {
-					return url;
-				}
-			}
-		}
-		function hideAllPopovers() {
-			$('#radius-popover').popover('hide');
-			$('#quantity-popover').popover('hide');
-			$('#weight-popover').popover('hide');
-		}
-  </script>
+	</script>
 
 
-  <!-- CORRECT SIZES OF ELEMENTS -->
-  <script>
-		$(document).ready(function () {
-			$("#search-form").submit(function (e) {
-				clearTimeout(refreshSearch());
-				refreshSearch();
-				return false;
-			});
 
-			$("#main-search-input").keypress((function (e) {
-				setTimeout(refreshSearch, 2000);
-			}));
-		});
-  </script>
+	<script>
+	  $(function ($) {
+		  $('#items').on('scroll', function () {
+			  if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+				  addMoreItems();
+			  }
+		  });
+	  });
+	</script>
 
-  <script>
-		// Popovers
-		$('#radius-popover').popover({
-			html   : true,
-			title  : function () {
-				return $("#radius-popover-head").html();
-			},
-			content: function () {
-				return $("#radius-popover-content").html();
-			},
+	<script>
+	  //Do this before page loaded event fires
+	  let obj = {}, i, parts, len, key, value;
+	  let _params = window.location.search.substr(1).split('#')[0].split('&');
 
-		}).on('shown.bs.popover', function () {
-			let aslider = $('.popover').find('#radiusSlider');
-			$('.popover').find('#radiusApply').click(function () {
-				let val = aslider.slider('getValue');
-				$('#radiusSlider').attr('data-slider-value', val);
-				window.history.pushState('Radius updated', 'Radius updated', UpdateQueryString('radius', val));
-				hideAllPopovers();
-				refreshSearch();
-			});
-			aslider.slider({
-				formatter: function (value) {
-					return value + 'm';
-				},
-			});
+	  for (i = 0, len = _params.length; i < len; i++) {
+		  parts = _params[i].split('=');
+		  if (!parts[0]) {continue;}
+		  obj[parts[0]] = parts[1] || true;
+	  }
 
-			$('.slider-selection').css('background', '#BABABA');
-			$('#quantity-popover').popover('hide');
-			$('#weight-popover').popover('hide');
-		});
+	  //todo markers on map <<<<<---------- fixme this
+	  //todo reset min/max button?
 
-		$('#quantity-popover').popover({
-			html   : true,
-			title  : function () {
-				return $("#quantity-popover-head").html();
-			},
-			content: function () {
-				return $("#quantity-popover-content").html();
-			},
-		}).on('shown.bs.popover', function () {
-			let aslider = $('.popover').find('#quantitySlider');
-			$('.popover').find('#quantityApply').click(function () {
-				let val = aslider.slider('getValue');
-				$('#quantitySlider').attr('data-slider-value', '[' + val.toString() + ']');
-				let query = UpdateQueryString('minQuantity', val[0]);
-				query = UpdateQueryString('maxQuantity', val[1], query);
-				history.pushState('Quantity updated', 'Quantity updated', query);
-				hideAllPopovers();
-				refreshSearch();
-			});
-			aslider.slider({
-				range    : true,
-				formatter: function (value) {
-					if (value.constructor === Array) {
-						return value[0] + " to " + value[1] + " items";
-					}
-					return value;
-				},
-			});
+	  if ('search' in obj) {
+		  let searchval = obj['search'];
+		  if (searchval === true) {
+			  window.history.replaceState('', '', UpdateQueryString('search', null));
+		  } else {
+			  $("#main-search-input").value = searchval;
+		  }
+	  } else {
+		  $("#main-search-input").value = "";
+	  }
 
-			$('.slider-selection').css('background', '#BABABA');
-			$('#radius-popover').popover('hide');
-			$('#weight-popover').popover('hide');
-		});
+	  if ('radius' in obj) {
+		  $('#radiusSlider').attr('data-slider-value', obj['radius']);
+	  }
 
-		$('#weight-popover').popover({
-			html   : true,
-			title  : function () {
-				return $("#weight-popover-head").html();
-			},
-			content: function () {
-				return $("#weight-popover-content").html();
-			},
-		}).on('shown.bs.popover', function () {
-			let aslider = $('.popover').find('#weightSlider');
-			$('.popover').find('#weightApply').click(function () {
-				let val = aslider.slider('getValue');
-				$('#weightSlider').attr('data-slider-value', '[' + val.toString() + ']');
-				let query = UpdateQueryString('minWeight', val[0]);
-				query = UpdateQueryString('maxWeight', val[1], query);
-				history.pushState('Weight updated', 'Weight updated', query);
-				hideAllPopovers();
-				refreshSearch();
-			});
-			aslider.slider({
-				range    : true,
-				formatter: function (value) {
-					if (value.constructor === Array) {
-						let result = "";
-						result += value[0] > 1000 ? (value[0] / 1000) + "kg" : value[0] + "g";
-						result += "-" + (value[1] > 1000 ? (value[1] / 1000) + "kg" : value[1] + "g");
-						return result;
-					}
-					return value;
-				},
-			});
+	  if ('longitude' in obj) {
+		  if ('latitude' in obj) {
+			  let searchTimeout = function () {
+				  let element = document.getElementById('map');
+				  if (element.gMap === undefined) {
+					  setTimeout(searchTimeout, 1000);
+				  } else {
+					  let input = $("#pac-input");
+					  input.attr("data-latitude", obj.latitude);
+					  input.attr("data-longitude", obj.longitude);
+					  refreshSearch();
+				  }
+			  };
+			  setTimeout(searchTimeout, 1000);
+		  } else {
+			  window.history.replaceState('', '', UpdateQueryString('latitude', null));
+		  }
+	  } else if ('latitude' in obj) {
+		  window.history.replaceState('', '', UpdateQueryString('longitude', null));
+	  }
 
-			$('.slider-selection').css('background', '#BABABA');
-			$('#radius-popover').popover('hide');
-			$('#quantity-popover').popover('hide');
-		});
-  </script>
+	  if ('minQuantity' in obj) {
+		  if ('maxQuantity' in obj) {
+			  $('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + obj['maxQuantity'] + ']');
+		  } else {
+			  let maxval = $('#quantitySlider').attr('data-slider-max');
+			  $('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + maxval + ']');
+			  window.history.replaceState('', '', UpdateQueryString('maxQuantity', maxval));
+		  }
+	  } else if ('maxQuantity' in obj) {
+		  let minval = $('#quantitySlider').attr('data-slider-min');
+		  $('#quantitySlider').attr('data-slider-value', '[' + minval + ',' + obj['maxQuantity'] + ']');
+		  window.history.replaceState('', '', UpdateQueryString('minQuantity', minval));
+	  }
 
-  <!-- HANDLE SORTING -->
-  <script>
-		//  Radius
-		$("#radius-sort").click(function () {
-			// Change Icon
-			if ($("#radius-sort-icon").hasClass("fa-sort-asc")) {
-				$("#radius-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
-				// Sort Items
-			} else if ($("#radius-sort").hasClass("fa-sort-desc")) {
-				$("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-				// Sort Items
-			} else {
-				$("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-				// Sort Items
-			}
-			$("#weight-sort-icon").attr('class', '');
-			$("#quantity-sort-icon").attr('class', '');
-			refreshSearch();
-		});
+	  if ('minWeight' in obj) {
+		  if ('maxWeight' in obj) {
+			  $('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + obj['maxWeight'] + ']');
+		  } else {
+			  let maxval = $('#weightSlider').attr('data-slider-max');
+			  $('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + maxval + ']');
+			  window.history.replaceState('', '', UpdateQueryString('maxWeight', maxval));
+		  }
+	  } else if ('maxWeight' in obj) {
+		  let minval = $('#weightSlider').attr('data-slider-min');
+		  $('#weightSlider').attr('data-slider-value', '[' + minval + ',' + obj['maxWeight'] + ']');
+		  window.history.replaceState('', '', UpdateQueryString('minWeight', minval));
+	  }
 
-		// Weight
-		$("#weight-sort").click(function () {
-			// Change Icon
-			if ($("#weight-sort-icon").hasClass("fa-sort-asc")) {
-				$("#weight-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
-				// Sort Items
-			} else if ($("#weight-sort").hasClass("fa-sort-desc")) {
-				$("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-				// Sort Items
-			} else {
-				$("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-				// Sort Items
-			}
-			$("#radius-sort-icon").attr('class', '');
-			$("#quantity-sort-icon").attr('class', '');
-			refreshSearch();
-		});
+	  function UpdateQueryString(key, value, url) {
+		  if (!url) {
+			  url = window.location.href;
+		  }
+		  let re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
+			  hash;
 
-		// Expiry
-		$("#quantity-sort").click(function () {
-			// Change Icon
-			if ($("#quantity-sort-icon").hasClass("fa-sort-asc")) {
-				$("#quantity-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
-				// Sort Items
-			} else if ($("#quantity-sort").hasClass("fa-sort-desc")) {
-				$("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-				// Sort Items
-			} else {
-				$("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-				// Sort Items
-			}
-			$("#radius-sort-icon").attr('class', '');
-			$("#weight-sort-icon").attr('class', '');
-			refreshSearch();
-		});
-  </script>
+		  if (re.test(url)) {
+			  if (typeof value !== 'undefined' && value !== null) {
+				  return url.replace(re, '$1' + key + "=" + value + '$2$3');
+			  } else {
+				  hash = url.split('#');
+				  url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
+				  if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
+					  url += '#' + hash[1];
+				  }
+				  return url;
+			  }
+		  }
+		  else {
+			  if (typeof value !== 'undefined' && value !== null) {
+				  var separator = url.indexOf('?') !== -1 ? '&' : '?';
+				  hash = url.split('#');
+				  url = hash[0] + separator + key + '=' + value;
+				  if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
+					  url += '#' + hash[1];
+				  }
+				  return url;
+			  }
+			  else {
+				  return url;
+			  }
+		  }
+	  }
+	  function hideAllPopovers() {
+		  $('#radius-popover').popover('hide');
+		  $('#quantity-popover').popover('hide');
+		  $('#weight-popover').popover('hide');
+	  }
+	</script>
+
+
+	<!-- CORRECT SIZES OF ELEMENTS -->
+	<script>
+	  $(document).ready(function () {
+		  $("#search-form").submit(function (e) {
+			  clearTimeout(refreshSearch());
+			  refreshSearch();
+			  return false;
+		  });
+
+		  $("#main-search-input").keypress((function (e) {
+			  setTimeout(refreshSearch, 2000);
+		  }));
+	  });
+	</script>
+
+	<script>
+	  // Popovers
+	  $('#radius-popover').popover({
+		  html   : true,
+		  title  : function () {
+			  return $("#radius-popover-head").html();
+		  },
+		  content: function () {
+			  return $("#radius-popover-content").html();
+		  },
+
+	  }).on('shown.bs.popover', function () {
+		  let aslider = $('.popover').find('#radiusSlider');
+		  $('.popover').find('#radiusApply').click(function () {
+			  let val = aslider.slider('getValue');
+			  $('#radiusSlider').attr('data-slider-value', val);
+			  window.history.pushState('Radius updated', 'Radius updated', UpdateQueryString('radius', val));
+			  hideAllPopovers();
+			  refreshSearch();
+		  });
+		  aslider.slider({
+			  formatter: function (value) {
+				  return value + 'm';
+			  },
+		  });
+
+		  $('.slider-selection').css('background', '#BABABA');
+		  $('#quantity-popover').popover('hide');
+		  $('#weight-popover').popover('hide');
+	  });
+
+	  $('#quantity-popover').popover({
+		  html   : true,
+		  title  : function () {
+			  return $("#quantity-popover-head").html();
+		  },
+		  content: function () {
+			  return $("#quantity-popover-content").html();
+		  },
+	  }).on('shown.bs.popover', function () {
+		  let aslider = $('.popover').find('#quantitySlider');
+		  $('.popover').find('#quantityApply').click(function () {
+			  let val = aslider.slider('getValue');
+			  $('#quantitySlider').attr('data-slider-value', '[' + val.toString() + ']');
+			  let query = UpdateQueryString('minQuantity', val[0]);
+			  query = UpdateQueryString('maxQuantity', val[1], query);
+			  history.pushState('Quantity updated', 'Quantity updated', query);
+			  hideAllPopovers();
+			  refreshSearch();
+		  });
+		  aslider.slider({
+			  range    : true,
+			  formatter: function (value) {
+				  if (value.constructor === Array) {
+					  return value[0] + " to " + value[1] + " items";
+				  }
+				  return value;
+			  },
+		  });
+
+		  $('.slider-selection').css('background', '#BABABA');
+		  $('#radius-popover').popover('hide');
+		  $('#weight-popover').popover('hide');
+	  });
+
+	  $('#weight-popover').popover({
+		  html   : true,
+		  title  : function () {
+			  return $("#weight-popover-head").html();
+		  },
+		  content: function () {
+			  return $("#weight-popover-content").html();
+		  },
+	  }).on('shown.bs.popover', function () {
+		  let aslider = $('.popover').find('#weightSlider');
+		  $('.popover').find('#weightApply').click(function () {
+			  let val = aslider.slider('getValue');
+			  $('#weightSlider').attr('data-slider-value', '[' + val.toString() + ']');
+			  let query = UpdateQueryString('minWeight', val[0]);
+			  query = UpdateQueryString('maxWeight', val[1], query);
+			  history.pushState('Weight updated', 'Weight updated', query);
+			  hideAllPopovers();
+			  refreshSearch();
+		  });
+		  aslider.slider({
+			  range    : true,
+			  formatter: function (value) {
+				  if (value.constructor === Array) {
+					  let result = "";
+					  result += value[0] > 1000 ? (value[0] / 1000) + "kg" : value[0] + "g";
+					  result += "-" + (value[1] > 1000 ? (value[1] / 1000) + "kg" : value[1] + "g");
+					  return result;
+				  }
+				  return value;
+			  },
+		  });
+
+		  $('.slider-selection').css('background', '#BABABA');
+		  $('#radius-popover').popover('hide');
+		  $('#quantity-popover').popover('hide');
+	  });
+	</script>
+
+	<!-- HANDLE SORTING -->
+	<script>
+	  //  Radius
+	  $("#radius-sort").click(function () {
+		  // Change Icon
+		  if ($("#radius-sort-icon").hasClass("fa-sort-asc")) {
+			  $("#radius-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+			  // Sort Items
+		  } else if ($("#radius-sort").hasClass("fa-sort-desc")) {
+			  $("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+			  // Sort Items
+		  } else {
+			  $("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+			  // Sort Items
+		  }
+		  $("#weight-sort-icon").attr('class', '');
+		  $("#quantity-sort-icon").attr('class', '');
+		  refreshSearch();
+	  });
+
+	  // Weight
+	  $("#weight-sort").click(function () {
+		  // Change Icon
+		  if ($("#weight-sort-icon").hasClass("fa-sort-asc")) {
+			  $("#weight-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+			  // Sort Items
+		  } else if ($("#weight-sort").hasClass("fa-sort-desc")) {
+			  $("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+			  // Sort Items
+		  } else {
+			  $("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+			  // Sort Items
+		  }
+		  $("#radius-sort-icon").attr('class', '');
+		  $("#quantity-sort-icon").attr('class', '');
+		  refreshSearch();
+	  });
+
+	  // Expiry
+	  $("#quantity-sort").click(function () {
+		  // Change Icon
+		  if ($("#quantity-sort-icon").hasClass("fa-sort-asc")) {
+			  $("#quantity-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+			  // Sort Items
+		  } else if ($("#quantity-sort").hasClass("fa-sort-desc")) {
+			  $("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+			  // Sort Items
+		  } else {
+			  $("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+			  // Sort Items
+		  }
+		  $("#radius-sort-icon").attr('class', '');
+		  $("#weight-sort-icon").attr('class', '');
+		  refreshSearch();
+	  });
+	</script>
 
 {% endblock %}
