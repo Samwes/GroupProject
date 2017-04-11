@@ -273,23 +273,27 @@ class Requests
 	}
 
 	public function updateName(Request $request, App $app) {
-		$newname = $request->get('newname');
 		$response = array("success" => false);
+		if ($request->get('name') === 'newname') {
+			$newname = $request->get('value');
 
-		//Check Vars
-		if (!is_string($newname)) {
-			$response['error'] = 'newname incorrectly defined';
-			die(json_encode($response));
-		}
-
-		$token = $app['security.token_storage']->getToken(); //future refactor this into its own func?
-
-		if (null !== $token) {
-			$userID = $token->getUser()->getID();
-			if ($this->db->updateFullName($userID, $newname)) {
-				$response['success'] = true;
+			//Check Vars
+			if (!is_string($newname)) {
+				$response['error'] = 'newname incorrectly defined';
+				die(json_encode($response));
 			}
-		}
+
+			$token = $app['security.token_storage']->getToken(); //future refactor this into its own func?
+
+			if (null !== $token) {
+				$userID = $token->getUser()->getID();
+				if ($this->db->updateFullName($userID, $newname)) {
+					$response['success'] = true;
+				}
+			}
+		} else {
+			$response['error'] = 'Incorrect sender';
+		};
 
 		return new JsonResponse($response);
 	}

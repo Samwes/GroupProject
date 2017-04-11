@@ -62,13 +62,13 @@
 			<tr>
 			  <td scope="row">Full Name:
 			  </td>
-			  <td> {#todo test#}
+			  <td>
 				<a href="#" id="newname" data-type="text" data-pk="1" data-url="{{ path('updatename') }}" data-title="Enter Full Name">{{ userData.fullname ?? 'No name set!' }}</a>
 			  </td>
 			</tr>
 			<tr>
 			  <td scope="row">Username:</td>
-			  <td><a href="#" id="username" data-type="text" data-pk="1" data-title="Enter Username(?)">{{ userData.username }}</a></td>
+			  <td class="lead h3">{{ userData.username }}</td>
 			</tr>
 			<tr>
 			  <td scope="row">Location:
@@ -121,8 +121,11 @@
 		  $('#newname').editable({
 			  success : function (response, newValue) {
 				  if (response.success === false) {
+					  if (error in response) {
+						  return 'Error:' + response.error;
+					  }
 					  return 'Error updating name to' + newValue;
-				  } //msg will be shown in editable form
+				  }
 			  },
 			  validate: function (value) {
 				  if (value === null || value === '') {
@@ -135,12 +138,11 @@
 	  let updatepass = function (form) {
 		  if (form.elements['password'].value === form.elements['confirmpassword'].value) {
 			  let data = $("#changepass").serialize();
-			  console.log(data);
 			  $.ajax({
 				  url : '{{ path('updatepass') }}',
 				  type: 'post',
 				  data: data,
-			  }).done(updatepassresult);
+			  }).always(updatepassresult);
 		  } else {
 			  let theclass = "has-danger";
 			  $("#passfeedback").addClass(theclass).html('Input passwords don\'t match').slideDown("slow");

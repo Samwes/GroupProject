@@ -268,10 +268,10 @@ input, .export {
 	background-color: #2d3b55;
 }
 
-.active {
-	color: #fff !important;
-	background-color: #2d3b55 !important;
-}
+/*.active {*/
+	/*color: #fff !important;*/
+	/*background-color: #2d3b55 !important;*/
+/*}*/
 
 .panel-heading .tabs {
 	border-color: #fff;

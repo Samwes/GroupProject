@@ -17,6 +17,7 @@ use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\VarDumperServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -190,7 +191,6 @@ class App extends Application
 			return $this['twig']->render('scanner.twig');
 		})->bind('scanner')->secure('ROLE_USER');
 
-		//future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		$account->get('/userprofile', function () {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			return $this['twig']->render('userProfile.twig', array('userData' => $userdata));
@@ -208,6 +208,7 @@ class App extends Application
 			return $this['twig']->render('messenger.twig');
 		})->bind('messenger');
 
+		//future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		$account->post('/update/fullname', 'rest.handler:updateName')
 				->bind('updatename')
 				->secure('IS_AUTHENTICATED_FULLY');
@@ -230,7 +231,12 @@ class App extends Application
 		})->assert('foodID', '\d+');
 
 		$this->get('/item/{id}', function ($id) {
-			return $this['twig']->render('itemPage.twig', array('itemid' => $id));
+			$foodData = $this['DB']->getFoodItemByID($id); //future combine?
+			$userData = $this['DB']->getUserByID($foodData['userid']);
+			if (($foodData === false) || ($userData === false)) {
+				throw new Exception('An error occured');
+			}
+			return $this['twig']->render('itemPage.twig', array('food' => $foodData, 'user' => $userData));
 		});
 
 		$this->get('/foodItems/{userID}', 'rest.handler:foodItemsGet')

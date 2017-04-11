@@ -7,3 +7,4 @@ vendor/
 /bigtosmall.txt
 /.stylelintrc
 /pimple.json
+/bower.json

@@ -51,6 +51,24 @@ class DBDataMapper
 		$stmt = null;
 		return $result;
 	}
+	public function getUserByID(int $id){
+		$query = 'SELECT * FROM `usertable` WHERE `userid` = :id';
+		$result = false;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':id' => strtolower($id),
+						   ));
+
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			if (DEBUG) { echo 'Getting user by ID failed: '.$e->getMessage();
+            }
+		}
+		$stmt = null;
+		return $result;
+	}
 
 	public function getFoodItemsByUserID(int $id) {
 		$query = 'SELECT `expirydate`,`category`,`foodid`,`name`,`description`,`latit`,`longit`,`amount`,
@@ -501,14 +519,14 @@ class DBDataMapper
 	}
 
 	public function updateFullName($userID, $newName) {
-		$query = 'UPDATE `usertable` SET `fullname` = :name WHERE `userid` = :uid';
+		$query = 'UPDATE `usertable` SET `fullname` = :nme WHERE `userid` = :uid';
 		$result = true;
 		try {
 			$stmt = $this->pdo->prepare($query);
 
 			$stmt->execute(array(
 							   ':uid'   => $userID,
-							   ':name' => $newName,
+							   ':nme' => $newName,
 						   ));
 		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Updating username failed: '.$e->getMessage();
@@ -527,7 +545,7 @@ class DBDataMapper
 
 			$stmt->execute(array(
 							   ':uid'   => $userID,
-							   ':name' => $newPass,
+							   ':pass' => $newPass,
 						   ));
 		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Updating password failed: '.$e->getMessage();
