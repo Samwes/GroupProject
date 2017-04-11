@@ -204,7 +204,7 @@
 		</div>
 	  </div>
 	  <!-- MAP -->
-	  <div class="d-block col-md-5" >
+	  <div class="d-block col-md-5">
 		<div id="map" class="w-100 h-100"></div>
 	  </div>
 
@@ -222,395 +222,310 @@
   {#todo move all search in single file + keep track of already gotten items#}
   {# todo - user inputs location on profile then ask browser then IP geolocation backup #}
   <script>
-	  var resultsSoFar = 0;
-	  var results = [];
-	  $(document).ready(refreshSearch());
+		var resultsSoFar = 0;
+		var results = [];
+		$(document).ready(refreshSearch());
+
+	function placesIter (place) {
+		if (!place.geometry) {
+			console.log("Returned place contains no geometry");
+			return;
+		}
+		let loc=place.geometry.location, input = $("#pac-input");
+	  input.attr("data-latitude", loc.lat);
+	  input.attr("data-longitude", loc.lng);
+
+	  let query = UpdateQueryString('latitude', loc.lat);
+	  query = UpdateQueryString('longitude', loc.lng, query);
+	  history.pushState('Location updated', 'Location updated', query);
+		refreshSearch();
+	}
   </script>
 
-  <script>
-//	  var map = null;
-//	  var mapmarkers = [];
-	  // Map markers
-
-	  {# future either use this method to refresh map (has to remove + add all markers but recovers much better from total wipe) #}
-	  {# future or add them onto the map as we get them from jquery #}
-	  {# note 100% should be keeping a list of their ID's in an array? array of ID => location seems pretty good #}
-
-
-	  function addMapMarkers() {
-		  var defaultLocation;
-		  if($("#pac-input").attr("latitude")) {
-			  defaultLocation = {lat: parseFloat($("#pac-input").attr("latitude")), lng: parseFloat($("#pac-input").attr("longitude"))}
-		  }
-		  if(defaultLocation) {
-			  map = new google.maps.Map(document.getElementById('map'), {
-				  zoom  : 12,
-				  center: defaultLocation
-			  });
-		  } else {
-			  map = new google.maps.Map(document.getElementById('map'), {
-				  zoom  : 6,
-				  center: {lat: 54.512997, lng: -4}
-			  });
-		  }
-
-		  $("#item-cards").find("div").each(function(index) {
-			  // this is card object
-			  var location = {lat: parseFloat($(this).attr("data-latit")), lng: parseFloat($(this).attr("data-longit"))};
-
-			  var marker = new google.maps.Marker({
-				  position: location,
-				  map     : map,
-			  });
-
-		  });
-	  }
-
-  </script>
-
-  <script>
-
-	  function initMapElements() {
-		  let element = document.getElementById('map');
-
-		  var defaultLocation = {lat: 54.512997, lng: -4.0};
-		  let map = new google.maps.Map(element, {
-			  zoom  : 6,
-			  center: defaultLocation,
-		  });
-
-
-		  element.gMap = map; //Yeah this works. Some god found it on stack overflow. Now just getelementbyid('map').gMap to get it, no globals
-
-
-		  // Create the search box and link it to the UI element.
-		  var input = document.getElementById('pac-input');
-		  var searchBox = new google.maps.places.SearchBox(input);
-
-		  // Listen for the event fired when the user selects a prediction and retrieve
-		  // more details for that place.
-		  searchBox.addListener('places_changed', function () {
-			  var places = searchBox.getPlaces();
-
-			  if (places.length == 0) {
-				  return;
-			  }
-
-			  // For each place, get the icon, name and location.
-			  var bounds = new google.maps.LatLngBounds();
-			  places.forEach(function (place) {
-				  if (!place.geometry) {
-					  console.log("Returned place contains no geometry");
-					  return;
-				  }
-
-				/*var icon = {
-				 url: place.icon,
-				 size: new google.maps.Size(71, 71),
-				 origin: new google.maps.Point(0, 0),
-				 anchor: new google.maps.Point(17, 34),
-				 scaledSize: new google.maps.Size(25, 25)
-				 };
-
-				 console.log(icon);*/
-				  $("#pac-input").attr("latitude", place.geometry.location.lat());
-				  $("#pac-input").attr("longitude", place.geometry.location.lng());
-
-				  history.pushState('Location updated', 'Location updated', document.location.href + "&latitude=" + place.geometry.location.lat() + "&longitude" + place.geometry.location.lng());
-				  refreshSearch();
-
-			  });
-		  });
-	  }
-  </script>
-
-  <script async defer
-		  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
-  </script>
 
 
   <script>
-	  $(function ($) {
-		  $('#items').on('scroll', function () {
-			  if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-				  addMoreItems();
-			  }
-		  });
-	  });
+		$(function ($) {
+			$('#items').on('scroll', function () {
+				if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+					addMoreItems();
+				}
+			});
+		});
   </script>
 
   <script>
-	  //Do this before page loaded event fires
-	  let obj = {}, i, parts, len, key, value;
-	  let _params = window.location.search.substr(1).split('#')[0].split('&');
+		//Do this before page loaded event fires
+		let obj = {}, i, parts, len, key, value;
+		let _params = window.location.search.substr(1).split('#')[0].split('&');
 
-	  for (i = 0, len = _params.length; i < len; i++) {
-		  parts = _params[i].split('=');
-		  if (!parts[0]) {continue;}
-		  obj[parts[0]] = parts[1] || true;
-	  }
+		for (i = 0, len = _params.length; i < len; i++) {
+			parts = _params[i].split('=');
+			if (!parts[0]) {continue;}
+			obj[parts[0]] = parts[1] || true;
+		}
 
-	  //todo markers on map <<<<<---------- fixme this
-	  //todo reset min/max button?
+		//todo markers on map <<<<<---------- fixme this
+		//todo reset min/max button?
 
-	  if ('search' in obj) {
-		  let searchval = obj['search'];
-		  if (searchval === true) {
-			  window.history.replaceState('', '', UpdateQueryString('search', null));
-		  } else {
-			  $("#main-search-input").value = searchval;
-		  }
-	  } else {
-		  $("#main-search-input").value = "";
-	  }
+		if ('search' in obj) {
+			let searchval = obj['search'];
+			if (searchval === true) {
+				window.history.replaceState('', '', UpdateQueryString('search', null));
+			} else {
+				$("#main-search-input").value = searchval;
+			}
+		} else {
+			$("#main-search-input").value = "";
+		}
 
-	  if ('radius' in obj) {
-		  $('#radiusSlider').attr('data-slider-value', obj['radius']);
-	  }
+		if ('radius' in obj) {
+			$('#radiusSlider').attr('data-slider-value', obj['radius']);
+		}
 
-	  if ('minQuantity' in obj) {
-		  if ('maxQuantity' in obj) {
-			  $('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + obj['maxQuantity'] + ']');
-		  } else {
-			  let maxval = $('#quantitySlider').attr('data-slider-max');
-			  $('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + maxval + ']');
-			  window.history.replaceState('', '', UpdateQueryString('maxQuantity', maxval));
-		  }
-	  } else if ('maxQuantity' in obj) {
-		  let minval = $('#quantitySlider').attr('data-slider-min');
-		  $('#quantitySlider').attr('data-slider-value', '[' + minval + ',' + obj['maxQuantity'] + ']');
-		  window.history.replaceState('', '', UpdateQueryString('minQuantity', minval));
-	  }
+		if ('minQuantity' in obj) {
+			if ('maxQuantity' in obj) {
+				$('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + obj['maxQuantity'] + ']');
+			} else {
+				let maxval = $('#quantitySlider').attr('data-slider-max');
+				$('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + maxval + ']');
+				window.history.replaceState('', '', UpdateQueryString('maxQuantity', maxval));
+			}
+		} else if ('maxQuantity' in obj) {
+			let minval = $('#quantitySlider').attr('data-slider-min');
+			$('#quantitySlider').attr('data-slider-value', '[' + minval + ',' + obj['maxQuantity'] + ']');
+			window.history.replaceState('', '', UpdateQueryString('minQuantity', minval));
+		}
 
-	  if ('minWeight' in obj) {
-		  if ('maxWeight' in obj) {
-			  $('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + obj['maxWeight'] + ']');
-		  } else {
-			  let maxval = $('#weightSlider').attr('data-slider-max');
-			  $('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + maxval + ']');
-			  window.history.replaceState('', '', UpdateQueryString('maxWeight', maxval));
-		  }
-	  } else if ('maxWeight' in obj) {
-		  let minval = $('#weightSlider').attr('data-slider-min');
-		  $('#weightSlider').attr('data-slider-value', '[' + minval + ',' + obj['maxWeight'] + ']');
-		  window.history.replaceState('', '', UpdateQueryString('minWeight', minval));
-	  }
+		if ('minWeight' in obj) {
+			if ('maxWeight' in obj) {
+				$('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + obj['maxWeight'] + ']');
+			} else {
+				let maxval = $('#weightSlider').attr('data-slider-max');
+				$('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + maxval + ']');
+				window.history.replaceState('', '', UpdateQueryString('maxWeight', maxval));
+			}
+		} else if ('maxWeight' in obj) {
+			let minval = $('#weightSlider').attr('data-slider-min');
+			$('#weightSlider').attr('data-slider-value', '[' + minval + ',' + obj['maxWeight'] + ']');
+			window.history.replaceState('', '', UpdateQueryString('minWeight', minval));
+		}
 
-	  function UpdateQueryString(key, value, url) {
-		  if (!url) {
-			  url = window.location.href;
-		  }
-		  let re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
-			  hash;
+		function UpdateQueryString(key, value, url) {
+			if (!url) {
+				url = window.location.href;
+			}
+			let re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
+					hash;
 
-		  if (re.test(url)) {
-			  if (typeof value !== 'undefined' && value !== null) {
-				  return url.replace(re, '$1' + key + "=" + value + '$2$3');
-			  } else {
-				  hash = url.split('#');
-				  url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
-				  if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
-					  url += '#' + hash[1];
-				  }
-				  return url;
-			  }
-		  }
-		  else {
-			  if (typeof value !== 'undefined' && value !== null) {
-				  var separator = url.indexOf('?') !== -1 ? '&' : '?';
-				  hash = url.split('#');
-				  url = hash[0] + separator + key + '=' + value;
-				  if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
-					  url += '#' + hash[1];
-				  }
-				  return url;
-			  }
-			  else {
-				  return url;
-			  }
-		  }
-	  }
-	  function hideAllPopovers() {
-		  $('#radius-popover').popover('hide');
-		  $('#quantity-popover').popover('hide');
-		  $('#weight-popover').popover('hide');
-	  }
+			if (re.test(url)) {
+				if (typeof value !== 'undefined' && value !== null) {
+					return url.replace(re, '$1' + key + "=" + value + '$2$3');
+				} else {
+					hash = url.split('#');
+					url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
+					if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
+						url += '#' + hash[1];
+					}
+					return url;
+				}
+			}
+			else {
+				if (typeof value !== 'undefined' && value !== null) {
+					var separator = url.indexOf('?') !== -1 ? '&' : '?';
+					hash = url.split('#');
+					url = hash[0] + separator + key + '=' + value;
+					if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
+						url += '#' + hash[1];
+					}
+					return url;
+				}
+				else {
+					return url;
+				}
+			}
+		}
+		function hideAllPopovers() {
+			$('#radius-popover').popover('hide');
+			$('#quantity-popover').popover('hide');
+			$('#weight-popover').popover('hide');
+		}
   </script>
 
 
   <!-- CORRECT SIZES OF ELEMENTS -->
   <script>
-	  $(document).ready(function () {
-		  $("#search-form").submit(function (e) {
-			  clearTimeout(refreshSearch());
-			  refreshSearch();
-			  return false;
-		  });
+		$(document).ready(function () {
+			$("#search-form").submit(function (e) {
+				clearTimeout(refreshSearch());
+				refreshSearch();
+				return false;
+			});
 
-		  $("#main-search-input").keypress((function (e) {
-			  setTimeout(refreshSearch, 2000);
-		  }));
-	  });
+			$("#main-search-input").keypress((function (e) {
+				setTimeout(refreshSearch, 2000);
+			}));
+		});
   </script>
 
   <script>
-	  // Popovers
-	  $('#radius-popover').popover({
-		  html   : true,
-		  title  : function () {
-			  return $("#radius-popover-head").html();
-		  },
-		  content: function () {
-			  return $("#radius-popover-content").html();
-		  },
+		// Popovers
+		$('#radius-popover').popover({
+			html   : true,
+			title  : function () {
+				return $("#radius-popover-head").html();
+			},
+			content: function () {
+				return $("#radius-popover-content").html();
+			},
 
-	  }).on('shown.bs.popover', function () {
-		  let aslider = $('.popover').find('#radiusSlider');
-		  $('.popover').find('#radiusApply').click(function () {
-			  let val = aslider.slider('getValue');
-			  $('#radiusSlider').attr('data-slider-value', val);
-			  window.history.pushState('Radius updated', 'Radius updated', UpdateQueryString('radius', val));
-			  hideAllPopovers();
-			  refreshSearch();
-		  });
-		  aslider.slider({
-			  formatter: function (value) {
-				  return value + 'm';
-			  },
-		  });
+		}).on('shown.bs.popover', function () {
+			let aslider = $('.popover').find('#radiusSlider');
+			$('.popover').find('#radiusApply').click(function () {
+				let val = aslider.slider('getValue');
+				$('#radiusSlider').attr('data-slider-value', val);
+				window.history.pushState('Radius updated', 'Radius updated', UpdateQueryString('radius', val));
+				hideAllPopovers();
+				refreshSearch();
+			});
+			aslider.slider({
+				formatter: function (value) {
+					return value + 'm';
+				},
+			});
 
-		  $('.slider-selection').css('background', '#BABABA');
-		  $('#quantity-popover').popover('hide');
-		  $('#weight-popover').popover('hide');
-	  });
+			$('.slider-selection').css('background', '#BABABA');
+			$('#quantity-popover').popover('hide');
+			$('#weight-popover').popover('hide');
+		});
 
-	  $('#quantity-popover').popover({
-		  html   : true,
-		  title  : function () {
-			  return $("#quantity-popover-head").html();
-		  },
-		  content: function () {
-			  return $("#quantity-popover-content").html();
-		  },
-	  }).on('shown.bs.popover', function () {
-		  let aslider = $('.popover').find('#quantitySlider');
-		  $('.popover').find('#quantityApply').click(function () {
-			  let val = aslider.slider('getValue');
-			  $('#quantitySlider').attr('data-slider-value', '[' + val.toString() + ']');
-			  let query = UpdateQueryString('minQuantity', val[0]);
-			  query = UpdateQueryString('maxQuantity', val[1], query);
-			  history.pushState('Quantity updated', 'Quantity updated', query);
-			  hideAllPopovers();
-			  refreshSearch();
-		  });
-		  aslider.slider({
-			  range    : true,
-			  formatter: function (value) {
-				  if (value.constructor === Array) {
-					  return value[0] + " to " + value[1] + " items";
-				  }
-				  return value;
-			  },
-		  });
+		$('#quantity-popover').popover({
+			html   : true,
+			title  : function () {
+				return $("#quantity-popover-head").html();
+			},
+			content: function () {
+				return $("#quantity-popover-content").html();
+			},
+		}).on('shown.bs.popover', function () {
+			let aslider = $('.popover').find('#quantitySlider');
+			$('.popover').find('#quantityApply').click(function () {
+				let val = aslider.slider('getValue');
+				$('#quantitySlider').attr('data-slider-value', '[' + val.toString() + ']');
+				let query = UpdateQueryString('minQuantity', val[0]);
+				query = UpdateQueryString('maxQuantity', val[1], query);
+				history.pushState('Quantity updated', 'Quantity updated', query);
+				hideAllPopovers();
+				refreshSearch();
+			});
+			aslider.slider({
+				range    : true,
+				formatter: function (value) {
+					if (value.constructor === Array) {
+						return value[0] + " to " + value[1] + " items";
+					}
+					return value;
+				},
+			});
 
-		  $('.slider-selection').css('background', '#BABABA');
-		  $('#radius-popover').popover('hide');
-		  $('#weight-popover').popover('hide');
-	  });
+			$('.slider-selection').css('background', '#BABABA');
+			$('#radius-popover').popover('hide');
+			$('#weight-popover').popover('hide');
+		});
 
-	  $('#weight-popover').popover({
-		  html   : true,
-		  title  : function () {
-			  return $("#weight-popover-head").html();
-		  },
-		  content: function () {
-			  return $("#weight-popover-content").html();
-		  },
-	  }).on('shown.bs.popover', function () {
-		  let aslider = $('.popover').find('#weightSlider');
-		  $('.popover').find('#weightApply').click(function () {
-			  let val = aslider.slider('getValue');
-			  $('#weightSlider').attr('data-slider-value', '[' + val.toString() + ']');
-			  let query = UpdateQueryString('minWeight', val[0]);
-			  query = UpdateQueryString('maxWeight', val[1], query);
-			  history.pushState('Weight updated', 'Weight updated', query);
-			  hideAllPopovers();
-			  refreshSearch();
-		  });
-		  aslider.slider({
-			  range    : true,
-			  formatter: function (value) {
-				  if (value.constructor === Array) {
-					  let result = "";
-					  result += value[0] > 1000 ? (value[0] / 1000) + "kg" : value[0] + "g";
-					  result += "-" + (value[1] > 1000 ? (value[1] / 1000) + "kg" : value[1] + "g");
-					  return result;
-				  }
-				  return value;
-			  },
-		  });
+		$('#weight-popover').popover({
+			html   : true,
+			title  : function () {
+				return $("#weight-popover-head").html();
+			},
+			content: function () {
+				return $("#weight-popover-content").html();
+			},
+		}).on('shown.bs.popover', function () {
+			let aslider = $('.popover').find('#weightSlider');
+			$('.popover').find('#weightApply').click(function () {
+				let val = aslider.slider('getValue');
+				$('#weightSlider').attr('data-slider-value', '[' + val.toString() + ']');
+				let query = UpdateQueryString('minWeight', val[0]);
+				query = UpdateQueryString('maxWeight', val[1], query);
+				history.pushState('Weight updated', 'Weight updated', query);
+				hideAllPopovers();
+				refreshSearch();
+			});
+			aslider.slider({
+				range    : true,
+				formatter: function (value) {
+					if (value.constructor === Array) {
+						let result = "";
+						result += value[0] > 1000 ? (value[0] / 1000) + "kg" : value[0] + "g";
+						result += "-" + (value[1] > 1000 ? (value[1] / 1000) + "kg" : value[1] + "g");
+						return result;
+					}
+					return value;
+				},
+			});
 
-		  $('.slider-selection').css('background', '#BABABA');
-		  $('#radius-popover').popover('hide');
-		  $('#quantity-popover').popover('hide');
-	  });
+			$('.slider-selection').css('background', '#BABABA');
+			$('#radius-popover').popover('hide');
+			$('#quantity-popover').popover('hide');
+		});
   </script>
 
   <!-- HANDLE SORTING -->
   <script>
-	  //  Radius
-	  $("#radius-sort").click(function () {
-		  // Change Icon
-		  if ($("#radius-sort-icon").hasClass("fa-sort-asc")) {
-			  $("#radius-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
-			  // Sort Items
-		  } else if ($("#radius-sort").hasClass("fa-sort-desc")) {
-			  $("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  } else {
-			  $("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  }
-		  $("#weight-sort-icon").attr('class', '');
-		  $("#quantity-sort-icon").attr('class', '');
-		  refreshSearch();
-	  });
+		//  Radius
+		$("#radius-sort").click(function () {
+			// Change Icon
+			if ($("#radius-sort-icon").hasClass("fa-sort-asc")) {
+				$("#radius-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+				// Sort Items
+			} else if ($("#radius-sort").hasClass("fa-sort-desc")) {
+				$("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			} else {
+				$("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			}
+			$("#weight-sort-icon").attr('class', '');
+			$("#quantity-sort-icon").attr('class', '');
+			refreshSearch();
+		});
 
-	  // Weight
-	  $("#weight-sort").click(function () {
-		  // Change Icon
-		  if ($("#weight-sort-icon").hasClass("fa-sort-asc")) {
-			  $("#weight-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
-			  // Sort Items
-		  } else if ($("#weight-sort").hasClass("fa-sort-desc")) {
-			  $("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  } else {
-			  $("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  }
-		  $("#radius-sort-icon").attr('class', '');
-		  $("#quantity-sort-icon").attr('class', '');
-		  refreshSearch();
-	  });
+		// Weight
+		$("#weight-sort").click(function () {
+			// Change Icon
+			if ($("#weight-sort-icon").hasClass("fa-sort-asc")) {
+				$("#weight-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+				// Sort Items
+			} else if ($("#weight-sort").hasClass("fa-sort-desc")) {
+				$("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			} else {
+				$("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			}
+			$("#radius-sort-icon").attr('class', '');
+			$("#quantity-sort-icon").attr('class', '');
+			refreshSearch();
+		});
 
-	  // Expiry
-	  $("#quantity-sort").click(function () {
-		  // Change Icon
-		  if ($("#quantity-sort-icon").hasClass("fa-sort-asc")) {
-			  $("#quantity-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
-			  // Sort Items
-		  } else if ($("#quantity-sort").hasClass("fa-sort-desc")) {
-			  $("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  } else {
-			  $("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  }
-		  $("#radius-sort-icon").attr('class', '');
-		  $("#weight-sort-icon").attr('class', '');
-		  refreshSearch();
-	  });
+		// Expiry
+		$("#quantity-sort").click(function () {
+			// Change Icon
+			if ($("#quantity-sort-icon").hasClass("fa-sort-asc")) {
+				$("#quantity-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+				// Sort Items
+			} else if ($("#quantity-sort").hasClass("fa-sort-desc")) {
+				$("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			} else {
+				$("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			}
+			$("#radius-sort-icon").attr('class', '');
+			$("#weight-sort-icon").attr('class', '');
+			refreshSearch();
+		});
   </script>
 
 {% endblock %}

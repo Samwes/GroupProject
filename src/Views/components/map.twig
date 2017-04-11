@@ -1,0 +1,133 @@
+{% block main %}
+	{#Inserts a map into the div with id 'map' accessable by js only (not jquery)#}
+	{#todo test if works inline#}
+	<script>
+	  function initMapElements() {
+		  let element = document.getElementById('map');
+
+		  element.gMap = new google.maps.Map(element, {//Yeah this works. Some god found it on stack overflow. Now just getelementbyid('map').gMap to get it, no globals
+			  zoom  : 6,
+			  center: {lat: 54.512997, lng: -4.0},
+		  });
+
+		  element.gMarkers = [];
+	  }
+
+	  function getMapElement() {
+		  let element = document.getElementById('map');
+		  if ((element === undefined) || (element.gMap === undefined)) {
+			  console.error('Map has not loaded yet');
+			  throw 'Map not loaded';
+			  return false;
+		  } else if (element.gMarkers === undefined) {
+			  element.gMarkers = [];
+		  }
+		  return element;
+	  }
+
+	  function setMarkersToMap(map) {
+		  let element = getMapElement(), markers = element.gMarkers;
+
+			markers.forEach(function(marker) {
+				marker.setMap(map);
+			});
+	  }
+
+	  function setMapCenter(lat, long) {
+		  let element = getMapElement(), map = element.gMap;
+	  }
+
+	  function addMarker(lat, long, info) {
+		  let element = getMapElement();
+				{#note title-> might crash#}
+		  let marker = google.maps.Marker({
+			  position: {lat: lat, lng: long},
+			  map     : element.gMap,
+			  title   : info,
+		  });
+		  element.gMarkers.push(marker);
+
+		  return marker;
+	  }
+
+	  function clearMarkers() {
+		  let element = getMapElement();
+		  setMarkersToMap(null);
+		  element.gMarkers = [];
+	  }
+
+	</script>
+
+	<script async defer
+					src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
+	</script>
+
+{% endblock %}
+
+{% block searchable-map %}
+
+<script>
+		{# future either use this method to refresh map (has to remove + add all markers but recovers much better from total wipe) #}
+		{# future or add them onto the map as we get them from jquery #}
+		{# note 100% should be keeping a list of their ID's in an array? array of ID => location seems pretty good #}
+
+
+
+	function initSingleSearchMap(placesIterator) {
+		// Create the search box and link it to the UI element.
+	  let element = getMapElement(), map = element.gMap, markers = element.gMarkers;
+
+		let input = document.getElementById('pac-input');
+		let searchBox = new google.maps.places.SearchBox(input);
+
+		{# note maybe remove this #}
+	  map.addListener('bounds_changed', function() {
+		  searchBox.setBounds(map.getBounds());
+	  });
+
+		// Listen for the event fired when the user selects a prediction and retrieve
+		// more details for that place.
+		searchBox.addListener('places_changed', function () {
+			let places = searchBox.getPlaces();
+
+			if (places.length === 0) {
+				return;
+			}
+
+			// For each place, get the icon, name and location.
+//			let bounds = new google.maps.LatLngBounds(); {# note commeted #}
+			places.forEach(placesIterator(place));
+		});
+	};
+</script>
+
+{% endblock %}
+
+{#function addMapMarkers() {#}
+{#var defaultLocation;#}
+{#if ($("#pac-input").attr("latitude")) {#}
+{#defaultLocation = {lat: parseFloat($("#pac-input").attr("latitude")), lng: parseFloat($("#pac-input").attr("longitude"))};#}
+{#}#}
+{#if (defaultLocation) {#}
+{#map = new google.maps.Map(document.getElementById('map'), {#}
+{#zoom  : 12,#}
+{#center: defaultLocation#}
+{#});#}
+{#} else {#}
+{#map = new google.maps.Map(document.getElementById('map'), {#}
+{#zoom  : 6,#}
+{#center: {lat: 54.512997, lng: -4}#}
+{#});#}
+{#}#}
+
+{#$("#item-cards").find("div").each(function (index) {#}
+{#// this is card object#}
+{#var location = {lat: parseFloat($(this).attr("data-latit")), lng: parseFloat($(this).attr("data-longit"))};#}
+
+{#var marker = new google.maps.Marker({#}
+{#position: location,#}
+{#map     : map,#}
+{#});#}
+
+{#});#}
+{#}#}
