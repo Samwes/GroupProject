@@ -190,7 +190,7 @@
 
 	<div class="container-fluid" style="height: 14px;"></div>
 
-	<div class="container-fluid my-2 h-100">
+	<div class="container-fluid my-2 h-100">element
 		<div class="row no-gutters h-100">
 			<!-- FOOD ITEMS -->
 			<!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
@@ -230,7 +230,7 @@
 	  var results = [];
 	  $(document).ready(refreshSearch());
 
-	  function placesIter(place) {
+	  function updatePlace(place) {
 		  if (!place.geometry) {
 			  console.log("Returned place contains no geometry");
 			  return;
@@ -250,7 +250,7 @@
 	  }
 
 		  $("#map").one("maploaded", function() {
-		  initSingleSearchMap(placesIter);
+		  initSingleSearchMap(updatePlace);
 			});
 	</script>
 

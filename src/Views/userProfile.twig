@@ -75,9 +75,8 @@
 						</tr>
 						<tr>
 							<td scope="row">Location:
-								{#todo user inputs their location#}
 							<td>
-								<a href="#" id="loc-input" data-type="button" data-toggle="modal" data-target="#mapModal" data-title="Enter A Location To Search For">Durham, United Kingdom</a>
+								<a href="#" id="loc-input" data-type="button" data-toggle="modal" data-target="#mapModal" data-title="Enter A Location To Search For">Geolocation disabled</a>
 							</td>
 						</tr>
 					</tbody>
@@ -116,34 +115,63 @@
 	</div>
 
 	<!-- MAP MODAL -->
-	<div class="modal fade" id="mapModal">
-		<div class="modal-dialog Absolute-Center w-50 h-50" role="document">
-			<div class="modal-content square-border h-100 border-0">
-				<div class="container d-flex flex-column align-items-stretch p-0 h-100">
-					<div class="flex-row">
-						<input type="text" title="Location" class="form-control h-100 border-0" id="pac-input" data-longitude="" data-latitutde="" style="background-color: #FAFAFA;" placeholder="Location">
-					</div>
-					<div class="flex-row h-100" id ="modalMap">
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	{{ block("modalMap", "map.twig") }}
 {% endblock %}
 
 {% block scripts %}
 	{{ parent() }}
 	{{ block("main", "map.twig") }}
 	{{ block("searchableMap", "map.twig") }}
-	{#todo select on map + accept button#}
-	{#todo modal in map.twig#}
+	{#todo accept button #}
+	{#todo transition map instead of directly placing #}
+	{#todo move modal to map.twig #}
+	{#todo move geolocator to map.twig #}
+	{#todo future dragging cursor on chrome - DOM mousemove is captured?#}
 	<script>
+		// ---------------MAP INIT HERE---------------------
+		$("#map").one("maploaded", function () {
+			initSingleSearchMap(updatePlace);
+			let e = getMapElement(), map = e.gMap;
+			e.mapoptions.zoom = 14;
+			e.mapoptions.draggableCursor = 'default';
+
+			e.geocoder = new google.maps.Geocoder;
+			initModalMap($('#mapholder'));
+			setToUserData(e);
+			map.addListener('click', function (e) {
+				if (!$('#mapModal').hasClass('invisible')) {
+					mapPanAndMarker(e.latLng.lat(), e.latLng.lng());
+				}
+			});
+		});
+
+		//Translate map to location in future
+
+		function geolocateCallback(position) {
+			let tomodify = $('#loc-input');
+			let element = getMapElement(), geocoder = element.geocoder;
+
+			{#todo enable geolocation#}
+			//			geocoder.geocode({'location': position}, function(results, status) {
+			//				if (status === 'OK') {
+			//					console.log(results); //disable in future
+			//					if (results[1]) {
+			//						tomodify.text(results[1].formatted_address);
+			//					} else {
+			//						tomodify.text('No results found');
+			//					}
+			//				} else {
+			//					tomodify.text('Error finding location');
+			//				}
+			//			});
+
+			mapPanAndMarker(position.lat, position.lng);
+		}
+
 		function setToUserData(e) {
 			let map = e.gMap;
-			let ouroptions = {};
 			{% if (userData.lat is null) or (userData.long is null) %}
-			{#future geolocate here (input text into table too)#}
+			getBrowserLocation(geolocateCallback);
 
 			{% else %}
 			let loc = {
@@ -151,105 +179,47 @@
 				lng: {{ userData.long }}
 			};
 
-			ouroptions = {
-				center: loc,
-				zoom  : 8,
-			};
+			geolocateCallback(loc);
 
 			{% endif %}
 
-//			addMarker(loc.lat,loc.lng); //add after geolocation
-			map.setOptions($.extend({}, e.mapoptions, ouroptions));
+			map.setOptions(e.mapoptions);
 		}
 
-		//		function createModal(query, sync, async) {
-		//			let elem = getMapElement(), map = elem.gMap;
-		//			let ouroptions = {
-		//				bounds: map.getBounds(),
-		//				input : query,
-		//			};
-		//			elem.async = async;
-		//			elem.searchservice.getQueryPredictions($.extend({}, elem.searchoptions, ouroptions), returnSuggestions);
-		//		}
-
-		//		function displaySuggestions(predictions, status){
-		//			let elem = getMapElement();
-		//			if (status !== google.maps.places.PlacesServiceStatus.OK) {
-		//				alert(status);
-		//				return;
-		//			}
-		//			let res = [];
-		//			predictions.forEach(function(prediction) {
-		//				res.push(prediction.description);
-		//			});
-		//			elem.async(res);
-		//		}
-
-		function placesIter(place) {
+		function updatePlace(place) {
 			if (!place.geometry) {
 				console.log("Returned place contains no geometry");
 				return;
 			}
-			clearMarkers();
 
 			let loc = place.geometry.location, input = $("#pac-input");
 			input.attr("data-latitude", loc.lat());
 			input.attr("data-longitude", loc.lng());
 
-			mapPanTo(loc.lat(),loc.lng());
-			addMarker(loc.lat(), loc.lng());
+			mapPanAndMarker({lat: loc.lat(), lng: loc.lng()});
 		}
+	</script>
 
-		// ---------------MAP INIT HERE---------------------
-		$("#map").one("maploaded", function () {
-			initSingleSearchMap(placesIter);
-			let e = getMapElement(), map = e.gMap;
-			e.mapoptions = {
-				fullscreenControl: false,
-				mapTypeControl   : false,
-				zoomControl      : false,
-				streetViewControl: false,
-			};
-			setToUserData(e);
-
-//			e.searchoptions = {
-//				types: ['address']
-//			};
-
-		});
-
+	<script>
 		$.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit"><i class="fa fa-fw fa-check"></i></button>' + '<button type="button" class="btn editable-cancel"><i class="fa fa-fw fa-remove"></i></button>';
 		$.fn.editable.defaults.mode = 'inline';
 		$(document).ready(function () {
-				$('#newname').editable({
-					success: function (response, newValue) {
-						if (response.success === false) {
-							if (error in response) {
-								return 'Error:' + response.error;
-							}
-						}
-						return 'Error updating name to' + newValue;
-					},
-					validate: function (value) {
-						if (value === null || value === '') {
-							return 'Empty values not allowed';
+			$('#newname').editable({
+				success : function (response, newValue) {
+					if (response.success === false) {
+						if (error in response) {
+							return 'Error:' + response.error;
 						}
 					}
-				});
-
-			$('#mapModal').on('shown.bs.modal', function (e) {
-				let elemet = getMapElement();
-				$('#modalMap').append(elemet);
-				setToUserData(elemet);
-				google.maps.event.trigger(elemet.gMap, "resize");
-			}).on('hidden.bs.modal', function (e) {
-				let elemet = getMapElement();
-				$('#mapholder').append(elemet);
-				setToUserData(elemet);
-				google.maps.event.trigger(elemet.gMap, "resize");
-			})
-			}
-		);
+					return 'Error updating name to' + newValue;
+				},
+				validate: function (value) {
+					if (value === null || value === '') {
+						return 'Empty values not allowed';
+					}
+				}
+			});
+		});
 
 		let updatepass = function (form) {
 			if (form.elements['password'].value === form.elements['confirmpassword'].value) {
