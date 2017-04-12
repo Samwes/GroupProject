@@ -240,7 +240,7 @@ class DBDataMapper
 		} catch (\PDOException $e) {
 			if (DEBUG) {
 				echo 'Get user messages failed: '.$e->getMessage();
-      }
+            }
 		}
 		$stmt = null;
 		return $result;
@@ -607,51 +607,76 @@ class DBDataMapper
 	}
 
 	public function searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort) {
-		$categoryQuery = "`category` = :category";
-		$distanceQuery = "`latit` <= :latit + :radius AND `latit` >= :latit - :radius AND `longit` <= :longit + :radius AND `longit` >= :longit - :radius";
-		$quantityQuery = "`amount` <= :maxAmount AND `amount` >= :minAmount";
-		$weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
+		$categoryQuery = '`category` = :category';
+		$nameQuery = '`name` LIKE :search';
+		$distanceQuery = 'acos(sin(:lat)*sin(radians(`latit`)) + cos(:lat)*cos(radians(`latit`))*cos(radians(`longit`)-:lon)) * :R < :radius';
+		$quantityQuery = '`amount` <= :maxAmount AND `amount` >= :minAmount';
+		$weightQuery = '`weight` <= :maxWeight AND `weight` >= :minWeight';
 
-		$query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE :search";
-		$adaptedSearch = '%'.$search.'%';
-		$params = array(':search' => $adaptedSearch);
+		$additionals = array();
+		$r = 6371;
+		$params = array(':R' => $r);
+		$subquery = '`itemtable`';
 
+		if ($search != "") {
+			$additionals[] = $nameQuery;
+			$adaptedSearch = '%'.$search.'%';
+			$params[':search'] = $adaptedSearch;
+		}
 		if ($category != "") {
 			$params[':category'] = $category;
-			$query = $query." AND ".$categoryQuery;
+			$additionals[] = $categoryQuery;
 		}
 		if ($latit != "" && $longit != "" && $radius != "") {
-			$params[':latit'] = $latit;
-			$params[':longit'] = $longit;
+			$radius /= 1000;
+			$params[':maxLat'] = $latit + rad2deg($radius/$r);
+			$params[':minLat'] = $latit - rad2deg($radius/$r);
+			$params[':maxLon'] = $longit + rad2deg(asin($radius/$r) / cos(deg2rad($latit)));
+			$params[':minLon'] = $longit - rad2deg(asin($radius/$r) / cos(deg2rad($latit)));
+			$params[':lat'] = deg2rad($latit);
+			$params[':lon'] = deg2rad($longit);
 			$params[':radius'] = $radius;
-			$query = $query." AND ".$distanceQuery;
+			$subquery = '(SELECT * from `itemtable` WHERE'.
+						'`latit` BETWEEN :minLat and :maxLat AND'.
+						' `longit` BETWEEN :minLon and :maxLon) as FirstPass';
+			$additionals[] = $distanceQuery;
 		}
 		if ($minAmount != "" && $maxAmount != "") {
 			$params[':minAmount'] = $minAmount;
 			$params[':maxAmount'] = $maxAmount;
-			$query = $query." AND ".$quantityQuery;
+			$additionals[] = $quantityQuery;
 		}
 		if ($minWeight != "" && $maxWeight != "") {
 			$params[':minWeight'] = $minWeight;
 			$params[':maxWeight'] = $maxWeight;
-			$query = $query." AND ".$weightQuery;
+			$additionals[] = $weightQuery;
 		}
 
 		if (($sort === 'radius-asc' || $sort === 'radius-des') && ($latit != "" && $longit != "")) {
-			$query = $query." ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
+			//$queryEnd = " ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
+			$queryEnd = " ORDER BY acos(sin(:lat)*sin(radians(`latit`)) + cos(:lat)*cos(radians(`latit`))*cos(radians(`longit`)-:lon)) * :R";
 		} elseif ($sort === 'amount-asc' || $sort === 'amount-des') {
-			$query = $query." ORDER BY `amount`";
+			$queryEnd = " ORDER BY `amount`";
 		} elseif ($sort === 'weight-asc' || $sort === 'weight-des') {
-			$query = $query." ORDER BY `weight`";
+			$queryEnd = " ORDER BY `weight`";
 		} else {
-			$query = $query." ORDER BY `amount`";
+			$queryEnd = " ORDER BY `amount`";
 		}
 
 		if (substr($sort, -3) === "asc") {
-			$query = $query." ASC LIMIT 120";
+			$queryEnd .= " ASC LIMIT 120";
 		} else {
-			$query = $query." DESC LIMIT 120";
+			$queryEnd .= " DESC LIMIT 120";
 		}
+
+		$query = "SELECT `foodid` FROM ".$subquery;
+		if (count($additionals) > 0) {
+			$query.=" WHERE ".$additionals[0];
+			for ($x = 1, $xMax = count($additionals); $x < $xMax; $x++) {
+				$query.= " AND ".$additionals;
+			}
+		}
+		$query.=$queryEnd;
 
 		$result = null;
 		try {

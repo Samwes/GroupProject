@@ -120,7 +120,6 @@
 				callback(loc);
 			}
 
-			map.setOptions(e.mapoptions);
 		}
 	</script>
 
@@ -158,6 +157,8 @@
 				}
 				updatePlace(places[0]);
 			});
+
+			map.setOptions(element.mapoptions);
 		}
 	</script>
 

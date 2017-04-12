@@ -20,40 +20,48 @@
 			<li class="nav-item hidden-md-down" style="height: 46px;">
 				<button id="radius-popover" type="button" class="btn btn-option square-border" data-container="body" data-toggle="popover" data-placement="bottom">Radius
 					<i class="fa fa-caret-down" aria-hidden="true"></i></button>
-				<div id="radius-popover-title" class="hidden-xs-up"></div>
-				<div id="radius-popover-content" class="hidden-xs-up">
-					<div class="form-group">
-						<label for="radiusSlider">Radius</label>
-						<input id="radiusSlider" data-slider-min="100" data-slider-max="1500" data-slider-step="100" data-slider-value="300"/>
-					</div>
-					<button id="radiusApply" class="btn apply btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0;">Apply</button>
-				</div>
 			</li>
 			<li class="nav-item hidden-md-down" style="height: 46px; margin-left: -6px;">
 				<button id="quantity-popover" type="button" class="btn btn-option square-border" data-container="body" data-toggle="popover" data-placement="bottom">Quantity
 					<i class="fa fa-caret-down" aria-hidden="true"></i></button>
-				<div id="quantity-popover-title" class="hidden-xs-up"></div>
-				<div id="quantity-popover-content" class="hidden-xs-up">
-					<div class="form-group">
-						<label for="quantitySlider">Quantity</label>
-						<input id="quantitySlider" data-slider-min="1" data-slider-max="10" data-slider-step="1" data-slider-value="[1,5]"/>
-					</div>
-					<button id="quantityApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
-				</div>
 			</li>
 			<li class="nav-item hidden-md-down" style="height: 46px; margin-left: -6px;">
 				<button id="weight-popover" type="button" class="btn btn-option square-border" style="border-right: 1px solid #dce0e0" data-container="body" data-toggle="popover" data-placement="bottom">Weight
 					<i class="fa fa-caret-down" aria-hidden="true"></i></button>
-				<div id="weight-popover-title" class="hidden-xs-up"></div>
-				<div id="weight-popover-content" class="hidden-xs-up">
-					<div class="form-group">
-						<label for="weightSlider">Min Weight</label>
-						<input id="weightSlider" data-slider-min="0" data-slider-max="2000" data-slider-step="100" data-slider-value="[0,300]"/>
-					</div>
-					<button id="weightApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
-				</div>
 			</li>
 		</ul>
+
+		<!-- POPOVER CONTENT -->
+		<div id="radius-popover-content" class="d-none">
+			<div class="d-flex flex-column p-2 pb-0">
+				<div class="d-flex flex-row justify-content-between pb-2">
+					<div>Items within:</div>
+					<div id="radiusDisplay">300m</div>
+				</div>
+				<input id="radiusSlider" data-slider-tooltip="hide" data-slider-min="100" data-slider-max="1500" data-slider-step="100" data-slider-value="300"/>
+				<div class="d-flex py-2 justify-content-between">
+					<a href="#" class="popovercancel" data-type="button" style="color:black">Cancel</a>
+					<a href="#" id="radiusApply" class="flex-last" style="">Apply</a>
+				</div>
+			</div>
+		</div>
+
+		<div id="quantity-popover-content" class="d-none">
+			<div class="form-group">
+				<label for="quantitySlider">Quantity</label>
+				<input id="quantitySlider" data-slider-min="1" data-slider-max="10" data-slider-step="1" data-slider-value="[1,5]"/>
+			</div>
+			<button id="quantityApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
+		</div>
+
+		<div id="weight-popover-content" class="d-none">
+			<div class="form-group">
+				<label for="weightSlider">Min Weight</label>
+				<input id="weightSlider" data-slider-min="0" data-slider-max="2000" data-slider-step="100" data-slider-value="[0,300]"/>
+			</div>
+			<button id="weightApply" class="btn btn-option square-border" style="background-color: #E8E9EC; border: 1px solid #dce0e0">Apply</button>
+		</div>
+		<!-- END POPOVER CONTENT -->
 
 		<div class="container" id="searchbreaker"></div>
 
@@ -197,10 +205,8 @@
 			<div class="d-flex flex-column flex-auto" id="items" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
 				<div class="container p-0">
 					<div class="card-columns" id="item-cards" style="column-gap: 0.4rem;">
-
 					</div>
-
-					<i class="fa fa-spinner fa-pulse fa-3x fa-fw hidden-xs-up" id="loading-icon"></i>
+				<i class="fa fa-spinner fa-pulse fa-3x fa-fw hidden-xs-up" id="loading-icon"></i>
 				</div>
 			</div>
 			<!-- MAP -->
@@ -225,8 +231,9 @@
 	{#todo move all search in single file + keep track of already gotten items#}
 	{#todo move map update markers#}
 	<script>
-		var resultsSoFar = 0;
-		var results = [];
+//		resultsSoFar = 0;
+		results = {};
+
 		$(document).ready(refreshSearch());
 
 		function updatePlace(place) {
@@ -250,14 +257,17 @@
 
 		$("#map").one("maploaded", function () {
 			initSingleSearchMap(updatePlace);
-			setToUserData(null,null, function (position) {
-				let input = $('#pac-input');
+			let input = $('#pac-input'), curlat = input.attr("data-latitude"), curlong = input.attr("data-longitude");
+			if ((curlat === "") || (curlong === "")) {
+				setToUserData(null, null, function (position) {
+					input.attr("data-latitude", position.lat);
+					input.attr("data-longitude", position.lng);
 
-				input.attr("data-latitude", position.lat);
-				input.attr("data-longitude", position.lng);
-
-				mapPanAndMarker(position.lat, position.lng);
-			});
+					mapPanTo(position.lat, position.lng);
+				});
+			} else {
+				mapPanTo(Number(curlat), Number(curlong));
+			}
 		});
 	</script>
 
@@ -302,18 +312,9 @@
 
 		if ('longitude' in obj) {
 			if ('latitude' in obj) {
-				let searchTimeout = function () {
-					let element = document.getElementById('map');
-					if (element.gMap === undefined) {
-						setTimeout(searchTimeout, 1000);
-					} else {
-						let input = $("#pac-input");
-						input.attr("data-latitude", obj.latitude);
-						input.attr("data-longitude", obj.longitude);
-						refreshSearch();
-					}
-				};
-				setTimeout(searchTimeout, 1000);
+				let input = $("#pac-input");
+				input.attr("data-latitude", obj.latitude);
+				input.attr("data-longitude", obj.longitude);
 			} else {
 				window.history.replaceState('', '', UpdateQueryString('latitude', null));
 			}
@@ -390,8 +391,6 @@
 		}
 	</script>
 
-
-	<!-- CORRECT SIZES OF ELEMENTS -->
 	<script>
 		$(document).ready(function () {
 			$("#search-form").submit(function (e) {
@@ -410,15 +409,13 @@
 		// Popovers
 		$('#radius-popover').popover({
 			html   : true,
-			title  : function () {
-				return $("#radius-popover-head").html();
-			},
 			content: function () {
 				return $("#radius-popover-content").html();
 			},
 
 		}).on('shown.bs.popover', function () {
 			let aslider = $('.popover').find('#radiusSlider');
+			$('.popover').find('#radiusDisplay').text($('#radiusSlider').attr('data-slider-value'));
 			$('.popover').find('#radiusApply').click(function () {
 				let val = aslider.slider('getValue');
 				$('#radiusSlider').attr('data-slider-value', val);
@@ -430,7 +427,10 @@
 				formatter: function (value) {
 					return value + 'm';
 				},
+			}).on("slide", function (slideEvt) {
+				$('.popover').find('#radiusDisplay').text(slideEvt.value + "m");
 			});
+			$('.popover').find('.popovercancel').click(hideAllPopovers);
 
 			$('.slider-selection').css('background', '#BABABA');
 			$('#quantity-popover').popover('hide');
@@ -439,9 +439,6 @@
 
 		$('#quantity-popover').popover({
 			html   : true,
-			title  : function () {
-				return $("#quantity-popover-head").html();
-			},
 			content: function () {
 				return $("#quantity-popover-content").html();
 			},
@@ -473,9 +470,6 @@
 
 		$('#weight-popover').popover({
 			html   : true,
-			title  : function () {
-				return $("#weight-popover-head").html();
-			},
 			content: function () {
 				return $("#weight-popover-content").html();
 			},
