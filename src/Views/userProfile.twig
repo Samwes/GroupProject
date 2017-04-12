@@ -123,50 +123,20 @@
 	{{ block("main", "map.twig") }}
 	{{ block("searchableMap", "map.twig") }}
 	{#todo accept button #}
-	{#todo transition map instead of directly placing #}
-	{#todo move modal to map.twig #}
-	{#todo move geolocator to map.twig #}
-	{#todo future dragging cursor on chrome - DOM mousemove is captured?#}
+	{#future transition map instead of directly placing #}
+	{#future move geolocator to map.twig? #}
+	{#note dragging cursor on chrome - DOM mousemove is captured?#}
 	<script>
 		// ---------------MAP INIT HERE---------------------
 		$("#map").one("maploaded", function () {
 			initSingleSearchMap(updatePlace);
 			let e = getMapElement(), map = e.gMap;
-			e.mapoptions.zoom = 14;
-			e.mapoptions.draggableCursor = 'default';
 
-			e.geocoder = new google.maps.Geocoder;
 			initModalMap($('#mapholder'));
 			setToUserData(e);
-			map.addListener('click', function (e) {
-				if (!$('#mapModal').hasClass('invisible')) {
-					mapPanAndMarker(e.latLng.lat(), e.latLng.lng());
-				}
-			});
 		});
 
 		//Translate map to location in future
-
-		function geolocateCallback(position) {
-			let tomodify = $('#loc-input');
-			let element = getMapElement(), geocoder = element.geocoder;
-
-			{#todo enable geolocation#}
-			//			geocoder.geocode({'location': position}, function(results, status) {
-			//				if (status === 'OK') {
-			//					console.log(results); //disable in future
-			//					if (results[1]) {
-			//						tomodify.text(results[1].formatted_address);
-			//					} else {
-			//						tomodify.text('No results found');
-			//					}
-			//				} else {
-			//					tomodify.text('Error finding location');
-			//				}
-			//			});
-
-			mapPanAndMarker(position.lat, position.lng);
-		}
 
 		function setToUserData(e) {
 			let map = e.gMap;
@@ -192,11 +162,7 @@
 				return;
 			}
 
-			let loc = place.geometry.location, input = $("#pac-input");
-			input.attr("data-latitude", loc.lat());
-			input.attr("data-longitude", loc.lng());
-
-			mapPanAndMarker({lat: loc.lat(), lng: loc.lng()});
+			geolocateCallback(place.geometry.location); //Re geo-locates the address
 		}
 	</script>
 
@@ -286,15 +252,15 @@
 			$('.select-image-btn').click(function () {
 				$('.cropit-image-input').click();
 			});
-			$('.cropit-preview-image-container').click(function () {
-				if ($('.image-editor').cropit('imageSrc') == "") {
-					$('.cropit-image-input').click();
-				}
-			});
-			$('.export').click(function () {
-				var imageData = $('.image-editor').cropit('export');
-				window.open(imageData);
-			});
+			{#$('.cropit-preview-image-container').click(function () {#}
+				{#if ($('.image-editor').cropit('imageSrc') === '{{asset('profile_default.jpg','users')}}') {#}
+					{#$('.cropit-image-input').click();#}
+				{#}#}
+			{#});#}
+			{#$('.export').click(function () {#}
+				{#var imageData = $('.image-editor').cropit('export');#}
+				{#window.open(imageData);#}
+			{#});#}
 		});
 	</script>
 {% endblock %}

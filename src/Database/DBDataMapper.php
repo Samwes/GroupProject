@@ -120,7 +120,7 @@ class DBDataMapper
 	public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image) {
 		//future change default image based on category
 		if ($image === null) {
-			$image = 'none.svg';
+			$image = 'none.png';
 		}
 		$query = 'INSERT INTO `itemtable` (`name`, `expirydate`, `category`,`userid`,`description`,`latit`,`longit`,`amount`,`weight`,`image`)
         VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)';

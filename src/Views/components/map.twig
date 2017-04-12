@@ -127,14 +127,22 @@
 			let element = getMapElement(), map = element.gMap, markers = element.gMarkers;
 
 			let input = document.getElementById('pac-input');
-			let autocomplete = new google.maps.places.Autocomplete(input, {types: ['address']});
+			element.searchBox = new google.maps.places.SearchBox(input);
+			let searchBox = element.searchBox;
 
-			autocomplete.bindTo('bounds', map);
+			map.addListener('bounds_changed', function () {
+				searchBox.setBounds(map.getBounds());
+			});
 
 			// Listen for the event fired when the user selects a prediction and retrieve
 			// more details for that place.
-			autocomplete.addListener('place_changed', function () {
-				updatePlace(autocomplete.getPlace());
+			searchBox.addListener('places_changed', function () {
+				let places = searchBox.getPlaces();
+
+				if (places.length === 0) {
+					return;
+				}
+				updatePlace(places[0]);
 			});
 		}
 	</script>
@@ -161,21 +169,56 @@
 
 	<script>
 		function initModalMap(mapholder) {
-			let elemet = getMapElement(), map = elemet.gMap;
+			let elem = getMapElement(), map = elem.gMap;
+			elem.geocoder = new google.maps.Geocoder;
+			elem.mapoptions.zoom = 14;
+			elem.mapoptions.draggableCursor = 'default';
+
 			$('#mapModal').on('show.bs.modal', function (e) {
+				$('#modalMap').append(elem);
+
 				let currCenter = map.getCenter();
-				$('#modalMap').append(elemet);
-				google.maps.event.trigger(elemet.gMap, "resize");
+				google.maps.event.trigger(map, "resize");
 				map.setCenter(currCenter);
 				$(this).removeClass('invisible');
+
 			}).on('hide.bs.modal', function (e) {
-				mapholder.append(elemet);
+				mapholder.append(elem);
+
 				let currCenter = map.getCenter();
-				google.maps.event.trigger(elemet.gMap, "resize");
+				google.maps.event.trigger(map, "resize");
 				map.setCenter(currCenter);
 				$(this).addClass('invisible');
 			});
-		};
+
+			map.addListener('click', function (e) {
+				if (!$('#mapModal').hasClass('invisible')) {
+					mapPanAndMarker(e.latLng.lat(), e.latLng.lng());
+				}
+			});
+		}
+
+		function geolocateCallback(position) {
+			let input = $('#loc-input');
+			let element = getMapElement(), geocoder = element.geocoder;
+
+			geocoder.geocode({'location': position}, function (results, status) {
+				if (status === 'OK') {
+					if (results[1]) {
+						input.text(results[1].formatted_address);
+						$('#pac-input').attr('placeholder',input.text());
+					} else {
+						input.text('No results found');
+					}
+				} else {
+					input.text('Error finding location');
+				}
+			});
+			input.attr("data-latitude", position.lat);
+			input.attr("data-longitude", position.lng);
+
+			mapPanAndMarker(position.lat, position.lng);
+		}
 	</script>
 {% endblock %}
 
