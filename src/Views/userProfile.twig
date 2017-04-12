@@ -1,238 +1,330 @@
 {% extends 'layout.twig' %}
 
 {% block head %}
-  {{ parent() }}
-  <title>Account</title>
-  <link rel="stylesheet" href="{{ asset('bootstrap-slider.min.css','css') }}">
-  <script src="{{ asset('bootstrap-slider.min.js','javascript') }}"></script>
-  <script src="{{ asset('quagga.min.js','javascript') }}"></script>
-  <script src="{{ asset('moment.js','javascript') }}"></script>
-  <script src="{{ asset('jquery.cropit.js','javascript') }}"></script>
+	{{ parent() }}
+	<title>Account</title>
+	<link rel="stylesheet" href="{{ asset('bootstrap-slider.min.css','css') }}">
+	<script src="{{ asset('bootstrap-slider.min.js','javascript') }}"></script>
+	<script src="{{ asset('quagga.min.js','javascript') }}"></script>
+	<script src="{{ asset('moment.js','javascript') }}"></script>
+	<script src="{{ asset('jquery.cropit.js','javascript') }}"></script>
 {% endblock %}
 
 {% block content %}
-  {{ parent() }}
-  <br>
+	{{ parent() }}
+	{#todo fix crop zoom + disable until selecting image#}
+	<br>
 
-  <div class="container">
-	<ul class="nav nav-tabs">
-	  <li class="nav-item">
-		<a class="nav-link active rounded-0" href="#">Profile</a>
-	  </li>
-	  <li class="nav-item">
-		<a class="nav-link rounded-0" href="#">Your Items</a>
-	  </li>
-	</ul>
-  </div>
-  <br>
-
-  <div class="container">
-	<div class="row">
-	  <div class="col-md-4">
-		<!-- USER PROFILE PICTURE -->
-		<div class="image-editor d-flex flex-column align-items-center">
-		  <input type="file" accept="image/*" capture="camera" class="cropit-image-input hidden-xs-up">
-		  <button class="btn btn-primary select-image-btn">Select Image</button>
-		  <div class="cropit-preview d-flex">
-		  </div>
-		  <div class="row d-flex flex-nowrap mw-100">
-			<button class="btn btn-link rotate-ccw p-1"><i class="fa fa-undo" aria-hidden="true"></i></button>
-			<button class="btn btn-link rotate-cw p-1"><i class="fa fa-repeat" aria-hidden="true"></i></button>
-			<i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;"></i>
-			<input class="cropit-image-zoom-input" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
-			<i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i></div>
-		</div>
-
-		<br>
-
-		<div id=map style="border: 1px solid #cccccc; height: 15rem; margin-top: -1px;"></div>
-	  </div>
-	  <div class="col-md-8">
-		<div class="alert alert-info" role="alert">
-		  <h3>User Profile</h3>
-		  <p>Give a brief overview of what the user should put on this page</p>
-		  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id molestie magna, non aliquam dui. Etiam condimentum hendrerit velit in interdum.</p>
-		</div>
-
-		<br>
-
-		<h3>Your Information</h3>
-		<table class="table">
-		  <tbody>
-			<tr>
-			  <td scope="row">Full Name:
-			  </td>
-			  <td>
-				<a href="#" id="newname" data-type="text" data-pk="1" data-url="{{ path('updatename') }}" data-title="Enter Full Name">{{ userData.fullname ?? 'No name set!' }}</a>
-			  </td>
-			</tr>
-			<tr>
-			  <td scope="row">Username:</td>
-			  <td class="lead h3">{{ userData.username }}</td>
-			</tr>
-			<tr>
-			  <td scope="row">Location:
-				{#todo user inputs their location#}
-			  <td>Durham, United Kingdom</td>
-			</tr>
-		  </tbody>
-		</table>
-		<hr>
-
-		<form id="changepass" onsubmit="event.preventDefault(); updatepass(this);" method="post">
-		  <div id="passfeedback" class="form-control-feedback text-center h4" style="display:none;"></div>
-
-		  <h3>Change Password</h3>
-		  <div class="form-group" id="oldpass">
-			<label for="oldPassword">Enter Old Password</label>
-			<div class="input-group">
-			  <span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-			  <input type="password" class="form-control square-border" id="oldPassword" name="oldPassword" placeholder="Old Password" required>
-			</div>
-		  </div>
-		  <div class="form-group" id="newpass">
-			<label for="password">Enter New Password</label>
-			<div class="input-group">
-			  <span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-			  <input type="password" class="form-control square-border" id="password" name="password" placeholder="New Password" required>
-			</div>
-		  </div>
-		  <div class="form-group" id="confpass">
-			<label for="confirmpassword">Confirm New Password</label>
-			<div class="input-group">
-			  <span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
-			  <input type="password" class="form-control square-border" id="confirmpassword" name="conf" placeholder="Confirm New Password" required>
-			</div>
-		  </div>
-		  <input type="submit" value="Change" class="btn btn-primary">
-		</form>
-	  </div>
+	<div class="container">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link active rounded-0" href="#">Profile</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link rounded-0" href="#">Your Items?</a>
+			</li>
+		</ul>
 	</div>
-  </div>
+	<br>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<!-- USER PROFILE PICTURE -->
+				<div class="image-editor d-flex flex-column align-items-center">
+					<input type="file" accept="image/*" capture="camera" class="cropit-image-input hidden-xs-up">
+					<button class="btn btn-primary select-image-btn">Select Image</button>
+					<div class="cropit-preview d-flex">
+					</div>
+					<div class="row d-flex flex-nowrap mw-100">
+						<button class="btn btn-link rotate-ccw p-1"><i class="fa fa-undo" aria-hidden="true"></i></button>
+						<button class="btn btn-link rotate-cw p-1"><i class="fa fa-repeat" aria-hidden="true"></i></button>
+						<i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;"></i>
+						<input class="cropit-image-zoom-input" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
+						<i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i></div>
+				</div>
+
+				<br>
+
+				<div class="container" id="mapholder" style="height: 15rem;">
+					<div id="map" style="border: 1px solid #cccccc; margin-top: -1px; height:100%"></div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="alert alert-info" role="alert">
+					<h3>User Profile</h3>
+					<p>Give a brief overview of what the user should put on this page</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In id molestie magna, non aliquam dui. Etiam condimentum hendrerit velit in interdum.</p>
+				</div>
+
+				<br>
+
+				<h3>Your Information</h3>
+				<table class="table">
+					<tbody>
+						<tr>
+							<td scope="row">Full Name:
+							</td>
+							<td>
+								<a href="#" id="newname" data-type="text" data-pk="1" data-url="{{ path('updatename') }}" data-title="Enter Full Name">{{ userData.fullname ?? 'No name set!' }}</a>
+							</td>
+						</tr>
+						<tr>
+							<td scope="row">Username:</td>
+							<td class="lead h3">{{ userData.username }}</td>
+						</tr>
+						<tr>
+							<td scope="row">Location:
+								{#todo user inputs their location#}
+							<td>
+								<a href="#" id="loc-input" data-type="button" data-toggle="modal" data-target="#mapModal" data-title="Enter A Location To Search For">Durham, United Kingdom</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<hr>
+
+				<form id="changepass" onsubmit="event.preventDefault(); updatepass(this);" method="post">
+					<div id="passfeedback" class="form-control-feedback text-center h4" style="display:none;"></div>
+
+					<h3>Change Password</h3>
+					<div class="form-group" id="oldpass">
+						<label for="oldPassword">Enter Old Password</label>
+						<div class="input-group">
+							<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+							<input type="password" class="form-control square-border" id="oldPassword" name="oldPassword" placeholder="Old Password" required>
+						</div>
+					</div>
+					<div class="form-group" id="newpass">
+						<label for="password">Enter New Password</label>
+						<div class="input-group">
+							<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+							<input type="password" class="form-control square-border" id="password" name="password" placeholder="New Password" required>
+						</div>
+					</div>
+					<div class="form-group" id="confpass">
+						<label for="confirmpassword">Confirm New Password</label>
+						<div class="input-group">
+							<span class="input-group-addon square-border"><i class="fa fa-fw fa-lock" aria-hidden="true"></i></span>
+							<input type="password" class="form-control square-border" id="confirmpassword" name="conf" placeholder="Confirm New Password" required>
+						</div>
+					</div>
+					<input type="submit" value="Change" class="btn btn-primary">
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- MAP MODAL -->
+	<div class="modal fade" id="mapModal">
+		<div class="modal-dialog Absolute-Center w-50 h-50" role="document">
+			<div class="modal-content square-border h-100 border-0">
+				<div class="container d-flex flex-column align-items-stretch p-0 h-100">
+					<div class="flex-row">
+						<input type="text" title="Location" class="form-control h-100 border-0" id="pac-input" data-longitude="" data-latitutde="" style="background-color: #FAFAFA;" placeholder="Location">
+					</div>
+					<div class="flex-row h-100" id ="modalMap">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block scripts %}
-  {{ parent() }}
+	{{ parent() }}
+	{{ block("main", "map.twig") }}
+	{{ block("searchableMap", "map.twig") }}
+	{#todo select on map + accept button#}
+	{#todo modal in map.twig#}
+	<script>
+		function setToUserData(e) {
+			let map = e.gMap;
+			let ouroptions = {};
+			{% if (userData.lat is null) or (userData.long is null) %}
+			{#future geolocate here (input text into table too)#}
 
-  <script>
-	  $.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit"><i class="fa fa-fw fa-check"></i></button>' + '<button type="button" class="btn editable-cancel"><i class="fa fa-fw fa-remove"></i></button>';
-	  $.fn.editable.defaults.mode = 'inline';
-	  $(document).ready(function () {
-		  $('#newname').editable({
-			  success : function (response, newValue) {
-				  if (response.success === false) {
-					  if (error in response) {
-						  return 'Error:' + response.error;
-					  }
-					  return 'Error updating name to' + newValue;
-				  }
-			  },
-			  validate: function (value) {
-				  if (value === null || value === '') {
-					  return 'Empty values not allowed';
-				  }
-			  },
-		  });
-	  });
+			{% else %}
+			let loc = {
+				lat:{{ userData.lat }},
+				lng: {{ userData.long }}
+			};
 
-	  let updatepass = function (form) {
-		  if (form.elements['password'].value === form.elements['confirmpassword'].value) {
-			  let data = $("#changepass").serialize();
-			  $.ajax({
-				  url : '{{ path('updatepass') }}',
-				  type: 'post',
-				  data: data,
-			  }).always(updatepassresult);
-		  } else {
-			  let theclass = "has-danger";
-			  $("#passfeedback").addClass(theclass).html('Input passwords don\'t match').slideDown("slow");
-			  $("#newpass").addClass(theclass);
-			  $("#confpass").addClass(theclass);
-			  setTimeout(removepassresult, 5000);
-		  }
-	  };
+			ouroptions = {
+				center: loc,
+				zoom  : 8,
+			};
 
-	  function updatepassresult(result) {
-		  if (result.success === true) {
-			  $("#passfeedback").addClass("has-success").html('Password successfully updated!').slideDown("slow");
-		  } else if (result.error === 'Incorret password entered') {
-			  $("#passfeedback").addClass("has-danger").html('Current Password Incorrect').slideDown("slow");
-			  $("#oldpass").addClass("has-danger");
-		  } else {
-			  $("#passfeedback").addClass("has-danger").html('Unknown error occured').slideDown("slow");
-		  }
-		  setTimeout(removepassresult, 5000);
-	  }
+			{% endif %}
 
-	  function removepassresult() {
-		  $("#changepass").find('.has-danger').removeClass("has-danger");
-		  $("#changepass").find('.has-success').removeClass("has-success");
-		  $("#passfeedback").slideUp("fast");
-	  }
-  </script>
+//			addMarker(loc.lat,loc.lng); //add after geolocation
+			map.setOptions($.extend({}, e.mapoptions, ouroptions));
+		}
 
-  <script>
-	  // Slider
-	  $('#ex1').slider({
-		  formatter: function (value) {
-			  return 'Current value: ' + value;
-		  },
-	  });
-	  $('#ex1Slider').addClass('d-inline-flex');
-  </script>
+		//		function createModal(query, sync, async) {
+		//			let elem = getMapElement(), map = elem.gMap;
+		//			let ouroptions = {
+		//				bounds: map.getBounds(),
+		//				input : query,
+		//			};
+		//			elem.async = async;
+		//			elem.searchservice.getQueryPredictions($.extend({}, elem.searchoptions, ouroptions), returnSuggestions);
+		//		}
 
-  <script>
-	  $(function () {
-		  $('.image-editor').cropit({
-			  imageState: {
-				  src: '{{ userData.picture | default(asset('profile_default.jpg','users')) }}',
-			  },
-			  smallImage: 'stretch',
-			  //			  {#todo#} imageBackground: true,
-		  });
+		//		function displaySuggestions(predictions, status){
+		//			let elem = getMapElement();
+		//			if (status !== google.maps.places.PlacesServiceStatus.OK) {
+		//				alert(status);
+		//				return;
+		//			}
+		//			let res = [];
+		//			predictions.forEach(function(prediction) {
+		//				res.push(prediction.description);
+		//			});
+		//			elem.async(res);
+		//		}
 
-		  $('.rotate-cw').click(function () {
-			  $('.image-editor').cropit('rotateCW');
-		  });
-		  $('.rotate-ccw').click(function () {
-			  $('.image-editor').cropit('rotateCCW');
-		  });
-		  $('.select-image-btn').click(function () {
-			  $('.cropit-image-input').click();
-		  });
-		  $('.cropit-preview-image-container').click(function () {
-			  if ($('.image-editor').cropit('imageSrc') == "") {
-				  $('.cropit-image-input').click();
-			  }
-		  });
-		  $('.export').click(function () {
-			  var imageData = $('.image-editor').cropit('export');
-			  window.open(imageData);
-		  });
-	  });
-  </script>
+		function placesIter(place) {
+			if (!place.geometry) {
+				console.log("Returned place contains no geometry");
+				return;
+			}
+			clearMarkers();
 
-  <script>
-	  var map = null;
+			let loc = place.geometry.location, input = $("#pac-input");
+			input.attr("data-latitude", loc.lat());
+			input.attr("data-longitude", loc.lng());
 
-	  function initMapElements() {
-		  // 67.9222° N, 26.5046° E
-		  var durham = {lat: 54.7752493, lng: -1.584852};
-		  map = new google.maps.Map(document.getElementById('map'), {
-			  zoom            : 12,
-			  center          : durham,
-			  disableDefaultUI: true,
-		  });
+			mapPanTo(loc.lat(),loc.lng());
+			addMarker(loc.lat(), loc.lng());
+		}
 
-		  var marker = new google.maps.Marker({
-			  position: durham,
-			  map     : map,
-		  });
+		// ---------------MAP INIT HERE---------------------
+		$("#map").one("maploaded", function () {
+			initSingleSearchMap(placesIter);
+			let e = getMapElement(), map = e.gMap;
+			e.mapoptions = {
+				fullscreenControl: false,
+				mapTypeControl   : false,
+				zoomControl      : false,
+				streetViewControl: false,
+			};
+			setToUserData(e);
 
-	  }
-  </script>
+//			e.searchoptions = {
+//				types: ['address']
+//			};
 
-  <script async defer
-		  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
-  </script>
+		});
+
+		$.fn.editableform.buttons = '<button type="submit" class="btn btn-primary editable-submit"><i class="fa fa-fw fa-check"></i></button>' + '<button type="button" class="btn editable-cancel"><i class="fa fa-fw fa-remove"></i></button>';
+		$.fn.editable.defaults.mode = 'inline';
+		$(document).ready(function () {
+				$('#newname').editable({
+					success: function (response, newValue) {
+						if (response.success === false) {
+							if (error in response) {
+								return 'Error:' + response.error;
+							}
+						}
+						return 'Error updating name to' + newValue;
+					},
+					validate: function (value) {
+						if (value === null || value === '') {
+							return 'Empty values not allowed';
+						}
+					}
+				});
+
+			$('#mapModal').on('shown.bs.modal', function (e) {
+				let elemet = getMapElement();
+				$('#modalMap').append(elemet);
+				setToUserData(elemet);
+				google.maps.event.trigger(elemet.gMap, "resize");
+			}).on('hidden.bs.modal', function (e) {
+				let elemet = getMapElement();
+				$('#mapholder').append(elemet);
+				setToUserData(elemet);
+				google.maps.event.trigger(elemet.gMap, "resize");
+			})
+			}
+		);
+
+		let updatepass = function (form) {
+			if (form.elements['password'].value === form.elements['confirmpassword'].value) {
+				let data = $("#changepass").serialize();
+				$.ajax({
+					url : '{{ path('updatepass') }}',
+					type: 'post',
+					data: data,
+				}).always(updatepassresult);
+			} else {
+				let theclass = "has-danger";
+				$("#passfeedback").addClass(theclass).html('Input passwords don\'t match').slideDown("slow");
+				$("#newpass").addClass(theclass);
+				$("#confpass").addClass(theclass);
+				setTimeout(removepassresult, 5000);
+			}
+		};
+
+		function updatepassresult(result) {
+			if (result.success === true) {
+				$("#passfeedback").addClass("has-success").html('Password successfully updated!').slideDown("slow");
+			} else if (result.error === 'Incorret password entered') {
+				$("#passfeedback").addClass("has-danger").html('Current Password Incorrect').slideDown("slow");
+				$("#oldpass").addClass("has-danger");
+			} else {
+				$("#passfeedback").addClass("has-danger").html('Unknown error occured').slideDown("slow");
+			}
+			setTimeout(removepassresult, 5000);
+		}
+
+		function removepassresult() {
+			$("#changepass").find('.has-danger').removeClass("has-danger");
+			$("#changepass").find('.has-success').removeClass("has-success");
+			$("#passfeedback").slideUp("fast");
+		}
+	</script>
+
+	<script>
+		// Slider
+		$('#ex1').slider({
+			formatter: function (value) {
+				return 'Current value: ' + value;
+			},
+		});
+		$('#ex1Slider').addClass('d-inline-flex');
+	</script>
+
+	<script>
+		$(function () {
+			$('.image-editor').cropit({
+				imageState: {
+					src: '{{ userData.picture | default(asset('profile_default.jpg','users')) }}',
+				},
+				smallImage: 'stretch',
+				//			  {#todo#} imageBackground: true,
+			});
+
+			$('.rotate-cw').click(function () {
+				$('.image-editor').cropit('rotateCW');
+			});
+			$('.rotate-ccw').click(function () {
+				$('.image-editor').cropit('rotateCCW');
+			});
+			$('.select-image-btn').click(function () {
+				$('.cropit-image-input').click();
+			});
+			$('.cropit-preview-image-container').click(function () {
+				if ($('.image-editor').cropit('imageSrc') == "") {
+					$('.cropit-image-input').click();
+				}
+			});
+			$('.export').click(function () {
+				var imageData = $('.image-editor').cropit('export');
+				window.open(imageData);
+			});
+		});
+	</script>
 {% endblock %}
