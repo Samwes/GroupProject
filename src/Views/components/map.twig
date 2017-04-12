@@ -108,6 +108,20 @@
 			}
 		}
 
+		function setToUserData(ulat, ulong, callback) {
+			let e = getMapElement(), map = e.gMap;
+			if ((ulat === null) || (ulong === null)){
+				getBrowserLocation(callback);
+			} else {
+				let loc = {
+					lat: ulat,
+					lng: ulong,
+				};
+				callback(loc);
+			}
+
+			map.setOptions(e.mapoptions);
+		}
 	</script>
 
 	<script async defer
@@ -149,7 +163,14 @@
 
 {% endblock %}
 
-{#todo geocoder + init?#}
+{#{% block geolocMap %}#}
+	{#<script>#}
+		{#function initMapGeolocator(){#}
+			{##}
+		{#}#}
+	{#</script>#}
+
+{#{% endblock %}#}
 
 {% block modalMap %}
 	<div class="modal fade invisible d-block" id="mapModal">
@@ -219,6 +240,7 @@
 
 			mapPanAndMarker(position.lat, position.lng);
 		}
+
 	</script>
 {% endblock %}
 

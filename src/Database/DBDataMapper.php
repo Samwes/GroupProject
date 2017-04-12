@@ -30,6 +30,7 @@ class DBDataMapper
 				die('Database Connection failed in create: '.$e->getMessage());
 			}
 		}
+
 		$this->pdo = $pdo;
 	}
 

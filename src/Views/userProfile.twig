@@ -36,7 +36,7 @@
 					<button class="btn btn-primary select-image-btn">Select Image</button>
 					<div class="cropit-preview d-flex">
 					</div>
-					<div class="row d-flex flex-nowrap mw-100">
+					<div class="row d-flex flex-nowrap align-items-center mw-100">
 						<button class="btn btn-link rotate-ccw p-1"><i class="fa fa-undo" aria-hidden="true"></i></button>
 						<button class="btn btn-link rotate-cw p-1"><i class="fa fa-repeat" aria-hidden="true"></i></button>
 						<i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;"></i>
@@ -130,39 +130,21 @@
 		// ---------------MAP INIT HERE---------------------
 		$("#map").one("maploaded", function () {
 			initSingleSearchMap(updatePlace);
-			let e = getMapElement(), map = e.gMap;
 
 			initModalMap($('#mapholder'));
-			setToUserData(e);
+			setToUserData({{ userData.lat ?? 'null' }},{{ userData.long ?? 'null'}}, geolocateCallback);
 		});
-
-		//Translate map to location in future
-
-		function setToUserData(e) {
-			let map = e.gMap;
-			{% if (userData.lat is null) or (userData.long is null) %}
-			getBrowserLocation(geolocateCallback);
-
-			{% else %}
-			let loc = {
-				lat:{{ userData.lat }},
-				lng: {{ userData.long }}
-			};
-
-			geolocateCallback(loc);
-
-			{% endif %}
-
-			map.setOptions(e.mapoptions);
-		}
 
 		function updatePlace(place) {
 			if (!place.geometry) {
 				console.log("Returned place contains no geometry");
 				return;
 			}
-
-			geolocateCallback(place.geometry.location); //Re geo-locates the address
+			let loc = {
+				lat: place.geometry.location.lat(),
+				lng: place.geometry.location.lng()
+			};
+			geolocateCallback(loc); //Re geo-locates the address
 		}
 	</script>
 
