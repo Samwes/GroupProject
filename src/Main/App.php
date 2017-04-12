@@ -33,6 +33,7 @@ class App extends Application
 
 	//future smaller item cards (for smaller screens) with bare essentials
 	//future sort by radius etc in dropdown
+	//future image upload - remove button??
 
 	public function __construct(array $values = array()) {
 		parent::__construct($values);
@@ -189,7 +190,8 @@ class App extends Application
 		$account = $this['controllers_factory'];
 
 		$account->get('/scanner', function () {
-			return $this['twig']->render('scanner.twig');
+			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
+			return $this['twig']->render('scanner.twig', array('userData' => $userdata));
 		})->bind('scanner')->secure('ROLE_USER');
 
 		$account->get('/userprofile', function () {

@@ -223,342 +223,347 @@
 
 	<!-- SEARCH FUNCTIONALITY -->
 	{#todo move all search in single file + keep track of already gotten items#}
-	{# todo - user inputs location on profile then ask browser then IP geolocation backup #}
 	{#todo move map update markers#}
 	<script>
-	  var resultsSoFar = 0;
-	  var results = [];
-	  $(document).ready(refreshSearch());
+		var resultsSoFar = 0;
+		var results = [];
+		$(document).ready(refreshSearch());
 
-	  function placesIter(place) {
-		  if (!place.geometry) {
-			  console.log("Returned place contains no geometry");
-			  return;
-		  }
-		  clearMarkers();
+		function updatePlace(place) {
+			if (!place.geometry) {
+				console.log("Returned place contains no geometry");
+				return;
+			}
+			clearMarkers();
 
-		  let loc = place.geometry.location, input = $("#pac-input");
-		  input.attr("data-latitude", loc.lat());
-		  input.attr("data-longitude", loc.lng());
+			let loc = place.geometry.location, input = $("#pac-input");
+			input.attr("data-latitude", loc.lat());
+			input.attr("data-longitude", loc.lng());
 
-		  mapPanTo(loc.lat(),loc.lng());
+			mapPanTo(loc.lat(), loc.lng());
 
-		  let query = UpdateQueryString('latitude', loc.lat());
-		  query = UpdateQueryString('longitude', loc.lng(), query);
-		  history.pushState('Location updated', 'Location updated', query);
-		  refreshSearch();
-	  }
+			let query = UpdateQueryString('latitude', loc.lat());
+			query = UpdateQueryString('longitude', loc.lng(), query);
+			history.pushState('Location updated', 'Location updated', query);
+			refreshSearch();
+		}
 
-		  $("#map").one("maploaded", function() {
-		  initSingleSearchMap(placesIter);
+		$("#map").one("maploaded", function () {
+			initSingleSearchMap(updatePlace);
+			setToUserData(null,null, function (position) {
+				let input = $('#pac-input');
+
+				input.attr("data-latitude", position.lat);
+				input.attr("data-longitude", position.lng);
+
+				mapPanAndMarker(position.lat, position.lng);
 			});
-	</script>
-
-
-
-	<script>
-	  $(function ($) {
-		  $('#items').on('scroll', function () {
-			  if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-				  addMoreItems();
-			  }
-		  });
-	  });
+		});
 	</script>
 
 	<script>
-	  //Do this before page loaded event fires
-	  let obj = {}, i, parts, len, key, value;
-	  let _params = window.location.search.substr(1).split('#')[0].split('&');
+		$(function ($) {
+			$('#items').on('scroll', function () {
+				if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+					addMoreItems();
+				}
+			});
+		});
+	</script>
 
-	  for (i = 0, len = _params.length; i < len; i++) {
-		  parts = _params[i].split('=');
-		  if (!parts[0]) {continue;}
-		  obj[parts[0]] = parts[1] || true;
-	  }
+	<script>
+		//Do this before page loaded event fires
+		let obj = {}, i, parts, len, key, value;
+		let _params = window.location.search.substr(1).split('#')[0].split('&');
 
-	  //todo markers on map <<<<<---------- fixme this
-	  //todo reset min/max button?
+		for (i = 0, len = _params.length; i < len; i++) {
+			parts = _params[i].split('=');
+			if (!parts[0]) {continue;}
+			obj[parts[0]] = parts[1] || true;
+		}
 
-	  if ('search' in obj) {
-		  let searchval = obj['search'];
-		  if (searchval === true) {
-			  window.history.replaceState('', '', UpdateQueryString('search', null));
-		  } else {
-			  $("#main-search-input").value = searchval;
-		  }
-	  } else {
-		  $("#main-search-input").value = "";
-	  }
+		//todo markers on map <<<<<---------- fixme this
+		//todo reset min/max button?
 
-	  if ('radius' in obj) {
-		  $('#radiusSlider').attr('data-slider-value', obj['radius']);
-	  }
+		if ('search' in obj) {
+			let searchval = obj['search'];
+			if (searchval === true) {
+				window.history.replaceState('', '', UpdateQueryString('search', null));
+			} else {
+				$("#main-search-input").value = searchval;
+			}
+		} else {
+			$("#main-search-input").value = "";
+		}
 
-	  if ('longitude' in obj) {
-		  if ('latitude' in obj) {
-			  let searchTimeout = function () {
-				  let element = document.getElementById('map');
-				  if (element.gMap === undefined) {
-					  setTimeout(searchTimeout, 1000);
-				  } else {
-					  let input = $("#pac-input");
-					  input.attr("data-latitude", obj.latitude);
-					  input.attr("data-longitude", obj.longitude);
-					  refreshSearch();
-				  }
-			  };
-			  setTimeout(searchTimeout, 1000);
-		  } else {
-			  window.history.replaceState('', '', UpdateQueryString('latitude', null));
-		  }
-	  } else if ('latitude' in obj) {
-		  window.history.replaceState('', '', UpdateQueryString('longitude', null));
-	  }
+		if ('radius' in obj) {
+			$('#radiusSlider').attr('data-slider-value', obj['radius']);
+		}
 
-	  if ('minQuantity' in obj) {
-		  if ('maxQuantity' in obj) {
-			  $('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + obj['maxQuantity'] + ']');
-		  } else {
-			  let maxval = $('#quantitySlider').attr('data-slider-max');
-			  $('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + maxval + ']');
-			  window.history.replaceState('', '', UpdateQueryString('maxQuantity', maxval));
-		  }
-	  } else if ('maxQuantity' in obj) {
-		  let minval = $('#quantitySlider').attr('data-slider-min');
-		  $('#quantitySlider').attr('data-slider-value', '[' + minval + ',' + obj['maxQuantity'] + ']');
-		  window.history.replaceState('', '', UpdateQueryString('minQuantity', minval));
-	  }
+		if ('longitude' in obj) {
+			if ('latitude' in obj) {
+				let searchTimeout = function () {
+					let element = document.getElementById('map');
+					if (element.gMap === undefined) {
+						setTimeout(searchTimeout, 1000);
+					} else {
+						let input = $("#pac-input");
+						input.attr("data-latitude", obj.latitude);
+						input.attr("data-longitude", obj.longitude);
+						refreshSearch();
+					}
+				};
+				setTimeout(searchTimeout, 1000);
+			} else {
+				window.history.replaceState('', '', UpdateQueryString('latitude', null));
+			}
+		} else if ('latitude' in obj) {
+			window.history.replaceState('', '', UpdateQueryString('longitude', null));
+		}
 
-	  if ('minWeight' in obj) {
-		  if ('maxWeight' in obj) {
-			  $('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + obj['maxWeight'] + ']');
-		  } else {
-			  let maxval = $('#weightSlider').attr('data-slider-max');
-			  $('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + maxval + ']');
-			  window.history.replaceState('', '', UpdateQueryString('maxWeight', maxval));
-		  }
-	  } else if ('maxWeight' in obj) {
-		  let minval = $('#weightSlider').attr('data-slider-min');
-		  $('#weightSlider').attr('data-slider-value', '[' + minval + ',' + obj['maxWeight'] + ']');
-		  window.history.replaceState('', '', UpdateQueryString('minWeight', minval));
-	  }
+		if ('minQuantity' in obj) {
+			if ('maxQuantity' in obj) {
+				$('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + obj['maxQuantity'] + ']');
+			} else {
+				let maxval = $('#quantitySlider').attr('data-slider-max');
+				$('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + maxval + ']');
+				window.history.replaceState('', '', UpdateQueryString('maxQuantity', maxval));
+			}
+		} else if ('maxQuantity' in obj) {
+			let minval = $('#quantitySlider').attr('data-slider-min');
+			$('#quantitySlider').attr('data-slider-value', '[' + minval + ',' + obj['maxQuantity'] + ']');
+			window.history.replaceState('', '', UpdateQueryString('minQuantity', minval));
+		}
 
-	  function UpdateQueryString(key, value, url) {
-		  if (!url) {
-			  url = window.location.href;
-		  }
-		  let re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
-			  hash;
+		if ('minWeight' in obj) {
+			if ('maxWeight' in obj) {
+				$('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + obj['maxWeight'] + ']');
+			} else {
+				let maxval = $('#weightSlider').attr('data-slider-max');
+				$('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + maxval + ']');
+				window.history.replaceState('', '', UpdateQueryString('maxWeight', maxval));
+			}
+		} else if ('maxWeight' in obj) {
+			let minval = $('#weightSlider').attr('data-slider-min');
+			$('#weightSlider').attr('data-slider-value', '[' + minval + ',' + obj['maxWeight'] + ']');
+			window.history.replaceState('', '', UpdateQueryString('minWeight', minval));
+		}
 
-		  if (re.test(url)) {
-			  if (typeof value !== 'undefined' && value !== null) {
-				  return url.replace(re, '$1' + key + "=" + value + '$2$3');
-			  } else {
-				  hash = url.split('#');
-				  url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
-				  if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
-					  url += '#' + hash[1];
-				  }
-				  return url;
-			  }
-		  }
-		  else {
-			  if (typeof value !== 'undefined' && value !== null) {
-				  var separator = url.indexOf('?') !== -1 ? '&' : '?';
-				  hash = url.split('#');
-				  url = hash[0] + separator + key + '=' + value;
-				  if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
-					  url += '#' + hash[1];
-				  }
-				  return url;
-			  }
-			  else {
-				  return url;
-			  }
-		  }
-	  }
-	  function hideAllPopovers() {
-		  $('#radius-popover').popover('hide');
-		  $('#quantity-popover').popover('hide');
-		  $('#weight-popover').popover('hide');
-	  }
+		function UpdateQueryString(key, value, url) {
+			if (!url) {
+				url = window.location.href;
+			}
+			let re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
+					hash;
+
+			if (re.test(url)) {
+				if (typeof value !== 'undefined' && value !== null) {
+					return url.replace(re, '$1' + key + "=" + value + '$2$3');
+				} else {
+					hash = url.split('#');
+					url = hash[0].replace(re, '$1$3').replace(/(&|\?)$/, '');
+					if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
+						url += '#' + hash[1];
+					}
+					return url;
+				}
+			}
+			else {
+				if (typeof value !== 'undefined' && value !== null) {
+					var separator = url.indexOf('?') !== -1 ? '&' : '?';
+					hash = url.split('#');
+					url = hash[0] + separator + key + '=' + value;
+					if (typeof hash[1] !== 'undefined' && hash[1] !== null) {
+						url += '#' + hash[1];
+					}
+					return url;
+				}
+				else {
+					return url;
+				}
+			}
+		}
+		function hideAllPopovers() {
+			$('#radius-popover').popover('hide');
+			$('#quantity-popover').popover('hide');
+			$('#weight-popover').popover('hide');
+		}
 	</script>
 
 
 	<!-- CORRECT SIZES OF ELEMENTS -->
 	<script>
-	  $(document).ready(function () {
-		  $("#search-form").submit(function (e) {
-			  clearTimeout(searchtimeout);
-			  refreshSearch();
-			  return false;
-		  });
+		$(document).ready(function () {
+			$("#search-form").submit(function (e) {
+				clearTimeout(searchtimeout);
+				refreshSearch();
+				return false;
+			});
 
-		  $("#main-search-input").keypress((function (e) {
-			  searchtimeout = setTimeout(refreshSearch, 2000);
-		  }));
-	  });
+			$("#main-search-input").keypress((function (e) {
+				searchtimeout = setTimeout(refreshSearch, 2000);
+			}));
+		});
 	</script>
 
 	<script>
-	  // Popovers
-	  $('#radius-popover').popover({
-		  html   : true,
-		  title  : function () {
-			  return $("#radius-popover-head").html();
-		  },
-		  content: function () {
-			  return $("#radius-popover-content").html();
-		  },
+		// Popovers
+		$('#radius-popover').popover({
+			html   : true,
+			title  : function () {
+				return $("#radius-popover-head").html();
+			},
+			content: function () {
+				return $("#radius-popover-content").html();
+			},
 
-	  }).on('shown.bs.popover', function () {
-		  let aslider = $('.popover').find('#radiusSlider');
-		  $('.popover').find('#radiusApply').click(function () {
-			  let val = aslider.slider('getValue');
-			  $('#radiusSlider').attr('data-slider-value', val);
-			  window.history.pushState('Radius updated', 'Radius updated', UpdateQueryString('radius', val));
-			  hideAllPopovers();
-			  refreshSearch();
-		  });
-		  aslider.slider({
-			  formatter: function (value) {
-				  return value + 'm';
-			  },
-		  });
+		}).on('shown.bs.popover', function () {
+			let aslider = $('.popover').find('#radiusSlider');
+			$('.popover').find('#radiusApply').click(function () {
+				let val = aslider.slider('getValue');
+				$('#radiusSlider').attr('data-slider-value', val);
+				window.history.pushState('Radius updated', 'Radius updated', UpdateQueryString('radius', val));
+				hideAllPopovers();
+				refreshSearch();
+			});
+			aslider.slider({
+				formatter: function (value) {
+					return value + 'm';
+				},
+			});
 
-		  $('.slider-selection').css('background', '#BABABA');
-		  $('#quantity-popover').popover('hide');
-		  $('#weight-popover').popover('hide');
-	  });
+			$('.slider-selection').css('background', '#BABABA');
+			$('#quantity-popover').popover('hide');
+			$('#weight-popover').popover('hide');
+		});
 
-	  $('#quantity-popover').popover({
-		  html   : true,
-		  title  : function () {
-			  return $("#quantity-popover-head").html();
-		  },
-		  content: function () {
-			  return $("#quantity-popover-content").html();
-		  },
-	  }).on('shown.bs.popover', function () {
-		  let aslider = $('.popover').find('#quantitySlider');
-		  $('.popover').find('#quantityApply').click(function () {
-			  let val = aslider.slider('getValue');
-			  $('#quantitySlider').attr('data-slider-value', '[' + val.toString() + ']');
-			  let query = UpdateQueryString('minQuantity', val[0]);
-			  query = UpdateQueryString('maxQuantity', val[1], query);
-			  history.pushState('Quantity updated', 'Quantity updated', query);
-			  hideAllPopovers();
-			  refreshSearch();
-		  });
-		  aslider.slider({
-			  range    : true,
-			  formatter: function (value) {
-				  if (value.constructor === Array) {
-					  return value[0] + " to " + value[1] + " items";
-				  }
-				  return value;
-			  },
-		  });
+		$('#quantity-popover').popover({
+			html   : true,
+			title  : function () {
+				return $("#quantity-popover-head").html();
+			},
+			content: function () {
+				return $("#quantity-popover-content").html();
+			},
+		}).on('shown.bs.popover', function () {
+			let aslider = $('.popover').find('#quantitySlider');
+			$('.popover').find('#quantityApply').click(function () {
+				let val = aslider.slider('getValue');
+				$('#quantitySlider').attr('data-slider-value', '[' + val.toString() + ']');
+				let query = UpdateQueryString('minQuantity', val[0]);
+				query = UpdateQueryString('maxQuantity', val[1], query);
+				history.pushState('Quantity updated', 'Quantity updated', query);
+				hideAllPopovers();
+				refreshSearch();
+			});
+			aslider.slider({
+				range    : true,
+				formatter: function (value) {
+					if (value.constructor === Array) {
+						return value[0] + " to " + value[1] + " items";
+					}
+					return value;
+				},
+			});
 
-		  $('.slider-selection').css('background', '#BABABA');
-		  $('#radius-popover').popover('hide');
-		  $('#weight-popover').popover('hide');
-	  });
+			$('.slider-selection').css('background', '#BABABA');
+			$('#radius-popover').popover('hide');
+			$('#weight-popover').popover('hide');
+		});
 
-	  $('#weight-popover').popover({
-		  html   : true,
-		  title  : function () {
-			  return $("#weight-popover-head").html();
-		  },
-		  content: function () {
-			  return $("#weight-popover-content").html();
-		  },
-	  }).on('shown.bs.popover', function () {
-		  let aslider = $('.popover').find('#weightSlider');
-		  $('.popover').find('#weightApply').click(function () {
-			  let val = aslider.slider('getValue');
-			  $('#weightSlider').attr('data-slider-value', '[' + val.toString() + ']');
-			  let query = UpdateQueryString('minWeight', val[0]);
-			  query = UpdateQueryString('maxWeight', val[1], query);
-			  history.pushState('Weight updated', 'Weight updated', query);
-			  hideAllPopovers();
-			  refreshSearch();
-		  });
-		  aslider.slider({
-			  range    : true,
-			  formatter: function (value) {
-				  if (value.constructor === Array) {
-					  let result = "";
-					  result += value[0] > 1000 ? (value[0] / 1000) + "kg" : value[0] + "g";
-					  result += "-" + (value[1] > 1000 ? (value[1] / 1000) + "kg" : value[1] + "g");
-					  return result;
-				  }
-				  return value;
-			  },
-		  });
+		$('#weight-popover').popover({
+			html   : true,
+			title  : function () {
+				return $("#weight-popover-head").html();
+			},
+			content: function () {
+				return $("#weight-popover-content").html();
+			},
+		}).on('shown.bs.popover', function () {
+			let aslider = $('.popover').find('#weightSlider');
+			$('.popover').find('#weightApply').click(function () {
+				let val = aslider.slider('getValue');
+				$('#weightSlider').attr('data-slider-value', '[' + val.toString() + ']');
+				let query = UpdateQueryString('minWeight', val[0]);
+				query = UpdateQueryString('maxWeight', val[1], query);
+				history.pushState('Weight updated', 'Weight updated', query);
+				hideAllPopovers();
+				refreshSearch();
+			});
+			aslider.slider({
+				range    : true,
+				formatter: function (value) {
+					if (value.constructor === Array) {
+						let result = "";
+						result += value[0] > 1000 ? (value[0] / 1000) + "kg" : value[0] + "g";
+						result += "-" + (value[1] > 1000 ? (value[1] / 1000) + "kg" : value[1] + "g");
+						return result;
+					}
+					return value;
+				},
+			});
 
-		  $('.slider-selection').css('background', '#BABABA');
-		  $('#radius-popover').popover('hide');
-		  $('#quantity-popover').popover('hide');
-	  });
+			$('.slider-selection').css('background', '#BABABA');
+			$('#radius-popover').popover('hide');
+			$('#quantity-popover').popover('hide');
+		});
 	</script>
 
 	<!-- HANDLE SORTING -->
 	<script>
-	  //  Radius
-	  $("#radius-sort").click(function () {
-		  // Change Icon
-		  if ($("#radius-sort-icon").hasClass("fa-sort-asc")) {
-			  $("#radius-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
-			  // Sort Items
-		  } else if ($("#radius-sort").hasClass("fa-sort-desc")) {
-			  $("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  } else {
-			  $("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  }
-		  $("#weight-sort-icon").attr('class', '');
-		  $("#quantity-sort-icon").attr('class', '');
-		  refreshSearch();
-	  });
+		//  Radius
+		$("#radius-sort").click(function () {
+			// Change Icon
+			if ($("#radius-sort-icon").hasClass("fa-sort-asc")) {
+				$("#radius-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+				// Sort Items
+			} else if ($("#radius-sort").hasClass("fa-sort-desc")) {
+				$("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			} else {
+				$("#radius-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			}
+			$("#weight-sort-icon").attr('class', '');
+			$("#quantity-sort-icon").attr('class', '');
+			refreshSearch();
+		});
 
-	  // Weight
-	  $("#weight-sort").click(function () {
-		  // Change Icon
-		  if ($("#weight-sort-icon").hasClass("fa-sort-asc")) {
-			  $("#weight-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
-			  // Sort Items
-		  } else if ($("#weight-sort").hasClass("fa-sort-desc")) {
-			  $("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  } else {
-			  $("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  }
-		  $("#radius-sort-icon").attr('class', '');
-		  $("#quantity-sort-icon").attr('class', '');
-		  refreshSearch();
-	  });
+		// Weight
+		$("#weight-sort").click(function () {
+			// Change Icon
+			if ($("#weight-sort-icon").hasClass("fa-sort-asc")) {
+				$("#weight-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+				// Sort Items
+			} else if ($("#weight-sort").hasClass("fa-sort-desc")) {
+				$("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			} else {
+				$("#weight-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			}
+			$("#radius-sort-icon").attr('class', '');
+			$("#quantity-sort-icon").attr('class', '');
+			refreshSearch();
+		});
 
-	  // Expiry
-	  $("#quantity-sort").click(function () {
-		  // Change Icon
-		  if ($("#quantity-sort-icon").hasClass("fa-sort-asc")) {
-			  $("#quantity-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
-			  // Sort Items
-		  } else if ($("#quantity-sort").hasClass("fa-sort-desc")) {
-			  $("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  } else {
-			  $("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
-			  // Sort Items
-		  }
-		  $("#radius-sort-icon").attr('class', '');
-		  $("#weight-sort-icon").attr('class', '');
-		  refreshSearch();
-	  });
+		// Expiry
+		$("#quantity-sort").click(function () {
+			// Change Icon
+			if ($("#quantity-sort-icon").hasClass("fa-sort-asc")) {
+				$("#quantity-sort-icon").attr('class', 'fa fa-sort-desc'); // Set to Descending
+				// Sort Items
+			} else if ($("#quantity-sort").hasClass("fa-sort-desc")) {
+				$("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			} else {
+				$("#quantity-sort-icon").attr('class', 'fa fa-sort-asc'); // Set to Ascending
+				// Sort Items
+			}
+			$("#radius-sort-icon").attr('class', '');
+			$("#weight-sort-icon").attr('class', '');
+			refreshSearch();
+		});
 	</script>
 
 {% endblock %}
