@@ -43,11 +43,16 @@
 	  function addMarker(lat, long, info) {
 		  let element = getMapElement();
 				{#note title-> might crash#}
-		  let marker = google.maps.Marker({
-			  position: {lat: lat, lng: long},
-			  map     : element.gMap,
-			  title   : info,
-		  });
+			let markeroptions = {
+				position: {lat: lat, lng: long},
+				map     : element.gMap,
+			};
+
+			if (typeof info !== 'undefined') {
+				markeroptions.title = info;
+			}
+
+		  let marker = new google.maps.Marker(markeroptions);
 		  element.gMarkers.push(marker);
 
 		  return marker;
@@ -58,6 +63,8 @@
 		  setMarkersToMap(null);
 		  element.gMarkers = [];
 	  }
+
+		{# todo set to browser location#}
 
 	</script>
 
@@ -78,17 +85,14 @@
 	  let element = getMapElement(), map = element.gMap, markers = element.gMarkers;
 
 		let input = document.getElementById('pac-input');
-		let searchBox = new google.maps.places.SearchBox(input);
+		let autocomplete = new google.maps.places.Autocomplete(input,{types: ['address']});
 
-		{# note maybe remove this #}
-	  map.addListener('bounds_changed', function() {
-		  searchBox.setBounds(map.getBounds());
-	  });
+		autocomplete.bindTo('bounds', map);
 
 		// Listen for the event fired when the user selects a prediction and retrieve
 		  // more details for that place.
-		 searchBox.addListener('places_changed', function () {
-			let places = searchBox.getPlaces();
+		 autocomplete.addListener('places_changed', function () {
+			let places = autocomplete.getPlaces();
 
 			if (places.length === 0) {
 				return;
@@ -96,7 +100,6 @@
 		 places.forEach(placesIterator);
 			// For each place, get the icon, name and location.
 //			let bounds = new google.maps.LatLngBounds(); {# note commeted #}
-
 
 		});
 	};

@@ -26,6 +26,10 @@ html, body {
 	height: 95vh;
 }
 
+.pac-container {
+	z-index: 1100;
+}
+
 .flex-auto {
 	flex: 1;
 }
