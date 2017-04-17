@@ -26,10 +26,11 @@ class DBDataMapper
 			try {
 				$attributes = $debug ? array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION) : null;
 				$pdo = new PDO($dsn, $username, $password, $attributes);
-			} catch (PDOException $e) {
+			} catch (\PDOException $e) {
 				die('Database Connection failed in create: '.$e->getMessage());
 			}
 		}
+
 		$this->pdo = $pdo;
 	}
 
@@ -44,8 +45,26 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting user failed: '.$e->getMessage();
+            }
+		}
+		$stmt = null;
+		return $result;
+	}
+	public function getUserByID(int $id){
+		$query = 'SELECT * FROM `usertable` WHERE `userid` = :id';
+		$result = false;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':id' => strtolower($id),
+						   ));
+
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			if (DEBUG) { echo 'Getting user by ID failed: '.$e->getMessage();
             }
 		}
 		$stmt = null;
@@ -66,7 +85,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting auth token failed: '.$e->getMessage();
             }
 		}
@@ -88,7 +107,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting auth token failed: '.$e->getMessage();
             }
 		}
@@ -102,7 +121,7 @@ class DBDataMapper
 	public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image) {
 		//future change default image based on category
 		if ($image === null) {
-			$image = 'none.svg';
+			$image = 'none.png';
 		}
 		$query = 'INSERT INTO `itemtable` (`name`, `expirydate`, `category`,`userid`,`description`,`latit`,`longit`,`amount`,`weight`,`image`)
         VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)';
@@ -123,7 +142,7 @@ class DBDataMapper
 							   ':weight' => $weight,
 							   ':image'  => $image,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new user failed: '.$e->getMessage();
             }
 			$result = false;
@@ -147,7 +166,7 @@ class DBDataMapper
 							   ':email' => $email,
 							   ':role'  => $roles,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new user failed: '.$e->getMessage();
             }
 			$result = false;
@@ -156,7 +175,7 @@ class DBDataMapper
 		return $result;
 	}
 
-	public function addNewUserMessage($message, $sender, $receiver, $requestid) {
+	public function addNewUserMessage($message, $sender, $receiver) {
 		$query = 'INSERT INTO `messagetable` (`message`, `time`) VALUES (:msg, NOW());';
 		$query .= 'INSERT INTO usermessagetable (messageid, sender, receiver) VALUES (LAST_INSERT_ID(), :send, :rec);';
 		$query .= 'INSERT INTO requestmessagetable (messageid, sender, requestid) VALUES (LAST_INSERT_ID(), :send, :req)';
@@ -168,9 +187,8 @@ class DBDataMapper
 							   ':msg'  => $message,
 							   ':send' => $sender,
 							   ':rec'  => $receiver,
-								 ':req'  => $requestid
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new user failed: '.$e->getMessage();
             }
 			$result = false;
@@ -194,7 +212,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Get user messages failed: '.$e->getMessage();
             }
 		}
@@ -219,10 +237,10 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) {
 				echo 'Get user messages failed: '.$e->getMessage();
-      }
+            }
 		}
 		$stmt = null;
 		return $result;
@@ -241,7 +259,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting password failed: '.$e->getMessage();
             }
 		}
@@ -262,7 +280,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting password failed: '.$e->getMessage();
             }
 		}
@@ -283,7 +301,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting email failed: '.$e->getMessage();
             }
 		}
@@ -304,7 +322,7 @@ class DBDataMapper
 							   ':req'  => $requester,
 							   ':food' => $foodid,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new request failed: '.$e->getMessage();
             }
 			$result = false;
@@ -325,7 +343,7 @@ class DBDataMapper
 							   ':send'  => $sender,
 							   ':reqid' => $requestID,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new request message failed: '.$e->getMessage();
             }
 			$result = false;
@@ -346,7 +364,7 @@ class DBDataMapper
 							   ':reqid' => $requestid,
 							   ':state' => $state,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Set request state failed: '.$e->getMessage();
             }
 			$result = false;
@@ -378,10 +396,10 @@ class DBDataMapper
 	}
 
 	public function getRequestsReceivedByUserID($id) {
-		$query = "SELECT `requesttable`.`requester`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
+		$query = 'SELECT `requesttable`.`requester`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
                     FROM `requesttable`, `itemtable`
                     WHERE `requesttable`.`foodid` = `itemtable`.`foodid`
-                    AND `itemtable`.`userid` = :id";
+                    AND `itemtable`.`userid` = :id';
 		$result = null;
 		try {
 			$stmt = $this->pdo->prepare($query);
@@ -391,7 +409,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
             }
 		}
@@ -412,7 +430,7 @@ class DBDataMapper
 						   ));
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting roles failed: '.$e->getMessage();
             }
 		}
@@ -433,7 +451,7 @@ class DBDataMapper
 							   ':un'    => $userID,
 							   ':token' => $token,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Adding new request message failed: '.$e->getMessage();
             }
 			$result = false;
@@ -453,7 +471,7 @@ class DBDataMapper
 							   ':token' => $token,
 						   ));
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
             }
 		}
@@ -469,7 +487,7 @@ class DBDataMapper
 					$stmt->execute(array(
 									   ':uid' => $userID,
 								   ));
-				} catch (PDOException $e) {
+				} catch (\PDOException $e) {
 					if (DEBUG) { echo 'Getting requests by ID failed: '.$e->getMessage();
                     }
 				}
@@ -492,8 +510,46 @@ class DBDataMapper
 							   ':uid'   => $userID,
 							   ':roles' => $newRoles,
 						   ));
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Update roles failed: '.$e->getMessage();
+            }
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
+
+	public function updateFullName($userID, $newName) {
+		$query = 'UPDATE `usertable` SET `fullname` = :nme WHERE `userid` = :uid';
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':uid'   => $userID,
+							   ':nme' => $newName,
+						   ));
+		} catch (\PDOException $e) {
+			if (DEBUG) { echo 'Updating username failed: '.$e->getMessage();
+            }
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
+	public function updatePass($userID, $newPass) {
+		//future extra token check here?
+		$query = 'UPDATE `usertable` SET `password` = :pass WHERE `userid` = :uid';
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':uid'   => $userID,
+							   ':pass' => $newPass,
+						   ));
+		} catch (\PDOException $e) {
+			if (DEBUG) { echo 'Updating password failed: '.$e->getMessage();
             }
 			$result = false;
 		}
@@ -515,7 +571,7 @@ class DBDataMapper
 			$stmt->execute();
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Getting food between X and Y failed: '.$e->getMessage();
             }
 		}
@@ -542,7 +598,7 @@ class DBDataMapper
 			$stmt->execute($params);
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Search by category and search text failed: '.$e->getMessage();
             }
 		}
@@ -551,51 +607,76 @@ class DBDataMapper
 	}
 
 	public function searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort) {
-		$categoryQuery = "`category` = :category";
-		$distanceQuery = "`latit` <= :latit + :radius AND `latit` >= :latit - :radius AND `longit` <= :longit + :radius AND `longit` >= :longit - :radius";
-		$quantityQuery = "`amount` <= :maxAmount AND `amount` >= :minAmount";
-		$weightQuery = "`weight` <= :maxWeight AND `weight` >= :minWeight";
+		$categoryQuery = '`category` = :category';
+		$nameQuery = '`name` LIKE :search';
+		$distanceQuery = 'acos(sin(:lat)*sin(radians(`latit`)) + cos(:lat)*cos(radians(`latit`))*cos(radians(`longit`)-:lon)) * :R < :radius';
+		$quantityQuery = '`amount` <= :maxAmount AND `amount` >= :minAmount';
+		$weightQuery = '`weight` <= :maxWeight AND `weight` >= :minWeight';
 
-		$query = "SELECT `foodid` FROM `itemtable` WHERE `name` LIKE :search";
-		$adaptedSearch = '%'.$search.'%';
-		$params = array(':search' => $adaptedSearch);
+		$additionals = array();
+		$r = 6371;
+		$params = array(':R' => $r);
+		$subquery = '`itemtable`';
 
+		if ($search != "") {
+			$additionals[] = $nameQuery;
+			$adaptedSearch = '%'.$search.'%';
+			$params[':search'] = $adaptedSearch;
+		}
 		if ($category != "") {
 			$params[':category'] = $category;
-			$query = $query." AND ".$categoryQuery;
+			$additionals[] = $categoryQuery;
 		}
 		if ($latit != "" && $longit != "" && $radius != "") {
-			$params[':latit'] = $latit;
-			$params[':longit'] = $longit;
+			$radius /= 1000;
+			$params[':maxLat'] = $latit + rad2deg($radius/$r);
+			$params[':minLat'] = $latit - rad2deg($radius/$r);
+			$params[':maxLon'] = $longit + rad2deg(asin($radius/$r) / cos(deg2rad($latit)));
+			$params[':minLon'] = $longit - rad2deg(asin($radius/$r) / cos(deg2rad($latit)));
+			$params[':lat'] = deg2rad($latit);
+			$params[':lon'] = deg2rad($longit);
 			$params[':radius'] = $radius;
-			$query = $query." AND ".$distanceQuery;
+			$subquery = '(SELECT * from `itemtable` WHERE'.
+						'`latit` BETWEEN :minLat and :maxLat AND'.
+						' `longit` BETWEEN :minLon and :maxLon) as FirstPass';
+			$additionals[] = $distanceQuery;
 		}
 		if ($minAmount != "" && $maxAmount != "") {
 			$params[':minAmount'] = $minAmount;
 			$params[':maxAmount'] = $maxAmount;
-			$query = $query." AND ".$quantityQuery;
+			$additionals[] = $quantityQuery;
 		}
 		if ($minWeight != "" && $maxWeight != "") {
 			$params[':minWeight'] = $minWeight;
 			$params[':maxWeight'] = $maxWeight;
-			$query = $query." AND ".$weightQuery;
+			$additionals[] = $weightQuery;
 		}
 
 		if (($sort === 'radius-asc' || $sort === 'radius-des') && ($latit != "" && $longit != "")) {
-			$query = $query." ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
+			//$queryEnd = " ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
+			$queryEnd = " ORDER BY acos(sin(:lat)*sin(radians(`latit`)) + cos(:lat)*cos(radians(`latit`))*cos(radians(`longit`)-:lon)) * :R";
 		} elseif ($sort === 'amount-asc' || $sort === 'amount-des') {
-			$query = $query." ORDER BY `amount`";
+			$queryEnd = " ORDER BY `amount`";
 		} elseif ($sort === 'weight-asc' || $sort === 'weight-des') {
-			$query = $query." ORDER BY `weight`";
+			$queryEnd = " ORDER BY `weight`";
 		} else {
-			$query = $query." ORDER BY `amount`";
+			$queryEnd = " ORDER BY `amount`";
 		}
 
 		if (substr($sort, -3) === "asc") {
-			$query = $query." ASC LIMIT 120";
+			$queryEnd .= " ASC LIMIT 120";
 		} else {
-			$query = $query." DESC LIMIT 120";
+			$queryEnd .= " DESC LIMIT 120";
 		}
+
+		$query = "SELECT `foodid` FROM ".$subquery;
+		if (count($additionals) > 0) {
+			$query.=" WHERE ".$additionals[0];
+			for ($x = 1, $xMax = count($additionals); $x < $xMax; $x++) {
+				$query.= " AND ".$additionals;
+			}
+		}
+		$query.=$queryEnd;
 
 		$result = null;
 		try {
@@ -603,7 +684,7 @@ class DBDataMapper
 			$stmt->execute($params);
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Search by category and search text failed: '.$e->getMessage();
             }
 		}

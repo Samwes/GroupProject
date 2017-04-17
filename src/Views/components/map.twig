@@ -1,0 +1,276 @@
+{% block main %}
+	{#Inserts a map into the div with id 'map' accessable by js only (not jquery)#}
+	{#todo load maps on server then send to client (hides key?)#}
+	{#todo map onlick pan and marker auto#}
+	<script>
+
+		function initMapElements() {
+			let element = document.getElementById('map');
+
+			element.gMap = new google.maps.Map(element, {//Yeah this works. Some god found it on stack overflow. Now just getelementbyid('map').gMap to get it, no globals
+				zoom  : 6,
+				center: {lat: 54.512997, lng: -4.0},
+			});
+
+			element.gMarkers = [];
+
+			element.mapoptions = {
+				zoom             : 12,
+				fullscreenControl: false,
+				mapTypeControl   : false,
+				zoomControl      : false,
+				streetViewControl: false,
+				draggableCursor  : 'default',
+			};
+
+			$(element).trigger('maploaded');
+		}
+
+		function getMapElement() {
+			let element = document.getElementById('map');
+			if ((element === undefined) || (element.gMap === undefined)) {
+				console.error('Map has not loaded yet');
+				throw 'Map not loaded';
+				return false;
+			} else if (element.gMarkers === undefined) {
+				element.gMarkers = [];
+			}
+			return element;
+		}
+
+		function setMarkersToMap(map) {
+			let element = getMapElement(), markers = element.gMarkers;
+
+			markers.forEach(function (marker) {
+				marker.setMap(map);
+			});
+		}
+
+		function mapPanTo(lat, long) {
+			let element = getMapElement(), map = element.gMap;
+			map.panTo({lat: lat, lng: long});
+		}
+
+		function mapPanAndMarker(lat, long) {
+			let element = getMapElement(), map = element.gMap;
+			map.panTo({lat: lat, lng: long});
+			clearMarkers();
+			addMarker(lat, long);
+		}
+
+		function addMarker(lat, long, info) {
+			let element = getMapElement();
+			let markeroptions = {
+				position: {lat: lat, lng: long},
+				map     : element.gMap,
+			};
+
+			if (typeof info !== 'undefined') {
+				markeroptions.title = info;
+			}
+
+			let marker = new google.maps.Marker(markeroptions);
+			element.gMarkers.push(marker);
+
+			return marker;
+		}
+
+		function clearMarkers() {
+			let element = getMapElement();
+			setMarkersToMap(null);
+			element.gMarkers = [];
+		}
+
+		function getBrowserLocationBasic(resultFunc) {
+			$.getJSON('https://ipinfo.io', function (data) {
+				let loc = data.loc.split(',');
+				let pos = {
+					lat: Number(loc[0]),
+					lng: Number(loc[1])
+				};
+				resultFunc(pos);
+			});
+		}
+
+		function getBrowserLocation(resultFunc) {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function (position) {
+					let pos = {
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					};
+					resultFunc(pos);
+				}, function () {
+					getBrowserLocationBasic(resultFunc);
+				});
+			} else {
+				getBrowserLocationBasic(resultFunc);
+			}
+		}
+
+		function setToUserData(ulat, ulong, callback) {
+			let e = getMapElement(), map = e.gMap;
+			if ((ulat === null) || (ulong === null)){
+				getBrowserLocation(callback);
+			} else {
+				let loc = {
+					lat: ulat,
+					lng: ulong,
+				};
+				callback(loc);
+			}
+
+		}
+	</script>
+
+	<script async defer
+					src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
+	</script>
+
+{% endblock %}
+
+{% block searchableMap %}
+
+	<script>
+		{# future either use this method to refresh map (has to remove + add all markers but recovers much better from total wipe) #}
+		{# future or add them onto the map as we get them from jquery #}
+		{# note 100% should be keeping a list of their ID's in an array? array of ID => location seems pretty good #}
+		function initSingleSearchMap(updatePlace) {
+			// Create the search box and link it to the UI element.
+			let element = getMapElement(), map = element.gMap, markers = element.gMarkers;
+
+			let input = document.getElementById('pac-input');
+			element.searchBox = new google.maps.places.SearchBox(input);
+			let searchBox = element.searchBox;
+
+			map.addListener('bounds_changed', function () {
+				searchBox.setBounds(map.getBounds());
+			});
+
+			// Listen for the event fired when the user selects a prediction and retrieve
+			// more details for that place.
+			searchBox.addListener('places_changed', function () {
+				let places = searchBox.getPlaces();
+
+				if (places.length === 0) {
+					return;
+				}
+				updatePlace(places[0]);
+			});
+
+			map.setOptions(element.mapoptions);
+		}
+	</script>
+
+{% endblock %}
+
+{#{% block geolocMap %}#}
+	{#<script>#}
+		{#function initMapGeolocator(){#}
+			{##}
+		{#}#}
+	{#</script>#}
+
+{#{% endblock %}#}
+
+{% block modalMap %}
+	<div class="modal fade invisible d-block" id="mapModal">
+		<div class="modal-dialog Absolute-Center w-50 h-50" role="document">
+			<div class="modal-content square-border h-100 border-0">
+				<div class="container d-flex flex-column align-items-stretch p-0 h-100">
+					<div class="flex-row">
+						<input type="text" title="Location" class="form-control h-100 border-0" id="pac-input" data-longitude="" data-latitutde="" style="background-color: #FAFAFA;" placeholder="Location">
+					</div>
+					<div class="flex-row h-100" id="modalMap">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function initModalMap(mapholder) {
+			let elem = getMapElement(), map = elem.gMap;
+			elem.geocoder = new google.maps.Geocoder;
+			elem.mapoptions.zoom = 14;
+			elem.mapoptions.draggableCursor = 'default';
+
+			$('#mapModal').on('show.bs.modal', function (e) {
+				$('#modalMap').append(elem);
+
+				let currCenter = map.getCenter();
+				google.maps.event.trigger(map, "resize");
+				map.setCenter(currCenter);
+				$(this).removeClass('invisible');
+
+			}).on('hide.bs.modal', function (e) {
+				mapholder.append(elem);
+
+				let currCenter = map.getCenter();
+				google.maps.event.trigger(map, "resize");
+				map.setCenter(currCenter);
+				$(this).addClass('invisible');
+			});
+
+			map.addListener('click', function (e) {
+				if (!$('#mapModal').hasClass('invisible')) {
+					mapPanAndMarker(e.latLng.lat(), e.latLng.lng());
+				}
+			});
+		}
+
+		function geolocateCallback(position) {
+			let input = $('#loc-input');
+			let element = getMapElement(), geocoder = element.geocoder;
+
+			geocoder.geocode({'location': position}, function (results, status) {
+				if (status === 'OK') {
+					if (results[1]) {
+						input.text(results[1].formatted_address);
+						$('#pac-input').attr('placeholder',input.text());
+					} else {
+						input.text('No results found');
+					}
+				} else {
+					input.text('Error finding location');
+				}
+			});
+			input.attr("data-latitude", position.lat);
+			input.attr("data-longitude", position.lng);
+
+			mapPanAndMarker(position.lat, position.lng);
+		}
+
+	</script>
+{% endblock %}
+
+
+{#function addMapMarkers() {#}
+{#var defaultLocation;#}
+{#if ($("#pac-input").attr("latitude")) {#}
+{#defaultLocation = {lat: parseFloat($("#pac-input").attr("latitude")), lng: parseFloat($("#pac-input").attr("longitude"))};#}
+{#}#}
+{#if (defaultLocation) {#}
+{#map = new google.maps.Map(document.getElementById('map'), {#}
+{#zoom  : 12,#}
+{#center: defaultLocation#}
+{#});#}
+{#} else {#}
+{#map = new google.maps.Map(document.getElementById('map'), {#}
+{#zoom  : 6,#}
+{#center: {lat: 54.512997, lng: -4}#}
+{#});#}
+{#}#}
+
+{#$("#item-cards").find("div").each(function (index) {#}
+{#// this is card object#}
+{#var location = {lat: parseFloat($(this).attr("data-latit")), lng: parseFloat($(this).attr("data-longit"))};#}
+
+{#var marker = new google.maps.Marker({#}
+{#position: location,#}
+{#map     : map,#}
+{#});#}
+
+{#});#}
+{#}#}

@@ -1,290 +1,272 @@
 {% extends 'layout.twig' %}
 
 {% block head %}
-  {{ parent() }}
-  <title>Messenger</title>
-  <script src="{{ asset('socket.io.min.js','javascript') }}"></script>
+	{{ parent() }}
+	<title>Messenger</title>
+	<script src="{{ asset('socket.io.min.js','javascript') }}"></script>
 
 {% endblock %}
 
 {% block content %}
-  {{ parent() }}
-  <!-- MAIN SECTION -->
-  <div class="container-fluid main">
-	<div class="row row-offcanvas row-offcanvas-left">
-	  <div class="col-xs-6 col-sm-3 no-padding sidebar-offcanvas" id="sidebar" role="navigation">
-		<!-- Requests Section -->
-		<nav class="navbar square-border" id="requests-nav" style="background-color: white; border: 1px solid #dce0e0; border-top: 0; height: 3rem; padding: 0;">
-		  <div class="btn-group" role="group" aria-label="Basic example" style="width: 100%; height: 100%;">
-			<button id="sentRequestsBtn" class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-right: 1px solid #ccc;">Sent</button>
-			<button id="receivedRequestsBtn" class="btn btn-secondary square-border" style="width: 50%; height: 100%; border: 0; border-left: 1px solid #ccc;">Received</button>
-		  </div>
-		</nav>
-		<div class="container-fluid" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0; padding-right: 0;">
-		  <!-- Requests -->
-      <div class="" id="sentRequests"></div>
-      <div class="hidden-xs-up" id="receivedRequests"></div>
-		</div>
-	  </div>
-	  <div class="col-xs-12 col-sm-9 no-padding">
-		<!-- Messaging Section -->
-		<nav class="navbar square-border" style="background-color: white; border: 1px solid #dce0e0; border-left: 0; border-top: 0; height: 3rem;" id="messages-nav">
-		  <button type="button" class="btn btn-secondary hidden-md-up" data-toggle="offcanvas" data-target=".sidebar-nav">Contacts</button>
-		  <ul class="nav navbar-nav float-xs-right">
-			<li class="nav-item">
-			  <a class="nav-link" href="#">Reject</a>
-			</li>
-			<li class="nav-item">
-			  <a class="nav-link" href="#">Accept</a>
-			</li>
-		  </ul>
-		</nav>
-		<div class="container-fluid" style="overflow: scroll; overflow-x:hidden;" id="messages">
-		  <!-- Message Container -->
-		</div>
-		<div class="container-fluid" id="input">
-		  <!-- Input Container -->
-		  <div class="row" style="width: 100%;">
-			<div class="input-group">
-			  <input type="text" class="form-control square-border" placeholder="Enter a message here" id="messageInput">
-			  <span class="input-group-btn">
-          <button class="btn btn-secondary square-border" type="button" id="sendButton">Send</button>
-        </span>
+	{{ parent() }}
+	<!-- MAIN SECTION -->
+	<div class="container-fluid h-100 main">
+		<div class="row row-offcanvas row-offcanvas-left h-100">
+			<div class="col-6 col-sm-3 p-0 d-flex flex-column align-items-stretch sidebar-offcanvas" id="sidebar" role="navigation">
+				<!-- Requests Section -->
+					<nav class="navbar navbar-toggleable-md square-border border-top-0 p-0" id="requests-nav" style="background-color: white; border: 1px solid #dce0e0; height: 3rem;">
+						<div class="d-flex d-flex-nowrap h-100 w-100" role="group" aria-label="Basic example">
+							<button id="sentRequestsBtn " class="btn flex-auto btn-secondary square-border" style="border: 0; border-right: 1px solid #ccc;">Sent</button>
+							<button id="receivedRequestsBtn " class="btn flex-auto btn-secondary square-border" style="border:0">Received</button>
+						</div>
+					</nav>
+				<div class="d-flex flex-column flex-auto" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0; padding-right: 0;">
+					<div>
+						Msg1
+					</div>
+					<div>
+						Msg2
+					</div>
+				</div>
 			</div>
-		  </div>
+			<div class="d-flex flex-column align-items-stretch justify-content-center col-12 col-sm-9 p-0">
+				<!-- Messaging Section -->
+				<nav class="navbar navbar-toggleable-md align-items-stretch square-border mb-auto" style="background-color: white; border: 1px solid #dce0e0; border-left: 0; border-top: 0; height: 3rem;" id="messages-nav">
+					<button type="button" class="btn btn-secondary hidden-md-up" data-toggle="offcanvas" data-target=".sidebar-nav">Contacts</button>
+					<ul class="navbar-nav w-100 justify-content-end">
+						<li class="nav-item">
+							<a class="nav-link" href="#">Reject</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">Accept</a>
+						</li>
+					</ul>
+				</nav>
+				<div class="container-fluid flex-auto mx-0" style="overflow: scroll; overflow-x:hidden" id="messages">
+					<!-- Message Container -->
+				</div>
+					<!-- Input Container -->
+					<div class="row no-gutters mt-auto w-100" id="search">
+						<div class="input-group">
+							<input type="text" class="form-control square-border" placeholder="Enter a message here" id="messageInput">
+							<span class="input-group-btn">
+          		<button class="btn btn-secondary square-border" type="button" id="sendButton">Send</button>
+			  </span>
+						</div>
+					</div>
+				</div>
 		</div>
-	  </div>
 	</div>
-  </div>
 
 {% endblock %}
 
 {% block scripts %}
-  {{ parent() }}
-  <script>
-	  // From Stack Overflow
-	  $(document).ready(function () {
-		  $('[data-toggle=offcanvas]').click(function () {
-			  $('.row-offcanvas').toggleClass('active2');
-		  });
-	  });
-  </script>
+	{{ parent() }}
+	<script>
+		// From Stack Overflow
+		$(document).ready(function () {
+			$('[data-toggle=offcanvas]').click(function () {
+				$('.row-offcanvas').toggleClass('active2');
+			});
+		});
+	</script>
 
-  <!-- MESSAGING -->
-  <script>
-	  var userID;
-	  var currentReceiverID;
-    var currentRequestID;
+	<!-- MESSAGING -->
+	<script>
+		var userID;
+		var currentReceiverID;
+		var currentRequestID;
 
-	  $(function () {
-		  var socket = io("https://gpmainmessaging.herokuapp.com/");
-		  socket.on('connect', function (data) {
-			  // Get proof of who are from App.php
-			  $.getJSON('/messenger/userid', function (data) {
-				  userID = data['userID'];
-				  var validation = 0;
-				  socket.emit('validation', {'validation': validation, 'userid': userID});
-			  });
+		$(function () {
+			var socket = io("https://gpmainmessaging.herokuapp.com/");
+			socket.on('connect', function (data) {
+				// Get proof of who are from App.php
+				$.getJSON('/messenger/userid', function (data) {
+					userID = data['userID'];
+					var validation = 0;
+					socket.emit('validation', {'validation': validation, 'userid': userID});
+				});
 
-		  });
-		  socket.on("message", function (data) {
-			  var fromid = data['fromid'];
-        var toid = data['toid'];
-			  var message = data['message'];
-        var date = data['date']
-        if (fromid == currentReceiverID || toid == currentReceiverID) {
-          // Add to page right away and bring contact to top
-          if (fromid == userID) {
-            // Send by user
-            $("#messages").append(
-              '<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
-        			'<div class="card message" style="background-color: #2979FF; float: right;" title="Sent at ' + date + '">' +
-        			  '<div class="card-block" style="padding: 0.5rem;">' +
-        				'<p class="card-text" style="color: white;">' + message +'</p>' +
-        			  '</div>' +
-        			'</div>' +
-        		  '</div>'
-            );
-          } else {
-            // Received by user
-            $("#messages").append(
-        		  '<div class="row" style="padding: 0.5rem; width: 100%;">' +
-        			'<img class="circle" src="../images/food/none.svg" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">' +
-        			'<div class="card message" style="background-color: #fafafa;" title="Sent at ' + date + '">' +
-        			  '<div class="card-block" style="padding: 0.5rem;">' +
-        				'<p class="card-text" style="color: black;">' + message + '</p>' +
-        			  '</div>' +
-        			'</div>' +
-        		  '</div>'
-            );
-          }
-        } else {
-          // Make contact bold and bring to top
-        }
+			});
+			socket.on("message", function (data) {
+				var fromid = data['fromid'];
+				var toid = data['toid'];
+				var message = data['message'];
+				var date = data['date'];
+				if (fromid == currentReceiverID || toid == currentReceiverID) {
+					// Add to page right away and bring contact to top
+					if (fromid == userID) {
+						// Send by user
+						$("#messages").append(
+							'<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
+							'<div class="card message" style="background-color: #2979ff; float: right;" title="Sent at ' + date + '">' +
+							'<div class="card-block" style="padding: 0.5rem;">' +
+							'<p class="card-text" style="color: white;">' + message + '</p>' +
+							'</div>' +
+							'</div>' +
+							'</div>'
+						);
+					} else {
+						// Received by user
+						$("#messages").append(
+							'<div class="row" style="padding: 0.5rem; width: 100%;">' +
+							'<img class="circle" src="../images/food/none.png" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">' +
+							'<div class="card message" style="background-color: #fafafa;" title="Sent at ' + date + '">' +
+							'<div class="card-block" style="padding: 0.5rem;">' +
+							'<p class="card-text" style="color: black;">' + message + '</p>' +
+							'</div>' +
+							'</div>' +
+							'</div>'
+						);
+					}
+				} else {
+					// Make contact bold and bring to top
+				}
 
-		  });
-	  });
+			});
+		});
 
-	  $("#sendButton").click(function () {
-		  //Send message
-		  $.post('/messenger/message', {'message': $("#messageInput").val(), 'fromid': userID, 'toid': currentReceiverID, 'requestid': currentRequestID}, function (data) {
-			  if (!data['success']) {
-				  // Failed to send message
-				  console.log("Failed to send message");
-			  } else {
-          // Clear input
-          $("#messageInput").val("");
-        }
-		  });
-	  });
+		$("#sendButton").click(function () {
+			//Send message
+			$.post('/messenger/message', {
+				'message'  : $("#messageInput").val(),
+				'fromid'   : userID,
+				'toid'     : currentReceiverID,
+				'requestid': currentRequestID,
+			}, function (data) {
+				if (!data['success']) {
+					// Failed to send message
+					console.log("Failed to send message");
+				} else {
+					// Clear input
+					$("#messageInput").val("");
+				}
+			});
+		});
 
-    $("body").on("click", ".contact", function() {
-      // Change colour and fill messages
-      currentRequestID = $(this).attr("requestid");
-      currentReceiverID = $(this).attr("receiverid");
-      $(this).removeClass("bold");
-      $(".contact").css("background-color", "white");
-      $(this).css("background-color", "#fafafa");
-      fillMessages($(this).attr("requestid"));
-    });
+		$("body").on("click", ".contact", function () {
+			// Change colour and fill messages
+			currentRequestID = $(this).attr("requestid");
+			currentReceiverID = $(this).attr("receiverid");
+			$(this).removeClass("bold");
+			$(".contact").css("background-color", "white");
+			$(this).css("background-color", "#fafafa");
+			fillMessages($(this).attr("requestid"));
+		});
 
-    $(document).ready(function() {
-      fillSentRequests();
-      fillReceivedRequests();
-    });
-  </script>
+		$(document).ready(function () {
+			fillSentRequests();
+			fillReceivedRequests();
+		});
+	</script>
 
-  <!-- REQUEST TAB CHANGING -->
-  <script>
-  $("#sentRequestsBtn").click(function() {
-    // Hide Received Requests
-    $("#sentRequests").removeClass("hidden-xs-up");
-    $("#receivedRequests").addClass("hidden-xs-up");
-    $("#sentRequestsBtn").css("background-color", "#e6e6e6");
-    $("#receivedRequestsBtn").css("background-color", "");
-  });
+	<!-- REQUEST TAB CHANGING -->
+	<script>
+		$("#sentRequestsBtn").click(function () {
+			// Hide Received Requests
+			$("#sentRequests").removeClass("hidden-xs-up");
+			$("#receivedRequests").addClass("hidden-xs-up");
+			$("#sentRequestsBtn").css("background-color", "#e6e6e6");
+			$("#receivedRequestsBtn").css("background-color", "");
+		});
 
-  $("#receivedRequestsBtn").click(function() {
-    // Hide Sent Requests
-    $("#receivedRequests").removeClass("hidden-xs-up");
-    $("#sentRequests").addClass("hidden-xs-up");
-    $("#receivedRequestsBtn").css("background-color", "#e6e6e6");
-    $("#sentRequestsBtn").css("background-color", "");
-  });
-  </script>
+		$("#receivedRequestsBtn").click(function () {
+			// Hide Sent Requests
+			$("#receivedRequests").removeClass("hidden-xs-up");
+			$("#sentRequests").addClass("hidden-xs-up");
+			$("#receivedRequestsBtn").css("background-color", "#e6e6e6");
+			$("#sentRequestsBtn").css("background-color", "");
+		});
+	</script>
 
-  <!-- CORRECT SIZES OF ELEMENTS -->
-  <script>
-	  $(document).ready(function () {
-		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-				  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#search-navbar-group')
-			  .width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-					  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#requests').height($(window).height() - $('#search-navbar').outerHeight() - $('#requests-nav').outerHeight());
-		  $('#messages').height($(window).height() - $('#search-navbar').outerHeight() - $('#messages-nav').outerHeight() - $('#input')
-				  .outerHeight());
-	  });
+	<!-- Move messaging scripts into own file> -->
+	<script>
 
-	  resize = function () {
-		  $('#main-search-input').width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-				  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#search-navbar-group')
-			  .width($('#search-navbar-container').width() - $('a.navbar-brand').outerWidth() - $('#categories-dropdown')
-					  .outerWidth() - $('#register-button').outerWidth() - $('#login-button').outerWidth() - 150);
-		  $('#requests').height($(window).height() - $('#search-navbar').outerHeight() - $('#requests-nav').outerHeight());
-		  $('#messages').height($(window).height() - $('#search-navbar').outerHeight() - $('#messages-nav').outerHeight() - $('#input')
-				  .outerHeight());
-	  };
-  </script>
+		function fillSentRequests() {
+			$.getJSON('/request/sent', function (data) {
+				// data is all that users requests
+				$.each(data, function (index, value) {
+					// value is requestid, foodid, accepted
+					$("#sentRequests").append(
+						'<div class="card square-border contact" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
+						'<div class="row">' +
+						'<div class="col-2" style="padding: 0;">' +
+						'<img class="card-img-top circle" src="../../images/food/none.png" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
+						'</div>' +
+						'<div class="col-10" style="padding: 0;">' +
+						'<div class="card-block" style="padding: 0.5rem;">' +
+						'<p class="card-text">USERNAME</p>' +
+						'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + value['foodid'] + '</p>' +
+						'<small class="text-muted">Last Message</small>' +
+						'</div>' +
+						'</div>' +
+						'</div>' +
+						'</div>'
+					);
+				});
+			});
+		}
 
-  <!-- Move messaging scripts into own file> -->
-  <script>
-	  function fillSentRequests() {
-		  $.getJSON('/request/sent', function (data) {
-			  // data is all that users requests
-			  $.each(data, function (index, value) {
-				  // value is requestid, foodid, accepted
-				  $("#sentRequests").append(
-					  '<div class="card square-border contact" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
-					       '<div class="row">' +
-					            '<div class="col-xs-2" style="padding: 0;">' +
-					                 '<img class="card-img-top circle" src="../../images/food/none.svg" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
-					            '</div>' +
-					            '<div class="col-xs-10" style="padding: 0;">' +
-					                 '<div class="card-block" style="padding: 0.5rem;">' +
-					                      '<p class="card-text">USERNAME</p>' +
-					                      '<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + value['foodid'] + '</p>' +
-					                      '<small class="text-muted">Last Message</small>' +
-					                 '</div>' +
-					            '</div>' +
-					       '</div>' +
-					  '</div>'
-				  );
-			  });
-		  });
-	  }
+		function fillReceivedRequests() {
+			$.getJSON('/request/received', function (data) {
+				// data is all that users requests
+				$.each(data, function (index, value) {
+					// value is requestid, foodid, accepted
+					$("#receivedRequests").append(
+						'<div class="card square-border contact" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '">' +
+						'<div class="row">' +
+						'<div class="col-2" style="padding: 0;">' +
+						'<img class="card-img-top circle" src="../../images/food/none.png" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
+						'</div>' +
+						'<div class="col-10" style="padding: 0;">' +
+						'<div class="card-block" style="padding: 0.5rem;">' +
+						'<p class="card-text">USERNAME</p>' +
+						'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + value['foodid'] + '</p>' +
+						'<small class="text-muted">Last Message</small>' +
+						'</div>' +
+						'</div>' +
+						'</div>' +
+						'</div>'
+					);
+				});
+			});
+		}
 
-    function fillReceivedRequests() {
-		  $.getJSON('/request/received', function (data) {
-			  // data is all that users requests
-			  $.each(data, function (index, value) {
-				  // value is requestid, foodid, accepted
-				  $("#receivedRequests").append(
-					  '<div class="card square-border contact" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '">' +
-					       '<div class="row">' +
-					            '<div class="col-xs-2" style="padding: 0;">' +
-					                 '<img class="card-img-top circle" src="../../images/food/none.svg" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
-					            '</div>' +
-					            '<div class="col-xs-10" style="padding: 0;">' +
-					                 '<div class="card-block" style="padding: 0.5rem;">' +
-					                      '<p class="card-text">USERNAME</p>' +
-					                      '<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + value['foodid'] + '</p>' +
-					                      '<small class="text-muted">Last Message</small>' +
-					                 '</div>' +
-					            '</div>' +
-					       '</div>' +
-					  '</div>'
-				  );
-			  });
-		  });
-	  }
-
-	  function fillMessages(requestID) {
-      $("#messages").empty();
-		  $.getJSON('/request/messages/1', function (messages) {
-			  // messages is message, time, sender, receiver
-        $.each(messages, function(index, value) {
-          // value = ["message": message, "time": time, "sender": sender, "receiver": receiver];
-          if (value["sender"] == parseInt(userID)) {
-            // Send by user
-            $("#messages").append(
-              '<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
-        			'<div class="card message" style="background-color: #2979FF; float: right;" title="Sent at ' + value["time"] + '">' +
-        			  '<div class="card-block" style="padding: 0.5rem;">' +
-        				'<p class="card-text" style="color: white;">' + value["message"] +'</p>' +
-        			  '</div>' +
-        			'</div>' +
-        		  '</div>'
-            );
-          } else if (value["receiver"] == parseInt(userID)) {
-            // Received by user
-            $("#messages").append(
-        		  '<div class="row" style="padding: 0.5rem; width: 100%;">' +
-        			'<img class="circle" src="../images/food/none.svg" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">' +
-        			'<div class="card message" style="background-color: #fafafa;" title="Sent at ' + value["time"] + '">' +
-        			  '<div class="card-block" style="padding: 0.5rem;">' +
-        				'<p class="card-text" style="color: black;">' + value["message"] + '</p>' +
-        			  '</div>' +
-        			'</div>' +
-        		  '</div>'
-            );
-          } else {
-            console.log("ERROR: incorrect messages received.")
-          }
-        });
-		  });
-	  }
-  </script>
+		function fillMessages(requestID) {
+			$("#messages").empty();
+			$.getJSON('/request/messages/1', function (messages) {
+				// messages is message, time, sender, receiver
+				$.each(messages, function (index, value) {
+					// value = ["message": message, "time": time, "sender": sender, "receiver": receiver];
+					if (value["sender"] == parseInt(userID)) {
+						// Send by user
+						$("#messages").append(
+							'<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
+							'<div class="card message" style="background-color: #2979ff; float: right;" title="Sent at ' + value["time"] + '">' +
+							'<div class="card-block" style="padding: 0.5rem;">' +
+							'<p class="card-text" style="color: white;">' + value["message"] + '</p>' +
+							'</div>' +
+							'</div>' +
+							'</div>'
+						);
+					} else if (value["receiver"] == parseInt(userID)) {
+						// Received by user
+						$("#messages").append(
+							'<div class="row" style="padding: 0.5rem; width: 100%;">' +
+							'<img class="circle" src="../images/food/none.png" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">' +
+							'<div class="card message" style="background-color: #fafafa;" title="Sent at ' + value["time"] + '">' +
+							'<div class="card-block" style="padding: 0.5rem;">' +
+							'<p class="card-text" style="color: black;">' + value["message"] + '</p>' +
+							'</div>' +
+							'</div>' +
+							'</div>'
+						);
+					} else {
+						console.log("ERROR: incorrect messages received.");
+					}
+				});
+			});
+		}
+	</script>
 
 {% endblock %}

@@ -1,0 +1,5 @@
+border-rounded: 0 -> rounded-0
+border-x: 0 -> border-x-0
+width:x% -> w-x		(only 25,50,75,100)
+height:x% -> h-x 	(as above)
+padding:0px -> p-0

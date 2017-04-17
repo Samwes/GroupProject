@@ -7,7 +7,7 @@
 
 {% block content %}
   {{ parent() }}
-  <div class="container">
+  <div class="d-flex">
 	<div class="row">
 	  <div class="Absolute-Center is-Responsive">
 		<div class="col-sm-12 col-md-10 col-md-offset-1" style="background-color: white; padding: 2rem;">
@@ -34,19 +34,4 @@
 
 {% block scripts %}
   {{ parent() }}
-  <!-- CORRECT SIZES OF ELEMENTS -->
-  <script>
-	  $(document).ready(function () {
-		  $('#items')
-			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-		  $('#map')
-			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-	  });
-	  resize = function () {
-		  $('#items')
-			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-		  $('#map')
-			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
-	  };
-  </script>
 {% endblock %}

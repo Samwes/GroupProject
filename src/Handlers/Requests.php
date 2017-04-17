@@ -8,8 +8,8 @@ use Ramsey\Uuid\Uuid;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class Requests
@@ -114,8 +114,6 @@ class Requests
 
 	public function foodItemPost(Request $request, Application $app) {
 		$toEncode = array("error" => "failed to add");
-
-		die("Disabled");
 
 		$token = $app['security.token_storage']->getToken();
 		if (null !== $token) {
@@ -270,6 +268,70 @@ class Requests
 		} else {
 			return new JsonResponse(array("success" => true));
 		}
+	}
+
+	public function updateName(Request $request, App $app) {
+		$response = array("success" => false);
+		if ($request->get('name') === 'newname') {
+			$newname = $request->get('value');
+
+			//Check Vars
+			if (!is_string($newname)) {
+				$response['error'] = 'newname incorrectly defined';
+				die(json_encode($response));
+			}
+
+			$token = $app['security.token_storage']->getToken(); //future refactor this into its own func?
+
+			if (null !== $token) {
+				$userID = $token->getUser()->getID();
+				if ($this->db->updateFullName($userID, $newname)) {
+					$response['success'] = true;
+				}
+			}
+		} else {
+			$response['error'] = 'Incorrect sender';
+		};
+
+		return new JsonResponse($response);
+	}
+
+	public function updatePass(Request $request, App $app) {
+		$oldpass = $request->get('oldPassword');
+		$newpass = $request->get('password');
+		$response = array("success" => false);
+
+		//Check Vars
+		if (!is_string($newpass)) {
+			$response['error'] = 'newpass incorrectly defined';
+			die(json_encode($response));
+		}
+		if (!is_string($oldpass)) {
+			$response['error'] = 'oldpass incorrectly defined';
+			die(json_encode($response));
+		}
+
+		$token = $app['security.token_storage']->getToken(); //future refactor this into its own func?
+
+		if (null !== $token) {
+			$user = $token->getUser();
+			$userID = $user->getID();
+			$password = $user->getPassword();
+			$encoded = $app['security.default_encoder']->encodePassword($newpass, null);
+			if (password_verify($oldpass, $password)) {
+				if ($this->db->updatePass($userID, $encoded)) {
+					$response['success'] = true;
+				} else {
+					$response['error'] = 'Database error encountered';
+				}
+			} else {
+				$response['error'] = 'Incorret password entered';
+			}
+		} else {
+			$response['error'] = 'Unknown error occured';
+		}
+
+		return new JsonResponse($response);
 	}
 
 	public function userID(Request $request, App $app) {

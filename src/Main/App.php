@@ -15,7 +15,9 @@ use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\VarDumperServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,6 +30,10 @@ class App extends Application
 	use Application\UrlGeneratorTrait;
 	use Application\SwiftmailerTrait;
 	use Application\MonologTrait;
+
+	//future smaller item cards (for smaller screens) with bare essentials
+	//future sort by radius etc in dropdown
+	//future image upload - remove button??
 
 	public function __construct(array $values = array()) {
 		parent::__construct($values);
@@ -86,6 +92,7 @@ class App extends Application
 				'profiler.cache_dir'    => ROOT.'/../cache/profiler',
 				'profiler.mount_prefix' => '/_profiler', // this is the default
 			));
+			$this->register(new VarDumperServiceProvider());
 		}
 
 		// Register asset rerouting
@@ -96,6 +103,7 @@ class App extends Application
 				'css'        => array('version' => 'css3', 'base_path' => 'stylesheets/'),
 				'images'     => array('base_path' => 'images/'),
 				'food'       => array('base_path' => 'images/food/'),
+				'users'      => array('base_path' => 'images/people/'),
 				'javascript' => array('base_path' => 'js/'),
 			),
 		));
@@ -171,7 +179,7 @@ class App extends Application
 				'error'         => $this['security.last_error']($request),
 				'last_username' => $this['session']->get('_security.last_username'),
 			));
-		})->bind('login');
+		})->bind('login'); //future remember me on here
 
 		$this->get('/register', function () {
 			return $this['twig']->render('signup.twig');
@@ -182,10 +190,10 @@ class App extends Application
 		$account = $this['controllers_factory'];
 
 		$account->get('/scanner', function () {
-			return $this['twig']->render('scanner.twig');
+			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
+			return $this['twig']->render('scanner.twig', array('userData' => $userdata));
 		})->bind('scanner')->secure('ROLE_USER');
 
-		//future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		$account->get('/userprofile', function () {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			return $this['twig']->render('userProfile.twig', array('userData' => $userdata));
@@ -203,6 +211,15 @@ class App extends Application
 			return $this['twig']->render('messenger.twig');
 		})->bind('messenger');
 
+		//future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+		$account->post('/update/fullname', 'rest.handler:updateName')
+				->bind('updatename')
+				->secure('IS_AUTHENTICATED_FULLY');
+
+		$account->post('/update/password', 'rest.handler:updatePass')
+				->bind('updatepass')
+				->secure('IS_AUTHENTICATED_FULLY');
+
 		$this->mount('/account', $account);
 	}
 
@@ -217,7 +234,12 @@ class App extends Application
 		})->assert('foodID', '\d+');
 
 		$this->get('/item/{id}', function ($id) {
-			return $this['twig']->render('itemPage.twig', array('itemid' => $id,));
+			$foodData = $this['DB']->getFoodItemByID($id); //future combine?
+			$userData = $this['DB']->getUserByID($foodData['userid']);
+			if (($foodData === false) || ($userData === false)) {
+				throw new Exception('An error occured');
+			}
+			return $this['twig']->render('itemPage.twig', array('food' => $foodData, 'user' => $userData));
 		});
 
 		$this->get('/foodItems/{userID}', 'rest.handler:foodItemsGet')
@@ -245,8 +267,8 @@ class App extends Application
 		$this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
 			 ->assert('category', '[a-zA-Z0-9_ ]*')
 			 ->assert('search', '[a-zA-Z0-9_ ]*')
-			 ->assert('latit', '[0-9.]*')
-			 ->assert('longit', '[0-9.]*')
+			->assert('latit', '[-+]?[0-9]*\.?[0-9]+')
+			->assert('longit', '[-+]?[0-9]*\.?[0-9]+')
 			 ->assert('radius', '[0-9]*')
 			 ->assert('minAmount', '[0-9]*')
 			 ->assert('maxAmount', '[0-9]*')
@@ -302,4 +324,5 @@ class App extends Application
 	}
 
 	//future admin routes
+	//todo improved error messages throughout
 }
