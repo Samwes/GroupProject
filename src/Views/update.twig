@@ -164,6 +164,7 @@
 				$('#weightNumberInput').val({{ foodData.weight }});
 				$('#descriptionTextarea').val('{{ foodData.description }}');
 				$('#foodIDInput').val({{ foodID }});
+				// update place to food place?
 			});
 		</script>
 
@@ -261,7 +262,7 @@
 
 				$('.image-editor').cropit({
 					imageState: {
-						src: '../images/food/{{ foodData.image | default(asset('none.png','food')) }}',
+						src: '../../images/food/{{ foodData.image | default(asset('none.png','food')) }}',
 					},
 					smallImage: 'stretch',
 				});
