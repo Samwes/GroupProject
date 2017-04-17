@@ -424,7 +424,7 @@ class Requests
 		if (null !== $token) {
 			$userID = $token->getUser()->getID();
 			if($this->db->removeFoodItem($foodid, $userID)) {
-				$toEncode = array('success' => 'Food Item Removed')
+				$toEncode = array('success' => 'Food Item Removed');
 			}
 		}
 
