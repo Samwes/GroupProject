@@ -16,17 +16,14 @@
 				<!-- Requests Section -->
 					<nav class="navbar navbar-toggleable-md square-border border-top-0 p-0" id="requests-nav" style="background-color: white; border: 1px solid #dce0e0; height: 3rem;">
 						<div class="d-flex d-flex-nowrap h-100 w-100" role="group" aria-label="Basic example">
-							<button id="sentRequestsBtn " class="btn flex-auto btn-secondary square-border" style="border: 0; border-right: 1px solid #ccc;">Sent</button>
-							<button id="receivedRequestsBtn " class="btn flex-auto btn-secondary square-border" style="border:0">Received</button>
+							<button id="sentRequestsBtn" class="btn flex-auto btn-secondary square-border" style="border: 0; border-right: 1px solid #ccc;">Sent</button>
+							<button id="receivedRequestsBtn" class="btn flex-auto btn-secondary square-border" style="border:0">Received</button>
 						</div>
 					</nav>
 				<div class="d-flex flex-column flex-auto" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0; padding-right: 0;">
-					<div>
-						Msg1
-					</div>
-					<div>
-						Msg2
-					</div>
+          <!-- Requests -->
+          <div class="" id="sentRequests"></div>
+          <div class="hidden-xs-up" id="receivedRequests"></div>
 				</div>
 			</div>
 			<div class="d-flex flex-column align-items-stretch justify-content-center col-12 col-sm-9 p-0">
@@ -50,8 +47,8 @@
 						<div class="input-group">
 							<input type="text" class="form-control square-border" placeholder="Enter a message here" id="messageInput">
 							<span class="input-group-btn">
-          		<button class="btn btn-secondary square-border" type="button" id="sendButton">Send</button>
-			  </span>
+          		    <button class="btn btn-secondary square-border" type="button" id="sendButton">Send</button>
+			        </span>
 						</div>
 					</div>
 				</div>
