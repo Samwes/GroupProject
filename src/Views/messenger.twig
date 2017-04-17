@@ -16,7 +16,7 @@
 				<!-- Requests Section -->
 					<nav class="navbar navbar-toggleable-md square-border border-top-0 p-0" id="requests-nav" style="background-color: white; border: 1px solid #dce0e0; height: 3rem;">
 						<div class="d-flex d-flex-nowrap h-100 w-100" role="group" aria-label="Basic example">
-							<button id="sentRequestsBtn" class="btn flex-auto btn-secondary square-border" style="border: 0; border-right: 1px solid #ccc;">Sent</button>
+							<button id="sentRequestsBtn" class="btn flex-auto btn-secondary square-border" style="border: 0; border-right: 1px solid #ccc; background-color: #fafafa">Sent</button>
 							<button id="receivedRequestsBtn" class="btn flex-auto btn-secondary square-border" style="border:0">Received</button>
 						</div>
 					</nav>
@@ -238,7 +238,7 @@
 					if (value["sender"] == parseInt(userID)) {
 						// Send by user
 						$("#messages").append(
-							'<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
+							'<div class="row" style="padding: 0.5rem; width: 100%; justify-content: flex-end">' +
 							'<div class="card message" style="background-color: #2979ff; float: right;" title="Sent at ' + value["time"] + '">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<p class="card-text" style="color: white;">' + value["message"] + '</p>' +
@@ -250,7 +250,7 @@
 						// Received by user
 						$("#messages").append(
 							'<div class="row" style="padding: 0.5rem; width: 100%;">' +
-							'<img class="circle" src="../images/food/none.png" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">' +
+							'<img class="circle" src="../images/food/none.png" alt="Card image cap" style="width: 3rem; height: 3rem; padding: 0.5rem;">' +
 							'<div class="card message" style="background-color: #fafafa;" title="Sent at ' + value["time"] + '">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<p class="card-text" style="color: black;">' + value["message"] + '</p>' +

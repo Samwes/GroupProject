@@ -1,3 +1,7 @@
+.btn {
+	cursor: pointer;
+}
+
 /* MOBILE */
 @media screen and (min-width: 544px) {
 	.card-columns {
