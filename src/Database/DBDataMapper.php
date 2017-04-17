@@ -118,6 +118,43 @@ class DBDataMapper
 		return false;
 	}
 
+	public function updateFoodItem($foodID, $name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image) {
+		if ($image === null) {
+			$image = 'none.png';
+		}
+		$query = 'INSERT INTO `itemtable` (`name`, `expirydate`, `category`,`userid`,`description`,`latit`,`longit`,`amount`,`weight`,`image`)
+        VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)';
+
+		$query = 'UPDATE `itemtable`
+				SET `name`=:name,`expirydate`=:expir,`category`=:cat,`userid`=:uid,`description`=:desc,`latit`=:lat,`longit`=:long,`amount`=:amount,`weight`=:weight,`image`=:image
+				WHERE `foodid`=:fid'
+
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':name'   => $name,
+							   ':expir'  => $expirDate,
+							   ':cat'    => $category,
+							   ':uid'    => $userID,
+								 ':fid'		 => $foodID,
+							   ':desc'   => $desc,
+							   ':lat'    => $lat,
+							   ':long'   => $long,
+							   ':amount' => $amount,
+							   ':weight' => $weight,
+							   ':image'  => $image,
+						   ));
+		} catch (\PDOException $e) {
+			if (DEBUG) { echo 'Updating food item failed: '.$e->getMessage();
+            }
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
+
 	public function addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image) {
 		//future change default image based on category
 		if ($image === null) {
@@ -143,7 +180,7 @@ class DBDataMapper
 							   ':image'  => $image,
 						   ));
 		} catch (\PDOException $e) {
-			if (DEBUG) { echo 'Adding new user failed: '.$e->getMessage();
+			if (DEBUG) { echo 'Adding new food item failed: '.$e->getMessage();
             }
 			$result = false;
 		}

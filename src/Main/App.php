@@ -189,10 +189,16 @@ class App extends Application
 	private function accountRoutes() {
 		$account = $this['controllers_factory'];
 
-		$account->get('/scanner', function () {
+		$account->get('/addItem', function () {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			return $this['twig']->render('scanner.twig', array('userData' => $userdata));
-		})->bind('scanner')->secure('ROLE_USER');
+		})->bind('additem')->secure('ROLE_USER');
+
+		$account->get('/addItem/{foodID}', function() {
+			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
+			$foodData = $this['DB']->getFoodItemByID($foodID);
+			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $foodData));
+		})->bind('update')->secure('ROLE_USER');
 
 		$account->get('/userprofile', function () {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
@@ -285,6 +291,9 @@ class App extends Application
 		//todo default food picture per category
 		$this->post('/food', 'rest.handler:foodItemPost')
 			 ->secure('ROLE_USER');
+
+		$this->post('/food/update', 'rest.handler:foodItemUpdate')
+	 		 ->secure('ROLE_USER');
 
 		//todo registration failure page
 		$this->post('/register/user', 'rest.handler:registerNewUser')

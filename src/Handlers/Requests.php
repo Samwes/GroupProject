@@ -118,6 +118,62 @@ class Requests
 		}
 	}
 
+	public function foodItemUpdate(Request $request, Application $app) {
+		$toEncode = array("error" => "failed to add");
+
+		$token = $app['security.token_storage']->getToken();
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+			$foodID = $request->get('foodID');
+			$name = $request->get('name');
+			$expirDate = $request->get('expiredate');
+			$category = $request->get('category');
+			$desc = $request->get('description');
+			$lat = $request->get('latitude');
+			$long = $request->get('longitude');
+			$amount = $request->get('amount');
+			$weight = $request->get('weight');
+			$imageuri = $request->get('image');
+
+			//Check Vars
+			if (!is_numeric($userID)) {
+				die(json_encode(array("error" => "userID incorrectly defined")));
+			} elseif (!is_numeric($foodID)) {
+				die(json_encode(array("error" => "foodID incorrectly defined")));
+			} elseif (!is_string($name)) {
+				die(json_encode(array("error" => "name incorrectly defined")));
+			} elseif (!is_string($expirDate)) {
+				die(json_encode(array("error" => "expirey incorrectly defined")));
+			} elseif (!is_string($category)) {
+				die(json_encode(array("error" => "category incorrectly defined")));
+			} elseif (!is_string($desc)) {
+				die(json_encode(array("error" => "description incorrectly defined")));
+			} elseif (!is_numeric($lat)) {
+				die(json_encode(array("error" => "latitude incorrectly defined")));
+			} elseif (!is_numeric($long)) {
+				die(json_encode(array("error" => "longitude incorrectly defined")));
+			} elseif (!is_numeric($amount)) {
+				die(json_encode(array("error" => "amount incorrectly defined")));
+			} elseif (!is_numeric($weight)) {
+				die(json_encode(array("error" => "weight incorrectly defined")));
+			}
+			if ($imageuri === "") {
+				$filename = null;
+			} else {
+				$uriPhp = 'data://'.substr($imageuri, 5);
+				$binary = file_get_contents($uriPhp);
+				$filename = Uuid::uuid4()->getHex().'.png';
+				file_put_contents('images/food/'.$filename, $binary);
+			}
+
+			if ($this->db->updateFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {
+				$toEncode = array("success" => "topic added");
+			}
+		}
+
+		return new RedirectResponse($app->path('user')); //note change redirect on failure/success
+	}
+
 	public function foodItemPost(Request $request, Application $app) {
 		$toEncode = array("error" => "failed to add");
 
