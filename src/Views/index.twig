@@ -202,11 +202,14 @@
 		<div class="row no-gutters h-100">
 			<!-- FOOD ITEMS -->
 			<!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
-			<div class="d-flex flex-column flex-auto" id="items" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
+			<div class="d-flex flex-column flex-auto" id="items" style="position: relative; overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
 				<div class="container p-0">
-					<div class="card-columns" id="item-cards" style="column-gap: 0.4rem;">
+					<div class="card-columns" id="item-cards" style="position: absolute; column-gap: 0.4rem;">
 					</div>
-				<i class="fa fa-spinner fa-pulse fa-3x fa-fw hidden-xs-up" id="loading-icon"></i>
+					<i class="fa fa-spinner fa-pulse fa-3x fa-fw hidden-xs-up" id="loading-icon"></i>
+				</div>
+				<div class="d-none w-100 h-100" id="items-fade" style="position: absolute; z-index: 100; opacity: 0.75; background-color: #000">
+
 				</div>
 			</div>
 			<!-- MAP -->
@@ -231,7 +234,7 @@
 	{#todo move all search in single file + keep track of already gotten items#}
 	{#todo move map update markers#}
 	<script>
-//		resultsSoFar = 0;
+		//		resultsSoFar = 0;
 		results = {};
 
 		$(document).ready(refreshSearch());
