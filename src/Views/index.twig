@@ -201,8 +201,7 @@
 	<div class="container-fluid my-2 h-100">
 		<div class="row no-gutters h-100">
 			<!-- FOOD ITEMS -->
-			<!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
-			<div class="d-flex flex-column flex-auto" id="items" style="position: relative; overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
+			<div class="d-flex flex-column flex-auto" id="items" style="position: relative; overflow: hidden; border-right: 1px solid #dce0e0;">
 				<div class="container p-0">
 					<div class="card-columns" id="item-cards" style="position: absolute; column-gap: 0.4rem;">
 					</div>
@@ -220,7 +219,9 @@
 		</div>
 	</div>
 
-	<br>
+	<div class="d-none" id="card-storage">
+
+	</div>
 
 {% endblock %}
 
@@ -236,8 +237,6 @@
 	<script>
 		//		resultsSoFar = 0;
 		results = {};
-
-		$(document).ready(refreshSearch());
 
 		function updatePlace(place) {
 			if (!place.geometry) {
@@ -260,6 +259,7 @@
 
 		$("#map").one("maploaded", function () {
 			initSingleSearchMap(updatePlace);
+			refreshSearch();
 			let input = $('#pac-input'), curlat = input.attr("data-latitude"), curlong = input.attr("data-longitude");
 			if ((curlat === "") || (curlong === "")) {
 				setToUserData(null, null, function (position) {
@@ -276,8 +276,8 @@
 
 	<script>
 		$(function ($) {
-			$('#items').on('scroll', function () {
-				if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+			$(window).on('scroll', function() {
+				if($(window).scrollTop() + window.innerHeight >= $(document).height()){
 					addMoreItems();
 				}
 			});

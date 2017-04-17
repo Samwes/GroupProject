@@ -1,26 +1,33 @@
 function getItem(id) {
+	if (typeof results[id] === "undefined") {
 	$.get("/food/html/" + id, function (html) {
 		//$("#item-cards").append(html);
 		let card = $($.parseHTML(html)).appendTo('#item-cards');
-		results.id = card;
+		results[id] = card;
 
 		let cardMarker = newMarker(Number(card.attr("data-latit")),Number(card.attr('data-longit')));
 		cardMarker.id = id;
-		//Clickable = false
+		//cardMarker.setClickable(false);
+		cardMarker.addListener('mouseover', function() {
+			highlightCard(this.id);
+		});
+		cardMarker.addListener('mouseout', resetCardHighlight);
 		card[0].marker = cardMarker;
-
 	});
+	} else {
+		$("#item-cards").append(results[id]);
+		addExistingMarker(results[id][0].marker);
+	}
 }
 
 function highlightCard(id){
-	//$("#item-cards").addClass('fadeContainer');
 	$('#items-fade').removeClass('d-none');
-	results.id.addClass('fadeItem');
+	results[id].addClass('fadeItem');
 }
 
 function resetCardHighlight(){
 	$("#item-cards").find('.fadeItem').removeClass('fadeItem');
-
+	$('#items-fade').addClass('d-none');
 }
 
 //todo move to index? or move everything needed in here. Don't split between the two
@@ -36,14 +43,19 @@ function GetURLParameter(sParam) {
 	}
 }
 
+function clearCurrentCards(){
+	let storage = $('#card-storage');
+	$("#item-cards").children().appendTo(storage);
+	clearMarkers();
+}
+
 function refreshSearch() {
+	clearCurrentCards();
+	doSearch(0, 12);
+}
+
+function doSearch(inStart, inCount) {
 	let search = GetURLParameter("search");
-
-	//future keep results?
-	results = {};
-
-	$("#item-cards").empty();
-
 	let category = GetURLParameter("category");
 	let latitude = GetURLParameter("latitude");
 	let longitude = GetURLParameter("longitude");
@@ -73,12 +85,12 @@ function refreshSearch() {
 	if (!minWeight) {minWeight = "";}
 	if (!maxWeight) {maxWeight = "";}
 
-	let query = "/search/" + category + "/" + search + "/" + latitude + "/" + longitude + "/" + radius + "/" + minQuantity + "/" + maxQuantity + "/" + minWeight + "/" + maxWeight + "/" + sort;
+	let query = "/search/" + category + "/" + search + "/" + latitude + "/" + longitude +
+							"/" + radius + "/" + minQuantity + "/" + maxQuantity + "/" + minWeight +
+							"/" + maxWeight + "/" + sort + "/" + inStart + "/" + inCount;
 	// Set Category and Search on page
 	$("#categories-dropdown").val(category);
 
-	// Make sure columns are empty
-	$("#item-cards").empty();
 	$.getJSON(query, function (data) {
 		// Data is list of relevant items
 		$.each(data, function (index, array) {
@@ -89,29 +101,6 @@ function refreshSearch() {
 
 function addMoreItems() {
 	let search = GetURLParameter("search");
-	if (search) {
-		$("#loading-icon").removeClass("hidden-xs-up");
-		let target = Math.max(resultsSoFar + 12, results.length);
-		for (let i = resultsSoFar; i < target; i++) {
-			if ((i < results.length) && !$("#loading-icon").hasClass("hidden-xs-up")) {
-				$.get("/food/html/" + results[i]["foodid"], function (html) {
-					$("#item-cards").append(html);
-				});
-				resultsSoFar += 1;
-			}
-		}
-		$("#loading-icon").addClass("hidden-xs-up");
-	} else {
-		let query = /food/ + resultsSoFar + "/12";
-
-		$.getJSON(query, function (data) {
-			results = results.concat(data);
-			// Data is list of relevant items
-			$.each(data, function (index, array) {
-				$.get("/food/html/" + array["foodid"], function (html) {
-					$("#item-cards").append(html);
-				});
-			});
-		});
-	}
+	let resultsSoFar = $("#item-cards").children().size();
+	doSearch(resultsSoFar, 12);
 }
