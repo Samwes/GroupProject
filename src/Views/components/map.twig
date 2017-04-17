@@ -55,10 +55,10 @@
 			let element = getMapElement(), map = element.gMap;
 			map.panTo({lat: lat, lng: long});
 			clearMarkers();
-			addMarker(lat, long);
+			newMarker(lat, long);
 		}
 
-		function addMarker(lat, long, info) {
+		function newMarker(lat, long, info) {
 			let element = getMapElement();
 			let markeroptions = {
 				position: {lat: lat, lng: long},

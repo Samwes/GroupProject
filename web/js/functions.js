@@ -4,21 +4,23 @@ function getItem(id) {
 		let card = $($.parseHTML(html)).appendTo('#item-cards');
 		results.id = card;
 
-		let cardMarker = addMarker(Number(card.attr("data-latit")),Number(card.attr('data-longit')));
+		let cardMarker = newMarker(Number(card.attr("data-latit")),Number(card.attr('data-longit')));
 		cardMarker.id = id;
+		//Clickable = false
 		card[0].marker = cardMarker;
 
 	});
-
 }
 
 function highlightCard(id){
-	$("#item-cards").addClass('fadeContainer');
+	//$("#item-cards").addClass('fadeContainer');
+	$('#items-fade').removeClass('d-none');
 	results.id.addClass('fadeItem');
 }
 
 function resetCardHighlight(){
-	$("#item-cards").removeClass('fadeContainer').find('.fadeItem').removeClass('fadeItem');
+	$("#item-cards").find('.fadeItem').removeClass('fadeItem');
+
 }
 
 //todo move to index? or move everything needed in here. Don't split between the two
