@@ -746,6 +746,35 @@ class DBDataMapper
 		return $result;
 	}
 
+	public function getUserFoodInfo($userid, $foodid) {
+		// fix to get message corresponding to time
+		$query = 'SELECT DISTINCT `usertable`.`username`, MAX(`messagetable`.`time`), `messagetable`.`message`, `itemtable`.`name`, `usertable`.`picture`
+				FROM `usertable`, `messagetable`, `itemtable`, `requestmessagetable`, `requesttable`
+				WHERE `usertable`.`userid` = :uid AND `itemtable`.`foodid` = :fid AND
+				`messagetable`.`messageid` = `requestmessagetable`.`messageid` AND
+				`requestmessagetable`.`requestid` = `requesttable`.`requestid` AND
+				`requesttable`.`foodid` = :fid AND
+				(`requesttable`.`requester` = :uid OR (`itemtable`.`foodid` = :fid AND `itemtable`.`userid` = :uid))';
+
+		$result = false;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':uid' => $userid,
+								 ':fid' => $foodid
+						   ));
+
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Getting user food info failed: '.$e->getMessage();
+		  }
+		}
+		$stmt = null;
+		return $result;
+	}
+
 	public function addVerification($userid) {
 		// Add verification code to database in relation to userid
     }

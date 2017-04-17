@@ -288,6 +288,11 @@ class App extends Application
 		$this->get('/messenger/userid', 'rest.handler:userID')
 			 ->secure('ROLE_USER');
 
+		$this->get('/messenger/userfood/{userid}/{foodid}', 'rest.handler:getUserFoodInfo')
+			->assert('userid', '\d+')
+			->assert('foodid', '\d+')
+			->secure('ROLE_USER');
+
 		//todo default food picture per category
 		$this->post('/food', 'rest.handler:foodItemPost')
 			 ->secure('ROLE_USER');
