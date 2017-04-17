@@ -194,7 +194,7 @@ class App extends Application
 			return $this['twig']->render('scanner.twig', array('userData' => $userdata));
 		})->bind('additem')->secure('ROLE_USER');
 
-		$account->get('/addItem/{foodID}', function() {
+		$account->get('/addItem/{foodID}', function($foodID) {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			$fooddata = $this['DB']->getFoodItemByID($foodID);
 			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $fooddata));
