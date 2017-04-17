@@ -408,6 +408,20 @@ class Requests
 		return new JsonResponse($toEncode);
 	}
 
+	public function removeFoodItem(Request $request, App $app, $foodID) {
+		$token = $app['security.token_storage']->getToken();
+		$toEncode = array('error' => 'foodID or userID incorrect');
+
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+			if($this->db->removeFoodItem($foodID, $userID)) {
+				$toEncode = array('success' => 'Food Item Removed')
+			}
+		}
+
+		return new RedirectResponse($app->path('user')); //note change redirect on failure/success
+	}
+
 	public function foodLikelihood(Request $request, App $app, $foodID) {
 		$foodItem = $this->db->getFoodItemByID($foodID);
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]

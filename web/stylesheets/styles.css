@@ -2,6 +2,10 @@
 	cursor: pointer;
 }
 
+.square {
+	border-radius: 0;
+}
+
 /* MOBILE */
 @media screen and (min-width: 544px) {
 	.card-columns {
