@@ -261,7 +261,7 @@
 
 				$('.image-editor').cropit({
 					imageState: {
-						src: '{{ foodData.image | default(asset('none.png','food')) }}',
+						src: '../images/food/{{ foodData.image | default(asset('none.png','food')) }}',
 					},
 					smallImage: 'stretch',
 				});
