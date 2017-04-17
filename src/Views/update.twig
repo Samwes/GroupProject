@@ -164,7 +164,6 @@
 				$('#weightNumberInput').val({{ foodData.weight }});
 				$('#descriptionTextarea').val('{{ foodData.description }}');
 				$('#foodIDInput').val({{ foodID }});
-				// update place to food place?
 			});
 		</script>
 
@@ -173,7 +172,7 @@
 			$("#map").one("maploaded", function () {
 				initSingleSearchMap(updatePlace);
 				initModalMap($('#mapholder'));
-				setToUserData({{ userData.lat ?? 'null' }},{{ userData.long ?? 'null'}}, geolocateCallback);
+				setToUserData({{ foodData.latit ?? 'null' }},{{ foodData.longit ?? 'null'}}, geolocateCallback);
 			});
 
 			//Translate map to location in future
