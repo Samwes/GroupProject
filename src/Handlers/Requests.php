@@ -352,7 +352,7 @@ class Requests
 		return new JsonResponse($toEncode);
 	}
 
-	public function foodLikelihood(Request $request, App $app, $userID) {
+	public function foodLikelihood(Request $request, App $app, $foodID) {
 		return new JsonResponse(array("likelihood" => '80%'));
 	}
 }
