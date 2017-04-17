@@ -156,13 +156,15 @@
 
 		<script>
 			// Set content to previous data
-			$('#nameTextInput').val({{ foodData.name }});
-			$('#categorySelect').val({{ foodData.category }});
-			$('#dateInput').val({{ foodData.expirydate }});
-			$('#amountNumberInput').val({{ foodData.amount }});
-			$('#weightNumberInput').val({{ foodData.weight }});
-			$('#descriptionTextarea').val({{ foodData.description }});
-			$('#foodIDInput').val({{ foodID }});
+			$(document).ready(function() {
+				$('#nameTextInput').val('{{ foodData.name }}');
+				$('#categorySelect').val('{{ foodData.category }}');
+				$('#dateInput').val({{ foodData.expirydate }});
+				$('#amountNumberInput').val({{ foodData.amount }});
+				$('#weightNumberInput').val({{ foodData.weight }});
+				$('#descriptionTextarea').val('{{ foodData.description }}');
+				$('#foodIDInput').val({{ foodID }});
+			});
 		</script>
 
 		<script>
