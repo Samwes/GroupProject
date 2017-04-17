@@ -264,10 +264,12 @@ class App extends Application
 			 ->secure('ROLE_USER')
 			 ->assert('requestID', '\d+');
 
+		//note deprecated?
 		$this->get('/food/{start}/{num}', 'rest.handler:getFoodBetween')
 			 ->assert('start', '[0-9]*')
 			 ->assert('num', '[0-9]*');
 
+		//note deprecated?
 		$this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
 			 ->assert('category', '[a-zA-Z0-9_ ]*')
 			 ->assert('search', '[a-zA-Z0-9_ ]*');

@@ -213,6 +213,7 @@
 			</div>
 			<!-- MAP -->
 			<div class="d-block col-md-5">
+				<div id="mapspacer" class="d-block h-0"></div>
 				<div id="map" class="w-100" style="height: 90%; "></div>
 			</div>
 
@@ -271,14 +272,14 @@
 			} else {
 				mapPanTo(Number(curlat), Number(curlong));
 			}
-		});
-	</script>
 
-	<script>
-		$(function ($) {
 			$(window).on('scroll', function() {
 				if($(window).scrollTop() + window.innerHeight >= $(document).height()){
 					addMoreItems();
+				}
+				let diff = $(window).scrollTop() - $('#map').parent().offset().top;
+				if(diff>0){
+					$('#mapspacer').height(diff);
 				}
 			});
 		});
