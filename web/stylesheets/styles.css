@@ -372,6 +372,8 @@ input, .export {
 	display: inline-block;
 }
 
+/* TODO - Sort to better sizes on different screens */
+
 /* MOBILE */
 @media screen and (min-width: 0px) {
 	.message {
