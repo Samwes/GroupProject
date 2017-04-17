@@ -122,12 +122,10 @@ class DBDataMapper
 		if ($image === null) {
 			$image = 'none.png';
 		}
-		$query = 'INSERT INTO `itemtable` (`name`, `expirydate`, `category`,`userid`,`description`,`latit`,`longit`,`amount`,`weight`,`image`)
-        VALUES (:name, :expir, :cat, :uid, :desc, :lat, :long, :amount, :weight, :image)';
 
 		$query = 'UPDATE `itemtable`
 				SET `name`=:name,`expirydate`=:expir,`category`=:cat,`userid`=:uid,`description`=:desc,`latit`=:lat,`longit`=:long,`amount`=:amount,`weight`=:weight,`image`=:image
-				WHERE `foodid`=:fid'
+				WHERE `foodid`=:fid';
 
 		$result = true;
 		try {
