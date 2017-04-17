@@ -26,12 +26,18 @@ class Requests
 
 	//note: Request handling functions go here
 
-	public function foodItemsGet(Request $request, App $app, $userID) {
+	public function foodItemsGet(Request $request, App $app) {
 
-		//fixme needs new route {} as param just accepts all, name irrelevant (not in query string)
-		$toEncode = $this->db->getFoodItemsByUserID($userID);
-		if ($toEncode === null) {
-			$toEncode = array('error' => 'failed');
+		$token = $app['security.token_storage']->getToken(); //future refactor this into its own func?
+
+		if (null !== $token) {
+			$user = $token->getUser();
+			$userID = $user->getID();
+
+			$toEncode = $this->db->getFoodItemsByUserID($userID);
+			if ($toEncode === null) {
+				$toEncode = array('error' => 'failed');
+			}
 		}
 
 		return new JsonResponse($toEncode);
@@ -344,5 +350,9 @@ class Requests
 		}
 
 		return new JsonResponse($toEncode);
+	}
+
+	public function foodLikelihood(Request $request, App $app, $userID) {
+		return new JsonResponse(array("likelihood" => '80%'));
 	}
 }
