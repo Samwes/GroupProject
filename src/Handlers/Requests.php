@@ -353,6 +353,29 @@ class Requests
 	}
 
 	public function foodLikelihood(Request $request, App $app, $foodID) {
-		return new JsonResponse(array("likelihood" => '80%'));
+		$foodItem = $this->db->getFoodItemByID($foodID);
+		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
+
+		// Content Here
+
+		return new JsonResponse(array("likelihood" => '80%')); // Temporary Return
+	}
+
+	public function wastageAnalysis(Request $request, App $app) {
+		$token = $app['security.token_storage']->getToken();
+		$toEncode = array('userID' => 'error');
+
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+
+			// Ignore all above
+			$toEncode['userID'] = $userID; // <-- The users id
+			$foodItems = $this->db->getFoodItemsByUserID($userID); // <-- Array of food items
+			// of form [[0] => [...], [1] => [...], [2] => [...]] or something like that
+			// each [...] as in foodLikelihood(...)
+
+			// Content Here
+
+		}
 	}
 }
