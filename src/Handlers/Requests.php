@@ -366,9 +366,9 @@ class Requests
 		$toEncode = array('userID' => 'error');
 
 		if (null !== $token) {
+			// Ignore all above
 			$userID = $token->getUser()->getID(); // <-- Users id
 
-			// Ignore all above
 			$foodItems = $this->db->getFoodItemsByUserID($userID); // <-- Array of food items
 			// of form [[0] => [...], [1] => [...], [2] => [...]] or something like that
 			// each [...] as in foodLikelihood(...)
