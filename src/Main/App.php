@@ -196,8 +196,8 @@ class App extends Application
 
 		$account->get('/addItem/{foodID}', function() {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
-			$foodData = $this['DB']->getFoodItemByID($foodID);
-			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $foodData));
+			$fooddata = $this['DB']->getFoodItemByID($foodID);
+			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $fooddata));
 		})->bind('update')->secure('ROLE_USER');
 
 		$account->get('/userprofile', function () {
