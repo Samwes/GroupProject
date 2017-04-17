@@ -366,10 +366,9 @@ class Requests
 		$toEncode = array('userID' => 'error');
 
 		if (null !== $token) {
-			$userID = $token->getUser()->getID();
+			$userID = $token->getUser()->getID(); // <-- Users id
 
 			// Ignore all above
-			$toEncode['userID'] = $userID; // <-- The users id
 			$foodItems = $this->db->getFoodItemsByUserID($userID); // <-- Array of food items
 			// of form [[0] => [...], [1] => [...], [2] => [...]] or something like that
 			// each [...] as in foodLikelihood(...)
