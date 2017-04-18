@@ -573,7 +573,7 @@
 	</script>
 
 	<script>
-		$('.card').on('click', function() {
+		$('body').on('click', '.card', function() {
 			var foodid = $(this).attr('data-id');
 			$.get("/item/" + foodid, function(data) {
 				$('#cardModalContent').empty();
