@@ -5,8 +5,6 @@
   <title>Item Page</title>
 {% endblock %}
 
-{#todo use map.twig#}
-
 {% block content %}
   {{ parent() }}
   <div class="container py-lg-5 py-md-3 py-sm-0" ></div>
@@ -34,7 +32,7 @@
 			</div>
 			<!-- MAP -->
 			<div class="tab-pane w-100" id="mapdisplay">
-			  <div class="d-block flex-auto" id=map style="border: 1px solid #cccccc; height: 15rem; margin-top: -1px;"></div>
+			  <div class="d-block flex-auto" id="map" style="border: 1px solid #cccccc; height: 15rem; margin-top: -1px;"></div>
 			</div>
 		  </div>
 		</div>
@@ -81,6 +79,7 @@
 
 {% block scripts %}
   {{ parent() }}
+	{{ block("main", "map.twig") }}
 
   <script>
 	  $(document).ready(function () {
@@ -89,49 +88,31 @@
 		  });
 
 		  $('#maptab').on('shown.bs.tab', function () {
+				let element = getMapElement(), map = element.gMap;
 			  google.maps.event.trigger(map, 'resize');
+			  mapPanTo({{ foodData.latit }}, {{ foodData.longit }});
 		  })
 
 
 	  });
   </script>
 
-  {#todo: store map marker(s) in array, redraw each time#}
-
   <script>
     $("#map").one("maploaded", function () {
-      setToUserData({{ foodData.latit }}, {{ foodData.longit }}, geolocateCallback);
+			mapPanAndMarker({{ foodData.latit }}, {{ foodData.longit }});
+			let geocoder = new google.maps.Geocoder();
+			geocoder.geocode({'location': {lat: {{ foodData.latit }}, lng: {{ foodData.longit }}}}, function (results, status) {
+				if (status === 'OK') {
+					if (results[1]) {
+						$("#loc-text").text(results[1].formatted_address);
+					} else {
+						$("#loc-text").text('No results found');
+					}
+				} else {
+					$("#loc-text").text('Error finding location');
+				}
+			});
     });
 
-	  map = null;
-
-	  function initMapElements() {
-		  // 67.9222° N, 26.5046° E
-		  var location = {lat: {{ foodData.latit }}, lng: {{ foodData.longit }}};
-		  map = new google.maps.Map(document.getElementById('map'), {
-			  zoom            : 10,
-			  center          : location,
-			  disableDefaultUI: true,
-		  });
-
-		  var marker = new google.maps.Marker({
-			  position: location,
-			  map     : map,
-		  });
-
-      let geocoder = new google.maps.Geocoder();
-      geocoder.geocode({'location': {lat: {{ foodData.latit }}, lng: {{ foodData.longit }}}}, function (results, status) {
-        if (status === 'OK') {
-          if (results[1]) {
-            $("#loc-text").text(results[1].formatted_address);
-          } else {
-            $("#loc-text").text('No results found');
-          }
-        } else {
-          $("#loc-text").text('Error finding location');
-        }
-      });
-
-	  }
   </script>
 {% endblock %}
