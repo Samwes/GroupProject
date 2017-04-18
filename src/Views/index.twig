@@ -224,6 +224,15 @@
 
 	</div>
 
+	<div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  	<div class="modal-dialog" role="document">
+    	<div class="modal-content" id="cardModalContent">
+      	<!--<div class="modal-body">
+      	</div>-->
+    	</div>
+  	</div>
+	</div>
+
 {% endblock %}
 
 
@@ -561,6 +570,17 @@
 			$("#weight-sort-icon").attr('class', '');
 			refreshSearch();
 		});
+	</script>
+
+	<script>
+		$('.card').on('click', function() {
+			var foodid = $(this).attr('data-id');
+			$.get("/item/" + foodid, function(data) {
+				$('#cardModalContent').empty();
+				$('#cardModalContent').append(data);
+				$('#cardModal').modal('show');
+			});
+		})
 	</script>
 
 {% endblock %}
