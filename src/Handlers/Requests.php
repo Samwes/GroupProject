@@ -438,7 +438,7 @@ class Requests
 
 		if (null !== $token) {
 			$userID = $token->getUser()->getID();
-			if($this->db->addNewRequest($foodid, $userID)) {
+			if($this->db->addNewRequest($userID, $foodid)) {
 				$toEncode = array('success' => 'Food Item requested');
 			}
 		}
