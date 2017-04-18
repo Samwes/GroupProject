@@ -240,7 +240,6 @@
 	{{ block("searchableMap", "map.twig") }}
 
 	<!-- SEARCH FUNCTIONALITY -->
-	{#todo move all search in single file + keep track of already gotten items#}
 	{#todo move map update markers#}
 	<script>
 		cardResults = {};
@@ -388,7 +387,7 @@
 
 	<script>
 		$(document).ready(function () {
-			$("#search-form").submit(function (e) {
+			$("#search-form").submit(function (e) { {# todo on change?#}
 				clearTimeout(searchtimeout);
 				refreshSearch();
 				return false;
