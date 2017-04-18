@@ -49,7 +49,7 @@
 		  <p><strong>Amount: </strong>{{ foodData.amount }}</p>
 		  <p><strong>Weight: </strong>{{ foodData.weight }}g</p>
 		  <hr>
-		  <p><strong>Location: </strong><p href="#" id="loc-input" data-title="Enter Food Items Location">Geolocation disabled</p></p>
+		  <p><strong>Location: </strong><p href="#" id="loc-text" data-title="Enter Food Items Location">Geolocation disabled</p></p>
 		  <!--<p><strong>Postage: </strong>No cost, I'll get one of my elves to hand deliver it ♥</p>-->
       <p><strong>Category: </strong>{{ foodData.category }}</p>
 		</div>
@@ -121,12 +121,12 @@
       geocoder.geocode({'location': {lat: {{ foodData.latit }}, lng: {{ foodData.longit }}}}, function (results, status) {
         if (status === 'OK') {
           if (results[1]) {
-            input.text(results[1].formatted_address);
+            $("#loc-text").text(results[1].formatted_address);
           } else {
-            input.text('No results found');
+            $("#loc-text").text('No results found');
           }
         } else {
-          input.text('Error finding location');
+          $("#loc-text").text('Error finding location');
         }
       });
 
