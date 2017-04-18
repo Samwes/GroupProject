@@ -431,7 +431,7 @@ class Requests
 		return new RedirectResponse($app->path('user')); //note change redirect on failure/success
 	}
 
-	public function foodLikelihood(Request $request, App $app, $foodid) {
+	public function foodLikelihood(Request $request, App $app, $foodID) {
 		$foodItem = $this->db->getFoodItemByID($foodid);
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
