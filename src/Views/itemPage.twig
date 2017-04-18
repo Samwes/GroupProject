@@ -1,3 +1,14 @@
+{% extends 'layout.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  <title>Item Page</title>
+{% endblock %}
+
+{#todo use map.twig#}
+
+{% block content %}
+  {{ parent() }}
   <div class="container py-lg-5 py-md-3 py-sm-0" ></div>
 
   <div class="container">
@@ -66,6 +77,10 @@
 	  </div>
 	</div>
   </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ parent() }}
 
   <script>
 	  $(document).ready(function () {
@@ -119,7 +134,4 @@
 
 	  }
   </script>
-
-  <script async defer
-					src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
-	</script>
+{% endblock %}

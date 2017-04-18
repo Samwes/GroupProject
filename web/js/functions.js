@@ -1,9 +1,9 @@
 function getItem(id) {
-	if (typeof results[id] === "undefined") {
+	if (typeof cardResults[id] === "undefined") {
 	$.get("/food/html/" + id, function (html) {
 		//$("#item-cards").append(html);
 		let card = $($.parseHTML(html)).appendTo('#item-cards');
-		results[id] = card;
+		cardResults[id] = card;
 
 		let cardMarker = newMarker(Number(card.attr("data-latit")),Number(card.attr('data-longit')));
 		cardMarker.id = id;
@@ -12,17 +12,29 @@ function getItem(id) {
 			highlightCard(this.id);
 		});
 		cardMarker.addListener('mouseout', resetCardHighlight);
+
 		card[0].marker = cardMarker;
+		card[0].id = id;
+		card.click(function() {
+			cardClick(this.id);
+		})
 	});
 	} else {
-		$("#item-cards").append(results[id]);
-		addExistingMarker(results[id][0].marker);
+		$("#item-cards").append(cardResults[id]);
+		addExistingMarker(cardResults[id][0].marker);
 	}
+}
+
+function cardClick(id){
+	$.get("/food/html/" + id, function (html) {
+		$('#cardModalDisplay').empty().append($.parseHTML(html));
+		$('#cardModal').modal('show');
+	});
 }
 
 function highlightCard(id){
 	$('#items-fade').removeClass('d-none');
-	results[id].addClass('fadeItem');
+	cardResults[id].addClass('fadeItem');
 }
 
 function resetCardHighlight(){
@@ -30,7 +42,7 @@ function resetCardHighlight(){
 	$('#items-fade').addClass('d-none');
 }
 
-//todo move to index? or move everything needed in here. Don't split between the two
+//todo move to twig (like map) or into index
 
 function GetURLParameter(sParam) {
 	let sPageURL = window.location.search.substring(1);
