@@ -79,9 +79,6 @@
 
 {% block scripts %}
   {{ parent() }}
-  {{ block("main", "map.twig") }}
-  {{ block("searchableMap", "map.twig") }}
-  {{ block("modalMap", "map.twig") }}
 
   <script>
 	  $(document).ready(function () {
@@ -104,7 +101,7 @@
       setToUserData({{ foodData.latit }}, {{ foodData.longit }}, geolocateCallback);
     });
 
-	  /*map = null;
+	  map = null;
 
 	  function initMapElements() {
 		  // 67.9222° N, 26.5046° E
@@ -120,7 +117,7 @@
 			  map     : map,
 		  });
 
-      let geocoder = document.getElementById('map').geocoder;
+      let geocoder = new google.maps.Geocoder();
       geocoder.geocode({'location': {lat: {{ foodData.latit }}, lng: {{ foodData.longit }}}}, function (results, status) {
         if (status === 'OK') {
           if (results[1]) {
@@ -133,6 +130,6 @@
         }
       });
 
-	  }*/
+	  }
   </script>
 {% endblock %}
