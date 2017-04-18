@@ -30,8 +30,17 @@
 				<!-- Messaging Section -->
 				<nav class="navbar navbar-light navbar-toggleable-xl justify-content-end" style="background-color: white; border: 1px solid #dce0e0; border-left: 0; border-top: 0; height: 3rem;" id="messages-nav">
 					<button type="button" class="btn btn-secondary hidden-md-up square-border d-flex mr-auto" data-toggle="offcanvas" data-target=".sidebar-nav">Contacts</button>
+					<h5 class="justify-content-center my-1 mx-auto" id="contactName"></h5>
 					<ul class="navbar-nav my-1 justify-content-end">
-						<!-- Add Rating Stars Here -->
+						<li class="nav-item hidden-sm-down">
+							<p href="#" style="color: gold;" class="my-2">
+								<i class="fa fa-star" aria-hidden="true"></i>
+								<i class="fa fa-star" aria-hidden="true"></i>
+								<i class="fa fa-star" aria-hidden="true"></i>
+								<i class="fa fa-star" aria-hidden="true"></i>
+								<i class="fa fa-star" aria-hidden="true"></i>
+							</p>
+						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="#">Reject</a>
 						</li>
@@ -149,6 +158,7 @@
 			$(this).removeClass("bold");
 			$(".contact").css("background-color", "white");
 			$(this).css("background-color", "#fafafa");
+			$("#contactName").text($(this).attr("username"));
 			fillMessages($(this).attr("requestid"));
 		});
 
@@ -187,7 +197,7 @@
 					// value is requestid, foodid, accepted
 					$.getJSON('/messenger/userfood/' + value['userid'] + '/' + value['foodid'], function(array) {
 						$("#sentRequests").append(
-							'<div class="card square-border contact" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
+							'<div class="card square-border contact" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '">' +
 							'<div class="row">' +
 							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
 							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
@@ -215,7 +225,7 @@
 					// value is requestid, foodid, accepted
 					$.getJSON('/messenger/userfood/' + value['requester'] + '/' + value['foodid'], function(array) {
 						$("#receivedRequests").append(
-							'<div class="card square-border contact" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '">' +
+							'<div class="card square-border contact" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '">' +
 							'<div class="row">' +
 							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
 							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
