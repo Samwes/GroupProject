@@ -242,7 +242,7 @@
 
 				$('.image-editor').cropit({
 					imageState: {
-						src: '{{ userData.picture | default(asset('none.png','food')) }}',
+						src: '{{ asset('none.png','food') }}',
 					},
 					smallImage: 'stretch',
 				});
