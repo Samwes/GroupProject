@@ -27,7 +27,7 @@
 		  <div class="tab-content d-flex justify-content-center clearfix p-lg-4 p-sm-2">
 			<div class="tab-pane active" id="imgdisplay">
 			  <div class="d-flex">
-				<img class="img-rounded mx-auto p-lg-4 p-sm-2" src="{{ asset('{{ foodData.image }}','food') }}" alt="Card image cap">
+				<img class="img-rounded mx-auto p-lg-4 p-sm-2" src="{{ asset(foodData.image,'food') }}" alt="Card image cap">
 			  </div>
 			</div>
 			<!-- MAP -->
@@ -101,7 +101,7 @@
   <script>
     $("#map").one("maploaded", function () {
       setToUserData({{ foodData.latit }}, {{ foodData.longit }}, geolocateCallback);
-    }
+    });
 
 	  /*map = null;
 
@@ -133,9 +133,5 @@
       });
 
 	  }*/
-  </script>
-
-  <script async defer
-		  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
   </script>
 {% endblock %}
