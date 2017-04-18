@@ -222,14 +222,6 @@
 
 	<div class="d-none" id="card-storage"></div>
 
-	<div class="modal" id="cardModal">
-		<div class="modal-dialog">
-			<div class="modal-content" id="cardModalDisplay">
-
-			</div>
-		</div>
-	</div>
-
 	<div class="modal fade" id="cardModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   	<div class="modal-lg modal-dialog" role="document">
     	<div class="modal-content" id="cardModalContent">
@@ -251,7 +243,7 @@
 	{#todo move all search in single file + keep track of already gotten items#}
 	{#todo move map update markers#}
 	<script>
-		cardResults = {};
+		results = {};
 
 		function updatePlace(place) {
 			if (!place.geometry) {
@@ -411,8 +403,6 @@
 
 	<script>
 		$(document).ready(function () {
-			$('#cardModal').modal();
-
 			$("#search-form").submit(function (e) {
 				clearTimeout(searchtimeout);
 				refreshSearch();
