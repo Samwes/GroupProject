@@ -251,8 +251,8 @@ class App extends Application
 			return $this['twig']->render('itemPage.twig', array('foodData' => $foodData, 'userData' => $userData, 'foodID' => $id));
 		});
 
-		$this->get('/food/likelihood/{foodID}', 'rest.handler:foodLikelihood')
-			 ->assert('foodID', '\d+');
+		$this->get('/food/likelihood/{foodid}', 'rest.handler:foodLikelihood')
+			 ->assert('foodid', '\d+');
 
 		$this->get('/foodItems', 'rest.handler:foodItemsGet')
 			 ->secure('ROLE_USER');

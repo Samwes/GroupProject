@@ -26,10 +26,12 @@ function getItem(id) {
 }
 
 function cardClick(id){
-	$.get("/food/html/" + id, function (html) {
-		$('#cardModalDisplay').empty().append($.parseHTML(html));
-		$('#cardModal').modal('show');
-	});
+	//Insert + display modal here
+
+	//$.get("/food/html/" + id, function (html) {
+	//	$('#cardModalDisplay').empty().append($.parseHTML(html));
+	//	$('#cardModal').modal('show');
+	//});
 }
 
 function highlightCard(id){
