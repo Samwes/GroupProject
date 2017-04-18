@@ -201,8 +201,7 @@
 	<div class="container-fluid my-2 h-100">
 		<div class="row no-gutters h-100">
 			<!-- FOOD ITEMS -->
-			<!--<div class="col-md-6 items" style="overflow: scroll; height: 818px; overflow-x:hidden;">-->
-			<div class="d-flex flex-column flex-auto" id="items" style="position: relative; overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0;">
+			<div class="d-flex flex-column flex-auto" id="items" style="position: relative; overflow: hidden; border-right: 1px solid #dce0e0;">
 				<div class="container p-0">
 					<div class="card-columns" id="item-cards" style="position: absolute; column-gap: 0.4rem;">
 					</div>
@@ -214,13 +213,16 @@
 			</div>
 			<!-- MAP -->
 			<div class="d-block col-md-5">
+				<div id="mapspacer" class="d-block h-0"></div>
 				<div id="map" class="w-100" style="height: 90%; "></div>
 			</div>
 
 		</div>
 	</div>
 
-	<br>
+	<div class="d-none" id="card-storage">
+
+	</div>
 
 {% endblock %}
 
@@ -234,10 +236,7 @@
 	{#todo move all search in single file + keep track of already gotten items#}
 	{#todo move map update markers#}
 	<script>
-		//		resultsSoFar = 0;
 		results = {};
-
-		$(document).ready(refreshSearch());
 
 		function updatePlace(place) {
 			if (!place.geometry) {
@@ -260,6 +259,7 @@
 
 		$("#map").one("maploaded", function () {
 			initSingleSearchMap(updatePlace);
+			refreshSearch();
 			let input = $('#pac-input'), curlat = input.attr("data-latitude"), curlong = input.attr("data-longitude");
 			if ((curlat === "") || (curlong === "")) {
 				setToUserData(null, null, function (position) {
@@ -271,14 +271,14 @@
 			} else {
 				mapPanTo(Number(curlat), Number(curlong));
 			}
-		});
-	</script>
 
-	<script>
-		$(function ($) {
-			$('#items').on('scroll', function () {
-				if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
+			$(window).on('scroll', function() {
+				if($(window).scrollTop() + window.innerHeight >= $(document).height()){
 					addMoreItems();
+				}
+				let diff = $(window).scrollTop() - $('#map').parent().offset().top;
+				if(diff>0){
+					$('#mapspacer').height(diff);
 				}
 			});
 		});

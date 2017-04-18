@@ -194,7 +194,7 @@ class App extends Application
 			return $this['twig']->render('scanner.twig', array('userData' => $userdata));
 		})->bind('additem')->secure('ROLE_USER');
 
-		$account->get('/addItem/{foodID}', function($foodID) {
+		$account->get('/addItem/{foodID}', function ($foodID) {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			$fooddata = $this['DB']->getFoodItemByID($foodID);
 			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $fooddata, 'foodID' => $foodID));
@@ -239,20 +239,17 @@ class App extends Application
 			return $this->renderView('foodcard.twig', array('foodData' => $foodData));
 		})->assert('foodID', '\d+');
 
-		$this->post('/food/request/{foodid}', 'rest.handler:addNewRequest')
-		->assert('foodid', '\d+')->secure('ROLE_USER');
-
 		$this->get('/item/{id}', function ($id) {
 			$foodData = $this['DB']->getFoodItemByID($id); //future combine?
 			$userData = $this['DB']->getUserByID($foodData['userid']);
 			if (($foodData === false) || ($userData === false)) {
 				throw new Exception('An error occured');
 			}
-			return $this['twig']->render('itemPage.twig', array('foodData' => $foodData, 'userData' => $userData, 'foodID' => $id));
+			return $this['twig']->render('itemPage.twig', array('food' => $foodData, 'user' => $userData));
 		});
 
-		$this->get('/food/likelihood/{foodid}', 'rest.handler:foodLikelihood')
-			->assert('foodid', '\d+');
+		$this->get('/food/likelihood/{foodID}', 'rest.handler:foodLikelihood')
+			 ->assert('foodID', '\d+');
 
 		$this->get('/foodItems', 'rest.handler:foodItemsGet')
 			 ->secure('ROLE_USER');
@@ -267,26 +264,30 @@ class App extends Application
 			 ->secure('ROLE_USER')
 			 ->assert('requestID', '\d+');
 
+		//note deprecated?
 		$this->get('/food/{start}/{num}', 'rest.handler:getFoodBetween')
 			 ->assert('start', '[0-9]*')
 			 ->assert('num', '[0-9]*');
 
+		//note deprecated?
 		$this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
 			 ->assert('category', '[a-zA-Z0-9_ ]*')
 			 ->assert('search', '[a-zA-Z0-9_ ]*');
 
 		//todo add sorting to slider (remove right 3 buttons) add remove button for each slider
-		$this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
+		$this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}/{start}/{count}', 'rest.handler:searchExtra')
 			 ->assert('category', '[a-zA-Z0-9_ ]*')
 			 ->assert('search', '[a-zA-Z0-9_ ]*')
-			->assert('latit', '[-+]?[0-9]*\.?[0-9]+')
-			->assert('longit', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('latit', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('longit', '[-+]?[0-9]*\.?[0-9]+')
 			 ->assert('radius', '[0-9]*')
 			 ->assert('minAmount', '[0-9]*')
 			 ->assert('maxAmount', '[0-9]*')
 			 ->assert('minWeight', '[0-9]*')
 			 ->assert('maxWeight', '[0-9]*')
-			 ->assert('sort', '[a-z\-]*');
+			 ->assert('sort', '[a-z\-]*')
+			 ->value('start', 0)
+			 ->value('count', 12);
 
 		$this->get('/messenger/userid', 'rest.handler:userID')
 			 ->secure('ROLE_USER');
@@ -301,7 +302,7 @@ class App extends Application
 			 ->secure('ROLE_USER');
 
 		$this->post('/food/update', 'rest.handler:foodItemUpdate')
-	 		 ->secure('ROLE_USER');
+			 ->secure('ROLE_USER');
 
 		$this->post('/food/remove/{foodid}', 'rest.handler:foodItemUpdate')
 	 	 	 ->assert('foodid', '\d+')->secure('ROLE_USER');

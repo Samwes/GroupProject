@@ -634,15 +634,15 @@ class DBDataMapper
 	}
 
 	public function mainSearch($category, $search) {
-		if ($category != "") {
-			$query = "SELECT `foodid`
+		if ($category !== '') {
+			$query = 'SELECT `foodid`
                         FROM `itemtable`
-                        WHERE `category` = ? AND `name` LIKE ?";
+                        WHERE `category` = ? AND `name` LIKE ?';
 			$params = array("$category", "%$search%");
 		} else {
-			$query = "SELECT `foodid`
+			$query = 'SELECT `foodid`
                         FROM `itemtable`
-                        WHERE `name` LIKE ?";
+                        WHERE `name` LIKE ?';
 			$params = array("%$search%");
 		}
 
@@ -660,7 +660,7 @@ class DBDataMapper
 		return $result;
 	}
 
-	public function searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort) {
+	public function searchExtra($category, $search, $latit, $longit, $radius, $minAmount, $maxAmount, $minWeight, $maxWeight, $sort, $start, $count) {
 		$categoryQuery = '`category` = :category';
 		$nameQuery = '`name` LIKE :search';
 		$distanceQuery = 'acos(sin(:lat)*sin(radians(`latit`)) + cos(:lat)*cos(radians(`latit`))*cos(radians(`longit`)-:lon)) * :R < :radius';
@@ -672,16 +672,16 @@ class DBDataMapper
 		$params = array(':R' => $r);
 		$subquery = '`itemtable`';
 
-		if ($search != "") {
+		if ($search !== '') {
 			$additionals[] = $nameQuery;
 			$adaptedSearch = '%'.$search.'%';
 			$params[':search'] = $adaptedSearch;
 		}
-		if ($category != "") {
+		if ($category !== '') {
 			$params[':category'] = $category;
 			$additionals[] = $categoryQuery;
 		}
-		if ($latit != "" && $longit != "" && $radius != "") {
+		if ($latit !== '' && $longit !== '' && $radius !== '') {
 			$radius /= 1000;
 			$params[':maxLat'] = $latit + rad2deg($radius/$r);
 			$params[':minLat'] = $latit - rad2deg($radius/$r);
@@ -690,47 +690,47 @@ class DBDataMapper
 			$params[':lat'] = deg2rad($latit);
 			$params[':lon'] = deg2rad($longit);
 			$params[':radius'] = $radius;
-			$subquery = '(SELECT * from `itemtable` WHERE'.
-						'`latit` BETWEEN :minLat and :maxLat AND'.
-						' `longit` BETWEEN :minLon and :maxLon) as FirstPass';
+			$subquery = '(SELECT * from `itemtable` WHERE
+						`latit` BETWEEN :minLat and :maxLat AND
+						`longit` BETWEEN :minLon and :maxLon) as FirstPass';
 			$additionals[] = $distanceQuery;
 		}
-		if ($minAmount != "" && $maxAmount != "") {
+		if ($minAmount !== '' && $maxAmount !== '') {
 			$params[':minAmount'] = $minAmount;
 			$params[':maxAmount'] = $maxAmount;
 			$additionals[] = $quantityQuery;
 		}
-		if ($minWeight != "" && $maxWeight != "") {
+		if ($minWeight !== '' && $maxWeight !== '') {
 			$params[':minWeight'] = $minWeight;
 			$params[':maxWeight'] = $maxWeight;
 			$additionals[] = $weightQuery;
 		}
 
-		if (($sort === 'radius-asc' || $sort === 'radius-des') && ($latit != "" && $longit != "")) {
-			//$queryEnd = " ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)";
-			$queryEnd = " ORDER BY acos(sin(:lat)*sin(radians(`latit`)) + cos(:lat)*cos(radians(`latit`))*cos(radians(`longit`)-:lon)) * :R";
+		if (($sort === 'radius-asc' || $sort === 'radius-des') && ($latit !== '' && $longit !== '')) {
+			//$queryEnd = ' ORDER BY POWER(`latit` - :latit, 2) + POWER(`longit` - :longit, 2)';
+			$queryEnd = ' ORDER BY acos(sin(:lat)*sin(radians(`latit`)) + cos(:lat)*cos(radians(`latit`))*cos(radians(`longit`)-:lon)) * :R';
 		} elseif ($sort === 'amount-asc' || $sort === 'amount-des') {
-			$queryEnd = " ORDER BY `amount`";
+			$queryEnd = ' ORDER BY `amount`';
 		} elseif ($sort === 'weight-asc' || $sort === 'weight-des') {
-			$queryEnd = " ORDER BY `weight`";
+			$queryEnd = ' ORDER BY `weight`';
 		} else {
-			$queryEnd = " ORDER BY `amount`";
+			$queryEnd = ' ORDER BY `amount`';
 		}
 
-		if (substr($sort, -3) === "asc") {
-			$queryEnd .= " ASC LIMIT 120";
+		if (substr($sort, -3) === 'asc') {
+			$queryEnd .= " ASC LIMIT $count OFFSET $start";
 		} else {
-			$queryEnd .= " DESC LIMIT 120";
+			$queryEnd .= " DESC LIMIT $count OFFSET $start";
 		}
 
-		$query = "SELECT `foodid` FROM ".$subquery;
+		$query = 'SELECT `foodid` FROM '.$subquery;
 		if (count($additionals) > 0) {
-			$query.=" WHERE ".$additionals[0];
+			$query .= ' WHERE '.$additionals[0];
 			for ($x = 1, $xMax = count($additionals); $x < $xMax; $x++) {
-				$query.= " AND ".$additionals;
+				$query .= ' AND '.$additionals;
 			}
 		}
-		$query.=$queryEnd;
+		$query .= $queryEnd;
 
 		$result = null;
 		try {

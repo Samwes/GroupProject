@@ -58,6 +58,12 @@
 			newMarker(lat, long);
 		}
 
+		function addExistingMarker(inMarker){
+			let element = getMapElement(), map = element.gMap;
+			inMarker.setMap(map);
+			element.gMarkers.push(inMarker);
+		}
+
 		function newMarker(lat, long, info) {
 			let element = getMapElement();
 			let markeroptions = {
