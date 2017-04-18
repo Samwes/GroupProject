@@ -28,9 +28,9 @@
 			</div>
 			<div class="d-flex flex-column align-items-stretch justify-content-center col-12 col-sm-9 p-0">
 				<!-- Messaging Section -->
-				<nav class="navbar navbar-toggleable-md align-items-stretch square-border mb-auto" style="background-color: white; border: 1px solid #dce0e0; border-left: 0; border-top: 0; height: 3rem;" id="messages-nav">
-					<button type="button" class="btn btn-secondary hidden-md-up" data-toggle="offcanvas" data-target=".sidebar-nav">Contacts</button>
-					<ul class="navbar-nav w-100 justify-content-end">
+				<nav class="navbar navbar-light navbar-toggleable-xl justify-content-end" style="background-color: white; border: 1px solid #dce0e0; border-left: 0; border-top: 0; height: 3rem;" id="messages-nav">
+					<button type="button" class="btn btn-secondary hidden-md-up square-border d-flex mr-auto" data-toggle="offcanvas" data-target=".sidebar-nav">Contacts</button>
+					<ul class="navbar-nav my-1 justify-content-end">
 						<!-- Add Rating Stars Here -->
 						<li class="nav-item">
 							<a class="nav-link" href="#">Reject</a>
@@ -189,10 +189,10 @@
 						$("#sentRequests").append(
 							'<div class="card square-border contact" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
 							'<div class="row">' +
-							'<div class="col-2" style="padding: 0;">' +
-							'<img class="card-img-top circle" src="../../images/food/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
+							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
+							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
 							'</div>' +
-							'<div class="col-10" style="padding: 0;">' +
+							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<small class="text-muted float-right" style="margin-right:  1rem;">' + array['time'] + '</small>' +
 							'<p class="card-text">' + array['username'] + '</p>' +
@@ -217,10 +217,10 @@
 						$("#receivedRequests").append(
 							'<div class="card square-border contact" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '">' +
 							'<div class="row">' +
-							'<div class="col-2" style="padding: 0;">' +
+							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
 							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
 							'</div>' +
-							'<div class="col-10" style="padding: 0;">' +
+							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<small class="text-muted float-right" style="margin-right:  1rem;">' + array['MAX(`messagetable`.`time`)'] + '</small>' +
 							'<p class="card-text">' + array['username'] + '</p>' +
