@@ -28,6 +28,11 @@ function getItem(id) {
 function cardClick(id){
 	//Insert + display modal here
 
+	$.get("/item/" + id, function(data) {
+		$('#cardModalContent').empty().append(data);
+		$('#cardModal').modal('show');
+	});
+
 	//$.get("/food/html/" + id, function (html) {
 	//	$('#cardModalDisplay').empty().append($.parseHTML(html));
 	//	$('#cardModal').modal('show');
