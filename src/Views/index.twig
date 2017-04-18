@@ -259,7 +259,6 @@
 
 		$("#map").one("maploaded", function () {
 			initSingleSearchMap(updatePlace);
-			refreshSearch();
 			let input = $('#pac-input'), curlat = input.attr("data-latitude"), curlong = input.attr("data-longitude");
 			if ((curlat === "") || (curlong === "")) {
 				setToUserData(null, null, function (position) {
@@ -267,11 +266,12 @@
 					input.attr("data-longitude", position.lng);
 
 					mapPanTo(position.lat, position.lng);
+					refreshSearch();
 				});
 			} else {
 				mapPanTo(Number(curlat), Number(curlong));
+				refreshSearch();
 			}
-
 			$(window).on('scroll', function() {
 				if($(window).scrollTop() + window.innerHeight >= $(document).height()){
 					addMoreItems();
