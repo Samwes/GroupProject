@@ -99,7 +99,11 @@
   {#todo: store map marker(s) in array, redraw each time#}
 
   <script>
-	  map = null;
+    $("#map").one("maploaded", function () {
+      setToUserData({{ foodData.latit }}, {{ foodData.longit }}, geolocateCallback);
+    }
+
+	  /*map = null;
 
 	  function initMapElements() {
 		  // 67.9222° N, 26.5046° E
@@ -128,7 +132,7 @@
         }
       });
 
-	  }
+	  }*/
   </script>
 
   <script async defer
