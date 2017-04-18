@@ -244,26 +244,21 @@
 	{#todo move map update markers#}
 	<script>
 		cardResults = {};
-
 		function updatePlace(place) {
 			if (!place.geometry) {
 				console.log("Returned place contains no geometry");
 				return;
 			}
 			clearMarkers();
-
 			let loc = place.geometry.location, input = $("#pac-input");
 			input.attr("data-latitude", loc.lat());
 			input.attr("data-longitude", loc.lng());
-
 			mapPanTo(loc.lat(), loc.lng());
-
 			let query = UpdateQueryString('latitude', loc.lat());
 			query = UpdateQueryString('longitude', loc.lng(), query);
 			history.pushState('Location updated', 'Location updated', query);
 			refreshSearch();
 		}
-
 		$("#map").one("maploaded", function () {
 			initSingleSearchMap(updatePlace);
 			let input = $('#pac-input'), curlat = input.attr("data-latitude"), curlong = input.attr("data-longitude");
@@ -271,7 +266,6 @@
 				setToUserData(null, null, function (position) {
 					input.attr("data-latitude", position.lat);
 					input.attr("data-longitude", position.lng);
-
 					mapPanTo(position.lat, position.lng);
 					refreshSearch();
 				});
@@ -295,16 +289,13 @@
 		//Do this before page loaded event fires
 		let obj = {}, i, parts, len, key, value;
 		let _params = window.location.search.substr(1).split('#')[0].split('&');
-
 		for (i = 0, len = _params.length; i < len; i++) {
 			parts = _params[i].split('=');
 			if (!parts[0]) {continue;}
 			obj[parts[0]] = parts[1] || true;
 		}
-
 		//todo markers on map <<<<<---------- fixme this
 		//todo reset min/max button?
-
 		if ('search' in obj) {
 			let searchval = obj['search'];
 			if (searchval === true) {
@@ -315,11 +306,9 @@
 		} else {
 			$("#main-search-input").value = "";
 		}
-
 		if ('radius' in obj) {
 			$('#radiusSlider').attr('data-slider-value', obj['radius']);
 		}
-
 		if ('longitude' in obj) {
 			if ('latitude' in obj) {
 				let input = $("#pac-input");
@@ -331,7 +320,6 @@
 		} else if ('latitude' in obj) {
 			window.history.replaceState('', '', UpdateQueryString('longitude', null));
 		}
-
 		if ('minQuantity' in obj) {
 			if ('maxQuantity' in obj) {
 				$('#quantitySlider').attr('data-slider-value', '[' + obj['minQuantity'] + ',' + obj['maxQuantity'] + ']');
@@ -345,7 +333,6 @@
 			$('#quantitySlider').attr('data-slider-value', '[' + minval + ',' + obj['maxQuantity'] + ']');
 			window.history.replaceState('', '', UpdateQueryString('minQuantity', minval));
 		}
-
 		if ('minWeight' in obj) {
 			if ('maxWeight' in obj) {
 				$('#weightSlider').attr('data-slider-value', '[' + obj['minWeight'] + ',' + obj['maxWeight'] + ']');
@@ -359,14 +346,12 @@
 			$('#weightSlider').attr('data-slider-value', '[' + minval + ',' + obj['maxWeight'] + ']');
 			window.history.replaceState('', '', UpdateQueryString('minWeight', minval));
 		}
-
 		function UpdateQueryString(key, value, url) {
 			if (!url) {
 				url = window.location.href;
 			}
 			let re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
 					hash;
-
 			if (re.test(url)) {
 				if (typeof value !== 'undefined' && value !== null) {
 					return url.replace(re, '$1' + key + "=" + value + '$2$3');
@@ -408,7 +393,6 @@
 				refreshSearch();
 				return false;
 			});
-
 			$("#main-search-input").keypress((function (e) {
 				searchtimeout = setTimeout(refreshSearch, 2000);
 			}));
@@ -422,7 +406,6 @@
 			content: function () {
 				return $("#radius-popover-content").html();
 			},
-
 		}).on('shown.bs.popover', function () {
 			let aslider = $('.popover').find('#radiusSlider');
 			$('.popover').find('#radiusDisplay').text($('#radiusSlider').attr('data-slider-value'));
@@ -441,12 +424,10 @@
 				$('.popover').find('#radiusDisplay').text(slideEvt.value + "m");
 			});
 			$('.popover').find('.popovercancel').click(hideAllPopovers);
-
 			$('.slider-selection').css('background', '#BABABA');
 			$('#quantity-popover').popover('hide');
 			$('#weight-popover').popover('hide');
 		});
-
 		$('#quantity-popover').popover({
 			html   : true,
 			content: function () {
@@ -472,12 +453,10 @@
 					return value;
 				},
 			});
-
 			$('.slider-selection').css('background', '#BABABA');
 			$('#radius-popover').popover('hide');
 			$('#weight-popover').popover('hide');
 		});
-
 		$('#weight-popover').popover({
 			html   : true,
 			content: function () {
@@ -506,7 +485,6 @@
 					return value;
 				},
 			});
-
 			$('.slider-selection').css('background', '#BABABA');
 			$('#radius-popover').popover('hide');
 			$('#quantity-popover').popover('hide');
@@ -532,7 +510,6 @@
 			$("#quantity-sort-icon").attr('class', '');
 			refreshSearch();
 		});
-
 		// Weight
 		$("#weight-sort").click(function () {
 			// Change Icon
@@ -550,7 +527,6 @@
 			$("#quantity-sort-icon").attr('class', '');
 			refreshSearch();
 		});
-
 		// Expiry
 		$("#quantity-sort").click(function () {
 			// Change Icon
