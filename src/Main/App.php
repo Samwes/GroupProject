@@ -239,13 +239,16 @@ class App extends Application
 			return $this->renderView('foodcard.twig', array('foodData' => $foodData));
 		})->assert('foodID', '\d+');
 
+		$this->post('/food/request/{foodid}', 'rest.handler:addNewRequest')
+		->assert('foodid', '\d+')->secure('ROLE_USER');
+
 		$this->get('/item/{id}', function ($id) {
 			$foodData = $this['DB']->getFoodItemByID($id); //future combine?
 			$userData = $this['DB']->getUserByID($foodData['userid']);
 			if (($foodData === false) || ($userData === false)) {
 				throw new Exception('An error occured');
 			}
-			return $this['twig']->render('itemPage.twig', array('food' => $foodData, 'user' => $userData));
+			return $this['twig']->render('itemPage.twig', array('foodData' => $foodData, 'userData' => $userData, 'foodID' => $id));
 		});
 
 		$this->get('/food/likelihood/{foodID}', 'rest.handler:foodLikelihood')
