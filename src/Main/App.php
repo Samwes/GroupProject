@@ -236,10 +236,10 @@ class App extends Application
 
 		$this->get('/food/html/{foodID}', function ($foodID) {
 			$foodData = $this['DB']->getFoodItemByID($foodID);
-			return $this->renderView('foodcard.twig', array('foodData' => $foodData));
+			return $this->renderView('foodcard.twig', array('foodData' => $foodData, 'foodID' => $foodID));
 		})->assert('foodID', '\d+');
 
-		$this->post('/food/request/{foodid}', 'rest.handler:addNewRequest')
+		$this->get('/food/request/{foodid}', 'rest.handler:addNewRequest')
 		->assert('foodid', '\d+')->secure('ROLE_USER');
 
 		$this->get('/item/{id}', function ($id) {
