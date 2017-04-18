@@ -19,6 +19,7 @@ use Silex\Provider\VarDumperServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 class App extends Application
@@ -334,9 +335,10 @@ class App extends Application
 		//future resend auth token to email
 
 		//note need better error handling here
-		$this->error(function (\Exception $e, $code):?Response {
+		$this->error(function (\Exception $e, Request $request, $code):?Response {
 			if ($this['debug']) {
 				// in debug mode we want to get the regular error message
+
 				return null;
 			}
 			switch ($code) {
