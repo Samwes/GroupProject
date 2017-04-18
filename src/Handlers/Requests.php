@@ -431,6 +431,21 @@ class Requests
 		return new RedirectResponse($app->path('user')); //note change redirect on failure/success
 	}
 
+	public function addNewRequest(Request $request, App $app, $foodid) {
+		// Add Request to database
+		$token = $app['security.token_storage']->getToken();
+		$toEncode = array('error' => 'foodID or userID incorrect');
+
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+			if($this->db->addNewRequest($foodid, $userID)) {
+				$toEncode = array('success' => 'Food Item requested');
+			}
+		}
+
+		return new RedirectResponse($app->path('messenger'));
+	}
+
 	public function foodLikelihood(Request $request, App $app, $foodid) {
 		$foodItem = $this->db->getFoodItemByID($foodid);
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
