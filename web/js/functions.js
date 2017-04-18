@@ -77,8 +77,9 @@ function doSearch(inStart, inCount) {
 	// If not exist then set to "" else replace "+" with " "
 	search = (!search) ? "" : search.replace("+", " ");
 	category = (!category) ? "" : category.replace("+", " ");
-	if (!latitude) {latitude = "";}
-	if (!longitude) {longitude = "";}
+	let input = $('#pac-input');
+	if (!latitude) {latitude = input.attr("data-latitude");}
+	if (!longitude) {longitude = input.attr("data-longitude");}
 	radius = (!radius) ? "300" : radius;
 	if (!minQuantity) {minQuantity = "";}
 	if (!maxQuantity) {maxQuantity = "";}
