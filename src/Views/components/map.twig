@@ -58,7 +58,7 @@
 			newMarker(lat, long);
 		}
 
-		function addExistingMarker(inMarker){
+		function addExistingMarker(inMarker) {
 			let element = getMapElement(), map = element.gMap;
 			inMarker.setMap(map);
 			element.gMarkers.push(inMarker);
@@ -116,7 +116,7 @@
 
 		function setToUserData(ulat, ulong, callback) {
 			let e = getMapElement(), map = e.gMap;
-			if ((ulat === null) || (ulong === null)){
+			if ((ulat === null) || (ulong === null)) {
 				getBrowserLocation(callback);
 			} else {
 				let loc = {
@@ -138,9 +138,6 @@
 {% block searchableMap %}
 
 	<script>
-		{# future either use this method to refresh map (has to remove + add all markers but recovers much better from total wipe) #}
-		{# future or add them onto the map as we get them from jquery #}
-		{# note 100% should be keeping a list of their ID's in an array? array of ID => location seems pretty good #}
 		function initSingleSearchMap(updatePlace) {
 			// Create the search box and link it to the UI element.
 			let element = getMapElement(), map = element.gMap, markers = element.gMarkers;
@@ -234,7 +231,7 @@
 				if (status === 'OK') {
 					if (results[1]) {
 						input.text(results[1].formatted_address);
-						$('#pac-input').attr('placeholder',input.text());
+						$('#pac-input').attr('placeholder', input.text());
 					} else {
 						input.text('No results found');
 					}

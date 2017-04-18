@@ -13,6 +13,11 @@ function getItem(id) {
 		});
 		cardMarker.addListener('mouseout', resetCardHighlight);
 
+		card.mouseover(function(){
+			highlightMarker(this.marker);
+			});
+		card.mouseout(resetMarkerHighlight);
+
 		card[0].marker = cardMarker;
 		card[0].id = id;
 		card.click(function() {
@@ -26,17 +31,25 @@ function getItem(id) {
 }
 
 function cardClick(id){
-	//Insert + display modal here
-
 	$.get("/item/" + id, function(data) {
 		$('#cardModalContent').empty().append(data);
 		$('#cardModal').modal('show');
 	});
+}
 
-	//$.get("/food/html/" + id, function (html) {
-	//	$('#cardModalDisplay').empty().append($.parseHTML(html));
-	//	$('#cardModal').modal('show');
-	//});
+function highlightMarker(theMarker){
+	let element = getMapElement(), markers = element.gMarkers;
+	markers.forEach(function (marker) {
+		marker.setOpacity(0.25);
+	});
+	theMarker.setOpacity(1);
+}
+
+function resetMarkerHighlight(){
+	let element = getMapElement(), markers = element.gMarkers;
+	markers.forEach(function (marker) {
+		marker.setOpacity(1);
+	});
 }
 
 function highlightCard(id){
