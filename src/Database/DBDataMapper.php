@@ -124,8 +124,8 @@ class DBDataMapper
 		}
 
 		$query = 'UPDATE `itemtable`
-				SET `name`=:name,`expirydate`=:expir,`category`=:cat,`userid`=:uid,`description`=:desc,`latit`=:lat,`longit`=:long,`amount`=:amount,`weight`=:weight,`image`=:image
-				WHERE `foodid`=:fid';
+				SET `name`=:name,`expirydate`=:expir,`category`=:cat,`description`=:desc,`latit`=:lat,`longit`=:long,`amount`=:amount,`weight`=:weight,`image`=:image
+				WHERE `foodid`=:fid AND `userid`=:uid';
 
 		$result = true;
 		try {
@@ -142,11 +142,30 @@ class DBDataMapper
 							   ':long'   => $long,
 							   ':amount' => $amount,
 							   ':weight' => $weight,
-							   ':image'  => $image,
+							   ':image'  => $image
 						   ));
 		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Updating food item failed: '.$e->getMessage();
             }
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
+
+	public function removeFoodItem($foodID, $userID) {
+		$query = 'UPDATE `itemtable`
+				SET `active` = 0, `hidden` = 1
+				WHERE `foodid`=:fid AND `userid`=:uid';
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(':fid' => $foodID, ':uid' => $userID));
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Updating food item failed: '.$e->getMessage();
+		   }
 			$result = false;
 		}
 		$stmt = null;
@@ -722,6 +741,35 @@ class DBDataMapper
 		} catch (\PDOException $e) {
 			if (DEBUG) { echo 'Search by category and search text failed: '.$e->getMessage();
             }
+		}
+		$stmt = null;
+		return $result;
+	}
+
+	public function getUserFoodInfo($userid, $foodid) {
+		// fix to get message corresponding to time
+		$query = 'SELECT DISTINCT `usertable`.`username`, MAX(`messagetable`.`time`), `messagetable`.`message`, `itemtable`.`name`, `usertable`.`picture`
+				FROM `usertable`, `messagetable`, `itemtable`, `requestmessagetable`, `requesttable`
+				WHERE `usertable`.`userid` = :uid AND `itemtable`.`foodid` = :fid AND
+				`messagetable`.`messageid` = `requestmessagetable`.`messageid` AND
+				`requestmessagetable`.`requestid` = `requesttable`.`requestid` AND
+				`requesttable`.`foodid` = :fid AND
+				(`requesttable`.`requester` = :uid OR (`itemtable`.`foodid` = :fid AND `itemtable`.`userid` = :uid))';
+
+		$result = false;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':uid' => $userid,
+								 ':fid' => $foodid
+						   ));
+
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Getting user food info failed: '.$e->getMessage();
+		  }
 		}
 		$stmt = null;
 		return $result;
