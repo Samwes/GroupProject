@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class App extends Application
 {
-	//future Make use of these. all of them
 	use Application\TwigTrait;
 	use Application\SecurityTrait;
 	use Application\FormTrait;
@@ -33,13 +32,10 @@ class App extends Application
 	use Application\MonologTrait;
 
 	//future smaller item cards (for smaller screens) with bare essentials
-	//future sort by radius etc in dropdown
 	//future image upload - remove button??
 
 	public function __construct(array $values = array()) {
 		parent::__construct($values);
-
-		//future cleanup twig files pt.2
 
 		$this->registerServices();
 
@@ -180,7 +176,7 @@ class App extends Application
 				'error'         => $this['security.last_error']($request),
 				'last_username' => $this['session']->get('_security.last_username'),
 			));
-		})->bind('login'); //future remember me on here
+		})->bind('login');
 
 		$this->get('/register', function () {
 			return $this['twig']->render('signup.twig');
@@ -218,7 +214,6 @@ class App extends Application
 			return $this['twig']->render('messenger.twig');
 		})->bind('messenger');
 
-		//future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		$account->post('/update/fullname', 'rest.handler:updateName')
 				->bind('updatename')
 				->secure('IS_AUTHENTICATED_FULLY');
@@ -231,7 +226,6 @@ class App extends Application
 	}
 
 	private function restAPI() {
-		//future move into handlers
 		$this->get('/food/{foodID}', 'rest.handler:foodItemGet')
 			 ->assert('foodID', '\d+');
 
@@ -244,7 +238,7 @@ class App extends Application
 		->assert('foodid', '\d+')->secure('ROLE_USER');
 
 		$this->get('/item/{id}', function ($id) {
-			$foodData = $this['DB']->getFoodItemByID($id); //future combine?
+			$foodData = $this['DB']->getFoodItemByID($id);
 			$userData = $this['DB']->getUserByID($foodData['userid']);
 			if (($foodData === false) || ($userData === false)) {
 				throw new Exception('An error occured');
