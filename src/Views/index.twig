@@ -279,17 +279,17 @@
 			map.controls[google.maps.ControlPosition.TOP_CENTER].push(thediv[0]);
 			//Onclick here
 			$('#mapCheckBox').click(function () {
-				if (this.checked){
+				if (this.checked) {
 					map.curBounds = map.getBounds().toJSON();
 					map.oldCenter = map.getCenter().toJSON();
-					maplistener = map.addListener('center_changed',function(){
+					maplistener = map.addListener('center_changed', function () {
 						let newcent = map.getCenter().toJSON(), oldcent = map.oldCenter;
-						let lat1=newcent.lat, lat2=oldcent.lat, lon1=newcent.lng,lon2=oldcent.lng;
+						let lat1 = newcent.lat, lat2 = oldcent.lat, lon1 = newcent.lng, lon2 = oldcent.lng;
 						let R = 6371, dLat = (lat2 - lat1) * Math.PI / 180, dLon = (lon2 - lon1) * Math.PI / 180;
-						let a =	0.5 - Math.cos(dLat)/2 +
-									Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos(dLon))/2;
-						let d = (R * 2 * Math.asin(Math.sqrt(a)))*1000;
-						if (d>500){
+						let a = 0.5 - Math.cos(dLat) / 2 +
+										Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos(dLon)) / 2;
+						let d = (R * 2 * Math.asin(Math.sqrt(a))) * 1000;
+						if (d > 500) {
 							map.curBounds = map.getBounds().toJSON();
 							map.oldCenter = newcent;
 							refreshSearch();
@@ -313,20 +313,26 @@
 			if (!parts[0]) {continue;}
 			obj[parts[0]] = parts[1] || true;
 		}
-		{# todo category here #}
+
 		if ('search' in obj) {
 			let searchval = obj['search'];
 			if (searchval === true) {
 				window.history.replaceState('', '', UpdateQueryString('search', null));
 			} else {
-				$("#main-search-input").value = searchval;
+				$("#main-search-input").val(searchval);
 			}
 		} else {
-			$("#main-search-input").value = "";
+			$("#main-search-input").val("");
 		}
+
+		if ('category' in obj) {
+			$('#categories-dropdown').val(obj['category']);
+		}
+
 		if ('radius' in obj) {
 			$('#radiusSlider').attr('data-slider-value', obj['radius']);
 		}
+
 		if ('longitude' in obj) {
 			if ('latitude' in obj) {
 				let input = $("#pac-input");
@@ -364,12 +370,13 @@
 			$('#weightSlider').attr('data-slider-value', '[' + minval + ',' + obj['maxWeight'] + ']');
 			window.history.replaceState('', '', UpdateQueryString('minWeight', minval));
 		}
+
 		function UpdateQueryString(key, value, url) {
 			if (!url) {
 				url = window.location.href;
 			}
 			let re = new RegExp("([?&])" + key + "=.*?(&|#|$)(.*)", "gi"),
-					hash;
+				hash;
 			if (re.test(url)) {
 				if (typeof value !== 'undefined' && value !== null) {
 					return url.replace(re, '$1' + key + "=" + value + '$2$3');
@@ -406,14 +413,34 @@
 
 	<script>
 		$(document).ready(function () {
-			$("#search-form").submit(function (e) { {# todo on change?#}
+			searchtimeout = null;
+			$("#search-form").submit(function () {
 				clearTimeout(searchtimeout);
+				let searchval = $("#main-search-input").val(), catval = $("#categories-dropdown").val();
+				let query = window.location.href;
+				if (searchval !== "") {
+					query = UpdateQueryString('search', searchval, query);
+				} else {
+					query = UpdateQueryString('search', null, query);
+				}
+				if (catval !== "") {
+					query = UpdateQueryString('category', catval, query);
+				} else {
+					query = UpdateQueryString('category', null, query);
+				}
+				history.pushState('', '', query);
 				refreshSearch();
 				return false;
 			});
-			$("#main-search-input").keypress((function (e) {
-				searchtimeout = setTimeout(refreshSearch, 2000);
-			}));
+			$("#main-search-input").keypress((function () {
+				clearTimeout(searchtimeout);
+				searchtimeout = setTimeout(function () {
+					$("#search-form").submit();
+				}, 1250);
+			})).on('keydown', function (e) {
+				if ((e.which === 8) || (e.which === 46)) {$(this).trigger('keypress');}
+			});
+			//category onchange
 		});
 	</script>
 
@@ -445,8 +472,7 @@
 
 		$('#collapseApply').click(function () {
 			let updating = $('#quantitySlider'), min = $('#coll-quantMin').val(), max = $('#coll-quantMax').val(),
-					step                                                                  = updating.attr('data-slider-step'), slidmin                     = updating.attr('data-slider-min'),
-					slidmax                                                               = updating.attr('data-slider-max');
+				step = updating.attr('data-slider-step'), slidmin = updating.attr('data-slider-min'), slidmax = updating.attr('data-slider-max');
 			if ((min !== "") && (max !== "")) {
 				if (min > max) {
 					[min, max] = [max, min];

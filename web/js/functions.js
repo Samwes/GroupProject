@@ -86,11 +86,11 @@ function refreshSearch() {
 	doSearch(0, 12);
 }
 
-function doSearch(inStart, inCount){
-	if($('#mapCheckBox')[0].checked){
-		mapSearch(inStart,inCount);
+function doSearch(inStart, inCount) {
+	if ($('#mapCheckBox')[0].checked) {
+		mapSearch(inStart, inCount);
 	} else {
-		urlSearch(inStart,inCount);
+		urlSearch(inStart, inCount);
 	}
 }
 
@@ -111,7 +111,8 @@ function mapSearch(inStart, inCount) {
 	if (!maxWeight) {maxWeight = "";}
 
 	let element = getMapElement(), map = element.gMap, bounds = map.curBounds;
-	let minLat=bounds.south, maxLat=bounds.north, minLong=bounds.west, maxLong=bounds.east;
+	if (bounds === undefined) {return;}
+	let minLat = bounds.south, maxLat = bounds.north, minLong = bounds.west, maxLong = bounds.east;
 
 	let query = "/search/location/" + minLat + "/" + maxLat + "/" + minLong + "/" + maxLong +
 							"/" + category + "/" + search + "/" + minQuantity + "/" + maxQuantity +

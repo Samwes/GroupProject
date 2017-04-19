@@ -822,7 +822,7 @@ class DBDataMapper
 		if (count($additionals) > 0) {
 			$query .= ' WHERE '.$additionals[0];
 			for ($x = 1, $xMax = count($additionals); $x < $xMax; $x++) {
-				$query .= ' AND '.$additionals;
+				$query .= ' AND '.$additionals[$x];
 			}
 		}
 		$query .= $queryEnd;
