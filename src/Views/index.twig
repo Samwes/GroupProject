@@ -185,12 +185,6 @@
 	{#<div class="container-fluid" style="height: 14px;"></div>#}
 	{#<br>#}
 
-	<div class="form-check form-check-inline p-2 square-border" id="mapControlDiv" style="background-color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.3)">
-		<label class="form-check-label" style="font-size:12px">
-			<input class="form-check-input" type="checkbox" id="mapCheckBox"> Search within map boundaries
-		</label>
-	</div>
-
 	<div class="container-fluid my-2 h-100">
 		<div class="row no-gutters h-100">
 			<!-- FOOD ITEMS -->
@@ -224,6 +218,11 @@
 		</div>
 	</div>
 
+	<div class="form-check form-check-inline p-2 square-border" id="mapControlDiv" style="background-color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.3)">
+		<label class="form-check-label" style="font-size:12px">
+			<input class="form-check-input" type="checkbox" id="mapCheckBox"> Search within map boundaries
+		</label>
+	</div>
 {% endblock %}
 
 
@@ -233,7 +232,6 @@
 	{{ block("searchableMap", "map.twig") }}
 
 	<!-- SEARCH FUNCTIONALITY -->
-	{#todo move map update markers#}
 	<script>
 		cardResults = {};
 		function updatePlace(place) {
@@ -276,11 +274,33 @@
 			});
 
 			let element = getMapElement(), map = element.gMap;
-			let thediv = $('#mapControlDiv');
+			let thediv = $('#mapControlDiv'), maplistener;
 			thediv[0].index = 1;
 			map.controls[google.maps.ControlPosition.TOP_CENTER].push(thediv[0]);
 			//Onclick here
-
+			$('#mapCheckBox').click(function () {
+				if (this.checked){
+					map.curBounds = map.getBounds().toJSON();
+					map.oldCenter = map.getCenter().toJSON();
+					maplistener = map.addListener('center_changed',function(){
+						let newcent = map.getCenter().toJSON(), oldcent = map.oldCenter;
+						let lat1=newcent.lat, lat2=oldcent.lat, lon1=newcent.lng,lon2=oldcent.lng;
+						let R = 6371, dLat = (lat2 - lat1) * Math.PI / 180, dLon = (lon2 - lon1) * Math.PI / 180;
+						let a =	0.5 - Math.cos(dLat)/2 +
+									Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * (1 - Math.cos(dLon))/2;
+						let d = (R * 2 * Math.asin(Math.sqrt(a)))*1000;
+						if (d>500){
+							map.curBounds = map.getBounds().toJSON();
+							map.oldCenter = newcent;
+							refreshSearch();
+						}
+					});
+				} else {
+					google.maps.event.removeListener(maplistener);
+					mapPanTo(Number(input.attr("data-latitude")), Number(input.attr("data-longitude")));
+				}
+				refreshSearch();
+			});
 		});
 	</script>
 
@@ -293,8 +313,7 @@
 			if (!parts[0]) {continue;}
 			obj[parts[0]] = parts[1] || true;
 		}
-		//todo markers on map <<<<<---------- fixme this
-		//todo reset min/max button?
+		{# todo category here #}
 		if ('search' in obj) {
 			let searchval = obj['search'];
 			if (searchval === true) {
@@ -407,7 +426,7 @@
 		});
 
 		$('#collapseFilter').collapse({
-						toggle: false
+			toggle: false
 		});
 
 		$('#filterCollapseBtn').click(function () {
@@ -426,13 +445,14 @@
 
 		$('#collapseApply').click(function () {
 			let updating = $('#quantitySlider'), min = $('#coll-quantMin').val(), max = $('#coll-quantMax').val(),
-					step = updating.attr('data-slider-step'), slidmin = updating.attr('data-slider-min'), slidmax = updating.attr('data-slider-max');
+					step                                                                  = updating.attr('data-slider-step'), slidmin                     = updating.attr('data-slider-min'),
+					slidmax                                                               = updating.attr('data-slider-max');
 			if ((min !== "") && (max !== "")) {
 				if (min > max) {
 					[min, max] = [max, min];
 				} //check min<sliderMax?
-				min = Math.max(Math.min(roundTo(Number(min), step), slidmin),slidmax);
-				max = Math.min(Math.max(roundTo(Number(max), step), slidmax),slidmin);
+				min = Math.max(Math.min(roundTo(Number(min), step), slidmin), slidmax);
+				max = Math.min(Math.max(roundTo(Number(max), step), slidmax), slidmin);
 
 				updating.attr('data-slider-value', '[' + min + ',' + max + ']');
 
@@ -443,19 +463,18 @@
 				if (min > max) {
 					[min, max] = [max, min];
 				}
-				min = Math.max(Math.min(roundTo(Number(min), step), slidmin),slidmax);
-				max = Math.min(Math.max(roundTo(Number(max), step), slidmax),slidmin);
+				min = Math.max(Math.min(roundTo(Number(min), step), slidmin), slidmax);
+				max = Math.min(Math.max(roundTo(Number(max), step), slidmax), slidmin);
 
 				updating.attr('data-slider-value', '[' + min + ',' + max + ']');
 			}
 			updating = $('#radiusSlider'), min = $('#coll-radius').val(),
 				step = updating.attr('data-slider-step'), slidmin = updating.attr('data-slider-min'), slidmax = updating.attr('data-slider-max');
 			if (min !== "") {
-				min = Math.max(Math.min(roundTo(Number(min), step), slidmin),slidmax);
+				min = Math.max(Math.min(roundTo(Number(min), step), slidmin), slidmax);
 
 				updating.attr('data-slider-value', min);
 			}
-
 
 			$('#collapseFilter').collapse('hide');
 			refreshSearch();

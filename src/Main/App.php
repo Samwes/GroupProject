@@ -19,8 +19,8 @@ use Silex\Provider\VarDumperServiceProvider;
 use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class App extends Application
 {
@@ -235,7 +235,7 @@ class App extends Application
 		})->assert('foodID', '\d+');
 
 		$this->get('/food/request/{foodid}', 'rest.handler:addNewRequest')
-		->assert('foodid', '\d+')->secure('ROLE_USER');
+			 ->assert('foodid', '\d+')->secure('ROLE_USER');
 
 		$this->get('/item/{id}', function ($id) {
 			$foodData = $this['DB']->getFoodItemByID($id);
@@ -272,6 +272,20 @@ class App extends Application
 			 ->assert('category', '[a-zA-Z0-9_ ]*')
 			 ->assert('search', '[a-zA-Z0-9_ ]*');
 
+		$this->get('/search/location/{minLat}/{maxLat}/{minLong}/{maxLong}/{category}/{search}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{start}/{count}', 'rest.handler:searchLocation')
+			 ->assert('minLat', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('maxLat', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('minLong', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('maxLong', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('category', '[a-zA-Z0-9_ ]*')
+			 ->assert('search', '[a-zA-Z0-9_ ]*')
+			 ->assert('minAmount', '[0-9]*')
+			 ->assert('maxAmount', '[0-9]*')
+			 ->assert('minWeight', '[0-9]*')
+			 ->assert('maxWeight', '[0-9]*')
+			 ->value('start', 0)->assert('start', '[0-9]*')
+			 ->value('count', 12)->assert('count', '[0-9]*');
+
 		//todo add sorting to slider (remove right 3 buttons) add remove button for each slider
 		$this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}/{start}/{count}', 'rest.handler:searchExtra')
 			 ->assert('category', '[a-zA-Z0-9_ ]*')
@@ -284,16 +298,16 @@ class App extends Application
 			 ->assert('minWeight', '[0-9]*')
 			 ->assert('maxWeight', '[0-9]*')
 			 ->assert('sort', '[a-z\-]*')
-			 ->value('start', 0)
-			 ->value('count', 12);
+			 ->value('start', 0)->assert('start', '[0-9]*')
+			 ->value('count', 12)->assert('count', '[0-9]*');
 
 		$this->get('/messenger/userid', 'rest.handler:userID')
 			 ->secure('ROLE_USER');
 
 		$this->get('/messenger/userfood/{userid}/{foodid}', 'rest.handler:getUserFoodInfo')
-			->assert('userid', '\d+')
-			->assert('foodid', '\d+')
-			->secure('ROLE_USER');
+			 ->assert('userid', '\d+')
+			 ->assert('foodid', '\d+')
+			 ->secure('ROLE_USER');
 
 		//todo default food picture per category
 		$this->post('/food', 'rest.handler:foodItemPost')
@@ -303,7 +317,7 @@ class App extends Application
 			 ->secure('ROLE_USER');
 
 		$this->post('/food/remove/{foodid}', 'rest.handler:foodItemUpdate')
-	 	 	 ->assert('foodid', '\d+')->secure('ROLE_USER');
+			 ->assert('foodid', '\d+')->secure('ROLE_USER');
 
 		//todo registration failure page
 		$this->post('/register/user', 'rest.handler:registerNewUser')
