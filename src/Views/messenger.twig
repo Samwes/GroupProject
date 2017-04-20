@@ -180,6 +180,7 @@
 		$(document).ready(function () {
 			fillSentRequests();
 			fillReceivedRequests();
+			sortRequests();
 		});
 	</script>
 
@@ -260,6 +261,30 @@
 						);
 					});
 				});
+			});
+		}
+
+		function sortRequests() {
+			// sorted into inverse order
+			var receivedRequests = $('#receivedRequests>.card').sort(function (a, b) {
+      	var contentA = Date.parse( $(a).attr('time'));
+      	var contentB = Date.parse( $(b).attr('time'));
+				if (isNaN(contentA)) { contentA = 0; }
+				if (isNaN(contentB)) { contentB = 0; }
+      	return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
+   		});
+			var sentRequests = $('#sentRequests>.card').sort(function (a, b) {
+      	var contentA = Date.parse( $(a).attr('time'));
+      	var contentB = Date.parse( $(b).attr('time'));
+				if (isNaN(contentA)) { contentA = 0; }
+				if (isNaN(contentB)) { contentB = 0; }
+      	return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
+   		});
+			$(receivedRequests).each(function(index) {
+				$("#receivedRequests").append(this);
+			});
+			$(sentRequests).each(function(index) {
+				$("#sentRequests").append(this);
 			});
 		}
 
