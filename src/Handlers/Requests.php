@@ -436,7 +436,7 @@ class Requests
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
 		// Content Here
-		
+
 		return new JsonResponse(array("likelihood" => '80%')); // Temporary Return
 	}
 
@@ -468,6 +468,10 @@ class Requests
 					$recommendation = "Chocolate-based items have a much longer expiry date than you would expect.";
 				} elseif (strpos($name, 'soup') !== FALSE) {
 					$recommendation = "Tinned soups are a very good idea as they nearly last forever!";
+				} elseif (strpos($name, 'fruit') !== FALSE) {
+					$recommendation = "Fruit must be stored in a cool dry place in order to last as long as possible";
+				} elseif (strpos($name, 'chicken') !== FALSE) {
+					$recommendation = "Raw chicken, and other meat, can be very dangerous if they are not stored correctly - make sure you do so before giving away.";
 				}
 
 
