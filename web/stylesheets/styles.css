@@ -174,7 +174,7 @@ input::-webkit-inner-spin-button {
 	margin-top: 10px;
 }
 
-input, .export {
+input.export {
 	display: block;
 }
 
@@ -380,13 +380,13 @@ input, .export {
 
   .row-offcanvas-left
   .sidebar-offcanvas {
-    left: -70%;
+    left: -50%;
   }
   .row-offcanvas-right.active2 {
     right: 75%;
   }
   .row-offcanvas-left.active2 {
-    left: 75%;
+    left: 53%;
   }
   .sidebar-offcanvas {
     position: absolute;

@@ -228,7 +228,7 @@
 				return allValid;
 			}
 		</script>
-		{#todo put into own file#}
+
 		<script>
 			$(function () {
 				$('#ex1').slider({
@@ -242,7 +242,7 @@
 
 				$('.image-editor').cropit({
 					imageState: {
-						src: '{{ userData.picture | default(asset('none.png','food')) }}',
+						src: '{{ asset('none.png','food') }}',
 					},
 					smallImage: 'stretch',
 				});
@@ -256,11 +256,12 @@
 				$('.select-image-btn').click(function () {
 					$('.cropit-image-input').click();
 				});
+//				baseImage = $('.image-editor').cropit('imageSrc'); //fucking async loading
 //				$('.cropit-preview-image-container').click(function () {
-//					if ($(this).attr('data-default') === 'true') {
+//					if ($('.image-editor').cropit('imageSrc') === baseImage) {
 //						$('.cropit-image-input').click();
 //					}
-//				}).attr('data-default', 'true');
+//				});
 			});
 		</script>
 

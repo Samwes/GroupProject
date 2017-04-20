@@ -20,10 +20,10 @@ use Silex\Provider\WebProfilerServiceProvider;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class App extends Application
 {
-	//future Make use of these. all of them
 	use Application\TwigTrait;
 	use Application\SecurityTrait;
 	use Application\FormTrait;
@@ -32,13 +32,10 @@ class App extends Application
 	use Application\MonologTrait;
 
 	//future smaller item cards (for smaller screens) with bare essentials
-	//future sort by radius etc in dropdown
 	//future image upload - remove button??
 
 	public function __construct(array $values = array()) {
 		parent::__construct($values);
-
-		//future cleanup twig files pt.2
 
 		$this->registerServices();
 
@@ -179,7 +176,7 @@ class App extends Application
 				'error'         => $this['security.last_error']($request),
 				'last_username' => $this['session']->get('_security.last_username'),
 			));
-		})->bind('login'); //future remember me on here
+		})->bind('login');
 
 		$this->get('/register', function () {
 			return $this['twig']->render('signup.twig');
@@ -194,7 +191,7 @@ class App extends Application
 			return $this['twig']->render('scanner.twig', array('userData' => $userdata));
 		})->bind('additem')->secure('ROLE_USER');
 
-		$account->get('/addItem/{foodID}', function($foodID) {
+		$account->get('/addItem/{foodID}', function ($foodID) {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			$fooddata = $this['DB']->getFoodItemByID($foodID);
 			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $fooddata, 'foodID' => $foodID));
@@ -217,7 +214,6 @@ class App extends Application
 			return $this['twig']->render('messenger.twig');
 		})->bind('messenger');
 
-		//future all account changing should have $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		$account->post('/update/fullname', 'rest.handler:updateName')
 				->bind('updatename')
 				->secure('IS_AUTHENTICATED_FULLY');
@@ -230,26 +226,28 @@ class App extends Application
 	}
 
 	private function restAPI() {
-		//future move into handlers
 		$this->get('/food/{foodID}', 'rest.handler:foodItemGet')
 			 ->assert('foodID', '\d+');
 
 		$this->get('/food/html/{foodID}', function ($foodID) {
 			$foodData = $this['DB']->getFoodItemByID($foodID);
-			return $this->renderView('foodcard.twig', array('foodData' => $foodData));
+			return $this->renderView('foodcard.twig', array('foodData' => $foodData, 'foodID' => $foodID));
 		})->assert('foodID', '\d+');
 
+		$this->get('/food/request/{foodid}', 'rest.handler:addNewRequest')
+			 ->assert('foodid', '\d+')->secure('ROLE_USER');
+
 		$this->get('/item/{id}', function ($id) {
-			$foodData = $this['DB']->getFoodItemByID($id); //future combine?
+			$foodData = $this['DB']->getFoodItemByID($id);
 			$userData = $this['DB']->getUserByID($foodData['userid']);
 			if (($foodData === false) || ($userData === false)) {
 				throw new Exception('An error occured');
 			}
-			return $this['twig']->render('itemPage.twig', array('food' => $foodData, 'user' => $userData));
+			return $this['twig']->render('itemPage.twig', array('foodData' => $foodData, 'userData' => $userData, 'foodID' => $id));
 		});
 
-		$this->get('/food/likelihood/{foodID}', 'rest.handler:foodLikelihood')
-			->assert('foodID', '\d+');
+		$this->get('/food/likelihood/{foodid}', 'rest.handler:foodLikelihood')
+			 ->assert('foodid', '\d+');
 
 		$this->get('/foodItems', 'rest.handler:foodItemsGet')
 			 ->secure('ROLE_USER');
@@ -264,44 +262,63 @@ class App extends Application
 			 ->secure('ROLE_USER')
 			 ->assert('requestID', '\d+');
 
+		//note deprecated?
 		$this->get('/food/{start}/{num}', 'rest.handler:getFoodBetween')
 			 ->assert('start', '[0-9]*')
 			 ->assert('num', '[0-9]*');
 
+		//note deprecated?
 		$this->get('/search/{category}/{search}', 'rest.handler:mainSearch')
 			 ->assert('category', '[a-zA-Z0-9_ ]*')
 			 ->assert('search', '[a-zA-Z0-9_ ]*');
 
-		//todo add sorting to slider (remove right 3 buttons) add remove button for each slider
-		$this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}', 'rest.handler:searchExtra')
+		$this->get('/search/location/{minLat}/{maxLat}/{minLong}/{maxLong}/{category}/{search}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{start}/{count}', 'rest.handler:searchLocation')
+			 ->assert('minLat', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('maxLat', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('minLong', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('maxLong', '[-+]?[0-9]*\.?[0-9]+')
 			 ->assert('category', '[a-zA-Z0-9_ ]*')
 			 ->assert('search', '[a-zA-Z0-9_ ]*')
-			->assert('latit', '[-+]?[0-9]*\.?[0-9]+')
-			->assert('longit', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('minAmount', '[0-9]*')
+			 ->assert('maxAmount', '[0-9]*')
+			 ->assert('minWeight', '[0-9]*')
+			 ->assert('maxWeight', '[0-9]*')
+			 ->value('start', 0)->assert('start', '[0-9]*')
+			 ->value('count', 12)->assert('count', '[0-9]*');
+
+		//todo add sorting to slider (remove right 3 buttons) add remove button for each slider
+		$this->get('/search/{category}/{search}/{latit}/{longit}/{radius}/{minAmount}/{maxAmount}/{minWeight}/{maxWeight}/{sort}/{start}/{count}', 'rest.handler:searchExtra')
+			 ->assert('category', '[a-zA-Z0-9_ ]*')
+			 ->assert('search', '[a-zA-Z0-9_ ]*')
+			 ->assert('latit', '[-+]?[0-9]*\.?[0-9]+')
+			 ->assert('longit', '[-+]?[0-9]*\.?[0-9]+')
 			 ->assert('radius', '[0-9]*')
 			 ->assert('minAmount', '[0-9]*')
 			 ->assert('maxAmount', '[0-9]*')
 			 ->assert('minWeight', '[0-9]*')
 			 ->assert('maxWeight', '[0-9]*')
-			 ->assert('sort', '[a-z\-]*');
+			 ->assert('sort', '[a-z\-]*')
+			 ->value('start', 0)->assert('start', '[0-9]*')
+			 ->value('count', 12)->assert('count', '[0-9]*');
 
 		$this->get('/messenger/userid', 'rest.handler:userID')
 			 ->secure('ROLE_USER');
 
-		$this->get('/messenger/userfood/{userid}/{foodid}', 'rest.handler:getUserFoodInfo')
-			->assert('userid', '\d+')
-			->assert('foodid', '\d+')
-			->secure('ROLE_USER');
+		$this->get('/messenger/userfood/{userid}/{foodid}/{requestid}', 'rest.handler:getUserFoodInfo')
+			 ->assert('userid', '\d+')
+			 ->assert('foodid', '\d+')
+			 ->assert('requestid', '\d+') // Should probably by under account
+			 ->secure('ROLE_USER');
 
 		//todo default food picture per category
 		$this->post('/food', 'rest.handler:foodItemPost')
 			 ->secure('ROLE_USER');
 
 		$this->post('/food/update', 'rest.handler:foodItemUpdate')
-	 		 ->secure('ROLE_USER');
+			 ->secure('ROLE_USER');
 
 		$this->post('/food/remove/{foodid}', 'rest.handler:foodItemUpdate')
-	 	 	 ->assert('foodid', '\d+')->secure('ROLE_USER');
+			 ->assert('foodid', '\d+')->secure('ROLE_USER');
 
 		//todo registration failure page
 		$this->post('/register/user', 'rest.handler:registerNewUser')
@@ -327,9 +344,10 @@ class App extends Application
 		//future resend auth token to email
 
 		//note need better error handling here
-		$this->error(function (\Exception $e, $code):?Response {
+		$this->error(function (\Exception $e, Request $request, $code):?Response {
 			if ($this['debug']) {
 				// in debug mode we want to get the regular error message
+
 				return null;
 			}
 			switch ($code) {

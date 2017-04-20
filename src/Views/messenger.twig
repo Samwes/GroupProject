@@ -28,9 +28,19 @@
 			</div>
 			<div class="d-flex flex-column align-items-stretch justify-content-center col-12 col-sm-9 p-0">
 				<!-- Messaging Section -->
-				<nav class="navbar navbar-toggleable-md align-items-stretch square-border mb-auto" style="background-color: white; border: 1px solid #dce0e0; border-left: 0; border-top: 0; height: 3rem;" id="messages-nav">
-					<button type="button" class="btn btn-secondary hidden-md-up" data-toggle="offcanvas" data-target=".sidebar-nav">Contacts</button>
-					<ul class="navbar-nav w-100 justify-content-end">
+				<nav class="navbar navbar-light navbar-toggleable-xl justify-content-end" style="background-color: white; border: 1px solid #dce0e0; border-left: 0; border-top: 0; height: 3rem;" id="messages-nav">
+					<button type="button" class="btn btn-secondary hidden-md-up square-border d-flex mr-auto" data-toggle="offcanvas" data-target=".sidebar-nav">Contacts</button>
+					<h5 class="justify-content-center my-1 mx-auto" id="contactName"></h5>
+					<ul class="navbar-nav my-1 justify-content-end">
+						<li class="nav-item hidden-sm-down">
+							<p href="#" style="color: gold;" class="my-2">
+								<i class="fa fa-star" aria-hidden="true"></i>
+								<i class="fa fa-star" aria-hidden="true"></i>
+								<i class="fa fa-star" aria-hidden="true"></i>
+								<i class="fa fa-star" aria-hidden="true"></i>
+								<i class="fa fa-star" aria-hidden="true"></i>
+							</p>
+						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="#">Reject</a>
 						</li>
@@ -90,12 +100,13 @@
 				var toid = data['toid'];
 				var message = data['message'];
 				var date = data['date'];
-				if (fromid == currentReceiverID || toid == currentReceiverID) {
+				var requestID = data['requestid'];
+				if ((fromid == currentReceiverID || toid == currentReceiverID) && currentRequestID == requestID) {
 					// Add to page right away and bring contact to top
 					if (fromid == userID) {
 						// Send by user
 						$("#messages").append(
-							'<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
+							'<div class="row" style="padding: 0.5rem; width: 100%; justify-content: flex-end">' +
 							'<div class="card message" style="background-color: #2979ff; float: right;" title="Sent at ' + date + '">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<p class="card-text" style="color: white;">' + message + '</p>' +
@@ -107,7 +118,7 @@
 						// Received by user
 						$("#messages").append(
 							'<div class="row" style="padding: 0.5rem; width: 100%;">' +
-							'<img class="circle" src="../images/food/none.png" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">' +
+							'<img class="circle" src="../images/food/none.png" alt="Card image cap" style="width: 3rem; height: 3rem; padding: 0.5rem;">' +
 							'<div class="card message" style="background-color: #fafafa;" title="Sent at ' + date + '">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<p class="card-text" style="color: black;">' + message + '</p>' +
@@ -118,8 +129,22 @@
 					}
 				} else {
 					// Make contact bold and bring to top
+					var card = $('[requestid="' + requestID + '"]');
+					if(card) {
+						// exists already so move to top						card.addClass('bold');
+						if(card.attr('request') == "sent") {
+							// Sent request
+							$("#sentRequests").prepend(card);
+						} else {
+							// Received request
+							$("#receivedRequests").prepend(card);
+						}
+					} else {
+						// Just refresh for now
+						fillSentRequests();
+						fillReceivedRequests();
+					}
 				}
-
 			});
 		});
 
@@ -148,12 +173,14 @@
 			$(this).removeClass("bold");
 			$(".contact").css("background-color", "white");
 			$(this).css("background-color", "#fafafa");
+			$("#contactName").text($(this).attr("username"));
 			fillMessages($(this).attr("requestid"));
 		});
 
 		$(document).ready(function () {
 			fillSentRequests();
 			fillReceivedRequests();
+			sortRequests();
 		});
 	</script>
 
@@ -180,18 +207,19 @@
 	<script>
 
 		function fillSentRequests() {
+			$("#sentRequests").empty();
 			$.getJSON('/request/sent', function (data) {
 				// data is all that users requests
 				$.each(data, function (index, value) {
 					// value is requestid, foodid, accepted
-					$.getJSON('/messenger/userfood/' + value['userid'] + '/' + value['foodid'], function(array) {
+					$.getJSON('/messenger/userfood/' + value['userid'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
 						$("#sentRequests").append(
-							'<div class="card square-border contact" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '">' +
+							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="sent" time="' + array['MAX(`messagetable`.`time`)'] + '">' +
 							'<div class="row">' +
-							'<div class="col-2" style="padding: 0;">' +
-							'<img class="card-img-top circle" src="../../images/food/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
+							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
+							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
 							'</div>' +
-							'<div class="col-10" style="padding: 0;">' +
+							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<small class="text-muted float-right" style="margin-right:  1rem;">' + array['time'] + '</small>' +
 							'<p class="card-text">' + array['username'] + '</p>' +
@@ -208,18 +236,19 @@
 		}
 
 		function fillReceivedRequests() {
+			$("#receivedRequests").empty();
 			$.getJSON('/request/received', function (data) {
 				// data is all that users requests
 				$.each(data, function (index, value) {
 					// value is requestid, foodid, accepted
-					$.getJSON('/messenger/userfood/' + value['requester'] + '/' + value['foodid'], function(array) {
+					$.getJSON('/messenger/userfood/' + value['requester'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
 						$("#receivedRequests").append(
-							'<div class="card square-border contact" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '">' +
+							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="received" time="' + array['MAX(`messagetable`.`time`)'] + '">' +
 							'<div class="row">' +
-							'<div class="col-2" style="padding: 0;">' +
+							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
 							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
 							'</div>' +
-							'<div class="col-10" style="padding: 0;">' +
+							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<small class="text-muted float-right" style="margin-right:  1rem;">' + array['MAX(`messagetable`.`time`)'] + '</small>' +
 							'<p class="card-text">' + array['username'] + '</p>' +
@@ -232,6 +261,30 @@
 						);
 					});
 				});
+			});
+		}
+
+		function sortRequests() {
+			// sorted into inverse order
+			var receivedRequests = $('#receivedRequests>.card').sort(function (a, b) {
+      	var contentA = Date.parse( $(a).attr('time'));
+      	var contentB = Date.parse( $(b).attr('time'));
+				if (isNaN(contentA)) { contentA = 0; }
+				if (isNaN(contentB)) { contentB = 0; }
+      	return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
+   		});
+			var sentRequests = $('#sentRequests>.card').sort(function (a, b) {
+      	var contentA = Date.parse( $(a).attr('time'));
+      	var contentB = Date.parse( $(b).attr('time'));
+				if (isNaN(contentA)) { contentA = 0; }
+				if (isNaN(contentB)) { contentB = 0; }
+      	return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
+   		});
+			$(receivedRequests).each(function(index) {
+				$("#receivedRequests").append(this);
+			});
+			$(sentRequests).each(function(index) {
+				$("#sentRequests").append(this);
 			});
 		}
 
