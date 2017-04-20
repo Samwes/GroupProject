@@ -310,6 +310,9 @@ class App extends Application
 			 ->assert('requestid', '\d+') // Should probably by under account
 			 ->secure('ROLE_USER');
 
+		$this->get('/user/analysis', 'rest.handler:wastageAnalysis')
+			 ->secure('ROLE_USER');
+
 		//todo default food picture per category
 		$this->post('/food', 'rest.handler:foodItemPost')
 			 ->secure('ROLE_USER');
