@@ -148,7 +148,11 @@
 						}
 					} else {
 						// Just refresh for now
-						fillSentRequests(fillReceivedRequests(sortRequests));
+						fillSentRequests(function() {
+							fillReceivedRequests(function() {
+								sortRequests();
+							});
+						});
 					}
 				}
 			});
@@ -185,7 +189,11 @@
 		});
 
 		$(document).ready(function () {
-			fillSentRequests(fillReceivedRequests(sortRequests));
+			fillSentRequests(function() {
+				fillReceivedRequests(function() {
+					sortRequests();
+				});
+			});
 		});
 	</script>
 
