@@ -428,6 +428,7 @@ class DBDataMapper
 	}
 
 	public function getRequestsSentByUserID($id) {
+		// TODO Sort by most recent time
 		$query = "SELECT `itemtable`.`userid`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
                     FROM `itemtable`, `requesttable`
                     WHERE `requester` = :id
@@ -450,6 +451,7 @@ class DBDataMapper
 	}
 
 	public function getRequestsReceivedByUserID($id) {
+		// TODO Sort by most recent time
 		$query = 'SELECT `requesttable`.`requester`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
                     FROM `requesttable`, `itemtable`
                     WHERE `requesttable`.`foodid` = `itemtable`.`foodid`

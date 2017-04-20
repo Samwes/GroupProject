@@ -105,7 +105,7 @@
 					if (fromid == userID) {
 						// Send by user
 						$("#messages").append(
-							'<div class="row" style="padding: 0.5rem; float: right; width: 100%;">' +
+							'<div class="row" style="padding: 0.5rem; width: 100%; justify-content: flex-end">' +
 							'<div class="card message" style="background-color: #2979ff; float: right;" title="Sent at ' + date + '">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<p class="card-text" style="color: white;">' + message + '</p>' +
@@ -117,7 +117,7 @@
 						// Received by user
 						$("#messages").append(
 							'<div class="row" style="padding: 0.5rem; width: 100%;">' +
-							'<img class="circle" src="../images/food/none.png" alt="Card image cap" style="width: 3rem; padding: 0.5rem;">' +
+							'<img class="circle" src="../images/food/none.png" alt="Card image cap" style="width: 3rem; height: 3rem; padding: 0.5rem;">' +
 							'<div class="card message" style="background-color: #fafafa;" title="Sent at ' + date + '">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<p class="card-text" style="color: black;">' + message + '</p>' +
@@ -128,8 +128,16 @@
 					}
 				} else {
 					// Make contact bold and bring to top
+					if($('[receiverid="' + fromid + '"]')) {
+						// exists already so move to top
+						$("#receivedRequests").prepend($('[receiverid="' + fromid + '"]'));
+						$('[receiverid="' + fromid + '"]').addClass('bold');
+					} else {
+						// Just refresh for now
+						fillSentRequests();
+						fillReceivedRequests();
+					}
 				}
-
 			});
 		});
 
