@@ -238,7 +238,7 @@ class DBDataMapper
 	}
 
 	public function addNewUserMessage($message, $sender, $receiver, $requestid) {
-		$query = 'INSERT INTO `messagetable` (`message`, `time`) VALUES (:msg, NOW());';
+		$query = 'INSERT INTO `messagetable` (`message`, `time`, `user1seen`, `user2seen`) VALUES (:msg, NOW(), 1, 1);';
 		$query .= 'INSERT INTO `usermessagetable` (`messageid`, `sender`, `receiver`) VALUES (LAST_INSERT_ID(), :send, :rec);';
 		$query .= 'INSERT INTO `requestmessagetable` (`messageid`, `sender`, `requestid`) VALUES (LAST_INSERT_ID(), :send, :req)';
 		$result = true;
@@ -845,6 +845,38 @@ class DBDataMapper
 		return $result;
 	}
 
+	public function setMessagesSeen($requestid, $userid) {
+
+		$query = 'UPDATE `messagetable`, `requestmessagetable`, `requesttable`
+				SET `messagetable`.`user1seen` = 0
+				WHERE `messagetable`.`messageid` = `requestmessagetable`.`messageid` AND
+					`requestmessagetable`.`requestid` = `requesttable`.`requestid` AND
+    			`requesttable`.`requester` = :requester AND `requesttable`.`requestid` = :requestid;
+
+				UPDATE `messagetable`, `requestmessagetable`, `requesttable`
+				SET `messagetable`.`user2seen` = 0
+				WHERE `messagetable`.`messageid` = `requestmessagetable`.`messageid` AND
+					`requestmessagetable`.`requestid` = `requesttable`.`requestid` AND
+    			`requesttable`.`requester` != :requester AND `requesttable`.`requestid` = :requestid;';
+
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':requester'  => $userid,
+							   ':requestid' => $requestid
+						   ));
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Adding new user failed: '.$e->getMessage();
+			}
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
+
 	public function getUserFoodInfo($userid, $foodid) {
 		// fix to get message corresponding to time
 		$query = 'SELECT DISTINCT `usertable`.`username`, MAX(`messagetable`.`time`), `messagetable`.`message`, `itemtable`.`name`, `usertable`.`picture`
@@ -862,6 +894,31 @@ class DBDataMapper
 			$stmt->execute(array(
 							   ':uid' => $userid,
 							   ':fid' => $foodid,
+						   ));
+
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Getting user food info failed: '.$e->getMessage();
+			}
+		}
+		$stmt = null;
+		return $result;
+	}
+
+	public function getNumberUnseenMessages($requestid) {
+		$query = 'SELECT SUM(`user1seen`), SUM(`user2seen`)
+				FROM `messagetable`, `requestmessagetable`, `requesttable`
+				WHERE `messagetable`.`messageid` = `requestmessagetable`.`messageid` AND
+				`requestmessagetable`.`requestid` = `requesttable`.`requestid` AND
+				`requesttable`.`requestid` = :requestid;'
+
+		$result = false;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':requestid' => $requestid
 						   ));
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);

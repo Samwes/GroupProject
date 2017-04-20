@@ -319,6 +319,7 @@ class Requests
 		$date = date('Y-m-d h:i:s', time());
 
 		$toEncode = $this->db->addNewUserMessage($message, $fromid, $toid, $requestid);
+		$toEncode = $toEncode && $this->db->setMessagesSeen($requestid, $fromid); // For now, set seen when another message is sent
 
 		$url = 'https://gpmainmessaging.herokuapp.com/message';
 		$data = array('message' => $message, 'fromid' => $fromid, 'toid' => $toid, 'date' => $date, 'requestid' => $requestid);
@@ -334,7 +335,7 @@ class Requests
 		$context = stream_context_create($options);
 		$result = file_get_contents($url, false, $context);
 		// Change to check for 200 OK response
-		if ($result === false) {
+		if ($result === false || $toEncode === false) {
 			return new JsonResponse(array("success" => false));
 		} else {
 			return new JsonResponse(array("success" => true));
@@ -417,8 +418,9 @@ class Requests
 		return new JsonResponse($toEncode);
 	}
 
-	public function getUserFoodInfo(Request $request, App $app, $userid, $foodid) {
+	public function getUserFoodInfo(Request $request, App $app, $userid, $foodid, $requestid) {
 		$toEncode = $this->db->getUserFoodInfo($userid, $foodid);
+		$toEncode = array_merge($toEncode, $this->db->getRequestsSentByUserID($requestid));
 		if ($toEncode === null) {
 			$toEncode = array('error' => 'failed');
 		}

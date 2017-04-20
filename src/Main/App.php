@@ -304,9 +304,10 @@ class App extends Application
 		$this->get('/messenger/userid', 'rest.handler:userID')
 			 ->secure('ROLE_USER');
 
-		$this->get('/messenger/userfood/{userid}/{foodid}', 'rest.handler:getUserFoodInfo')
+		$this->get('/messenger/userfood/{userid}/{foodid}/{requestid}', 'rest.handler:getUserFoodInfo')
 			 ->assert('userid', '\d+')
 			 ->assert('foodid', '\d+')
+			 ->assert('requestid', '\d+') // Should probably by under account
 			 ->secure('ROLE_USER');
 
 		//todo default food picture per category
