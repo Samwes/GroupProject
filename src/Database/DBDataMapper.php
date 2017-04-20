@@ -237,10 +237,10 @@ class DBDataMapper
 		return $result;
 	}
 
-	public function addNewUserMessage($message, $sender, $receiver) {
+	public function addNewUserMessage($message, $sender, $receiver, $requestid) {
 		$query = 'INSERT INTO `messagetable` (`message`, `time`) VALUES (:msg, NOW());';
 		$query .= 'INSERT INTO `usermessagetable` (`messageid`, `sender`, `receiver`) VALUES (LAST_INSERT_ID(), :send, :rec);';
-		$query .= 'INSERT INTO `requestmessagetable` (`messageid`, `sender`, `requestid`) VALUES (LAST_INSERT_ID(), :send, :req)';
+		$query .= 'INSERT INTO `requestmessagetable` (`messageid`, `sender`, `requestid`) VALUES (LAST_INSERT_ID(), :send, :req)'; // :req...
 		$result = true;
 		try {
 			$stmt = $this->pdo->prepare($query);
@@ -249,6 +249,7 @@ class DBDataMapper
 							   ':msg'  => $message,
 							   ':send' => $sender,
 							   ':rec'  => $receiver,
+								 ':req'  => $requestid
 						   ));
 		} catch (\PDOException $e) {
 			if (DEBUG) {
@@ -693,7 +694,7 @@ class DBDataMapper
 	public function searchLocation($minLat, $maxLat, $minLong, $maxLong, $category, $search, $minAmount, $maxAmount, $minWeight, $maxWeight, $start, $count) {
 		$query = 'SELECT `foodid`
 					FROM `itemtable`
-					WHERE `latit` <= :maxLat AND `latit` >= :minLat 
+					WHERE `latit` <= :maxLat AND `latit` >= :minLat
 					AND `longit` <= :maxLong AND `longit` >= :minLong';
 		$queryEnd = " ORDER BY `foodid` DESC LIMIT $count OFFSET $start";
 
