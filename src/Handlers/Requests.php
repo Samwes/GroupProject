@@ -436,7 +436,7 @@ class Requests
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
 		// Content Here
-
+		
 		return new JsonResponse(array("likelihood" => '80%')); // Temporary Return
 	}
 
@@ -458,6 +458,20 @@ class Requests
 
 
 			for($i = 0; $i<$foodItems.length; $i++) {
+				$name = strtolower($foodItems[i]['name']);
+
+				if (strpos($name, 'bread') !== FALSE) {
+					$recommendation = "Did you know you can freeze " + $name + " to make it last longer?";
+				} elseif (strpos($name, 'milk') !== FALSE) {
+					$recommendation = "You may be able to freeze " + $name + " so that it lasts longer.";
+				} elseif (strpos($name, 'chocolate') !== FALSE) {
+					$recommendation = "Chocolate-based items have a much longer expiry date than you would expect.";
+				} elseif (strpos($name, 'soup') !== FALSE) {
+					$recommendation = "Tinned soups are a very good idea as they nearly last forever!";
+				}
+
+
+
 				$currentCategory = foodItems[i]['category'];
 				if (!(in_array($currentCategory, $categories))) {
 					$categories[$currentCategory] = 1;
@@ -483,9 +497,9 @@ class Requests
 				$response = "You haven't had to give away too many items, well done."
 			}
 
-
+			$combinedResponse = $response + $recommendation;
 			// Content Here
-			return new JsonResponse(array("recommendation" => $response));
+			return new JsonResponse(array("recommendation" => $combinedResponse));
 		}
 	}
 }
