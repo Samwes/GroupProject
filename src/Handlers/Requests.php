@@ -455,7 +455,8 @@ class Requests
 			}
 		}
 
-		return new RedirectResponse($app->path('messenger'));
+		//return new RedirectResponse($app->path('messenger'));
+		return new JsonResponse($toEncode);
 	}
 
 	public function foodLikelihood(Request $request, App $app, $foodid) {
