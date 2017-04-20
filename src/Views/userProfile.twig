@@ -219,7 +219,7 @@
 		$(function () {
 			$('.image-editor').cropit({
 				imageState: {
-					src: '{{ userData.picture | default(asset('profile_default.jpg','users')) }}',
+					src: '{{ asset(userData.picture | default('profile_default.jpg'),'users') }}',
 				},
 				smallImage: 'stretch',
 				//			  {#todo#} imageBackground: true,

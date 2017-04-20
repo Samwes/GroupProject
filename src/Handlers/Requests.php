@@ -302,6 +302,15 @@ class Requests
 		return new JsonResponse($toEncode);
 	}
 
+	public function searchLocation(Request $request, App $app, $minLat, $maxLat, $minLong, $maxLong, $category, $search, $minAmount, $maxAmount, $minWeight, $maxWeight, $start, $count){
+		$toEncode = $this->db->searchLocation($minLat, $maxLat, $minLong, $maxLong, $category, $search, $minAmount, $maxAmount, $minWeight, $maxWeight, $start, $count);
+		if ($toEncode === null) {
+			$toEncode = array('error' => 'failed');
+		}
+
+		return new JsonResponse($toEncode);
+	}
+
 	public function messageUser(Request $request, App $app) {
 		$message = $request->get('message');
 		$fromid = $request->get('fromid');
@@ -423,7 +432,7 @@ class Requests
 
 		if (null !== $token) {
 			$userID = $token->getUser()->getID();
-			if($this->db->removeFoodItem($foodid, $userID)) {
+			if ($this->db->removeFoodItem($foodid, $userID)) {
 				$toEncode = array('success' => 'Food Item Removed');
 			}
 		}
@@ -438,7 +447,7 @@ class Requests
 
 		if (null !== $token) {
 			$userID = $token->getUser()->getID();
-			if($this->db->addNewRequest($userID, $foodid)) {
+			if ($this->db->addNewRequest($userID, $foodid)) {
 				$toEncode = array('success' => 'Food Item requested');
 			}
 		}

@@ -174,7 +174,7 @@ input::-webkit-inner-spin-button {
 	margin-top: 10px;
 }
 
-input, .export {
+input.export {
 	display: block;
 }
 
