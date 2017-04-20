@@ -911,7 +911,7 @@ class DBDataMapper
 				FROM `messagetable`, `requestmessagetable`, `requesttable`
 				WHERE `messagetable`.`messageid` = `requestmessagetable`.`messageid` AND
 				`requestmessagetable`.`requestid` = `requesttable`.`requestid` AND
-				`requesttable`.`requestid` = :requestid;'
+				`requesttable`.`requestid` = :requestid';
 
 		$result = false;
 		try {
@@ -924,7 +924,7 @@ class DBDataMapper
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		} catch (\PDOException $e) {
 			if (DEBUG) {
-				echo 'Getting user food info failed: '.$e->getMessage();
+				echo 'Getting number of unseen messages failed: '.$e->getMessage();
 			}
 		}
 		$stmt = null;
