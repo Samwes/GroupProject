@@ -419,8 +419,8 @@ class Requests
 	}
 
 	public function getUserFoodInfo(Request $request, App $app, $userid, $foodid, $requestid) {
-		$toEncode = $this->db->getUserFoodInfo($userid, $foodid);
-		$toEncode = $toEncode + $this->db->getNumberUnseenMessages($requestid);
+		//$toEncode = $this->db->getUserFoodInfo($userid, $foodid);
+		$toEncode = $this->db->getNumberUnseenMessages($requestid);
 		if ($toEncode === null) {
 			$toEncode = array('error' => 'failed');
 		}
