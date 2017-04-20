@@ -129,10 +129,10 @@
 					}
 				} else {
 					// Make contact bold and bring to top
-					if($('[receiverid="' + fromid + '"]')) {
+					if($('[requestid="' + requestID + '"]')) {
 						// exists already so move to top
-						$("#receivedRequests").prepend($('[receiverid="' + fromid + '"]'));
-						$('[receiverid="' + fromid + '"]').addClass('bold');
+						$("#receivedRequests").prepend($('[requestid="' + requestID + '"]'));
+						$('[requestid="' + requestID + '"]').addClass('bold');
 					} else {
 						// Just refresh for now
 						fillSentRequests();
