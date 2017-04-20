@@ -526,7 +526,7 @@ class Requests
 			if ($keys[0] > 5) {
 				$response = "You could consider buying fewer " + $mostWasted + " items, as you've given away " + $keys[0] + "of this item type.";
 			} else {
-				$response = "You haven't had to give away too many items, well done."
+				$response = "You haven't had to give away too many items, well done.";
 			}
 
 			$combinedResponse = $response + $recommendation;
