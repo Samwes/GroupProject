@@ -58,7 +58,7 @@
           var likelihood;
           $.getJSON('/food/likelihood/'+value['foodid'], function(array) {
             var toAddTo;
-            if(value['active'] == 1) {
+            if(value['active'] == 0) {
               toAddTo = "#current-columns";
             } else if (value['hidden'] == 0) {
               toAddTo = "#past-columns";

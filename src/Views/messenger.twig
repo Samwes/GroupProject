@@ -41,11 +41,17 @@
 								<i class="fa fa-star" aria-hidden="true"></i>
 							</p>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">Reject</a>
+						<li class="nav-item" id="reject-item">
+							<a class="nav-link" id="reject" href="#">Reject</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">Accept</a>
+						<li class="nav-item" id="accept-item">
+							<a class="nav-link" id="accept" href="#">Accept</a>
+						</li>
+						<li class="nav-item hidden-xs-up" id="accepted-item">
+							<p class="nav-link">Accepted</p>
+						</li>
+						<li class="nav-item hidden-xs-up" id="rejected-item">
+							<p class="nav-link">Rejected</p>
 						</li>
 					</ul>
 				</nav>
@@ -83,6 +89,7 @@
 		var userID;
 		var currentReceiverID;
 		var currentRequestID;
+		var currentFoodID;
 
 		$(function () {
 			var socket = io("https://gpmainmessaging.herokuapp.com/");
@@ -170,6 +177,7 @@
 			// Change colour and fill messages
 			currentRequestID = $(this).attr("requestid");
 			currentReceiverID = $(this).attr("receiverid");
+			currentFoodID = $(this).attr("foodid");
 			$(this).removeClass("bold");
 			$(".contact").css("background-color", "white");
 			$(this).css("background-color", "#fafafa");
@@ -192,6 +200,9 @@
 			$("#receivedRequests").addClass("hidden-xs-up");
 			$("#sentRequestsBtn").css("background-color", "#e6e6e6");
 			$("#receivedRequestsBtn").css("background-color", "");
+			// Hide Accept/Reject Buttons
+			$("#reject-item").addClass('hidden-xs-up');
+			$("#accept-item").addClass('hidden-xs-up');
 		});
 
 		$("#receivedRequestsBtn").click(function () {
@@ -200,6 +211,29 @@
 			$("#sentRequests").addClass("hidden-xs-up");
 			$("#receivedRequestsBtn").css("background-color", "#e6e6e6");
 			$("#sentRequestsBtn").css("background-color", "");
+			// Show Accept/Reject Buttons
+			$("#reject-item").removeClass('hidden-xs-up');
+			$("#accept-item").removeClass('hidden-xs-up');
+		});
+	</script>
+
+	<script>
+		// Accept/Rejecting an item
+		$("#accept").click(function() {
+			$.post('/account/request/accept', {"requestid": currentRequestID, "foodid": currentFoodID}, function() {
+				// Change to Accepted
+				$('#accept-item').addClass('hidden-xs-up');
+				$('#reject-item').addClass('hidden-xs-up');
+				$('#accepted-item').removeClass('hidden-xs-up');
+			});
+		});
+		$("#reject").click(function() {
+			$.post('/account/request/reject', {"requestid": currentRequestID}, function() {
+				// Change to Rejected
+				$('#accept-item').addClass('hidden-xs-up');
+				$('#reject-item').addClass('hidden-xs-up');
+				$('#rejected-item').removeClass('hidden-xs-up');
+			});
 		});
 	</script>
 
@@ -214,7 +248,7 @@
 					// value is requestid, foodid, accepted
 					$.getJSON('/messenger/userfood/' + value['userid'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
 						$("#sentRequests").append(
-							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="sent" time="' + array['MAX(`messagetable`.`time`)'] + '">' +
+							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="sent" time="' + array['MAX(`messagetable`.`time`)'] + '" foodid="' + value['foodid'] + '">' +
 							'<div class="row">' +
 							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
 							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
@@ -243,7 +277,7 @@
 					// value is requestid, foodid, accepted
 					$.getJSON('/messenger/userfood/' + value['requester'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
 						$("#receivedRequests").append(
-							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="received" time="' + array['MAX(`messagetable`.`time`)'] + '">' +
+							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="received" time="' + array['MAX(`messagetable`.`time`)'] + '" foodid="' + value['foodid'] + '">' +
 							'<div class="row">' +
 							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
 							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +

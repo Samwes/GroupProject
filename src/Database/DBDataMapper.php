@@ -123,6 +123,57 @@ class DBDataMapper
 		return false;
 	}
 
+	public function acceptRequest($requestid, $requester, $foodid) {
+		$query = 'UPDATE `requesttable`
+				SET `status` = 2
+				WHERE `requestid` = :requestid;';
+		$query .= 'UPDATE `requesttable`
+				SET `status` = 1
+				WHERE `foodid` = :foodid AND `requestid` != :requestid;';
+		$query .= 'UPDATE `itemtable`
+				SET `active` = 1
+				WHERE `foodid` = :foodid;';
+
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':requestid' => $requestid,
+								 ':foodid' => $foodid
+						   ));
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Updating food item failed: '.$e->getMessage();
+			}
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
+
+	public function rejectRequest($requestid, $requester) {
+		$query = 'UPDATE `requesttable`
+				SET `status` = 1
+				WHERE `requestid` = :requestid;';
+
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':requestid' => $requestid
+						   ));
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Updating food item failed: '.$e->getMessage();
+			}
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
+
 	public function updateFoodItem($foodID, $name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $image) {
 		if ($image === null) {
 			$image = 'none.png';

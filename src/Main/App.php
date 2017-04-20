@@ -222,6 +222,15 @@ class App extends Application
 				->bind('updatepass')
 				->secure('IS_AUTHENTICATED_FULLY');
 
+		$account->post('/request/accept', 'rest.handler:acceptRequest')
+				->assert('requestid', '\d+')
+				->assert('foodid', '\d+')
+				->secure('IS_AUTHENTICATED_FULLY');
+
+		$account->post('/request/reject', 'rest.handler:rejectRequest')
+				->assert('requestid', '\d+')
+				->secure('IS_AUTHENTICATED_FULLY');
+
 		$this->mount('/account', $account);
 	}
 

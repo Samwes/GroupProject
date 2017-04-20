@@ -166,7 +166,7 @@ class Requests
 				file_put_contents('images/food/'.$filename, $binary);
 			}
 
-			if ($this->db->updateFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {
+			if ($this->db->updateFoodItem($foodID, $name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {
 				$toEncode = array("success" => "topic added");
 			}
 		}
@@ -452,6 +452,35 @@ class Requests
 			$userID = $token->getUser()->getID();
 			if ($this->db->addNewRequest($userID, $foodid)) {
 				$toEncode = array('success' => 'Food Item requested');
+			}
+		}
+
+		return new RedirectResponse($app->path('messenger'));
+	}
+
+	public function acceptRequest(Request $request, App $app) {
+		$requestid = $request->get('requestid');
+		$foodid = $request->get('foodid');
+		$token = $app['security.token_storage']->getToken();
+
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+			if ($this->db->acceptRequest($requestid, $userID, $foodid)) {
+				$toEncode = array('success' => 'Food Item Accepted');
+			}
+		}
+
+		return new RedirectResponse($app->path('messenger'));
+	}
+
+	public function rejectRequest(Request $request, App $app) {
+		$requestid = $request->get('requestid');
+		$token = $app['security.token_storage']->getToken();
+
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+			if ($this->db->rejectRequest($requestid, $userID)) {
+				$toEncode = array('success' => 'Food Item Rejected');
 			}
 		}
 
