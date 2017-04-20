@@ -213,7 +213,7 @@
 					// value is requestid, foodid, accepted
 					$.getJSON('/messenger/userfood/' + value['userid'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
 						$("#sentRequests").append(
-							'<div class="card square-border contact ' + (array['user1seen'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="sent">' +
+							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="sent">' +
 							'<div class="row">' +
 							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
 							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
@@ -242,7 +242,7 @@
 					// value is requestid, foodid, accepted
 					$.getJSON('/messenger/userfood/' + value['requester'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
 						$("#receivedRequests").append(
-							'<div class="card square-border contact ' + (array['user2seen'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="received">' +
+							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="received">' +
 							'<div class="row">' +
 							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
 							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
