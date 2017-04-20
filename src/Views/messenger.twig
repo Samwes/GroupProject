@@ -206,6 +206,7 @@
 	<script>
 
 		function fillSentRequests() {
+			$("#sentRequests").empty();
 			$.getJSON('/request/sent', function (data) {
 				// data is all that users requests
 				$.each(data, function (index, value) {
@@ -234,6 +235,7 @@
 		}
 
 		function fillReceivedRequests() {
+			$("#receivedRequests").empty();
 			$.getJSON('/request/received', function (data) {
 				// data is all that users requests
 				$.each(data, function (index, value) {
