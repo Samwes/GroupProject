@@ -513,7 +513,7 @@ class Requests
 
 			// Content Here
 
-			return new JsonResponse(array("recommendation" => "working" ));
+			return new JsonResponse(array("recommendation" => $response ));
 
 
 
