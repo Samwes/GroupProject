@@ -148,8 +148,7 @@
 						}
 					} else {
 						// Just refresh for now
-						fillSentRequests();
-						fillReceivedRequests();
+						fillSentRequests(fillReceivedRequests(sortRequests()));
 					}
 				}
 			});
@@ -186,9 +185,7 @@
 		});
 
 		$(document).ready(function () {
-			fillSentRequests();
-			fillReceivedRequests();
-			sortRequests();
+			fillSentRequests(fillReceivedRequests(sortRequests()));
 		});
 	</script>
 
@@ -240,7 +237,7 @@
 	<!-- Move messaging scripts into own file> -->
 	<script>
 
-		function fillSentRequests() {
+		function fillSentRequests(callback) {
 			$("#sentRequests").empty();
 			$.getJSON('/request/sent', function (data) {
 				// data is all that users requests
@@ -267,9 +264,10 @@
 					})
 				});
 			});
+			callback();
 		}
 
-		function fillReceivedRequests() {
+		function fillReceivedRequests(callback {
 			$("#receivedRequests").empty();
 			$.getJSON('/request/received', function (data) {
 				// data is all that users requests
@@ -296,6 +294,7 @@
 					});
 				});
 			});
+			callback();
 		}
 
 		function sortRequests() {
