@@ -476,7 +476,7 @@ class DBDataMapper
 	//Instate as boolean
 	public function setRequestState($requestid, $instate) {
 		$state = $instate ? 1 : 0;
-		$query = 'UPDATE `requesttable` SET `accepted` = :state WHERE `requestid` = :reqid';
+		$query = 'UPDATE `requesttable` SET `status` = :state WHERE `requestid` = :reqid';
 		$result = true;
 		try {
 			$stmt = $this->pdo->prepare($query);
@@ -497,7 +497,7 @@ class DBDataMapper
 
 	public function getRequestsSentByUserID($id) {
 		// TODO Sort by most recent time
-		$query = "SELECT `itemtable`.`userid`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
+		$query = "SELECT `itemtable`.`userid`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`status`
                     FROM `itemtable`, `requesttable`
                     WHERE `requester` = :id
 										AND `requesttable`.`foodid` = `itemtable`.`foodid`";
@@ -521,7 +521,7 @@ class DBDataMapper
 
 	public function getRequestsReceivedByUserID($id) {
 		// TODO Sort by most recent time
-		$query = 'SELECT `requesttable`.`requester`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`accepted`
+		$query = 'SELECT `requesttable`.`requester`, `requesttable`.`requestid`, `requesttable`.`foodid`, `requesttable`.`status`
                     FROM `requesttable`, `itemtable`
                     WHERE `requesttable`.`foodid` = `itemtable`.`foodid`
                     AND `itemtable`.`userid` = :id';
