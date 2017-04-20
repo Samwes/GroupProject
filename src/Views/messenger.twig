@@ -267,7 +267,7 @@
 			callback();
 		}
 
-		function fillReceivedRequests(callback {
+		function fillReceivedRequests(callback) {
 			$("#receivedRequests").empty();
 			$.getJSON('/request/received', function (data) {
 				// data is all that users requests
