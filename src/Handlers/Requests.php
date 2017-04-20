@@ -530,11 +530,9 @@ class Requests
 
 			$combinedResponse = $response + $recommendation;
 			// Content Here
-<<<<<<< HEAD
+
 			return new JsonResponse(array("recommendation" => "working" + $response));
-=======
-			return new JsonResponse(array("recommendation" => $combinedResponse));
->>>>>>> origin/master
+
 		}
 	}
 }
