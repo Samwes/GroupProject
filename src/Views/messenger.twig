@@ -238,7 +238,7 @@
 				// data is all that users requests
 				$.each(data, function (index, value) {
 					// value is requestid, foodid, accepted
-					$.getJSON('/messenger/userfood/' + value['requester'] + '/' + value['foodid'], function(array) {
+					$.getJSON('/messenger/userfood/' + value['requester'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
 						$("#receivedRequests").append(
 							'<div class="card square-border contact ' + (value['user2seen'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="received">' +
 							'<div class="row">' +
