@@ -480,8 +480,40 @@ class Requests
 			// of form [[0] => [...], [1] => [...], [2] => [...]] or something like that
 			// each [...] as in foodLikelihood(...)
 
-			// Content Here
+			//Array for a map of categories and their frequency.
 
+			$categories = array();
+
+
+			for($i = 0; $i<$foodItems.length; $i++) {
+				$currentCategory = foodItems[i]['category'];
+				if (!(in_array($currentCategory, $categories))) {
+					$categories[$currentCategory] = 1;
+				} else {
+					$categories[$currentCategory] += 1;
+				}
+
+			}
+
+			//Now $categories is an associative array that contains how many times a user has given away food in that currentCategory
+
+			//Sort the array
+			arsort($categories);
+			$keys = array_keys($categories);
+			$mostWasted = $categories[$keys[0]] = "";
+
+
+			//Have they wasted enough to warrant telling them to stop wasting them
+
+			if ($keys[0] > 5) {
+				$response = "You could consider buying fewer " + $mostWasted + " items, as you've given away " + $keys[0] + "of this item type.";
+			} else {
+				$response = "You haven't had to give away too many items, well done."
+			}
+
+
+			// Content Here
+			return new JsonResponse(array("recommendation" => $response));
 		}
 	}
 }
