@@ -229,6 +229,9 @@
 							'</div>' +
 							'</div>'
 						);
+						if(array['SUM(`user1seen`)'] != 0) {
+							$('[requestid="' + value['requestid'] + '"]').parent().prepend(this);
+						}
 					})
 				});
 			});
@@ -258,6 +261,9 @@
 							'</div>' +
 							'</div>'
 						);
+						if(array['SUM(`user2seen`)'] != 0) {
+							$('[requestid="' + value['requestid'] + '"]').parent().prepend(this);
+						}
 					});
 				});
 			});
