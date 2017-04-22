@@ -653,5 +653,11 @@
 		});
 	</script>
 
+	<script>
+		$('body').on('click', '.card', function() {
+			cardClick($(this).attr('data-id'));
+		});
+	</script>
+
 
 {% endblock %}
