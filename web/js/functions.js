@@ -38,7 +38,6 @@ function cardClick(id) {
 }
 
 function modalLoaded(latitude, longitude) {
-
 	itemMap = null;
 
 	// 67.9222° N, 26.5046° E
