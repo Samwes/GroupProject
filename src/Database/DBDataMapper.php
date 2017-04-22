@@ -543,6 +543,29 @@ class DBDataMapper
 		return $result;
 	}
 
+	public function getRequestStatus($requestid) {
+		$query = 'SELECT `status`
+								FROM `requesttable`
+								WHERE `requestid` = :reqid';
+
+	$result = null;
+	try {
+		$stmt = $this->pdo->prepare($query);
+
+		$stmt->execute(array(
+									   ':reqid' => $requestid,
+								   ));
+
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+	} catch (\PDOException $e) {
+		if (DEBUG) {
+			echo 'Getting request state by ID failed: '.$e->getMessage();
+		}
+	}
+	$stmt = null;
+	return $result;
+	}
+
 	public function getRoles($userID) {
 		$query = 'SELECT `roles`
                     FROM `usertable`

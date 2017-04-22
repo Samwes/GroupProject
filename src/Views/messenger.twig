@@ -48,10 +48,10 @@
 							<a class="nav-link" id="accept" href="#">Accept</a>
 						</li>
 						<li class="nav-item hidden-xs-up" id="accepted-item">
-							<p class="nav-link">Accepted</p>
+							<p class="nav-link my-2">Accepted</p>
 						</li>
 						<li class="nav-item hidden-xs-up" id="rejected-item">
-							<p class="nav-link">Rejected</p>
+							<p class="nav-link my-2">Rejected</p>
 						</li>
 					</ul>
 				</nav>
@@ -200,6 +200,8 @@
 	<!-- REQUEST TAB CHANGING -->
 	<script>
 		$("#sentRequestsBtn").click(function () {
+			// Sort Requests
+			sortRequests();
 			// Hide Received Requests
 			$("#sentRequests").removeClass("hidden-xs-up");
 			$("#receivedRequests").addClass("hidden-xs-up");
@@ -211,6 +213,8 @@
 		});
 
 		$("#receivedRequestsBtn").click(function () {
+			// Sort Requests
+			sortRequests();
 			// Hide Sent Requests
 			$("#receivedRequests").removeClass("hidden-xs-up");
 			$("#sentRequests").addClass("hidden-xs-up");
@@ -330,6 +334,25 @@
 		}
 
 		function fillMessages(requestID) {
+			$.getJSON('/account/request/state/' + requestID, function(data) {
+				if(data['status'] == 0) {
+					// No Response
+					$('#accept-item').removeClass('hidden-xs-up');
+					$('#reject-item').removeClass('hidden-xs-up');
+					$('#accepted-item').addClass('hidden-xs-up');
+					$('#rejected-item').addClass('hidden-xs-up');
+				} else if (data['status'] == 1) {
+					// Rejected
+					$('#accept-item').addClass('hidden-xs-up');
+					$('#reject-item').addClass('hidden-xs-up');
+					$('#rejected-item').removeClass('hidden-xs-up');
+				} else if (data['status'] == 2) {
+					// Accepted
+					$('#accept-item').addClass('hidden-xs-up');
+					$('#reject-item').addClass('hidden-xs-up');
+					$('#accepted-item').removeClass('hidden-xs-up');
+				}
+			});
 			$("#messages").empty();
 			$.getJSON('/request/messages/' + requestID, function (messages) {
 				// messages is message, time, sender, receiver
@@ -350,7 +373,7 @@
 						// Received by user
 						$("#messages").append(
 							'<div class="row" style="padding: 0.5rem; width: 100%;">' +
-							'<img class="circle" src="../images/food/none.png" alt="Card image cap" style="width: 3rem; height: 3rem; padding: 0.5rem;">' +
+							'<img class="circle" src="../images/people/profile_default.jpg" alt="Card image cap" style="width: 2.5rem; height: 2.5rem; padding: 0.5rem;">' +
 							'<div class="card message" style="background-color: #fafafa;" title="Sent at ' + value["time"] + '">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
 							'<p class="card-text" style="color: black;">' + value["message"] + '</p>' +

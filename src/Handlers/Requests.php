@@ -487,6 +487,15 @@ class Requests
 		return new RedirectResponse($app->path('messenger'));
 	}
 
+	public function requestStatus(Request $request, App $app, $requestid) {
+		$toEncode = $this->db->getRequestStatus($requestid);
+		if ($toEncode === null) {
+			$toEncode = array('error' => 'failed');
+		}
+
+		return new JsonResponse($toEncode);
+	}
+
 	public function foodLikelihood(Request $request, App $app, $foodid) {
 		$foodItem = $this->db->getFoodItemByID($foodid);
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
