@@ -37,6 +37,37 @@ function cardClick(id) {
 	});
 }
 
+function modalLoaded(latitude, longitude) {
+
+	itemMap = null;
+
+	// 67.9222° N, 26.5046° E
+	var location = {lat: latitude, lng: longitude};
+	itemMap = new google.maps.Map(document.getElementById('itemMap'), {
+	 zoom            : 10,
+	 center          : location,
+	 disableDefaultUI: true,
+	});
+
+	var marker = new google.maps.Marker({
+	 position: location,
+	 map     : itemMap,
+	});
+
+	let geocoder = new google.maps.Geocoder();
+	geocoder.geocode({'location': {lat: latitude, lng: longitude}}, function (results, status) {
+		if (status === 'OK') {
+			if (results[1]) {
+				$("#loc-text").text(results[1].formatted_address);
+			} else {
+				$("#loc-text").text('No results found');
+			}
+		} else {
+			$("#loc-text").text('Error finding location');
+		}
+	});
+}
+
 function highlightMarker(theMarker) {
 	let element = getMapElement(), markers = element.gMarkers;
 	markers.forEach(function (marker) {
