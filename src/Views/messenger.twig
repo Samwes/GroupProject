@@ -32,7 +32,7 @@
 					<button type="button" class="btn btn-secondary hidden-md-up square-border d-flex mr-auto" data-toggle="offcanvas" data-target=".sidebar-nav">Contacts</button>
 					<h5 class="justify-content-center my-1 mx-auto" id="contactName"></h5>
 					<ul class="navbar-nav my-1 justify-content-end">
-						<li class="nav-item hidden-sm-down">
+						<li class="nav-item hidden-sm-down hidden-xs-up" id="stars">
 							<p href="#" style="color: gold;" class="my-2">
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
@@ -185,6 +185,7 @@
 			$(".contact").css("background-color", "white");
 			$(this).css("background-color", "#fafafa");
 			$("#contactName").text($(this).attr("username"));
+			$('#stars')
 			fillMessages($(this).attr("requestid"));
 		});
 
@@ -268,10 +269,10 @@
 							'</div>' +
 							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
-							'<small class="text-muted float-right" style="margin-right:  1rem;">' + array['time'] + '</small>' +
+							'<small class="text-muted float-right" style="margin-right:  1rem;">' + (array['MAX(`messagetable`.`time`)'] ? array['MAX(`messagetable`.`time`)'] : "") + '</small>' +
 							'<p class="card-text">' + array['username'] + '</p>' +
 							'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + array['name'] + '</p>' +
-							'<small class="text-muted">' + array['message'] + '</small>' +
+							'<small class="text-muted">' + (array['message'] ? array['message'] : "") + '</small>' +
 							'</div>' +
 							'</div>' +
 							'</div>' +
@@ -298,10 +299,10 @@
 							'</div>' +
 							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
 							'<div class="card-block" style="padding: 0.5rem;">' +
-							'<small class="text-muted float-right" style="margin-right:  1rem;">' + array['MAX(`messagetable`.`time`)'] + '</small>' +
+							'<small class="text-muted float-right" style="margin-right:  1rem;">' + (array['MAX(`messagetable`.`time`)'] ? array['MAX(`messagetable`.`time`)'] : "") + '</small>' +
 							'<p class="card-text">' + array['username'] + '</p>' +
 							'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + array['name'] + '</p>' +
-							'<small class="text-muted">' + array['message'] + '</small>' +
+							'<small class="text-muted">' + (array['message'] ? array['message'] : "") + '</small>' +
 							'</div>' +
 							'</div>' +
 							'</div>' +
