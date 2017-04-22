@@ -85,42 +85,40 @@
   {#todo: store map marker(s) in array, redraw each time#}
 
   <script>
-    $("#map").one("maploaded", function () {
+    $("#itemmap").one("maploaded", function () {
       setToUserData({{ foodData.latit }}, {{ foodData.longit }}, geolocateCallback);
     });
 
 	  itemMap = null;
 
-	  function initMapElements() {
-		  // 67.9222° N, 26.5046° E
-		  var location = {lat: {{ foodData.latit }}, lng: {{ foodData.longit }}};
-		  itemMap = new google.maps.Map(document.getElementById('itemMap'), {
-			  zoom            : 10,
-			  center          : location,
-			  disableDefaultUI: true,
-		  });
+		// 67.9222° N, 26.5046° E
+		var location = {lat: {{ foodData.latit }}, lng: {{ foodData.longit }}};
+		itemMap = new google.maps.Map(document.getElementById('itemMap'), {
+		 zoom            : 10,
+		 center          : location,
+		 disableDefaultUI: true,
+		});
 
-		  var marker = new google.maps.Marker({
-			  position: location,
-			  map     : itemMap,
-		  });
+		var marker = new google.maps.Marker({
+		 position: location,
+		 map     : itemMap,
+		});
 
-      let geocoder = new google.maps.Geocoder();
-      geocoder.geocode({'location': {lat: {{ foodData.latit }}, lng: {{ foodData.longit }}}}, function (results, status) {
-        if (status === 'OK') {
-          if (results[1]) {
-            $("#loc-text").text(results[1].formatted_address);
-          } else {
-            $("#loc-text").text('No results found');
-          }
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'location': {lat: {{ foodData.latit }}, lng: {{ foodData.longit }}}}, function (results, status) {
+      if (status === 'OK') {
+        if (results[1]) {
+          $("#loc-text").text(results[1].formatted_address);
         } else {
-          $("#loc-text").text('Error finding location');
+          $("#loc-text").text('No results found');
         }
-      });
+      } else {
+        $("#loc-text").text('Error finding location');
+      }
+    });
 
-	  }
   </script>
 
-  <script async defer
+  <!--<script async defer
 					src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
-	</script>
+	</script>-->

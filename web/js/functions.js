@@ -31,10 +31,10 @@ function getItem(id) {
 }
 
 function cardClick(id) {
-	//$.get("/item/" + id, function (data) {
-	//	$('#cardModalContent').empty().append(data);
-	//	$('#cardModal').modal('show');
-	//});
+	$.get("/item/" + id, function (data) {
+		$('#cardModalContent').empty().append(data);
+		$('#cardModal').modal('show');
+	});
 }
 
 function highlightMarker(theMarker) {
