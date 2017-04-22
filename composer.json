@@ -17,7 +17,7 @@
 		"symfony/security-bundle": "~3.0",
 		"symfony/security-acl": "~3.0",
 		"swiftmailer/swiftmailer": "^5.4",
-		"ramsey/uuid": "~3.0",
+		"ramsey/uuid": "^3.6",
 		"moontoast/math": "^1.1",
 		"symfony/var-dumper": "^3.2",
 		"sorien/silex-pimple-dumper": "^2.0",
