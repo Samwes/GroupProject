@@ -319,15 +319,15 @@
 			var receivedRequests = $('#receivedRequests>.card').sort(function (a, b) {
       	var contentA = Date.parse( $(a).attr('time'));
       	var contentB = Date.parse( $(b).attr('time'));
-				if (isNaN(contentA)) { contentA = 0; }
-				if (isNaN(contentB)) { contentB = 0; }
+				if (isNaN(contentA)) { contentA = 9007199254740991; }
+				if (isNaN(contentB)) { contentB = 9007199254740991; }
       	return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
    		});
 			var sentRequests = $('#sentRequests>.card').sort(function (a, b) {
       	var contentA = Date.parse( $(a).attr('time'));
       	var contentB = Date.parse( $(b).attr('time'));
-				if (isNaN(contentA)) { contentA = 0; }
-				if (isNaN(contentB)) { contentB = 0; }
+				if (isNaN(contentA)) { contentA = 9007199254740991; }
+				if (isNaN(contentB)) { contentB = 9007199254740991; }
       	return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
    		});
 			$(receivedRequests).each(function(index) {
