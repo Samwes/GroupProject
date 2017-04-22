@@ -200,6 +200,8 @@
 	<!-- REQUEST TAB CHANGING -->
 	<script>
 		$("#sentRequestsBtn").click(function () {
+			$("#sentRequestsBtn").addClass('clicked');
+			$("#receivedRequestsBtn").removeClass('clicked');
 			// Sort Requests
 			sortRequests();
 			// Hide Received Requests
@@ -213,6 +215,8 @@
 		});
 
 		$("#receivedRequestsBtn").click(function () {
+			$("#sentRequestsBtn").removeClass('clicked');
+			$("#receivedRequestsBtn").addClass('clicked');
 			// Sort Requests
 			sortRequests();
 			// Hide Sent Requests
@@ -334,13 +338,22 @@
 		}
 
 		function fillMessages(requestID) {
-			$.getJSON('/account/request/state/' + requestID, function(data) {
+			$.getJSON('/account/request/status/' + requestID, function(data) {
 				if(data['status'] == 0) {
 					// No Response
-					$('#accept-item').removeClass('hidden-xs-up');
-					$('#reject-item').removeClass('hidden-xs-up');
-					$('#accepted-item').addClass('hidden-xs-up');
-					$('#rejected-item').addClass('hidden-xs-up');
+					if($('#sentRequestsBtn').hasClass('clicked')) {
+						// Is A Sent Request
+						$('#accept-item').addClass('hidden-xs-up');
+						$('#reject-item').addClass('hidden-xs-up');
+						$('#accepted-item').addClass('hidden-xs-up');
+						$('#rejected-item').addClass('hidden-xs-up');
+					} else {
+						// Is A Received Request
+						$('#accept-item').removeClass('hidden-xs-up');
+						$('#reject-item').removeClass('hidden-xs-up');
+						$('#accepted-item').addClass('hidden-xs-up');
+						$('#rejected-item').addClass('hidden-xs-up');
+					}
 				} else if (data['status'] == 1) {
 					// Rejected
 					$('#accept-item').addClass('hidden-xs-up');
