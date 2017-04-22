@@ -1,0 +1,68 @@
+{% extends 'layout.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  <title>Sign Up</title>
+{% endblock %}
+
+{% block content %}
+  {{ parent() }}
+  <div class="d-flex">
+	<div class="row">
+	  <div class="Absolute-Center is-Responsive">
+		<div class="col-sm-12 col-md-10 col-md-offset-1 p-2" style="background-color: white;">
+		  <form action="{{ path('register') }}" id="signupForm" method="post" onSubmit="return verify(this);">
+			<h3 style="text-align: center; margin-bottom: 0.5em;">Sign Up</h3>
+			<div class="form-group input-group">
+			  <span class="input-group-addon"><i class="fa fa-pencil" aria-hidden="true"></i></span>
+			  <input class="form-control" type="text" name='email' placeholder="Email"/>
+			</div>
+			<div class="form-group input-group">
+			  <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+			  <input class="form-control" type="text" name='username' placeholder="Username"/>
+			</div>
+			<div class="form-group input-group">
+			  <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
+			  <input class="form-control" type="password" name='password' placeholder="Password"/>
+			</div>
+			<div class="form-group input-group">
+			  <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
+			  <input type="password" name="confirmpassword" class="form-control" placeholder="Confirm Password">
+			</div>
+			<div class="form-group">
+			  <button type="submit" value="submit" class="btn btn-def btn-block">Register</button>
+			</div>
+		  </form>
+		</div>
+	  </div>
+	</div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ parent() }}
+  <!-- CORRECT SIZES OF ELEMENTS -->
+  <script>
+	  function verify(form) {
+		  if (form.elements['password'].value === form.elements['confirmpassword'].value) { return true; }
+		  else {
+			  alert('Passwords don\'t match');
+			  form.elements['password'].focus();
+			  return false;
+		  }
+	  }
+
+	  $(document).ready(function () {
+		  $('#items')
+			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		  $('#map')
+			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+	  });
+	  resize = function () {
+		  $('#items')
+			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+		  $('#map')
+			  .height($(window).height() - $('#search-navbar').height() - $('#categories-navbar').height() - $('#options').height() - 80);
+	  };
+  </script>
+{% endblock %}

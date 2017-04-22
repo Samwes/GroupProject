@@ -1,0 +1,126 @@
+{% extends 'layout.twig' %}
+
+{% block head %}
+  {{ parent() }}
+  <title>Your Items</title>
+{% endblock %}
+
+{% block content %}
+  {{ parent() }}
+  <br>
+  {#todo spacer down middle#}
+  <div class="container">
+	<div class="row">
+	  <ul class="nav nav-tabs">
+		<li class="nav-item">
+		  <a class="nav-link active" href="#current-columns" style="border-radius: 0;" data-toggle="tab" role="tab">Current Items</a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" href="#past-columns" style="border-radius: 0;" data-toggle="tab" role="tab">Past Items</a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" href="#cancelled-columns" style="border-radius: 0;" data-toggle="tab" role="tab">Cancelled Items</a>
+		</li>
+	  </ul>
+
+	  <div class="col-md-4 col-lg-3 hidden-md-down"></div>
+
+	  <form class="form-inline" style="flex: 1 0 auto">
+		<div class="input-group w-100">
+		  <span class="input-group-addon panel-input-symbol border-bottom-0 p-4" style="background-color: #FAFAFA;"><i class="fa fa-search" aria-hidden="true"></i></span>
+		  <input type="text" name="itemsearch" id="user-food-search" class="form-control mb-sm-0 w-100 square-border" style="background-color: #FAFAFA;" placeholder="Search" value="">
+		</div>
+	  </form>
+	</div>
+  </div>
+
+  <br>
+
+  <div class="container">
+	  <div class="row">
+      <div class="tab-content">
+        <div class="tab-pane card-columns active" role="tabpanel" style="column-gap: 0.4rem;" id="current-columns"></div>
+        <div class="tab-pane card-columns" role="tabpanel" style="column-gap: 0.4rem;" id="past-columns"></div>
+        <div class="tab-pane card-columns" role="tabpanel" style="column-gap: 0.4rem;" id="cancelled-columns"></div>
+      </div>
+	 </div>
+  </div>
+{% endblock %}
+
+
+{% block scripts %}
+  {{ parent() }}
+
+  <script>
+    $(document).ready(function() {
+      $.getJSON('/foodItems', function (data) {
+        $.each(data, function (index, value) {
+          var likelihood;
+          $.getJSON('/food/likelihood/'+value['foodid'], function(array) {
+            var toAddTo;
+            if(value['active'] == 0) {
+              toAddTo = "#current-columns";
+            } else if (value['hidden'] == 0) {
+              toAddTo = "#past-columns";
+            } else {
+              toAddTo = "#cancelled-columns";
+            }
+            $(toAddTo).append(
+                '<div class="card" style="">' +
+              		  '<ul class="list-group list-group-flush">' +
+              			'<li class="list-group-item p-0" style="background-color: #f6f6f6; border: 1px solid #e0e0e0; border-radius: 0;">' +
+              			  '<div class="d-flex w-100" style="height: 4.2rem;">' +
+              				'<div class="col-4" style="padding: 0.7rem; margin-left: 1rem;">' +
+              				  '<p style="margin-bottom: 0.1rem; font-size: 0.9em;">POSTED ON</p>' +
+              				  '<p style="margin-bottom: 0.1rem; font-size: 0.9em;">21 March 2017</p>' +
+              				'</div>' +
+              				'<div class="col-4" style="padding: 0.7rem;">' +
+              				  '<p style="margin-bottom: 0.1rem; font-size: 0.9em;">TRADE CHANCE</p>' +
+              				  '<p style="margin-bottom: 0.1rem; font-size: 0.9em;">' + array['likelihood'] + '</p>' +
+              				'</div>' +
+              				'<div class="flex-last ml-auto h-100" style="margin-left: -1rem; display:table">' +
+              				  '<a href="/account/addItem/' + value['foodid'] + '" class="btn btn-option square-border" style="display: table-cell; background-color: #E8E9EC; border-left: 1px solid #dce0e0; width: 6rem;">EDIT</a>' +
+              				'</div>' +
+              			  '</div>' +
+              			'</li>' +
+              			'<li class="list-group-item p-0" style="border: 1px solid #e0e0e0; border-radius: 0;">' +
+              			  '<div class="row">' +
+              				'<div class="col-4">' +
+              				  '<img class="card-img-top mw-100" src="../images/food/' + value['image'] + '" alt="Card image cap">' +
+              				'</div>' +
+              				'<div class="col-8">' +
+              				  '<div class="card-block" style="padding: 0.5rem 0.5rem; margin-bottom: -0.5rem;">' +
+              					'<h5 class="card-title">' + value['name'] + '</h5>' +
+              					'<p style="font-size:0.9em; margin-bottom:5px">' + value['description'] + '</p>' +
+              					'<table class="table table-sm">' +
+              					  '<tbody style="font-size: 0.9em">' +
+              					  '<tr>' +
+              						'<td scope="row pl-0">Expiry Date:' +
+              						'</td>' +
+              						'<td>' + value['expirydate'] + '</td>' +
+              					  '</tr>' +
+              					  '<tr>' +
+              						'<td scope="row pl-0">Amount:' +
+              						'</td>' +
+              						'<td>' + value['amount'] + '</td>' +
+              					  '</tr>' +
+              					  '<tr>' +
+              						'<td scope="row pl-0">Weight:' +
+              						'</td>' +
+              						'<td>' + value['weight'] + 'g</td>' +
+              					  '</tr>' +
+              					  '</tbody>' +
+              					'</table>' +
+              				  '</div>' +
+              				'</div>' +
+              			  '</div>' +
+              			'</li>' +
+              		  '</ul>' +
+              		'</div>'
+            );
+          });
+        });
+      });
+    });
+  </script>
+{% endblock %}

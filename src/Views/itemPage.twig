@@ -1,0 +1,85 @@
+
+  <br>
+
+  <div class="container">
+	<div class="row d-flex flex-nowrap">
+	  <div class="col-md-7">
+		<div class="d-flex flex-column square-border" style="min-height: 50%;">
+		  <div class="d-flex">
+			<ul class="nav nav-tabs nav-fill w-100">
+			  <li class="nav-item active">
+				<a class="nav-link rounded-0" data-toggle="tab" id="imgtab" href="#imgdisplay"><i class="fa fa-camera mr-1" aria-hidden="true"></i> Picture</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link rounded-0" data-toggle="tab" id="maptab" href="#mapdisplay"><i class="fa fa-map-marker mr-1" aria-hidden="true"></i> Map</a>
+			  </li>
+			</ul>
+		  </div>
+		  <!-- IMAGE -->
+		  <div class="tab-content d-flex justify-content-center clearfix p-lg-4 p-sm-2">
+			<div class="tab-pane active" id="imgdisplay">
+			  <div class="d-flex">
+				<img class="img-rounded mx-auto p-lg-4 p-sm-2" src="{{ asset(foodData.image,'food') }}" alt="Card image cap">
+			  </div>
+			</div>
+			<!-- MAP -->
+			<div class="tab-pane w-100" id="mapdisplay">
+			  <div class="d-block flex-auto" id="itemMap" style="border: 1px solid #cccccc; height: 15rem; margin-top: -1px;"></div>
+			</div>
+		  </div>
+		</div>
+
+		<!-- ITEM INFORMATION -->
+		<div class="d-block">
+
+      <br>
+
+		  <h4>{{ foodData.name }}</h4>
+		  <p>{{ foodData.description }}</p>
+		  <br>
+		  <p><strong>Expiry Date: </strong>{{ foodData.expirydate }}</p>
+		  <p><strong>Amount: </strong>{{ foodData.amount }}</p>
+		  <p><strong>Weight: </strong>{{ foodData.weight }}g</p>
+		  <hr>
+		  <p><strong>Location: </strong><p href="#" id="loc-text" data-title="Enter Food Items Location">Geolocation disabled</p></p>
+		  <!--<p><strong>Postage: </strong>No cost, I'll get one of my elves to hand deliver it ♥</p>-->
+      <p><strong>Category: </strong>{{ foodData.category }}</p>
+		</div>
+	  </div>
+
+	  <div class="col-md-5">
+		<div class="card" style="border: 1px solid #cccccc">
+		  <div class="card-block">
+			<h4 class="card-title">Donator Information</h4>
+			<p class="card-text"><strong>Username: </strong>{{ userData.username }}</p>
+			<p class="card-text">
+			  <strong>Rating: </strong><span style="color: gold; font-size:1.5em;">&#8902;&#8902;&#8902;&#8902;&#8902;</span>
+      </p>
+			<hr>
+			<p class="card-text">Make sure to request an item before visiting the messaging page</p>
+			<hr>
+			<div class="d-flex justify-content-around ">
+			  <a class="btn btn-primary square" href="/food/request/{{ foodID }}">Request</a>
+			  <a class="btn btn-secondary square" href="/account/messenger">Message</a>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+  </div>
+
+  <script>
+    modalLoaded({{ foodData.latit}}, {{ foodData.longit }});
+
+    $("#itemmap").one("maploaded", function () {
+  		setToUserData(latitude, longitude, geolocateCallback);
+  	});
+
+    $('#maptab').on('shown.bs.tab', function () {
+      google.maps.event.trigger(map, 'resize');
+    })
+  </script>
+
+  <!--<script async defer
+					src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxJox1KlfQI8Tzo1I4wAMgSUELoga4DX0&libraries=places&callback=initMapElements">
+	</script>-->

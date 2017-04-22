@@ -2,3 +2,9 @@ vendor/
 .env
 .idea/
 ~.*
+/bigobjects.txt
+/allfileshas.txt
+/bigtosmall.txt
+/.stylelintrc
+/pimple.json
+/bower.json

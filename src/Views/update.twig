@@ -1,0 +1,294 @@
+{% extends 'layout.twig' %}
+
+{% block head %}
+	{{ parent() }}
+	<script src="{{ asset('quagga.min.js','javascript') }}"></script>
+	<script src="{{ asset('moment.js','javascript') }}"></script>
+	<script src="{{ asset('bootstrap-datetimepicker.min.js','javascript') }}"></script>
+	<link rel="stylesheet" href="{{ asset('bootstrap-datetimepicker.min.css','css') }}">
+	<link rel="stylesheet" href="{{ asset('bootstrap-slider.min.css','css') }}">
+	<script src="{{ asset('bootstrap-slider.min.js','javascript') }}"></script>
+	<script src="{{ asset('jquery.cropit.js','javascript') }}"></script>
+	<title>Barcode Scanner</title>
+{% endblock %}
+
+{% block content %}
+	{{ parent() }}
+<br>
+
+<div class="container">
+	<h2>Add Item</h2>
+</div>
+
+<br>
+
+<!-- MAIN FORM SECTION -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<!-- INPUT A BARCODE --> {# todo as dropdown#}
+			<h5>Scan A Barcode</h5>
+			<label class="custom-file">
+				<input id="barcode-input" type="file" accept="image/*" capture="camera" class="custom-file-input form-control-file" aria-describedby="fileHelp">
+				<span class="custom-file-control"></span>
+			</label>
+			<small id="fileHelp" class="form-text text-muted">Uses camera on mobile device</small>
+			<br>
+		</div>
+		<div class="col-md-6 d-flex flex-column align-items-center">
+			<h5>Remove Item</h5>
+  		<p style="margin-left: 3rem; margin-right: 3rem;">Once you have removed an item it will no longer be viewable by visitors to the site.</p>
+  		<button class="btn btn-primary square" href="/food/remove/{{ foodID }}">Remove Item</button>
+			<br>
+  	</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<form action="/food/update" onsubmit="return validateForm();" method="post">
+				<!-- FOODID INPUT -->
+				<div class="form-group hidden-xs-up">
+					<input name="foodID" type="number" id="foodIDInput">
+				</div>
+
+				<!-- NAME INPUT -->
+				<div class="form-group">
+					<label for="nameTextInput">Name</label>
+					<input name="name" class="form-control mr-sm-2 square-border" type="text" placeholder="Name" id="nameTextInput">
+				</div>
+
+				<div class="form-group">
+					<label for="categorySelect">Category</label>
+					<!-- Category INPUT -->
+					<select name="category" class="form-control square-border" id="categorySelect">
+						<option>Fresh Food</option>
+						<option>Bakery</option>
+						<option>Food Cupboard</option>
+						<option>Frozen Food</option>
+						<option>Drinks</option>
+						<option>Baby</option>
+						<option>Personal</option>
+						<option>Pet Care</option>
+						<option>Household</option>
+					</select>
+				</div>
+				<p id="tempCategory">Puts Category Here Instead At The Moment</p>
+
+				<!-- EXPIRY INPUT -->
+				<div class="form-group">
+					<label for="dateInput">Expiry Date</label>
+					<input name="expiredate" class="form-control mr-sm-2 square-border" type="date" id="dateInput">
+				</div>
+
+				{#todo firefox date picker#}
+				{#<div class="form-group">#}
+				{#<div class='input-group date' id='datepicker'>#}
+				{#<input type='text' class="form-control" id="expiredate" />#}
+				{#<span class="input-group-addon">#}
+				{#<span class="glyphicon glyphicon-calendar"></span>#}
+				{#</span>#}
+				{#<span class="input-group-addon panel-input-symbol" style="border-bottom: 0; padding: 0; padding-right: 0; background-color: #FAFAFA;"><i class="fa fa-calendar" aria-hidden="true"></i></span>#}
+				{#</div>#}
+				{#</div>#}
+
+				<!-- AMOUNT INPUT -->
+				<div class="form-group">
+					<label for="amountNumberInput">Amount</label>
+					<input name="amount" class="form-control mr-sm-2 square-border" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57;' id="amountNumberInput">
+				</div>
+
+				<!-- WEIGHT INPUT -->
+				<div class="form-group">
+					<label for="weightNumberInput">Weight (g)</label>
+					<input name="weight" class="form-control mr-sm-2 square-border" type="number" onkeypress='return event.charCode >= 48 && event.charCode <= 57;' id="weightNumberInput">
+				</div>
+
+				<!-- DESCRIPTION INPUT -->
+				<div class="form-group">
+					<label for="descriptionTextarea">Description</label>
+					<textarea name="description" class="form-control square-border" id="descriptionTextarea" rows="3"></textarea>
+				</div>
+
+				<!-- HAVE MAP HERE -->
+				<div class="form-group">
+					<label for="loc-input">Location:</label>
+					<a href="#" id="loc-input" data-type="button" data-toggle="modal" data-target="#mapModal" data-title="Enter Food Items Location">Geolocation disabled</a>
+					<input type="hidden" id="latitude" name="latitude"/>
+					<input type="hidden" id="longitude" name="longitude"/>
+				</div>
+
+				<!-- HIDDEN IMAGE TO UPLOAD -->
+				<input type="hidden" id="imagetoupload" name="image"/>
+
+				<!-- SUBMIT BUTTON -->
+				<button type="submit" class="btn btn-primary square">Update Item</button>
+			</form>
+		</div>
+		<div class="col-md-6">
+			<div class="d-flex flex-column align-items-center">
+				<h5>Image Uploader</h5>
+				<p>Click 'Select Image' or Drag and Drop into pane</p>
+
+				<div class="image-editor d-flex flex-column align-items-center">
+					<input type="file" accept="image/*" capture="camera" class="cropit-image-input hidden-xs-up">
+					<button class="btn btn-primary select-image-btn square">Select Image</button>
+					<div class="cropit-preview d-flex mw-100">
+					</div>
+					<div class="row d-flex flex-nowrap align-items-center mw-100">
+						<button class="btn btn-link rotate-ccw p-1"><i class="fa fa-undo" aria-hidden="true"></i></button>
+						<button class="btn btn-link rotate-cw p-1"><i class="fa fa-repeat" aria-hidden="true"></i></button>
+						<i class="fa fa-picture-o fa-sm" aria-hidden="true" style="margin-right: 10px;"></i>
+						<input class="cropit-image-zoom-input" id="ex1" data-slider-id='ex1Slider' type="range" data-slider-min="0" data-slider-max="1" data-slider-step="0.01" data-slider-value="0" data-slider-tooltip="hide" data-slider-handle="custom"/>
+						<i class="fa fa-picture-o fa-lg" aria-hidden="true" style="margin-left: 10px;"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="d-none" id="mapholder">
+		<div id="map" style="border: 1px solid #cccccc; margin-top: -1px; height:100%"></div>
+	</div>
+
+</div>
+
+	<!-- MAP MODAL -->
+	{{ block("modalMap", "map.twig") }}
+	{% endblock %}
+
+	{% block scripts %}
+		{{ parent() }}
+		{{ block("main", "map.twig") }}
+		{{ block("searchableMap", "map.twig") }}
+
+		<script>
+			// Set content to previous data
+			$(document).ready(function() {
+				$('#nameTextInput').val('{{ foodData.name }}');
+				$('#categorySelect').val('{{ foodData.category }}');
+				$('#dateInput').val('{{ foodData.expirydate }}');
+				$('#amountNumberInput').val({{ foodData.amount }});
+				$('#weightNumberInput').val({{ foodData.weight }});
+				$('#descriptionTextarea').val('{{ foodData.description }}');
+				$('#foodIDInput').val({{ foodID }});
+			});
+		</script>
+
+		<script>
+			// ---------------MAP INIT HERE---------------------
+			$("#map").one("maploaded", function () {
+				initSingleSearchMap(updatePlace);
+				initModalMap($('#mapholder'));
+				setToUserData({{ foodData.latit ?? 'null' }},{{ foodData.longit ?? 'null'}}, geolocateCallback);
+			});
+
+			//Translate map to location in future
+
+			function updatePlace(place) {
+				if (!place.geometry) {
+					console.log("Returned place contains no geometry");
+					return;
+				}
+				let loc = {
+					lat: place.geometry.location.lat(),
+					lng: place.geometry.location.lng()
+				};
+				geolocateCallback(loc); //Re geo-locates the address
+			}
+
+		</script>
+
+		<script>
+			function validateForm() {
+				// First set hidden image to be cropped one
+				var imageData = $('.image-editor').cropit('export');
+				$('.hidden-image-data').val(imageData);
+
+				var allValid = true;
+				if ($("#nameTextInput").val() == "") {
+					$("label[for='nameTextInput']").css({"color": "red"});
+					allValid = false;
+				} else {
+					$("label[for='nameTextInput']").css({"color": "black"});
+				}
+
+				// Can't check SELECT
+
+				if ($("#dateInput").val() == "") {
+					$("label[for='dateInput']").css({"color": "red"});
+					allValid = false;
+				} else {
+					$("label[for='dateInput']").css({"color": "black"});
+				}
+
+				if ($("#amountNumberInput").val() == "") {
+					$("label[for='amountNumberInput']").css({"color": "red"});
+					allValid = false;
+				} else {
+					$("label[for='amountNumberInput']").css({"color": "black"});
+				}
+
+				if ($("#weightNumberInput").val() == "") {
+					$("label[for='weightNumberInput']").css({"color": "red"});
+					allValid = false;
+				} else {
+					$("label[for='weightNumberInput']").css({"color": "black"});
+				}
+
+				if ($("#descriptionTextarea").val() == "") {
+					$("label[for='descriptionTextarea']").css({"color": "red"});
+					allValid = false;
+				} else {
+					$("label[for='descriptionTextarea']").css({"color": "black"});
+				}
+
+				//---------Check location is valid?
+
+				if (allValid) {
+					$('#imagetoupload').val($('.image-editor').cropit('export'));
+					let input = $('#loc-input');
+					$('#longitude').val(input.attr("data-longitude"));
+					$('#latitude').val(input.attr("data-latitude"));
+				}
+
+				return allValid;
+			}
+		</script>
+
+		<script>
+			$(function () {
+				$('#ex1').slider({
+					formatter: function (value) {
+						return 'Current value: ' + value;
+					},
+				});
+				$('#ex1Slider').addClass('d-inline-flex');
+				//Calender:
+				//    $('#datepicker').datetimepicker();
+
+				$('.image-editor').cropit({
+					imageState: {
+						src: '{{ asset(foodData.image | default('none.png'),'food') }}',
+					},
+					smallImage: 'stretch',
+				});
+
+				$('.rotate-cw').click(function () {
+					$('.image-editor').cropit('rotateCW');
+				});
+				$('.rotate-ccw').click(function () {
+					$('.image-editor').cropit('rotateCCW');
+				});
+				$('.select-image-btn').click(function () {
+					$('.cropit-image-input').click();
+				});
+//				$('.cropit-preview-image-container').click(function () {
+//					if ($(this).attr('data-default') === 'true') {
+//						$('.cropit-image-input').click();
+//					}
+//				}).attr('data-default', 'true');
+			});
+		</script>
+
+		<script src="{{ asset('barcode.js', 'javascript') }}" type="text/javascript"></script>
+		<script src="{{ asset('scanner.js', 'javascript') }}" type="text/javascript"></script>
+	{% endblock %}
