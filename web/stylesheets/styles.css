@@ -311,6 +311,16 @@ input.export {
 	padding: 0 !important;
 }
 
+/*.tab-content>.tab-pane{*/
+	/*!*display:block;*!*/
+	/*position:absolute;*/
+	/*visibility:hidden;*/
+/*}*/
+
+/*.tab-content>.active{*/
+	/*visibility:visible;*/
+/*}*/
+
 .custom-control-description {
 	color: #55595c;
 }
