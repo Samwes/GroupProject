@@ -511,7 +511,7 @@ class Requests
 		$foodItem = $this->db->getFoodItemByID($foodid);
 		$desirableFoods = ['chocolate', 'steak', 'beef', 'lamb', 'chicken', 'burger', 'cereal', 'pizza', 'pasta' ];
 		$foodName = $foodItem['name'];
-		$probability = rand(40, 70);
+		$probability = 60;
 
 
 		for($i = 0; i<$desirableFoods.length; $i++) {
