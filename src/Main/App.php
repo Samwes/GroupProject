@@ -248,7 +248,7 @@ class App extends Application
 		})->assert('foodID', '\d+');
 
 		$this->get('/food/request/{foodid}', 'rest.handler:addNewRequest')
-			 ->assert('foodid', '\d+')->secure('ROLE_USER');
+			 ->assert('foodid', '\d+')->secure('ROLE_USER')->bind('foodRequest');
 
 		$this->get('/item/{id}', function ($id) {
 			$foodData = $this['DB']->getFoodItemByID($id);

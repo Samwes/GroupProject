@@ -1,6 +1,6 @@
 <div class="d-flex flex-column w-100 p-2">
 	<div class="d-flex no-gutters">
-		<div class="col-7 pr-2 d-flex flex-column square-border">
+		<div class="col-7 mr-2 d-flex flex-column square-border">
 			{#<div class="">#}
 				<ul class="nav nav-tabs nav-fill w-100">
 					<li class="nav-item active">
@@ -10,19 +10,20 @@
 						<a class="nav-link rounded-0" data-toggle="tab" id="maptab" href="#mapdisplay"><i class="fa fa-map-marker mr-1" aria-hidden="true"></i> Map</a>
 					</li>
 				</ul>
-				<!-- IMAGE -->
-				<div class="tab-content d-flex justify-content-center">
+				<div class="tab-content d-flex flex-auto align-items-stretch justify-content-center">
+					<!-- IMAGE -->
 					<div class="tab-pane active p-lg-4 p-sm-2" id="imgdisplay">
 						<img class="img-rounded mx-auto" src="{{ asset(foodData.image,'food') }}" alt="No Image" style="max-width:30vh; max-height:20vh; width:250px; height:250px">
 					</div>
 					<!-- MAP -->
 					<div class="tab-pane w-100" id="mapdisplay">
-						<div class="d-block flex-auto" id="itemMap" style="border: 1px solid #cccccc; height: 15rem; margin-top: -1px;"></div>
+						<div class="d-flex flex-auto h-100" id="itemMap" style="border: 1px solid #cccccc; margin-top: -1px;"></div>
 					</div>
 				</div>
 			</div>
-		{#</div>#}
-		<div class="col-5 pl-2">
+
+
+		<div class="col-5 ml-2">
 			<div class="card" style="border: 1px solid #cccccc">
 				<div class="card-block">
 					<h4 class="card-title">Donator Information</h4>
@@ -34,13 +35,15 @@
 					<p class="card-text">Make sure to request an item before visiting the messaging page</p>
 					<hr>
 					<div class="d-flex justify-content-around ">
-						<a class="btn btn-primary square" href="/food/request/{{ foodID }}">Request</a>
-						<a class="btn btn-secondary square" href="/account/messenger">Message</a>
+						<a class="btn btn-primary square" href="{{ path('foodRequest', {'foodid': foodID} )}}">Request</a>
+						<a class="btn btn-secondary square" href="{{ path('messenger')}}">Message</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+	{# modal is now responsive so do whatever here. No idea what fixed it#}
 
 	<!-- ITEM INFORMATION -->
 	<div class="d-flex flex-column">
