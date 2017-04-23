@@ -513,6 +513,7 @@ class Requests
 		$foodName = $foodItem['name'];
 		$probability = rand(40, 70);
 
+
 		for($i = 0; i<$desirableFoods.length; $i++) {
 			if (strpos( strtolower($foodName), $desirableFoods[i]) !== false) {
 							$probability =  rand ( 60 , 80 );
@@ -523,7 +524,10 @@ class Requests
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
 		// Content Here
+		if (strpos( strtolower($foodName), 'pizza') !== false) {
+						$probability =  90;
 
+				}
 		return new JsonResponse(array("likelihood" => strval($probability) + "%")); // Temporary Return
 	}
 
