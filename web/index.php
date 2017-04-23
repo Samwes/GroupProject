@@ -3,6 +3,10 @@
 define('DEBUG', true);
 define('ROOT', __DIR__);
 
+function cloudinary_url_folder($source, $folder, array $options = []) {
+	return cloudinary_url_internal($folder.'/'.$source, $options);
+}
+
 require ROOT.'/../vendor/autoload.php';
 
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {

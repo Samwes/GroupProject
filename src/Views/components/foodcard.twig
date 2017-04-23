@@ -1,7 +1,7 @@
 <div class="card" style="border: 1px solid #dce0e0;cursor: pointer" data-latit="{{ foodData.latit }}" data-longit="{{ foodData.longit }}" data-id="{{ foodID }}">
   <div class="d-flex">
 	<div class="col-5 align-self-center pr-0 pl-2">
-	  <img class="card-img img-rounded mw-100 " src="{{ asset(foodData.image,'food') }}" alt="No Image">
+	  <img class="card-img img-rounded mw-100 " src="{{ cloudinary_url_folder(foodData.image, 'food')}}" alt="No Image">
 	</div>
 	<div class="col-7 px-0">
 	  <div class="card-block" style="padding: 0.75rem 0.5rem 0;">

@@ -18,7 +18,8 @@
 		"symfony/debug-bundle": "^3.2",
 		"phpunit/phpunit": "^6.1",
 		"symfony/security-bundle": "^3.2",
-		"cloudinary/cloudinary_php": "^1.7"
+		"cloudinary/cloudinary_php": "^1.7",
+		"umpirsky/twig-php-function": "^0.2.0"
 	},
 	"require-dev": {
 		"heroku/heroku-buildpack-php": "*"

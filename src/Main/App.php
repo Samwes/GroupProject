@@ -21,6 +21,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Umpirsky\Twig\Extension\PhpFunctionExtension;
 
 class App extends Application
 {
@@ -51,6 +52,14 @@ class App extends Application
 
 		$this->errorHandling();
 
+		//$api = new \Cloudinary\Api();
+		//$result = $api->resource("food/bdk5uhvjuookqcqkdyzp");
+		//die(dump($result));
+		//die(dump(cloudinary_url_folder('k0vx5tenfq9ugtzmcjya','food')));
+
+		//$result = \Cloudinary\Uploader::explicit("food/ede4681c3ebe4753af067e26a4dacc45", $options = array('invalidate' => true, "type" => "upload" ));
+		//die(dump($result));
+
 		// Register web profiler if in debug mode
 		if ($this['debug']) {
 			$this->register(new VarDumperServiceProvider());
@@ -77,6 +86,13 @@ class App extends Application
 				),
 		));
 
+		$this->extend('twig', function($twig) {
+			$extension = new PhpFunctionExtension(array('cloudinary_url_folder'));
+			//$extension->allowFunction('cloudinary_url');
+			$twig->addExtension($extension);
+			return $twig;
+		});
+
 		// Registering service controllers
 		$this->register(new ServiceControllerServiceProvider());
 
@@ -99,7 +115,6 @@ class App extends Application
 			'assets.named_packages' => array(
 				'css'        => array('version' => 'css3', 'base_path' => 'stylesheets/'),
 				'images'     => array('base_urls' => array('https://res.cloudinary.com/hxovetfvu/misc')),
-				'food'       => array('base_urls' => array('https://res.cloudinary.com/hxovetfvu/food')),
 				'users'      => array('base_urls' => array('https://res.cloudinary.com/hxovetfvu/people')),
 				'javascript' => array('base_path' => 'js/'),
 			),
@@ -197,6 +212,10 @@ class App extends Application
 			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $fooddata, 'foodID' => $foodID));
 		})->assert('foodID', '\d+')->bind('update')->secure('ROLE_USER');
 
+		$account->post('/getItem', function(Request $request){
+			return $this['twig']->render('aUserItem.twig', array('request' => $request));
+		})->bind('getItem')->secure('ROLE_USER');
+
 		$account->get('/userprofile', function () {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			return $this['twig']->render('userProfile.twig', array('userData' => $userdata));
@@ -235,7 +254,7 @@ class App extends Application
 			  ->assert('requestid', '\d+')
 			  ->secure('ROLE_USER');
 
-		$account->get('user/notifications', 'rest.handlser:getNumberNotifications')
+		$account->get('/user/notifications', 'rest.handlser:getNumberNotifications')
 			  ->secure('ROLE_USER');
 
 		$this->mount('/account', $account);

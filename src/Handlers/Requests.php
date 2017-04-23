@@ -164,12 +164,10 @@ class Requests
 				//plllllllease don't upload new images without dealing with the old ones
 				if ($oldfilename === 'none.png') {
 					$result = Uploader::upload($imageuri, ['folder' => 'food']);
-					$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
 				} else {
-					//pathinfo($result['public_id'], PATHINFO_FILENAME);
-					$result = Uploader::upload($imageuri, array('public_id' => "food/$oldfilename", 'overwrite' => true, 'invalidate' => true));
-					$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
+					$result = Uploader::upload($imageuri, array('folder' => 'food', 'public_id' => $oldfilename, 'overwrite' => true, 'invalidate' => true));
 				}
+				$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
 			}
 
 			if ($this->db->updateFoodItem($foodID, $name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {
@@ -305,7 +303,7 @@ class Requests
 		return new JsonResponse($toEncode);
 	}
 
-	public function searchLocation(Request $request, App $app, $minLat, $maxLat, $minLong, $maxLong, $category, $search, $minAmount, $maxAmount, $minWeight, $maxWeight, $start, $count){
+	public function searchLocation(Request $request, App $app, $minLat, $maxLat, $minLong, $maxLong, $category, $search, $minAmount, $maxAmount, $minWeight, $maxWeight, $start, $count) {
 		$toEncode = $this->db->searchLocation($minLat, $maxLat, $minLong, $maxLong, $category, $search, $minAmount, $maxAmount, $minWeight, $maxWeight, $start, $count);
 		if ($toEncode === null) {
 			$toEncode = array('error' => 'failed');
@@ -516,22 +514,17 @@ class Requests
 		$foodName = $foodItem['name'];
 		$probability = 60;
 
-
-
-
 		foreach ($desirableFoods as $food) {
-    		if (strpos( strtolower($foodName), $food) !== false) {
-			$probability =  80;
-							
-
-		}
+			if (strpos(strtolower($foodName), $food) !== false) {
+				$probability = 80;
+			}
 		}
 
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
 		// Content Here
 
-		return new JsonResponse(array("likelihood" => strval($probability) + "%")); // Temporary Return
+		return new JsonResponse(array("likelihood" => (string) $probability."%")); // Temporary Return
 	}
 
 	public function wastageAnalysis(Request $request, App $app) {
@@ -550,8 +543,7 @@ class Requests
 
 			$categories = array();
 
-
-			for($i = 0; $i<$foodItems.length; $i++) {
+			for ($i = 0; $i < $foodItems.length; $i++) {
 				$currentCategory = foodItems[i]['category'];
 				if (!(in_array($currentCategory, $categories))) {
 					$categories[$currentCategory] = 1;
@@ -568,7 +560,6 @@ class Requests
 			$keys = array_keys($categories);
 			$mostWasted = $categories[$keys[0]] = "";
 
-
 			//Have they wasted enough to warrant telling them to stop wasting them
 
 			if ($keys[0] > 5) {
@@ -577,13 +568,9 @@ class Requests
 				$response = "You haven't had to give away too many items, well done.";
 			}
 
-
 			// Content Here
 
-			return new JsonResponse(array("recommendation" => $response ));
-
-
-
+			return new JsonResponse(array("recommendation" => $response));
 
 		}
 	}
