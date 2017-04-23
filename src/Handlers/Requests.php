@@ -167,7 +167,7 @@ class Requests
 					$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
 				} else {
 					//pathinfo($result['public_id'], PATHINFO_FILENAME);
-					$result = Uploader::upload($imageuri, array('public_id' => "food/$oldfilename", 'overwrite' => true));
+					$result = Uploader::upload($imageuri, array('public_id' => "food/$oldfilename", 'overwrite' => true, 'invalidate' => true));
 					$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
 				}
 			}
