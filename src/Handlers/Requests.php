@@ -509,11 +509,29 @@ class Requests
 
 	public function foodLikelihood(Request $request, App $app, $foodid) {
 		$foodItem = $this->db->getFoodItemByID($foodid);
+		$token = $app['security.token_storage']->getToken();
+		$foodName = $foodItem['name'];
+		$highestProbability = 50;
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+			$foodItems = $this->db->getGivenAwayFoods($userID);
+
+			for($i = 0; $i<$foodItems.length; $i++) {
+				$currentItem = foodItems[i]['name'];
+
+				$result = strcasecmp ( $currentItem , $foodName);
+				if ($result == 0) {
+					$highestProbability = 90;
+				}
+
+			}
+
+		}
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
 		// Content Here
 
-		return new JsonResponse(array("likelihood" => '80%')); // Temporary Return
+		return new JsonResponse(array("likelihood" => strval($highestProbability) + '%')); // Temporary Return
 	}
 
 	public function wastageAnalysis(Request $request, App $app) {
