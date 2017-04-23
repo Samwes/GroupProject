@@ -235,6 +235,9 @@ class App extends Application
 			  ->assert('requestid', '\d+')
 			  ->secure('IS_AUTHENTICATED_FULLY');
 
+		$account->get('user/notifications', 'rest.handlser:getNumberNotifications')
+			  ->secure('IS_AUTHENTICATED_FULLY');
+
 		$this->mount('/account', $account);
 	}
 

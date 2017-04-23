@@ -429,6 +429,17 @@ class Requests
 		return new JsonResponse($toEncode);
 	}
 
+	public function getNumberNotifications(Request $request, App $app) {
+		$token = $app['security.token_storage']->getToken();
+		$toEncode = array('error' => 'error');
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+			$toEncode = $this->db->...($foodid, $userID);
+		}
+
+		return new JsonResponse($toEncode);
+	}
+
 	public function removeFoodItem(Request $request, App $app, $foodid) {
 		$token = $app['security.token_storage']->getToken();
 		$toEncode = array('error' => 'foodID or userID incorrect');

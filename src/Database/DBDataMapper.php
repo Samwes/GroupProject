@@ -1005,6 +1005,29 @@ class DBDataMapper
 		return $result;
 	}
 
+	public function getGivenAwayFoods($userid) {
+		$query = 'SELECT `itemtable`.`foodid`
+								FROM `itemtable`
+								WHERE `itemtable`.`userid` = :userid
+								AND `itemtable`.`active` = 0';
+		$result = null;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':userid' => $userid,
+						   ));
+
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Getting requests by ID failed: '.$e->getMessage();
+			}
+		}
+		$stmt = null;
+		return $result;
+	}
+
 	public function addVerification($userid) {
 		// Add verification code to database in relation to userid
     }
