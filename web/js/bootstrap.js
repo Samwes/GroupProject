@@ -2024,7 +2024,7 @@ var Modal = function ($) {
 
     Modal.prototype._handleUpdate = function _handleUpdate() {
       this._adjustDialog();
-    };https:
+    };
 
     Modal.prototype._adjustDialog = function _adjustDialog() {
       var isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight;
