@@ -432,10 +432,10 @@ class Requests
 	public function getNumberNotifications(Request $request, App $app) {
 		$token = $app['security.token_storage']->getToken();
 		$toEncode = array('error' => 'error');
-		if (null !== $token) {
-			$userID = $token->getUser()->getID();
-			$toEncode = $this->db->...($foodid, $userID);
-		}
+		//if (null !== $token) {
+		//	$userID = $token->getUser()->getID();
+		//	$toEncode = $this->db->($foodid, $userID);
+		//}
 
 		return new JsonResponse($toEncode);
 	}

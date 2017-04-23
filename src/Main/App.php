@@ -225,18 +225,18 @@ class App extends Application
 		$account->post('/request/accept', 'rest.handler:acceptRequest')
 				->assert('requestid', '\d+')
 				->assert('foodid', '\d+')
-				->secure('IS_AUTHENTICATED_FULLY');
+				->secure('ROLE_USER');
 
 		$account->post('/request/reject', 'rest.handler:rejectRequest')
 				->assert('requestid', '\d+')
-				->secure('IS_AUTHENTICATED_FULLY');
+				->secure('ROLE_USER');
 
 		$account->get('/request/status/{requestid}', 'rest.handler:requestStatus')
 			  ->assert('requestid', '\d+')
-			  ->secure('IS_AUTHENTICATED_FULLY');
+			  ->secure('ROLE_USER');
 
 		$account->get('user/notifications', 'rest.handlser:getNumberNotifications')
-			  ->secure('IS_AUTHENTICATED_FULLY');
+			  ->secure('ROLE_USER');
 
 		$this->mount('/account', $account);
 	}
