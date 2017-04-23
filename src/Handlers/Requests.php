@@ -512,7 +512,7 @@ class Requests
 
 	public function foodLikelihood(Request $request, App $app, $foodid) {
 		$foodItem = $this->db->getFoodItemByID($foodid);
-		$desirableFoods = ['chocolate', 'steak', 'beef', 'lamb', 'chicken', 'burger', 'cereal', 'pizza', 'pasta' ];
+		$desirableFoods = ['chocolate', 'steak', 'beef', 'lamb', 'chicken', 'burger', 'cereal', 'pizza', 'pasta'];
 		$foodName = $foodItem['name'];
 		$probability = 60;
 
@@ -520,7 +520,7 @@ class Requests
 		for($i = 0; i<$desirableFoods.length; $i++) {
 			if (strpos( strtolower($foodName), $desirableFoods[i]) !== false) {
 							$probability =  rand ( 60 , 80 );
-							break;
+							
 
 					}
 		}
