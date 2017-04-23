@@ -1,28 +1,29 @@
 function getItem(id) {
 	if (typeof cardResults[id] === "undefined") {
 		$.get("/food/html/" + id, function (html) {
-			//$("#item-cards").append(html);
-			let card = $($.parseHTML(html)).appendTo('#item-cards');
-			cardResults[id] = card;
+			if (typeof cardResults[id] === "undefined") {
+				let card = $($.parseHTML(html)).appendTo('#item-cards');
+				cardResults[id] = card;
 
-			let cardMarker = newMarker(Number(card.attr("data-latit")), Number(card.attr('data-longit')));
-			cardMarker.id = id;
-			//cardMarker.setClickable(false);
-			cardMarker.addListener('mouseover', function () {
-				highlightCard(this.id);
-			});
-			cardMarker.addListener('mouseout', resetCardHighlight);
+				let cardMarker = newMarker(Number(card.attr("data-latit")), Number(card.attr('data-longit')));
+				cardMarker.id = id;
+				//cardMarker.setClickable(false);
+				cardMarker.addListener('mouseover', function () {
+					highlightCard(this.id);
+				});
+				cardMarker.addListener('mouseout', resetCardHighlight);
 
-			card.mouseover(function () {
-				highlightMarker(this.marker);
-			});
-			card.mouseout(resetMarkerHighlight);
+				card.mouseover(function () {
+					highlightMarker(this.marker);
+				});
+				card.mouseout(resetMarkerHighlight);
 
-			card[0].marker = cardMarker;
-			card[0].id = id;
-			card.click(function () {
-				cardClick(this.id);
-			});
+				card[0].marker = cardMarker;
+				card[0].id = id;
+				card.click(function () {
+					cardClick(this.id);
+				});
+			}
 		});
 	} else {
 		$("#item-cards").append(cardResults[id]);
@@ -38,20 +39,19 @@ function cardClick(id) {
 }
 
 function modalLoaded(latitude, longitude) {
-
 	itemMap = null;
 
 	// 67.9222° N, 26.5046° E
 	var location = {lat: latitude, lng: longitude};
 	itemMap = new google.maps.Map(document.getElementById('itemMap'), {
-	 zoom            : 10,
-	 center          : location,
-	 disableDefaultUI: true,
+		zoom            : 10,
+		center          : location,
+		disableDefaultUI: true,
 	});
 
 	var marker = new google.maps.Marker({
-	 position: location,
-	 map     : itemMap,
+		position: location,
+		map     : itemMap,
 	});
 
 	let geocoder = new google.maps.Geocoder();

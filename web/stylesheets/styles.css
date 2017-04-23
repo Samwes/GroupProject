@@ -311,6 +311,10 @@ input.export {
 	padding: 0 !important;
 }
 
+.flexModal.show{
+	display: flex !important;
+}
+
 .custom-control-description {
 	color: #55595c;
 }

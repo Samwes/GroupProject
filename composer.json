@@ -6,25 +6,19 @@
 		"symfony/twig-bridge": "~3.0",
 		"roave/security-advisories": "dev-master",
 		"symfony/security": "~3.0",
-		"symfony/form": "~3.0",
 		"symfony/validator": "~3.0",
 		"symfony/asset": "~3.0",
 		"silex/web-profiler": "^2.0",
 		"symfony/monolog-bridge": "~3.0",
 		"symfony/console": "~3.0",
 		"symfony/config": "~3.0",
-		"symfony/yaml": "~3.0",
-		"symfony/security-bundle": "~3.0",
-		"symfony/security-acl": "~3.0",
 		"swiftmailer/swiftmailer": "^5.4",
-		"ramsey/uuid": "~3.0",
+		"ramsey/uuid": "^3.6",
 		"moontoast/math": "^1.1",
 		"symfony/var-dumper": "^3.2",
 		"sorien/silex-pimple-dumper": "^2.0",
-		"curl/curl": "^1.6",
 		"symfony/debug-bundle": "^3.2",
-		"symfony/dependency-injection": "^3.2",
-		"phpunit/phpunit": "6.1.0"
+		"phpunit/phpunit": "^6.1"
 	},
 	"require-dev": {
 		"heroku/heroku-buildpack-php": "*"

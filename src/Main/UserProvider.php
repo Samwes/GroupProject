@@ -36,6 +36,6 @@ class UserProvider implements UserProviderInterface
 	}
 
 	public function supportsClass($class) {
-		return $class === '\Main\User';
+		return $class === 'Main\User';
 	}
 }
