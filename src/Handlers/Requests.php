@@ -516,10 +516,16 @@ class Requests
 
 		for($i = 0; i<$desirableFoods.length; $i++) {
 			if (strpos( strtolower($foodName), $desirableFoods[i]) !== false) {
-							$probability =  rand ( 60 , 80 );
+							$probability =  99;
 							
 
 					}
+		}
+
+		if (strpos( strtolower($foodName), 'pizza') !== false) {
+			$probability =  99;
+							
+
 		}
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
