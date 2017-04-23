@@ -84,7 +84,7 @@ class Requests
 
 		if ($this->db->addNewUser($username, $encoded, null, $email)) {
 			$user = $app['user.provider']->loadUserByUsername($username);
-			$token = new UsernamePasswordToken($username, null, 'main', $user->getRoles());
+			$token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
 			$app['security.token_storage']->setToken($token);  //note doesnt work?
 			$app['session']->set('_security_main', serialize($token));
 
@@ -93,7 +93,7 @@ class Requests
 			return new RedirectResponse($app->path('user'));
 		}
 
-		throw new RuntimeException(sprintf('Cant create user %s', $username)); //note just database error or?
+		throw new \RuntimeException(sprintf('Cant create user %s', $username)); //note just database error or?
 	}
 
 	public function sendVerifyToken(App $app, $userid) {
@@ -114,7 +114,7 @@ class Requests
 
 				return new Response('Token Sent!', 201);
 			}
-			throw new RuntimeException(sprintf('Cant find email for user %s', $userid)); //note just database error or?
+			throw new \RuntimeException(sprintf('Cant find email for user %s', $userid)); //note just database error or?
 		}
 	}
 
