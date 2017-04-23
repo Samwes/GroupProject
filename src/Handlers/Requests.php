@@ -4,7 +4,7 @@ namespace Handler;
 
 use Database\DBDataMapper;
 use Main\App;
-use Ramsey\Uuid\Uuid;
+use Cloudinary\Uploader;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -189,7 +189,6 @@ class Requests
 			$amount = $request->get('amount');
 			$weight = $request->get('weight');
 			$imageuri = $request->get('image');
-			//            $imagedir = "none";//note ???
 
 			//Check Vars
 			if (!is_numeric($userID)) {
@@ -216,8 +215,7 @@ class Requests
 			} else {
 				$uriPhp = 'data://'.substr($imageuri, 5);
 				$binary = file_get_contents($uriPhp);
-				$filename = Uuid::uuid4()->getHex().'.png';
-				file_put_contents('images/food/'.$filename, $binary);
+				$result = Uploader::upload($binary, array("folder"=>"food"));
 			}
 
 			if ($this->db->addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {

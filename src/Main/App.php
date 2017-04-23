@@ -98,9 +98,9 @@ class App extends Application
 			'assets.version_format' => '%s?version=%s',
 			'assets.named_packages' => array(
 				'css'        => array('version' => 'css3', 'base_path' => 'stylesheets/'),
-				'images'     => array('base_urls' => array('http://res.cloudinary.com/hxovetfvu/misc')),
-				'food'       => array('base_urls' => array('http://res.cloudinary.com/hxovetfvu/food')),
-				'users'      => array('base_urls' => array('http://res.cloudinary.com/hxovetfvu/people')),
+				'images'     => array('base_urls' => array('https://res.cloudinary.com/hxovetfvu/misc')),
+				'food'       => array('base_urls' => array('https://res.cloudinary.com/hxovetfvu/food')),
+				'users'      => array('base_urls' => array('https://res.cloudinary.com/hxovetfvu/people')),
 				'javascript' => array('base_path' => 'js/'),
 			),
 		));

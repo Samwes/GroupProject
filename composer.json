@@ -16,7 +16,9 @@
 		"symfony/var-dumper": "^3.2",
 		"sorien/silex-pimple-dumper": "^2.0",
 		"symfony/debug-bundle": "^3.2",
-		"phpunit/phpunit": "^6.1"
+		"phpunit/phpunit": "^6.1",
+		"symfony/security-bundle": "^3.2",
+		"cloudinary/cloudinary_php": "^1.7"
 	},
 	"require-dev": {
 		"heroku/heroku-buildpack-php": "*"
