@@ -50,6 +50,15 @@ class App extends Application
 		$this->restAPI();
 
 		$this->errorHandling();
+
+		// Register web profiler if in debug mode
+		if ($this['debug']) {
+			$this->register(new VarDumperServiceProvider());
+			$this->register(new WebProfilerServiceProvider(), array(
+				'profiler.cache_dir'    => ROOT.'/../cache/profiler',
+				'profiler.mount_prefix' => '/_profiler', // this is the default
+			));
+		}
 	}
 
 	private function registerServices() {
@@ -106,15 +115,6 @@ class App extends Application
 				'auth_mode'  => 'cram-md5',
 			),
 		));
-
-		// Register web profiler if in debug mode
-		if ($this['debug']) {
-			$this->register(new VarDumperServiceProvider());
-			$this->register(new WebProfilerServiceProvider(), array(
-				'profiler.cache_dir'    => ROOT.'/../cache/profiler',
-				'profiler.mount_prefix' => '/_profiler', // this is the default
-			));
-		}
 
 		// Register DB provider service
 		$this['DB'] = function () {
