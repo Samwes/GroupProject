@@ -4,7 +4,7 @@ namespace Handler;
 
 use Database\DBDataMapper;
 use Main\App;
-use Ramsey\Uuid\Uuid;
+use Cloudinary\Uploader;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -134,6 +134,7 @@ class Requests
 			$amount = $request->get('amount');
 			$weight = $request->get('weight');
 			$imageuri = $request->get('image');
+			$oldfilename = $request->get('filename');
 
 			//Check Vars
 			if (!is_numeric($userID)) {
@@ -157,13 +158,18 @@ class Requests
 			} elseif (!is_numeric($weight)) {
 				die(json_encode(array("error" => "weight incorrectly defined")));
 			}
-			if ($imageuri === "") {
+			if ($imageuri === '') {
 				$filename = null;
 			} else {
-				$uriPhp = 'data://'.substr($imageuri, 5);
-				$binary = file_get_contents($uriPhp);
-				$filename = Uuid::uuid4()->getHex().'.png';
-				file_put_contents('images/food/'.$filename, $binary);
+				//plllllllease don't upload new images without dealing with the old ones
+				if ($oldfilename === 'none.png') {
+					$result = Uploader::upload($imageuri, ['folder' => 'food']);
+					$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
+				} else {
+					//pathinfo($result['public_id'], PATHINFO_FILENAME);
+					$result = Uploader::upload($imageuri, array('public_id' => "food/$oldfilename", 'overwrite' => true, 'invalidate' => true));
+					$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
+				}
 			}
 
 			if ($this->db->updateFoodItem($foodID, $name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {
@@ -189,35 +195,32 @@ class Requests
 			$amount = $request->get('amount');
 			$weight = $request->get('weight');
 			$imageuri = $request->get('image');
-			//            $imagedir = "none";//note ???
 
 			//Check Vars
 			if (!is_numeric($userID)) {
-				die(json_encode(array("error" => "userID incorrectly defined")));
+				die(json_encode(array('error' => 'userID incorrectly defined')));
 			} elseif (!is_string($name)) {
-				die(json_encode(array("error" => "name incorrectly defined")));
+				die(json_encode(array('error' => 'name incorrectly defined')));
 			} elseif (!is_string($expirDate)) {
-				die(json_encode(array("error" => "expirey incorrectly defined")));
+				die(json_encode(array('error' => 'expirey incorrectly defined')));
 			} elseif (!is_string($category)) {
-				die(json_encode(array("error" => "category incorrectly defined")));
+				die(json_encode(array('error' => 'category incorrectly defined')));
 			} elseif (!is_string($desc)) {
-				die(json_encode(array("error" => "description incorrectly defined")));
+				die(json_encode(array('error' => 'description incorrectly defined')));
 			} elseif (!is_numeric($lat)) {
-				die(json_encode(array("error" => "latitude incorrectly defined")));
+				die(json_encode(array('error' => 'latitude incorrectly defined')));
 			} elseif (!is_numeric($long)) {
-				die(json_encode(array("error" => "longitude incorrectly defined")));
+				die(json_encode(array('error' => 'longitude incorrectly defined')));
 			} elseif (!is_numeric($amount)) {
-				die(json_encode(array("error" => "amount incorrectly defined")));
+				die(json_encode(array('error' => 'amount incorrectly defined')));
 			} elseif (!is_numeric($weight)) {
-				die(json_encode(array("error" => "weight incorrectly defined")));
+				die(json_encode(array('error' => 'weight incorrectly defined')));
 			}
-			if ($imageuri === "") {
+			if ($imageuri === '') {
 				$filename = null;
 			} else {
-				$uriPhp = 'data://'.substr($imageuri, 5);
-				$binary = file_get_contents($uriPhp);
-				$filename = Uuid::uuid4()->getHex().'.png';
-				file_put_contents('images/food/'.$filename, $binary);
+				$result = Uploader::upload($imageuri, ['folder' => 'food']);
+				$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
 			}
 
 			if ($this->db->addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {
