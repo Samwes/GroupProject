@@ -509,11 +509,22 @@ class Requests
 
 	public function foodLikelihood(Request $request, App $app, $foodid) {
 		$foodItem = $this->db->getFoodItemByID($foodid);
+		$desirableFoods = ['chocolate', 'steak', 'beef', 'lamb', 'chicken', 'burger', 'cereal', 'pizza', 'pasta' ];
+		$foodName = $foodItem['name'];
+		$probability = rand(40, 70);
+
+		for($i = 0; i<$desirableFoods.length; $i++) {
+			if (strpos( strtolower($foodName), $desirableFoods[i]) !== false) {
+							$probability =  rand ( 60 , 80 );
+							break;
+
+					}
+		}
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
 		// Content Here
 
-		return new JsonResponse(array("likelihood" => '80%')); // Temporary Return
+		return new JsonResponse(array("likelihood" => strval($probability) + "%")); // Temporary Return
 	}
 
 	public function wastageAnalysis(Request $request, App $app) {
