@@ -57,22 +57,18 @@
         $.each(data, function (index, value) {
           var likelihood;
           $.getJSON('/food/likelihood/' + value['foodid'], function(array) {
+            let toAddTo;
 						value.likelihood = array.likelihood;
             if(value['active'] == 0) {
-							$.post("{{path('getItem')}}", $.param(value), function (html) {
-								$("#current-columns").append($.parseHTML(html));
-							});
+              toAddTo = "#current-columns";
             } else if (value['hidden'] == 0) {
-							$.post("{{path('getItem')}}", $.param(value), function (html) {
-								$("#past-columns").append($.parseHTML(html));
-							});
+              toAddTo = "#past-columns";
             } else {
-							$.post("{{path('getItem')}}", $.param(value), function (html) {
-								$("#cancelled-columns").append($.parseHTML(html));
-							});
+              toAddTo = "#cancelled-columns";
             }
-
-
+						$.post("{{path('getItem')}}", $.param(value), function (html) {
+							$(toAddTo).append($.parseHTML(html));
+						});
           });
         });
       });
