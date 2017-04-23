@@ -524,10 +524,7 @@ class Requests
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
 		// Content Here
-		if (strpos( strtolower($foodName), 'pizza') !== false) {
-						$probability =  90;
 
-				}
 		return new JsonResponse(array("likelihood" => strval($probability) + "%")); // Temporary Return
 	}
 
