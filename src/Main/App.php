@@ -339,7 +339,7 @@ class App extends Application
 		//todo registration failure page
 		$this->post('/register/user', 'rest.handler:registerNewUser')
 			 ->requireHttps()->bind('register')
-			 ->assert('username', '^[a-zA-Z0-9_]+$')
+			 ->assert('username', '^[a-zA-Z0-9_]+$') // fixme this needed?
 			 ->assert('password', '^[\w]+$');
 
 		$this->post('/messenger/message', 'rest.handler:messageUser')
