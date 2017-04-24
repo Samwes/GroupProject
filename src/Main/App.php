@@ -86,9 +86,8 @@ class App extends Application
 				),
 		));
 
-		$this->extend('twig', function($twig) {
+		$this->extend('twig', function ($twig) {
 			$extension = new PhpFunctionExtension(array('cloudinary_url_folder'));
-			//$extension->allowFunction('cloudinary_url');
 			$twig->addExtension($extension);
 			return $twig;
 		});
@@ -212,7 +211,7 @@ class App extends Application
 			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $fooddata, 'foodID' => $foodID));
 		})->assert('foodID', '\d+')->bind('update')->secure('ROLE_USER');
 
-		$account->post('/getItem', function(Request $request){
+		$account->post('/getItem', function (Request $request) {
 			return $this['twig']->render('aUserItem.twig', array('request' => $request));
 		})->bind('getItem')->secure('ROLE_USER');
 
@@ -251,11 +250,11 @@ class App extends Application
 				->secure('ROLE_USER');
 
 		$account->get('/request/status/{requestid}', 'rest.handler:requestStatus')
-			  ->assert('requestid', '\d+')
-			  ->secure('ROLE_USER');
+				->assert('requestid', '\d+')
+				->secure('ROLE_USER');
 
 		$account->get('/user/notifications', 'rest.handler:getNumberNotifications')
-			  ->secure('ROLE_USER');
+				->secure('ROLE_USER');
 
 		$account->post('/user/review', 'rest.handler:reviewUser')
 				->secure('ROLE_USER');
@@ -345,11 +344,15 @@ class App extends Application
 		$this->get('/messenger/userid', 'rest.handler:userID')
 			 ->secure('ROLE_USER');
 
-		$this->get('/messenger/userfood/{userid}/{foodid}/{requestid}', 'rest.handler:getUserFoodInfo')
+		$this->post('/messenger/userfood/{userid}/{foodid}/{requestid}', function ($userid, $foodid, $requestid) {
+			$userFoodInfo = $this['DB']->getUserFoodInfo($userid, $foodid);
+			$numUnseenMessages = $this['DB']->getNumberUnseenMessages($requestid);
+			return $this['twig']->render('messengerCard.twig', array('array' => $userFoodInfo+$numUnseenMessages));
+		})
 			 ->assert('userid', '\d+')
 			 ->assert('foodid', '\d+')
-			 ->assert('requestid', '\d+') // Should probably by under account
-			 ->secure('ROLE_USER');
+			 ->assert('requestid', '\d+')
+			 ->secure('ROLE_USER')->bind('messengerfood');
 
 		$this->get('/user/analysis', 'rest.handler:wastageAnalysis')
 			 ->secure('ROLE_USER');
@@ -367,7 +370,7 @@ class App extends Application
 		//todo registration failure page
 		$this->post('/register/user', 'rest.handler:registerNewUser')
 			 ->requireHttps()->bind('register')
-			 ->assert('username', '^[a-zA-Z0-9_]+$') // fixme this needed?
+			 ->assert('username', '^[a-zA-Z0-9_]+$')// fixme this needed?
 			 ->assert('password', '^[\w]+$');
 
 		$this->post('/messenger/message', 'rest.handler:messageUser')

@@ -841,7 +841,7 @@ class DBDataMapper
 		$quantityQuery = '`amount` <= :maxAmount AND `amount` >= :minAmount';
 		$weightQuery = '`weight` <= :maxWeight AND `weight` >= :minWeight';
 
-		$additionals = array();
+		$additionals = array('`active` = 0', '`hidden` = 0');
 		$r = 6371;
 		$params = array(':R' => $r);
 		$subquery = '`itemtable`';
@@ -954,7 +954,7 @@ class DBDataMapper
 
 	public function getUserFoodInfo($userid, $foodid) {
 		// fix to get message corresponding to time
-		$query = 'SELECT DISTINCT `usertable`.`username`, MAX(`messagetable`.`time`), `messagetable`.`message`, `itemtable`.`name`, `usertable`.`picture`
+		$query = 'SELECT DISTINCT `usertable`.`username`, MAX(`messagetable`.`time`) as `lasttime`, `messagetable`.`message`, `itemtable`.`name`, `usertable`.`picture`
 				FROM `usertable`, `messagetable`, `itemtable`, `requestmessagetable`, `requesttable`
 				WHERE `usertable`.`userid` = :uid AND `itemtable`.`foodid` = :fid AND
 				`messagetable`.`messageid` = `requestmessagetable`.`messageid` AND
@@ -982,7 +982,7 @@ class DBDataMapper
 	}
 
 	public function getNumberUnseenMessages($requestid) {
-		$query = 'SELECT SUM(`user1seen`), SUM(`user2seen`)
+		$query = 'SELECT SUM(`user1seen`) as `user1seen`, SUM(`user2seen`) as `user2seen`
 				FROM `messagetable`, `requestmessagetable`, `requesttable`
 				WHERE `messagetable`.`messageid` = `requestmessagetable`.`messageid` AND
 				`requestmessagetable`.`requestid` = `requesttable`.`requestid` AND

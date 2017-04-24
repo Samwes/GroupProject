@@ -280,25 +280,9 @@
 				// data is all that users requests
 				$.each(data, function (index, value) {
 					// value is requestid, foodid, accepted
-					$.getJSON('/messenger/userfood/' + value['userid'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
-						$("#sentRequests").append(
-							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="sent" time="' + array['MAX(`messagetable`.`time`)'] + '" foodid="' + value['foodid'] + '">' +
-							'<div class="row">' +
-							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
-							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
-							'</div>' +
-							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
-							'<div class="card-block" style="padding: 0.5rem;">' +
-							'<small class="text-muted float-right" style="margin-right:  1rem;">' + (array['MAX(`messagetable`.`time`)'] ? array['MAX(`messagetable`.`time`)'] : "") + '</small>' +
-							'<p class="card-text">' + array['username'] + '</p>' +
-							'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + array['name'] + '</p>' +
-							'<small class="text-muted">' + (array['message'] ? array['message'] : "") + '</small>' +
-							'</div>' +
-							'</div>' +
-							'</div>' +
-							'</div>'
-						);
-					})
+					$.post('/messenger/userfood/' + value['requester'] + '/' + value['foodid'] + '/' + value['requestid'], $.param(value), function (html) {
+						$("#receivedRequests").append($.parseHTML(html));
+					});
 				});
 			});
 			callback();
@@ -310,24 +294,8 @@
 				// data is all that users requests
 				$.each(data, function (index, value) {
 					// value is requestid, foodid, accepted
-					$.getJSON('/messenger/userfood/' + value['requester'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
-						$("#receivedRequests").append(
-							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="received" time="' + array['MAX(`messagetable`.`time`)'] + '" foodid="' + value['foodid'] + '">' +
-							'<div class="row">' +
-							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
-							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
-							'</div>' +
-							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
-							'<div class="card-block" style="padding: 0.5rem;">' +
-							'<small class="text-muted float-right" style="margin-right:  1rem;">' + (array['MAX(`messagetable`.`time`)'] ? array['MAX(`messagetable`.`time`)'] : "") + '</small>' +
-							'<p class="card-text">' + array['username'] + '</p>' +
-							'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + array['name'] + '</p>' +
-							'<small class="text-muted">' + (array['message'] ? array['message'] : "") + '</small>' +
-							'</div>' +
-							'</div>' +
-							'</div>' +
-							'</div>'
-						);
+					$.post('/messenger/userfood/' + value['requester'] + '/' + value['foodid'] + '/' + value['requestid'], $.param(value), function (html) {
+						$("#receivedRequests").append($.parseHTML(html));
 					});
 				});
 			});
