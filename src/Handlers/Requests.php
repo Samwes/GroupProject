@@ -185,6 +185,7 @@ class Requests
 	}
 
 	public function foodItemPost(Request $request, Application $app) {
+		// Adds food item to database
 		$toEncode = array("error" => "failed to add");
 
 		$token = $app['security.token_storage']->getToken();
@@ -238,6 +239,7 @@ class Requests
 	}
 
 	public function getRequestsSentByUserID(Request $request, App $app) {
+		// Gets food items requested by user
 		$toEncode = null;
 		$token = $app['security.token_storage']->getToken();
 
@@ -253,6 +255,7 @@ class Requests
 	}
 
 	public function getRequestsReceivedByUserID(Request $request, App $app) {
+
 		$toEncode = null;
 		$token = $app['security.token_storage']->getToken();
 
@@ -458,7 +461,7 @@ class Requests
 			}
 		}
 
-		return new RedirectResponse($app->path('user')); //note change redirect on failure/success
+		return new RedirectResponse($app->path('useritems')); //note change redirect on failure/success
 	}
 
 	public function addNewRequest(Request $request, App $app, $foodid) {
