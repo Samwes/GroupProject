@@ -597,7 +597,7 @@ class Requests
 
 			$categories = array();
 
-			for ($i = 0; $i < $foodItems.length; $i++) {
+			for ($i = 0; $i < sizeof($foodItems); $i++) {
 				$currentCategory = foodItems[i]['category'];
 				if (!(in_array($currentCategory, $categories))) {
 					$categories[$currentCategory] = 1;
@@ -619,7 +619,7 @@ class Requests
 			if ($keys[0] > 2) {
 				$response = "You could consider buying fewer " + $mostWasted + " items, as you've given away " + $keys[0] + "of this item type.";
 			} else {
-				$response = "You haven't had to give away too many items, well done.";
+				$response = "You have not had to give away too many items, well done.";
 			}
 
 			// Content Here
