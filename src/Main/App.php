@@ -162,8 +162,8 @@ class App extends Application
 		);
 
 		$this['security.role_hierarchy'] = array(
-			'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH'),
-			'ROLE_USER'  => array('ROLE_BASIC'),
+			'ROLE_ADMIN' => array('ROLE_BASIC', 'ROLE_ALLOWED_TO_SWITCH'),
+			'ROLE_BASIC'  => array('ROLE_BASIC'),
 		);
 
 		$this['security.access_rules'] = array(
@@ -203,17 +203,17 @@ class App extends Application
 		$account->get('/addItem', function () {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			return $this['twig']->render('scanner.twig', array('userData' => $userdata));
-		})->bind('additem')->secure('ROLE_USER');
+		})->bind('additem')->secure('ROLE_BASIC');
 
 		$account->get('/addItem/{foodID}', function ($foodID) {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			$fooddata = $this['DB']->getFoodItemByID($foodID);
 			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $fooddata, 'foodID' => $foodID));
-		})->assert('foodID', '\d+')->bind('update')->secure('ROLE_USER');
+		})->assert('foodID', '\d+')->bind('update')->secure('ROLE_BASIC');
 
 		$account->post('/getItem', function (Request $request) {
 			return $this['twig']->render('aUserItem.twig', array('request' => $request));
-		})->bind('getItem')->secure('ROLE_USER');
+		})->bind('getItem')->secure('ROLE_BASIC');
 
 		$account->get('/userprofile', function () {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
@@ -243,21 +243,21 @@ class App extends Application
 		$account->post('/request/accept', 'rest.handler:acceptRequest')
 				->assert('requestid', '\d+')
 				->assert('foodid', '\d+')
-				->secure('ROLE_USER');
+				->secure('ROLE_BASIC');
 
 		$account->post('/request/reject', 'rest.handler:rejectRequest')
 				->assert('requestid', '\d+')
-				->secure('ROLE_USER');
+				->secure('ROLE_BASIC');
 
 		$account->get('/request/status/{requestid}', 'rest.handler:requestStatus')
 				->assert('requestid', '\d+')
-				->secure('ROLE_USER');
+				->secure('ROLE_BASIC');
 
 		$account->get('/user/notifications', 'rest.handler:getNumberNotifications')
-				->secure('ROLE_USER');
+				->secure('ROLE_BASIC');
 
 		$account->post('/user/review', 'rest.handler:reviewUser')
-				->secure('ROLE_USER');
+				->secure('ROLE_BASIC');
 
 		$this->mount('/account', $account);
 	}
@@ -272,7 +272,7 @@ class App extends Application
 		})->assert('foodID', '\d+');
 
 		$this->get('/food/request/{foodid}', 'rest.handler:addNewRequest')
-			 ->assert('foodid', '\d+')->secure('ROLE_USER')->bind('foodRequest');
+			 ->assert('foodid', '\d+')->secure('ROLE_BASIC')->bind('foodRequest');
 
 		$this->get('/item/{id}', function ($id) {
 			$foodData = $this['DB']->getFoodItemByID($id);
@@ -287,19 +287,19 @@ class App extends Application
 			 ->assert('foodid', '\d+');
 
 		$this->get('/foodItems', 'rest.handler:foodItemsGet')
-			 ->secure('ROLE_USER');
+			 ->secure('ROLE_BASIC');
 
 		$this->get('/user/rating/{userid}', 'rest.handler:getUserRating')
 			 ->assert('userid', '\d+');
 
 		$this->get('/request/sent', 'rest.handler:getRequestsSentByUserID')
-			 ->secure('ROLE_USER');
+			 ->secure('ROLE_BASIC');
 
 		$this->get('/request/received', 'rest.handler:getRequestsReceivedByUserID')
-			 ->secure('ROLE_USER');
+			 ->secure('ROLE_BASIC');
 
 		$this->get('/request/messages/{requestID}', 'rest.handler:getUserMessagesByRequestID')
-			 ->secure('ROLE_USER')
+			 ->secure('ROLE_BASIC')
 			 ->assert('requestID', '\d+');
 
 		//note deprecated?
@@ -342,7 +342,7 @@ class App extends Application
 			 ->value('count', 12)->assert('count', '[0-9]*');
 
 		$this->get('/messenger/userid', 'rest.handler:userID')
-			 ->secure('ROLE_USER');
+			 ->secure('ROLE_BASIC');
 
 		$this->post('/messenger/userfood/{userid}/{foodid}/{requestid}', function ($userid, $foodid, $requestid) {
 			$userFoodInfo = $this['DB']->getUserFoodInfo($userid, $foodid);
@@ -352,20 +352,20 @@ class App extends Application
 			 ->assert('userid', '\d+')
 			 ->assert('foodid', '\d+')
 			 ->assert('requestid', '\d+')
-			 ->secure('ROLE_USER')->bind('messengerfood');
+			 ->secure('ROLE_BASIC')->bind('messengerfood');
 
 		$this->get('/user/analysis', 'rest.handler:wastageAnalysis')
-			 ->secure('ROLE_USER');
+			 ->secure('ROLE_BASIC');
 
 		//todo default food picture per category
 		$this->post('/food', 'rest.handler:foodItemPost')
-			 ->secure('ROLE_USER');
+			 ->secure('ROLE_BASIC');
 
 		$this->post('/food/update', 'rest.handler:foodItemUpdate')
-			 ->secure('ROLE_USER');
+			 ->secure('ROLE_BASIC');
 
 		$this->get('/food/remove/{foodid}', 'rest.handler:removeFoodItem')
-			 ->assert('foodid', '\d+')->secure('ROLE_USER');
+			 ->assert('foodid', '\d+')->secure('ROLE_BASIC');
 
 		//todo registration failure page
 		$this->post('/register/user', 'rest.handler:registerNewUser')
