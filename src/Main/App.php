@@ -352,7 +352,7 @@ class App extends Application
 			 ->assert('userid', '\d+')
 			 ->assert('foodid', '\d+')
 			 ->assert('requestid', '\d+')
-			 ->secure('ROLE_USER')->bind('messengerfood');
+			 ->secure('role_basic')->bind('messengerfood');
 
 		$this->get('/user/analysis', 'rest.handler:wastageAnalysis')
 			 ->secure('ROLE_USER');
