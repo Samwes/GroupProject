@@ -600,7 +600,7 @@ class Requests
 
 			//Have they wasted enough to warrant telling them to stop wasting them
 
-			if ($keys[0] > 5) {
+			if ($keys[0] > 2) {
 				$response = "You could consider buying fewer " + $mostWasted + " items, as you've given away " + $keys[0] + "of this item type.";
 			} else {
 				$response = "You haven't had to give away too many items, well done.";
@@ -608,7 +608,7 @@ class Requests
 
 			// Content Here
 
-			return new JsonResponse(array("recommendation" => $response));
+			return new JsonResponse(array("recommendation" => $response, "categories" => $categories));
 
 		}
 	}
