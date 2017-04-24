@@ -235,6 +235,14 @@ $(function() {
           console.log(data);
         	$("#nameTextInput").val(toTitleCase(data["name"]));
           $("#tempCategory").text(data["categoriesHierarchy"][0].substring(3));
+          if(data["categoriesHierarchy"][0] == "Frozen foods") {
+            $("#categorySelect").val("Frozen Food");
+          } else if(data["categoriesHierarchy"][0] == "Blueberry muffins") {
+            $("#categorySelect").val("Bakery");
+          } else if(data["categoriesHierarchy"][0] == "Meals") {
+            $("#categorySelect").val("Bakery");
+          }
+          $("#amountNumberInput").val(1);
           $("#weightNumberInput").val(data["weight"].replace(/\D/g,''));
           $("#descriptionTextarea").text(capitalizeFirstLetter(data["description"]));
           if($('.image-editor').cropit('imageSrc') == "") {
