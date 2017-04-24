@@ -163,7 +163,7 @@ class App extends Application
 
 		$this['security.role_hierarchy'] = array(
 			'ROLE_ADMIN' => array('ROLE_BASIC', 'ROLE_ALLOWED_TO_SWITCH'),
-			'ROLE_BASIC'  => array('ROLE_BASIC'),
+			'ROLE_USER'  => array('ROLE_BASIC'),
 		);
 
 		$this['security.access_rules'] = array(
