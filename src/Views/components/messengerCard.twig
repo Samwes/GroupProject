@@ -1,0 +1,19 @@
+<div class="card square-border contact {{ array.user2seen ? 'bold' }}" style="border: 0;"
+		 receiverid="{{global.request.get('requester'}}"
+		 requestid="{{global.request.get('requestid'}}" username=" {{ array.username}}  "
+		 request="received" time="  {{array[MAX(`messagetable`.`time`)]}}
+" foodid="  {{global.request.get('foodid')}}  ">
+	<div class="row">
+		<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">
+			<img class="card-img-top circle" src="{{cloudinary_url_folder(array.picture, 'people')}}" alt="No image" style="width:100%; padding: 0.5rem;">
+		</div>
+		<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">
+			<div class="card-block" style="padding: 0.5rem;">
+				<small class="text-muted float-right" style="margin-right:  1rem;"> {{array.lasttime ""}})</small>
+				<p class="card-text"> {{array.username}} </p>
+				<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;"> {{array.name}} </p>
+				<small class="text-muted"> {{array.message ?? "" }}</small>
+			</div>
+		</div>
+	</div>
+</div>
