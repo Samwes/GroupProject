@@ -27,6 +27,7 @@ class Requests
 	//note: Request handling functions go here
 
 	public function foodItemsGet(Request $request, App $app) {
+		// Returns food items uploaded by current user
 
 		$token = $app['security.token_storage']->getToken(); //future refactor this into its own func?
 
@@ -44,6 +45,7 @@ class Requests
 	}
 
 	public function foodItemGet(Request $request, App $app, $foodID) {
+		// Returns food item details by its id
 		$toEncode = $this->db->getFoodItemByID($foodID);
 		if ($toEncode === null) {
 			$toEncode = array('error' => 'failed');
@@ -53,6 +55,7 @@ class Requests
 	}
 
 	public function verifyToken(App $app, $token) {
+		// Verifies current user token
 		$result = $this->db->verifyToken($token);
 		if (false !== $result) {
 			//Success - future log them in? result has their userID  --- $user = $app->user(); ?
@@ -65,6 +68,7 @@ class Requests
 	}
 
 	public function registerNewUser(Request $request, App $app) {
+		// Adds new user data to database
 		$username = $request->get('username');
 		$email = $request->get('email');
 		$password = $request->get('password');
@@ -97,6 +101,7 @@ class Requests
 	}
 
 	public function sendVerifyToken(App $app, $userid) {
+		// Sends verification to email
 		//note maybe broke with this if
 		if ($this->db->getRoles($userid) === 'ROLE_BASIC') {
 			$bytes = bin2hex(random_bytes(32));
