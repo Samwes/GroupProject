@@ -254,7 +254,7 @@ class App extends Application
 			  ->assert('requestid', '\d+')
 			  ->secure('ROLE_USER');
 
-		$account->get('/user/notifications', 'rest.handlser:getNumberNotifications')
+		$account->get('/user/notifications', 'rest.handler:getNumberNotifications')
 			  ->secure('ROLE_USER');
 
 		$account->post('/user/review', 'rest.handler:reviewUser')
