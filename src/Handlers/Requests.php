@@ -614,7 +614,7 @@ class Requests
 			//Sort the array
 			arsort($categories);
 			$keys = array_keys($categories);
-			$mostWasted = $categories[$keys[0]] = "";
+			$mostWasted = $categories[$keys[0]];
 
 			//Have they wasted enough to warrant telling them to stop wasting them
 
