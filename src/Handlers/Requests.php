@@ -101,7 +101,7 @@ class Requests
 	}
 
 	public function sendVerifyToken(App $app, $userid) {
-		// Sends verification to email
+		// Sends verification token to email
 		//note maybe broke with this if
 		if ($this->db->getRoles($userid) === 'ROLE_BASIC') {
 			$bytes = bin2hex(random_bytes(32));
@@ -124,6 +124,7 @@ class Requests
 	}
 
 	public function foodItemUpdate(Request $request, Application $app) {
+		// POST - Updates food item uploaded by current user
 		$toEncode = array("error" => "failed to add");
 
 		$token = $app['security.token_storage']->getToken();

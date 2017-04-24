@@ -361,7 +361,7 @@ class App extends Application
 		$this->post('/food/update', 'rest.handler:foodItemUpdate')
 			 ->secure('ROLE_USER');
 
-		$this->get('/food/remove/{foodid}', 'rest.handler:foodItemUpdate')
+		$this->get('/food/remove/{foodid}', 'rest.handler:removeFoodItem')
 			 ->assert('foodid', '\d+')->secure('ROLE_USER');
 
 		//todo registration failure page
