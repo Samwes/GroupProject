@@ -1028,6 +1028,124 @@ class DBDataMapper
 		return $result;
 	}
 
+	public function getNumberNotifications($userid) {
+		$query = 'SELECT `requestmessagetable`.`requestid`, `messagetable`.`user2seen`
+								FROM `messagetable`, `requestmessagetable`, `requesttable`
+								WHERE `messagetable`.`messageid` = `requestmessagetable`.`messageid`
+									AND `requestmessagetable`.`sender` != :userid
+									AND `requestmessagetable`.`requestid` = `requesttable`.`requestid`
+    							AND `requesttable`.`requester` = :userid';
+
+		 $asRequester = null;
+		 try {
+ 			$stmt = $this->pdo->prepare($query);
+
+ 			$stmt->execute(array(
+ 							   ':userid' => $userid,
+ 						   ));
+
+ 			$asRequester = $stmt->fetchAll(PDO::FETCH_ASSOC);
+ 		} catch (\PDOException $e) {
+ 			if (DEBUG) {
+ 				echo 'Getting requests by ID failed: '.$e->getMessage();
+ 			}
+ 		}
+ 		$stmt = null;
+
+		$asRequesterResults = array();
+
+		foreach($asRequester as $value) {
+			if(array_key_exists($value['requestid'], $asRequesterResults) && $value['user2seen'] == 1) {
+				$asRequesterResults[$value['requestid']] += 1;
+			} else {
+				$asRequesterResults[$value['requestid']] = 1;
+			}
+		}
+
+		$query = 'SELECT `requestmessagetable`.`requestid`, `messagetable`.`user1seen`
+								FROM `messagetable`, `requestmessagetable`, `requesttable`, `itemtable`
+								WHERE `messagetable`.`messageid` = `requestmessagetable`.`messageid`
+									AND `requestmessagetable`.`sender` != :userid
+									AND `requestmessagetable`.`requestid` = `requesttable`.`requestid`
+    							AND `requesttable`.`foodid` = `itemtable`.`foodid`
+    							AND `itemtable`.`userid` = :userid';
+
+		$asSender = null;
+		try {
+		 $stmt = $this->pdo->prepare($query);
+
+		 $stmt->execute(array(
+								':userid' => $userid,
+							));
+
+		 $asSender = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	 } catch (\PDOException $e) {
+		 if (DEBUG) {
+			 echo 'Getting requests by ID failed: '.$e->getMessage();
+		 }
+	 }
+	 $stmt = null;
+
+	 $asSenderResults = array();
+
+	 foreach($asSender as $value) {
+		 if(array_key_exists($value['requestid'], $asSenderResults) && $value['user1seen'] == 1) {
+			 $asSenderResults[$value['requestid']] += 1;
+		 } else {
+			 $asSenderResults[$value['requestid']] = 1;
+		 }
+	 }
+
+		$notifications = sizeof($asReceiverResults) + sizeof($asSenderResults);
+
+		return array('notifications' => $notifications);
+	}
+
+	public function reviewUser($otherID, $userID, $rating) {
+		$query = 'INSERT INTO `reviewtable` (`userid`, `reviewerid`, `rating`) VALUES (:userid, :otherid, :rating)';
+
+		$result = true;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':userid' => $userID,
+								 ':otherid' => $otherID,
+								 ':rating' => $rating
+						   ));
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Review Insertion failed: '.$e->getMessage();
+			}
+			$result = false;
+		}
+		$stmt = null;
+		return $result;
+	}
+
+	public function getUserRating($userID) {
+		$query = "SELECT ROUND(AVG(`rating`)) AS 'rating'
+								FROM `reviewtable`
+								WHERE `userid` = :userid";
+
+		$result = false;
+		try {
+			$stmt = $this->pdo->prepare($query);
+
+			$stmt->execute(array(
+							   ':userid' => $userID
+						   ));
+
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		} catch (\PDOException $e) {
+			if (DEBUG) {
+				echo 'Getting rating: '.$e->getMessage();
+			}
+		}
+		$stmt = null;
+		return $result;
+	}
+
 	public function addVerification($userid) {
 		// Add verification code to database in relation to userid
     }

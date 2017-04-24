@@ -29,7 +29,7 @@
 					<h4 class="card-title">Donator Information</h4>
 					<p class="card-text"><strong>Username: </strong>{{ userData.username }}</p>
 					<p class="card-text">
-						<strong>Rating: </strong><span style="color: gold; font-size:1.5em;">&#8902;&#8902;&#8902;&#8902;&#8902;</span>
+						<strong>Rating: </strong><span style="color: gold; font-size:1.5em;" id="stars"></span> <!-- &#8902;&#8902;&#8902;&#8902;&#8902; -->
 					</p>
 					<hr>
 					<p class="card-text">Make sure to request an item before visiting the messaging page</p>
@@ -74,6 +74,12 @@
 	$('#maptab').on('shown.bs.tab', function () {
 		google.maps.event.trigger(itemMap, 'resize');
 		itemMap.panTo({lat: {{ foodData.latit }}, lng: {{ foodData.longit }}});
+	});
+</script>
+
+<script>
+	$.getJSON('/user/rating/{{ foodData.userid }}', function(data) {
+		$('#stars').text(Array(data['rating']+1).join("&#8902;"))
 	});
 </script>
 

@@ -33,13 +33,26 @@
 					<h5 class="justify-content-center my-1 mx-auto" id="contactName"></h5>
 					<ul class="navbar-nav my-1 justify-content-end">
 						<li class="nav-item hidden-sm-down hidden-xs-up" id="stars">
-							<p href="#" style="color: gold;" class="my-2">
+							<form id="rating-form" action="/user/review">
+								<input id="rating-userid" type="hidden" name="userid">
+    						<input class="star star-5" value="5" id="star-5" type="radio" name="star">
+    						<label class="star star-5" for="star-5"></label>
+    						<input class="star star-4" value="4" id="star-4" type="radio" name="star">
+    						<label class="star star-4" for="star-4"></label>
+    						<input class="star star-3" value="3" id="star-3" type="radio" name="star">
+    						<label class="star star-3" for="star-3"></label>
+    						<input class="star star-2" value="2" id="star-2" type="radio" name="star">
+    						<label class="star star-2" for="star-2"></label>
+    						<input class="star star-1" value="1" id="star-1" type="radio" name="star">
+    						<label class="star star-1" for="star-1"></label>
+  						</form>
+							<!--<p href="#" style="color: gold;" class="my-2">
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
-							</p>
+							</p>-->
 						</li>
 						<li class="nav-item hidden-xs-up" id="reject-item">
 							<a class="nav-link" id="reject" href="#">Reject</a>
@@ -180,6 +193,7 @@
 			// Change colour and fill messages
 			currentRequestID = $(this).attr("requestid");
 			currentReceiverID = $(this).attr("receiverid");
+			$("#rating-userid").val($(this).attr("receiverid"));
 			currentFoodID = $(this).attr("foodid");
 			$(this).removeClass("bold");
 			$(".contact").css("background-color", "white");
@@ -195,6 +209,12 @@
 					sortRequests();
 				});
 			});
+		});
+	</script>
+
+	<script>
+		$(".star").click(function() {
+			$("#rating-form").submit();
 		});
 	</script>
 

@@ -3,8 +3,8 @@
 {% block content %}
 	<nav class="navbar navbar-toggleable-sm navbar-light bg-faded p-0 align-items-stretch" id="search-navbar" style="border-bottom: 1px solid #dce0e0;">
 		<a class="navbar-brand mr-0 p-3" href="{{ path('index') }}" style="border-right: 1px solid #dce0e0; color: #55595c">FoodShare</a>
-		<button class="navbar-toggler navbar-toggler-right p-3" style="right:4.5rem" type="button" data-toggle="collapse" data-target="#navbarCollapse">
-			<span class="navbar-toggler-icon"></span>
+		<button class="navbar-toggler navbar-toggler-right p-3" style="right:4.5rem; margin-top: 0.25rem; border: 0;" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+			<i class="fa fa-search fa-lg" aria-hidden="true" style="color: grey"></i>
 		</button>
 
 		{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
@@ -13,7 +13,7 @@
 					<button class="btn btn-link h-100 p-3" style="box-shadow:none" id="user-popover" data-offset="4 70%" data-toggle="popover" data-placement="bottom">
 						<i class="fa fa-user-circle fa-2x" aria-hidden="true">
 							<span class="fa fa-circle"></span>
-							<span class="notif-num">3</span>
+							<span class="notif-num" id="notif-num">3</span>
 						</i>
 					</button>
 				</li>
@@ -58,7 +58,14 @@
 	<!-- USER POPOVER -->
 	<div id="user-popover-content" class="hidden-xs-up">
 		<div class="container-fluid my-0 p-3">
-			<div class="row pb-2">
+			<div class="btn-group-vertical">
+				<a class="btn btn-primary btn-block" href="{{ path('additem') }}">Add Item</a>
+				<a class="btn btn-primary btn-block" href="{{ path('user') }}">Your Account</a>
+        <a class="btn btn-primary btn-block" href="{{ path('useritems') }}">Your Items</a>
+				<a class="btn btn-primary btn-block" href="{{ path('messenger') }}">Messenger</a>
+				<a class="btn btn-primary btn-block" href="{{ path('account_logout') }}">Logout</a>
+			</div>
+			<!--<div class="row pb-2">
 				<div class="col-md-6 pr-2">
 					<a class="btn btn-primary btn-block" href="{{ path('user') }}">Your Account</a>
 				</div>
@@ -78,7 +85,7 @@
 				<div class="col-md-6 pr-2">
 					<a class="btn btn-primary btn-block" href="{{ path('additem') }}">Add Item</a>
 				</div>
-			</div>
+			</div>-->
 		</div>
 	</div>
 	<!-- POPOVER END -->
@@ -207,6 +214,14 @@
 		}
 
 	</script>
+
+	{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+	<script>
+		$.getJSON('/account/user/notifications', function(data) {
+			$('#notif-num').text(data['notifications']);
+		});
+	</script>
+	{% endif %}
 
 	<script>
 		// User Login Popover

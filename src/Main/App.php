@@ -235,8 +235,11 @@ class App extends Application
 			  ->assert('requestid', '\d+')
 			  ->secure('IS_AUTHENTICATED_FULLY');
 
-		$account->get('user/notifications', 'rest.handlser:getNumberNotifications')
+		$account->get('/user/notifications', 'rest.handler:getNumberNotifications')
 			  ->secure('IS_AUTHENTICATED_FULLY');
+
+		$account->post('/user/review', 'rest.handler:reviewUser')
+				->secure('IS_AUTHENTICATED_FULLY');
 
 		$this->mount('/account', $account);
 	}
@@ -267,6 +270,9 @@ class App extends Application
 
 		$this->get('/foodItems', 'rest.handler:foodItemsGet')
 			 ->secure('ROLE_USER');
+
+		$this->get('/user/rating/{userid}', 'rest.handler:getUserRating')
+			 ->assert('userid', '\d+');
 
 		$this->get('/request/sent', 'rest.handler:getRequestsSentByUserID')
 			 ->secure('ROLE_USER');

@@ -434,7 +434,7 @@ class Requests
 		$toEncode = array('error' => 'error');
 		if (null !== $token) {
 			$userID = $token->getUser()->getID();
-			$toEncode = $this->db->...($foodid, $userID);
+			$toEncode = $this->db->getNumberNotifications($userID);
 		}
 
 		return new JsonResponse($toEncode);
@@ -487,6 +487,7 @@ class Requests
 	public function rejectRequest(Request $request, App $app) {
 		$requestid = $request->get('requestid');
 		$token = $app['security.token_storage']->getToken();
+		$toEncode = array('failed' => 'item not rejected');
 
 		if (null !== $token) {
 			$userID = $token->getUser()->getID();
@@ -500,6 +501,34 @@ class Requests
 
 	public function requestStatus(Request $request, App $app, $requestid) {
 		$toEncode = $this->db->getRequestStatus($requestid);
+		if ($toEncode === null) {
+			$toEncode = array('error' => 'failed');
+		}
+
+		return new JsonResponse($toEncode);
+	}
+
+	public function reviewUser(Request $request, App $app) {
+		$otherID = $request->get('userid');
+		$rating = $request->get('star');
+		$rating = (int) $rating;
+		$toEncode = array('failed' => 'Review Failed');
+
+		$token = $app['security.token_storage']->getToken();
+
+		if (null !== $token) {
+			$userID = $token->getUser()->getID();
+			if ($this->db->reviewUser($otherID, $userID, $rating)) {
+				$toEncode = array('success' => 'User Reviewed');
+			}
+		}
+
+		return new JsonResponse($toEncode);
+
+	}
+
+	public function getUserRating(Request $request, App $app, $userid) {
+		$toEncode = $this->db->getUserRating($userid);
 		if ($toEncode === null) {
 			$toEncode = array('error' => 'failed');
 		}
