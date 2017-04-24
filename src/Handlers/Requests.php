@@ -103,7 +103,7 @@ class Requests
 	public function sendVerifyToken(App $app, $userid) {
 		// Sends verification token to email
 		//note maybe broke with this if
-		
+
 		if (strpos($this->db->getRoles($userid), 'ROLE_BASIC') !== false) {
 			$bytes = bin2hex(random_bytes(32));
 			$this->db->addToken($userid, $bytes);
@@ -318,7 +318,7 @@ class Requests
 		if ($toEncode === null) {
 			$toEncode = array('error' => 'failed');
 		}
- 
+
 		return new JsonResponse($toEncode);
 	}
 
@@ -560,19 +560,19 @@ class Requests
 			if (strpos(strtolower($foodName), $food) !== false) {
 				$probability += 15;
 			}
-		} 
+		}
 
 		foreach ($desirableFoods as $food) {
 			if (strpos(strtolower($foodName), $food) !== false) {
 				$probability += 5;
 			}
-		} 
+		}
 
 		foreach ($undesirableFoods as $food) {
 			if (strpos(strtolower($foodName), $food) !== false) {
 				$probability -= 5;
 			}
-		} 
+		}
 
 
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
@@ -603,10 +603,11 @@ class Requests
 				if (!(in_array($currentCategory, $categories))) {
 					$categories[$currentCategory] = 1;
 				} else {
-					$categories[$currentCategory] = $categories[$currentCategory] + 1;
+					$categories[$currentCategory] += 1;
 				}
-
 			}
+
+			$categoriesCopy = $categories;
 
 			//Now $categories is an associative array that contains how many times a user has given away food in that currentCategory
 
@@ -627,7 +628,7 @@ class Requests
 
 
 
-			return new JsonResponse(array("recommendation" => $response, "categories" => $categories, "fooditems" => $foodItems));
+			return new JsonResponse(array("recommendation" => $response, "categories" => $categoriesCopy, "fooditems" => $foodItems));
 
 		}
 	}

@@ -137,25 +137,25 @@
 				$.getJSON('/user/analysis', function(data) {
 					var recommendation = data['recommendation'];
 					var categories = data['categories'];
-					$('#recommendation').text(recommendation);
+					if (categories[""] != "") {
+						$('#recommendation').text(recommendation);
 
-					var array = [["Category", "Number Of Items"]];
-					for (var category in categories) {
-						array.push([category, categories[category]]);
+						var array = [["Category", "Number Of Items"]];
+						for (var category in categories) {
+							array.push([category, categories[category]]);
+						}
+
+						var data = google.visualization.arrayToDataTable(array);
+
+		        var options = {
+		          title: 'Wastage Analysis'
+		        };
+
+		        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+		        chart.draw(data, options);
 					}
-
-					var data = google.visualization.arrayToDataTable(array);
-
-	        var options = {
-	          title: 'Wastage Analysis'
-	        };
-
-	        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-	        chart.draw(data, options);
-
 				});
-
       }
     </script>
 
