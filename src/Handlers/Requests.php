@@ -598,7 +598,7 @@ class Requests
 			$categories = array();
 
 			for ($i = 0; $i < sizeof($foodItems); $i++) {
-				$currentCategory = $foodItems[i]['category'];
+				$currentCategory = $foodItems[$i]['category'];
 				if (!(in_array($currentCategory, $categories))) {
 					$categories[$currentCategory] = 1;
 				} else {
