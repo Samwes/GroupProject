@@ -348,7 +348,7 @@ class App extends Application
 	 			 ->assert('userid', '\d+')
 	 			 ->assert('foodid', '\d+')
 	 			 ->assert('requestid', '\d+') // Should probably by under account
-	 			 ->secure('ROLE_USER');
+	 			 ->secure('ROLE_BASIC');
 
 		$this->get('/user/analysis', 'rest.handler:wastageAnalysis')
 			 ->secure('ROLE_BASIC');
