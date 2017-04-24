@@ -436,7 +436,6 @@ class Requests
 		if ($toEncode === null) {
 			$toEncode = array('error' => 'failed');
 		}
-
 		return new JsonResponse($toEncode);
 	}
 

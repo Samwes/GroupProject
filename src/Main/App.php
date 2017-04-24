@@ -344,15 +344,11 @@ class App extends Application
 		$this->get('/messenger/userid', 'rest.handler:userID')
 			 ->secure('ROLE_BASIC');
 
-		$this->post('/messenger/userfood/{userid}/{foodid}/{requestid}', function ($userid, $foodid, $requestid) {
-			$userFoodInfo = $this['DB']->getUserFoodInfo($userid, $foodid);
-			$numUnseenMessages = $this['DB']->getNumberUnseenMessages($requestid);
-			return $this['twig']->render('messengerCard.twig', array('array' => $userFoodInfo+$numUnseenMessages));
-		})
-			 ->assert('userid', '\d+')
-			 ->assert('foodid', '\d+')
-			 ->assert('requestid', '\d+')
-			 ->secure('ROLE_BASIC')->bind('messengerfood');
+			 $this->get('/messenger/userfood/{userid}/{foodid}/{requestid}', 'rest.handler:getUserFoodInfo')
+	 			 ->assert('userid', '\d+')
+	 			 ->assert('foodid', '\d+')
+	 			 ->assert('requestid', '\d+') // Should probably by under account
+	 			 ->secure('ROLE_USER');
 
 		$this->get('/user/analysis', 'rest.handler:wastageAnalysis')
 			 ->secure('ROLE_BASIC');
