@@ -548,20 +548,28 @@ class Requests
 
 	public function foodLikelihood(Request $request, App $app, $foodid) {
 		$foodItem = $this->db->getFoodItemByID($foodid);
-		$desirableFoods = ['chocolate', 'steak', 'beef', 'lamb', 'chicken', 'burger', 'cereal', 'pizza', 'pasta'];
-		$undesirableFoods = ['stale', 'old', 'vegetable', 'vegeatable', 'horrible', 'sprouts', 'broccoli', 'egg'];
+		$bestFoods = ['chocolate', 'steak', 'beef', 'lamb', 'chicken', 'icecream'];
+		$desirableFoods = ['burger', 'cereal', 'pizza', 'pasta', 'tasty', 'fruit'];
+		$undesirableFoods = ['stale', 'old', 'vegetable', 'vegeatable', 'horrible', 'sprouts', 'broccoli', 'egg', 'bad', 'fast food', 'potato'];
 		$foodName = $foodItem['name'];
 		$probability = 60;
 
+
+		foreach ($bestFoods as $food) {
+			if (strpos(strtolower($foodName), $food) !== false) {
+				$probability += 15;
+			}
+		} 
+
 		foreach ($desirableFoods as $food) {
 			if (strpos(strtolower($foodName), $food) !== false) {
-				$probability += 10;
+				$probability += 5;
 			}
 		} 
 
 		foreach ($undesirableFoods as $food) {
 			if (strpos(strtolower($foodName), $food) !== false) {
-				$probability -= 10;
+				$probability -= 5;
 			}
 		} 
 
