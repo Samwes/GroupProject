@@ -596,11 +596,11 @@ class Requests
 
 			//Array for a map of categories and their frequency.
 
-			$categories = array();
+			//$categories = array("Fresh Food" => 0, "Bakery" => 0, "Food Cupboard" => 0, "Frozen Food" => 0, "Drinks" => 0, "Baby" => 0, "Personal" => 0, "");
 
 			for ($i = 0; $i < sizeof($foodItems); $i++) {
 				$currentCategory = $foodItems[$i]['category'];
-				if (!(in_array($currentCategory, $categories))) {
+				if (!(array_key_exists($currentCategory, $categories))) {
 					$categories[$currentCategory] = 1;
 				} else {
 					$categories[$currentCategory] += 1;
