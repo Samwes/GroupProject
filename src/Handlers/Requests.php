@@ -524,7 +524,7 @@ class Requests
 			}
 		}
 
-		return new JsonResponse($toEncode);
+		return new RedirectResponse($app->path('messenger'));
 
 	}
 
