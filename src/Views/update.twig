@@ -120,6 +120,8 @@
 				<!-- HIDDEN IMAGE TO UPLOAD -->
 				<input type="hidden" id="imagetoupload" name="image"/>
 
+				<input type="hidden" id="filename" name="filename" value="{{ foodData.image }}"/>
+
 				<!-- SUBMIT BUTTON -->
 				<button type="submit" class="btn btn-primary square">Update Item</button>
 			</form>
@@ -267,7 +269,7 @@
 
 				$('.image-editor').cropit({
 					imageState: {
-						src: '{{ asset(foodData.image | default('none.png'),'food') }}',
+						src: '{{ cloudinary_url_folder(foodData.image | default('none.png'), 'food') }}',
 					},
 					smallImage: 'stretch',
 				});

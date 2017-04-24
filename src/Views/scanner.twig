@@ -242,7 +242,7 @@
 
 				$('.image-editor').cropit({
 					imageState: {
-						src: '{{ asset('none.png','food') }}',
+						src: '{{ cloudinary_url_folder('none.png', 'food') }}',
 					},
 					smallImage: 'stretch',
 				});

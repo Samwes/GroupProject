@@ -4,7 +4,7 @@ namespace Handler;
 
 use Database\DBDataMapper;
 use Main\App;
-use Ramsey\Uuid\Uuid;
+use Cloudinary\Uploader;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -84,7 +84,7 @@ class Requests
 
 		if ($this->db->addNewUser($username, $encoded, null, $email)) {
 			$user = $app['user.provider']->loadUserByUsername($username);
-			$token = new UsernamePasswordToken($username, null, 'main', $user->getRoles());
+			$token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
 			$app['security.token_storage']->setToken($token);  //note doesnt work?
 			$app['session']->set('_security_main', serialize($token));
 
@@ -93,7 +93,7 @@ class Requests
 			return new RedirectResponse($app->path('user'));
 		}
 
-		throw new RuntimeException(sprintf('Cant create user %s', $username)); //note just database error or?
+		throw new \RuntimeException(sprintf('Cant create user %s', $username)); //note just database error or?
 	}
 
 	public function sendVerifyToken(App $app, $userid) {
@@ -114,7 +114,7 @@ class Requests
 
 				return new Response('Token Sent!', 201);
 			}
-			throw new RuntimeException(sprintf('Cant find email for user %s', $userid)); //note just database error or?
+			throw new \RuntimeException(sprintf('Cant find email for user %s', $userid)); //note just database error or?
 		}
 	}
 
@@ -134,6 +134,7 @@ class Requests
 			$amount = $request->get('amount');
 			$weight = $request->get('weight');
 			$imageuri = $request->get('image');
+			$oldfilename = $request->get('filename');
 
 			//Check Vars
 			if (!is_numeric($userID)) {
@@ -157,13 +158,16 @@ class Requests
 			} elseif (!is_numeric($weight)) {
 				die(json_encode(array("error" => "weight incorrectly defined")));
 			}
-			if ($imageuri === "") {
+			if ($imageuri === '') {
 				$filename = null;
 			} else {
-				$uriPhp = 'data://'.substr($imageuri, 5);
-				$binary = file_get_contents($uriPhp);
-				$filename = Uuid::uuid4()->getHex().'.png';
-				file_put_contents('images/food/'.$filename, $binary);
+				//plllllllease don't upload new images without dealing with the old ones
+				if ($oldfilename === 'none.png') {
+					$result = Uploader::upload($imageuri, ['folder' => 'food']);
+				} else {
+					$result = Uploader::upload($imageuri, array('folder' => 'food', 'public_id' => $oldfilename, 'overwrite' => true, 'invalidate' => true));
+				}
+				$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
 			}
 
 			if ($this->db->updateFoodItem($foodID, $name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {
@@ -189,35 +193,32 @@ class Requests
 			$amount = $request->get('amount');
 			$weight = $request->get('weight');
 			$imageuri = $request->get('image');
-			//            $imagedir = "none";//note ???
 
 			//Check Vars
 			if (!is_numeric($userID)) {
-				die(json_encode(array("error" => "userID incorrectly defined")));
+				die(json_encode(array('error' => 'userID incorrectly defined')));
 			} elseif (!is_string($name)) {
-				die(json_encode(array("error" => "name incorrectly defined")));
+				die(json_encode(array('error' => 'name incorrectly defined')));
 			} elseif (!is_string($expirDate)) {
-				die(json_encode(array("error" => "expirey incorrectly defined")));
+				die(json_encode(array('error' => 'expirey incorrectly defined')));
 			} elseif (!is_string($category)) {
-				die(json_encode(array("error" => "category incorrectly defined")));
+				die(json_encode(array('error' => 'category incorrectly defined')));
 			} elseif (!is_string($desc)) {
-				die(json_encode(array("error" => "description incorrectly defined")));
+				die(json_encode(array('error' => 'description incorrectly defined')));
 			} elseif (!is_numeric($lat)) {
-				die(json_encode(array("error" => "latitude incorrectly defined")));
+				die(json_encode(array('error' => 'latitude incorrectly defined')));
 			} elseif (!is_numeric($long)) {
-				die(json_encode(array("error" => "longitude incorrectly defined")));
+				die(json_encode(array('error' => 'longitude incorrectly defined')));
 			} elseif (!is_numeric($amount)) {
-				die(json_encode(array("error" => "amount incorrectly defined")));
+				die(json_encode(array('error' => 'amount incorrectly defined')));
 			} elseif (!is_numeric($weight)) {
-				die(json_encode(array("error" => "weight incorrectly defined")));
+				die(json_encode(array('error' => 'weight incorrectly defined')));
 			}
-			if ($imageuri === "") {
+			if ($imageuri === '') {
 				$filename = null;
 			} else {
-				$uriPhp = 'data://'.substr($imageuri, 5);
-				$binary = file_get_contents($uriPhp);
-				$filename = Uuid::uuid4()->getHex().'.png';
-				file_put_contents('images/food/'.$filename, $binary);
+				$result = Uploader::upload($imageuri, ['folder' => 'food']);
+				$filename = pathinfo($result['public_id'], PATHINFO_FILENAME);
 			}
 
 			if ($this->db->addNewFoodItem($name, $expirDate, $category, $userID, $desc, $lat, $long, $amount, $weight, $filename)) {
@@ -302,7 +303,7 @@ class Requests
 		return new JsonResponse($toEncode);
 	}
 
-	public function searchLocation(Request $request, App $app, $minLat, $maxLat, $minLong, $maxLong, $category, $search, $minAmount, $maxAmount, $minWeight, $maxWeight, $start, $count){
+	public function searchLocation(Request $request, App $app, $minLat, $maxLat, $minLong, $maxLong, $category, $search, $minAmount, $maxAmount, $minWeight, $maxWeight, $start, $count) {
 		$toEncode = $this->db->searchLocation($minLat, $maxLat, $minLong, $maxLong, $category, $search, $minAmount, $maxAmount, $minWeight, $maxWeight, $start, $count);
 		if ($toEncode === null) {
 			$toEncode = array('error' => 'failed');
@@ -538,11 +539,21 @@ class Requests
 
 	public function foodLikelihood(Request $request, App $app, $foodid) {
 		$foodItem = $this->db->getFoodItemByID($foodid);
+		$desirableFoods = ['chocolate', 'steak', 'beef', 'lamb', 'chicken', 'burger', 'cereal', 'pizza', 'pasta'];
+		$foodName = $foodItem['name'];
+		$probability = 60;
+
+		foreach ($desirableFoods as $food) {
+			if (strpos(strtolower($foodName), $food) !== false) {
+				$probability = 80;
+			}
+		}
+
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
 		// Content Here
 
-		return new JsonResponse(array("likelihood" => '80%')); // Temporary Return
+		return new JsonResponse(array("likelihood" => (string) $probability."%")); // Temporary Return
 	}
 
 	public function wastageAnalysis(Request $request, App $app) {
@@ -561,8 +572,7 @@ class Requests
 
 			$categories = array();
 
-
-			for($i = 0; $i<$foodItems.length; $i++) {
+			for ($i = 0; $i < $foodItems.length; $i++) {
 				$currentCategory = foodItems[i]['category'];
 				if (!(in_array($currentCategory, $categories))) {
 					$categories[$currentCategory] = 1;
@@ -579,7 +589,6 @@ class Requests
 			$keys = array_keys($categories);
 			$mostWasted = $categories[$keys[0]] = "";
 
-
 			//Have they wasted enough to warrant telling them to stop wasting them
 
 			if ($keys[0] > 5) {
@@ -588,13 +597,9 @@ class Requests
 				$response = "You haven't had to give away too many items, well done.";
 			}
 
-
 			// Content Here
 
-			return new JsonResponse(array("recommendation" => $response ));
-
-
-
+			return new JsonResponse(array("recommendation" => $response));
 
 		}
 	}

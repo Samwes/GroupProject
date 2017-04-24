@@ -1,7 +1,6 @@
 <div class="d-flex flex-column w-100 p-2">
 	<div class="d-flex no-gutters">
 		<div class="col-7 mr-2 d-flex flex-column square-border">
-			{#<div class="">#}
 				<ul class="nav nav-tabs nav-fill w-100">
 					<li class="nav-item active">
 						<a class="nav-link rounded-0" data-toggle="tab" id="imgtab" href="#imgdisplay"><i class="fa fa-camera mr-1" aria-hidden="true"></i> Picture</a>
@@ -13,7 +12,7 @@
 				<div class="tab-content d-flex flex-auto align-items-stretch justify-content-center">
 					<!-- IMAGE -->
 					<div class="tab-pane active p-lg-4 p-sm-2" id="imgdisplay">
-						<img class="img-rounded mx-auto" src="{{ asset(foodData.image,'food') }}" alt="No Image" style="max-width:30vh; max-height:20vh; width:250px; height:250px">
+						<img class="img-rounded mx-auto" src="{{ cloudinary_url_folder(foodData.image, 'food') }}" alt="No Image" style="max-width:30vh; max-height:20vh; width:250px; height:250px">
 					</div>
 					<!-- MAP -->
 					<div class="tab-pane w-100" id="mapdisplay">

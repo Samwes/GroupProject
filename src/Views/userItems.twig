@@ -56,8 +56,9 @@
       $.getJSON('/foodItems', function (data) {
         $.each(data, function (index, value) {
           var likelihood;
-          $.getJSON('/food/likelihood/'+value['foodid'], function(array) {
-            var toAddTo;
+          $.getJSON('/food/likelihood/' + value['foodid'], function(array) {
+            let toAddTo;
+						value.likelihood = array.likelihood;
             if(value['active'] == 0) {
               toAddTo = "#current-columns";
             } else if (value['hidden'] == 0) {
@@ -65,59 +66,9 @@
             } else {
               toAddTo = "#cancelled-columns";
             }
-            $(toAddTo).append(
-                '<div class="card" style="">' +
-              		  '<ul class="list-group list-group-flush">' +
-              			'<li class="list-group-item p-0" style="background-color: #f6f6f6; border: 1px solid #e0e0e0; border-radius: 0;">' +
-              			  '<div class="d-flex w-100" style="height: 4.2rem;">' +
-              				'<div class="col-4" style="padding: 0.7rem; margin-left: 1rem;">' +
-              				  '<p style="margin-bottom: 0.1rem; font-size: 0.9em;">POSTED ON</p>' +
-              				  '<p style="margin-bottom: 0.1rem; font-size: 0.9em;">21 March 2017</p>' +
-              				'</div>' +
-              				'<div class="col-4" style="padding: 0.7rem;">' +
-              				  '<p style="margin-bottom: 0.1rem; font-size: 0.9em;">TRADE CHANCE</p>' +
-              				  '<p style="margin-bottom: 0.1rem; font-size: 0.9em;">' + array['likelihood'] + '</p>' +
-              				'</div>' +
-              				'<div class="flex-last ml-auto h-100" style="margin-left: -1rem; display:table">' +
-              				  '<a href="/account/addItem/' + value['foodid'] + '" class="btn btn-option square-border" style="display: table-cell; background-color: #E8E9EC; border-left: 1px solid #dce0e0; width: 6rem;">EDIT</a>' +
-              				'</div>' +
-              			  '</div>' +
-              			'</li>' +
-              			'<li class="list-group-item p-0" style="border: 1px solid #e0e0e0; border-radius: 0;">' +
-              			  '<div class="row">' +
-              				'<div class="col-4">' +
-              				  '<img class="card-img-top mw-100" src="../images/food/' + value['image'] + '" alt="Card image cap">' +
-              				'</div>' +
-              				'<div class="col-8">' +
-              				  '<div class="card-block" style="padding: 0.5rem 0.5rem; margin-bottom: -0.5rem;">' +
-              					'<h5 class="card-title">' + value['name'] + '</h5>' +
-              					'<p style="font-size:0.9em; margin-bottom:5px">' + value['description'] + '</p>' +
-              					'<table class="table table-sm">' +
-              					  '<tbody style="font-size: 0.9em">' +
-              					  '<tr>' +
-              						'<td scope="row pl-0">Expiry Date:' +
-              						'</td>' +
-              						'<td>' + value['expirydate'] + '</td>' +
-              					  '</tr>' +
-              					  '<tr>' +
-              						'<td scope="row pl-0">Amount:' +
-              						'</td>' +
-              						'<td>' + value['amount'] + '</td>' +
-              					  '</tr>' +
-              					  '<tr>' +
-              						'<td scope="row pl-0">Weight:' +
-              						'</td>' +
-              						'<td>' + value['weight'] + 'g</td>' +
-              					  '</tr>' +
-              					  '</tbody>' +
-              					'</table>' +
-              				  '</div>' +
-              				'</div>' +
-              			  '</div>' +
-              			'</li>' +
-              		  '</ul>' +
-              		'</div>'
-            );
+						$.post("{{path('getItem')}}", $.param(value), function (html) {
+							$(toAddTo).append($.parseHTML(html));
+						});
           });
         });
       });

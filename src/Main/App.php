@@ -21,6 +21,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Umpirsky\Twig\Extension\PhpFunctionExtension;
 
 class App extends Application
 {
@@ -50,6 +51,23 @@ class App extends Application
 		$this->restAPI();
 
 		$this->errorHandling();
+
+		//$api = new \Cloudinary\Api();
+		//$result = $api->resource("food/bdk5uhvjuookqcqkdyzp");
+		//die(dump($result));
+		//die(dump(cloudinary_url_folder('k0vx5tenfq9ugtzmcjya','food')));
+
+		//$result = \Cloudinary\Uploader::explicit("food/ede4681c3ebe4753af067e26a4dacc45", $options = array('invalidate' => true, "type" => "upload" ));
+		//die(dump($result));
+
+		// Register web profiler if in debug mode
+		if ($this['debug']) {
+			$this->register(new VarDumperServiceProvider());
+			$this->register(new WebProfilerServiceProvider(), array(
+				'profiler.cache_dir'    => ROOT.'/../cache/profiler',
+				'profiler.mount_prefix' => '/_profiler', // this is the default
+			));
+		}
 	}
 
 	private function registerServices() {
@@ -67,6 +85,13 @@ class App extends Application
 					ROOT.'/../src/Views/components',
 				),
 		));
+
+		$this->extend('twig', function($twig) {
+			$extension = new PhpFunctionExtension(array('cloudinary_url_folder'));
+			//$extension->allowFunction('cloudinary_url');
+			$twig->addExtension($extension);
+			return $twig;
+		});
 
 		// Registering service controllers
 		$this->register(new ServiceControllerServiceProvider());
@@ -89,9 +114,8 @@ class App extends Application
 			'assets.version_format' => '%s?version=%s',
 			'assets.named_packages' => array(
 				'css'        => array('version' => 'css3', 'base_path' => 'stylesheets/'),
-				'images'     => array('base_path' => 'images/'),
-				'food'       => array('base_path' => 'images/food/'),
-				'users'      => array('base_path' => 'images/people/'),
+				'images'     => array('base_urls' => array('https://res.cloudinary.com/hxovetfvu/misc')),
+				'users'      => array('base_urls' => array('https://res.cloudinary.com/hxovetfvu/people')),
 				'javascript' => array('base_path' => 'js/'),
 			),
 		));
@@ -106,15 +130,6 @@ class App extends Application
 				'auth_mode'  => 'cram-md5',
 			),
 		));
-
-		// Register web profiler if in debug mode
-		if ($this['debug']) {
-			$this->register(new VarDumperServiceProvider());
-			$this->register(new WebProfilerServiceProvider(), array(
-				'profiler.cache_dir'    => ROOT.'/../cache/profiler',
-				'profiler.mount_prefix' => '/_profiler', // this is the default
-			));
-		}
 
 		// Register DB provider service
 		$this['DB'] = function () {
@@ -197,6 +212,10 @@ class App extends Application
 			return $this['twig']->render('update.twig', array('userData' => $userdata, 'foodData' => $fooddata, 'foodID' => $foodID));
 		})->assert('foodID', '\d+')->bind('update')->secure('ROLE_USER');
 
+		$account->post('/getItem', function(Request $request){
+			return $this['twig']->render('aUserItem.twig', array('request' => $request));
+		})->bind('getItem')->secure('ROLE_USER');
+
 		$account->get('/userprofile', function () {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			return $this['twig']->render('userProfile.twig', array('userData' => $userdata));
@@ -225,18 +244,18 @@ class App extends Application
 		$account->post('/request/accept', 'rest.handler:acceptRequest')
 				->assert('requestid', '\d+')
 				->assert('foodid', '\d+')
-				->secure('IS_AUTHENTICATED_FULLY');
+				->secure('ROLE_USER');
 
 		$account->post('/request/reject', 'rest.handler:rejectRequest')
 				->assert('requestid', '\d+')
-				->secure('IS_AUTHENTICATED_FULLY');
+				->secure('ROLE_USER');
 
 		$account->get('/request/status/{requestid}', 'rest.handler:requestStatus')
 			  ->assert('requestid', '\d+')
-			  ->secure('IS_AUTHENTICATED_FULLY');
+			  ->secure('ROLE_USER');
 
-		$account->get('/user/notifications', 'rest.handler:getNumberNotifications')
-			  ->secure('IS_AUTHENTICATED_FULLY');
+		$account->get('/user/notifications', 'rest.handlser:getNumberNotifications')
+			  ->secure('ROLE_USER');
 
 		$account->post('/user/review', 'rest.handler:reviewUser')
 				->secure('IS_AUTHENTICATED_FULLY');
@@ -348,7 +367,7 @@ class App extends Application
 		//todo registration failure page
 		$this->post('/register/user', 'rest.handler:registerNewUser')
 			 ->requireHttps()->bind('register')
-			 ->assert('username', '^[a-zA-Z0-9_]+$')
+			 ->assert('username', '^[a-zA-Z0-9_]+$') // fixme this needed?
 			 ->assert('password', '^[\w]+$');
 
 		$this->post('/messenger/message', 'rest.handler:messageUser')

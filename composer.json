@@ -13,12 +13,12 @@
 		"symfony/console": "~3.0",
 		"symfony/config": "~3.0",
 		"swiftmailer/swiftmailer": "^5.4",
-		"ramsey/uuid": "^3.6",
-		"moontoast/math": "^1.1",
 		"symfony/var-dumper": "^3.2",
 		"sorien/silex-pimple-dumper": "^2.0",
 		"symfony/debug-bundle": "^3.2",
-		"phpunit/phpunit": "^6.1"
+		"symfony/security-bundle": "^3.2",
+		"cloudinary/cloudinary_php": "^1.7",
+		"umpirsky/twig-php-function": "^0.2.0"
 	},
 	"require-dev": {
 		"heroku/heroku-buildpack-php": "*"
