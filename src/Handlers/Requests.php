@@ -549,14 +549,22 @@ class Requests
 	public function foodLikelihood(Request $request, App $app, $foodid) {
 		$foodItem = $this->db->getFoodItemByID($foodid);
 		$desirableFoods = ['chocolate', 'steak', 'beef', 'lamb', 'chicken', 'burger', 'cereal', 'pizza', 'pasta'];
+		$undesirableFoods = ['stale', 'old', 'vegetable', 'vegeatable', 'horrible', 'sprouts', 'broccoli', 'egg'];
 		$foodName = $foodItem['name'];
 		$probability = 60;
 
 		foreach ($desirableFoods as $food) {
 			if (strpos(strtolower($foodName), $food) !== false) {
-				$probability = 80;
+				$probability += 10;
 			}
-		}
+		} 
+
+		foreach ($undesirableFoods as $food) {
+			if (strpos(strtolower($foodName), $food) !== false) {
+				$probability -= 10;
+			}
+		} 
+
 
 		// of form [`expirydate` => ...,`category` => ...,`foodid` => ...,`name` => ...,`description` => ...,`latit` => ...,`longit` => ...,`amount` => ...,`weight` => ...,`image` => ...,`active` => ...,`hidden` => ...]
 
