@@ -1102,15 +1102,15 @@ class DBDataMapper
 	}
 
 	public function reviewUser($otherID, $userID, $rating) {
-		$query = 'INSERT INTO `reviewtable` (`userid`, `reviewerid`, `rating`) VALUES (:userid, :otherid, :rating)';
+		$query = 'INSERT INTO `reviewtable` (`userid`, `reviewerid`, `rating`) VALUES (:userid, :reviewerid, :rating)';
 
 		$result = true;
 		try {
 			$stmt = $this->pdo->prepare($query);
 
 			$stmt->execute(array(
-							   ':userid' => $userID,
-								 ':otherid' => $otherID,
+							   ':userid' => $otherID,
+								 ':reviewerid' => $userID,
 								 ':rating' => $rating
 						   ));
 		} catch (\PDOException $e) {
