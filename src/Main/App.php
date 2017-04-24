@@ -218,7 +218,7 @@ class App extends Application
 		$account->get('/userprofile', function () {
 			$userdata = $this['DB']->getUserByUsername((string) $this['security.token_storage']->getToken()->getUser());
 			return $this['twig']->render('userProfile.twig', array('userData' => $userdata));
-		})->bind('user')->secure('ROLE_USER');  //Double secured so dont check token exists
+		})->bind('user')->secure('ROLE_BASIC');  //Double secured so dont check token exists
 
 		$account->get('/userprofiletest', function () {
 			return $this['twig']->render('userProfileTest.twig');
