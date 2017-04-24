@@ -103,7 +103,8 @@ class Requests
 	public function sendVerifyToken(App $app, $userid) {
 		// Sends verification token to email
 		//note maybe broke with this if
-		if ($this->db->getRoles($userid) === 'ROLE_BASIC') {
+		
+		if (strpos($this->db->getRoles($userid), 'ROLE_BASIC') !== false) {
 			$bytes = bin2hex(random_bytes(32));
 			$this->db->addToken($userid, $bytes);
 			if ($email = $this->db->getEmailByID($userid)) {
