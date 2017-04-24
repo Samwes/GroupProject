@@ -193,8 +193,9 @@
 						if (error in response) {
 							return 'Error:' + response.error;
 						}
+						return 'Error updating name to' + newValue;
 					}
-					return 'Error updating name to' + newValue;
+					return 'Name Updated!';
 				},
 				validate: function (value) {
 					if (value === null || value === '') {
