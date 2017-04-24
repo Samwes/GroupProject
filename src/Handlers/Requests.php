@@ -602,7 +602,7 @@ class Requests
 				if (!(in_array($currentCategory, $categories))) {
 					$categories[$currentCategory] = 1;
 				} else {
-					$categories[$currentCategory] += 1;
+					$categories[$currentCategory] = $categories[$currentCategory] + 1;
 				}
 
 			}
