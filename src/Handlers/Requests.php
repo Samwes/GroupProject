@@ -624,7 +624,9 @@ class Requests
 
 			// Content Here
 
-			return new JsonResponse(array("recommendation" => $response, "categories" => $categories));
+
+
+			return new JsonResponse(array("recommendation" => $response, "categories" => $categories, "fooditems" => $foodItems));
 
 		}
 	}
