@@ -769,7 +769,8 @@ class DBDataMapper
 		$query = 'SELECT `foodid`
 					FROM `itemtable`
 					WHERE `latit` <= :maxLat AND `latit` >= :minLat
-					AND `longit` <= :maxLong AND `longit` >= :minLong';
+					AND `longit` <= :maxLong AND `longit` >= :minLong
+					AND `active` = 0 AND `hidden` = 0';
 		$queryEnd = " ORDER BY `foodid` DESC LIMIT $count OFFSET $start";
 
 		$categoryQuery = '`category` = :category';
