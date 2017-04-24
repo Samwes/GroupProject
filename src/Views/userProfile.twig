@@ -141,7 +141,7 @@
 					var categories = data['categories'];
 					$('#recommendation').text(recommendation);
 
-					var array = ["Category", "Number Of Items"];
+					var array = [["Category", "Number Of Items"]];
 					for (var category in categories) {
 						array.push([category, categories[category]]);
 					}
