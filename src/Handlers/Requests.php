@@ -175,7 +175,7 @@ class Requests
 			}
 		}
 
-		return new RedirectResponse($app->path('user')); //note change redirect on failure/success
+		return new RedirectResponse($app->path('useritems')); //note change redirect on failure/success
 	}
 
 	public function foodItemPost(Request $request, Application $app) {
