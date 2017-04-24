@@ -30,9 +30,9 @@
 	}
 }
 
-html, body {
-	height: 95vh;
-}
+/*html, body {*/
+	/*height: 95vh;*/
+/*}*/
 
 .pac-container {
 	z-index: 1100;
