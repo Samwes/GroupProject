@@ -264,7 +264,7 @@ class DBDataMapper
 	}
 
 	//Never call directly, simply inserts values. Use handler
-	public function addNewUser($un, $pw, $pic, $email, $roles = 'ROLE_BASIC') {
+	public function addNewUser($un, $pw, $email, $roles = 'ROLE_BASIC', $pic = 'profile_default.jpg') {
 		$query = 'INSERT INTO `usertable` (`username`, `password`, `picture`, `email`, `roles`)
                   VALUES (:un, :pw, :pic, :email, :role)';
 		$result = true;

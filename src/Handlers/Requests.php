@@ -86,7 +86,7 @@ class Requests
 			//            throw new \RuntimeException(sprintf('Can\'t create user %s', $username)); //note just database error or?
 		}
 
-		if ($this->db->addNewUser($username, $encoded, null, $email)) {
+		if ($this->db->addNewUser($username, $encoded, $email)) {
 			$user = $app['user.provider']->loadUserByUsername($username);
 			$token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
 			$app['security.token_storage']->setToken($token);  //note doesnt work?
