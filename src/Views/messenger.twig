@@ -14,16 +14,16 @@
 		<div class="row row-offcanvas row-offcanvas-left h-100">
 			<div class="col-6 col-sm-3 p-0 d-flex flex-column align-items-stretch sidebar-offcanvas" id="sidebar" role="navigation">
 				<!-- Requests Section -->
-				<nav class="navbar navbar-toggleable-md square-border border-top-0 p-0" id="requests-nav" style="background-color: white; border: 1px solid #dce0e0; height: 3rem;">
-					<div class="d-flex d-flex-nowrap h-100 w-100" role="group" aria-label="Basic example">
-						<button id="sentRequestsBtn" class="btn flex-auto btn-secondary square-border" style="border: 0; border-right: 1px solid #ccc; background-color: #e6e6e6">Sent</button>
-						<button id="receivedRequestsBtn" class="btn flex-auto btn-secondary square-border" style="border:0">Received</button>
-					</div>
-				</nav>
+					<nav class="navbar navbar-toggleable-md square-border border-top-0 p-0" id="requests-nav" style="background-color: white; border: 1px solid #dce0e0; height: 3rem;">
+						<div class="d-flex d-flex-nowrap h-100 w-100" role="group" aria-label="Basic example">
+							<button id="sentRequestsBtn" class="btn flex-auto btn-secondary square-border" style="border: 0; border-right: 1px solid #ccc; background-color: #e6e6e6">Sent</button>
+							<button id="receivedRequestsBtn" class="btn flex-auto btn-secondary square-border" style="border:0">Received</button>
+						</div>
+					</nav>
 				<div class="d-flex flex-column flex-auto" id="requests" style="overflow: scroll; overflow-x:hidden; border-right: 1px solid #dce0e0; padding-right: 0;">
-					<!-- Requests -->
-					<div class="" id="sentRequests"></div>
-					<div class="hidden-xs-up" id="receivedRequests"></div>
+          <!-- Requests -->
+          <div class="" id="sentRequests"></div>
+          <div class="hidden-xs-up" id="receivedRequests"></div>
 				</div>
 			</div>
 			<div class="d-flex flex-column align-items-stretch justify-content-center col-12 col-sm-9 p-0">
@@ -35,17 +35,17 @@
 						<li class="nav-item hidden-sm-down hidden-xs-up" id="stars">
 							<form id="rating-form" action="/account/user/review" method="post">
 								<input id="rating-userid" type="hidden" name="userid">
-								<input class="star star-5" value="5" id="star-5" type="radio" name="star">
-								<label class="star star-5" for="star-5"></label>
-								<input class="star star-4" value="4" id="star-4" type="radio" name="star">
-								<label class="star star-4" for="star-4"></label>
-								<input class="star star-3" value="3" id="star-3" type="radio" name="star">
-								<label class="star star-3" for="star-3"></label>
-								<input class="star star-2" value="2" id="star-2" type="radio" name="star">
-								<label class="star star-2" for="star-2"></label>
-								<input class="star star-1" value="1" id="star-1" type="radio" name="star">
-								<label class="star star-1" for="star-1"></label>
-							</form>
+    						<input class="star star-5" value="5" id="star-5" type="radio" name="star">
+    						<label class="star star-5" for="star-5"></label>
+    						<input class="star star-4" value="4" id="star-4" type="radio" name="star">
+    						<label class="star star-4" for="star-4"></label>
+    						<input class="star star-3" value="3" id="star-3" type="radio" name="star">
+    						<label class="star star-3" for="star-3"></label>
+    						<input class="star star-2" value="2" id="star-2" type="radio" name="star">
+    						<label class="star star-2" for="star-2"></label>
+    						<input class="star star-1" value="1" id="star-1" type="radio" name="star">
+    						<label class="star star-1" for="star-1"></label>
+  						</form>
 							<!--<p href="#" style="color: gold;" class="my-2">
 								<i class="fa fa-star" aria-hidden="true"></i>
 								<i class="fa fa-star" aria-hidden="true"></i>
@@ -71,16 +71,16 @@
 				<div class="container-fluid flex-auto mx-0" style="overflow: scroll; overflow-x:hidden" id="messages">
 					<!-- Message Container -->
 				</div>
-				<!-- Input Container -->
-				<div class="row no-gutters mt-auto w-100" id="search">
-					<div class="input-group">
-						<input type="text" class="form-control square-border" placeholder="Enter a message here" id="messageInput">
-						<span class="input-group-btn">
+					<!-- Input Container -->
+					<div class="row no-gutters mt-auto w-100" id="search">
+						<div class="input-group">
+							<input type="text" class="form-control square-border" placeholder="Enter a message here" id="messageInput">
+							<span class="input-group-btn">
           		    <button class="btn btn-secondary square-border" type="button" id="sendButton">Send</button>
 			        </span>
+						</div>
 					</div>
 				</div>
-			</div>
 		</div>
 	</div>
 
@@ -103,7 +103,6 @@
 		var currentReceiverID;
 		var currentRequestID;
 		var currentFoodID;
-
 		$(function () {
 			var socket = io("https://gpmainmessaging.herokuapp.com/");
 			socket.on('connect', function (data) {
@@ -113,7 +112,6 @@
 					var validation = 0;
 					socket.emit('validation', {'validation': validation, 'userid': userID});
 				});
-
 			});
 			socket.on("message", function (data) {
 				var fromid = data['fromid'];
@@ -150,9 +148,9 @@
 				} else {
 					// Make contact bold and bring to top
 					var card = $('[requestid="' + requestID + '"]');
-					if (card) {
+					if(card) {
 						// exists already so move to top						card.addClass('bold');
-						if (card.attr('request') == "sent") {
+						if(card.attr('request') == "sent") {
 							// Sent request
 							$("#sentRequests").prepend(card);
 						} else {
@@ -161,8 +159,8 @@
 						}
 					} else {
 						// Just refresh for now
-						fillSentRequests(function () {
-							fillReceivedRequests(function () {
+						fillSentRequests(function() {
+							fillReceivedRequests(function() {
 								sortRequests();
 							});
 						});
@@ -170,7 +168,6 @@
 				}
 			});
 		});
-
 		$("#sendButton").click(function () {
 			//Send message
 			$.post('/messenger/message', {
@@ -188,7 +185,6 @@
 				}
 			});
 		});
-
 		$("body").on("click", ".contact", function () {
 			// Change colour and fill messages
 			currentRequestID = $(this).attr("requestid");
@@ -202,10 +198,9 @@
 			$('#stars').removeClass('hidden-xs-up');
 			fillMessages($(this).attr("requestid"));
 		});
-
 		$(document).ready(function () {
-			fillSentRequests(function () {
-				fillReceivedRequests(function () {
+			fillSentRequests(function() {
+				fillReceivedRequests(function() {
 					sortRequests();
 				});
 			});
@@ -213,7 +208,7 @@
 	</script>
 
 	<script>
-		$(".star").click(function () {
+		$(".star").click(function() {
 			$("#rating-form").submit();
 		});
 	</script>
@@ -232,9 +227,8 @@
 			$("#receivedRequestsBtn").css("background-color", "");
 			// Hide Accept/Reject Buttons
 			/*$("#reject-item").addClass('hidden-xs-up');
-			 $("#accept-item").addClass('hidden-xs-up');*/
+			$("#accept-item").addClass('hidden-xs-up');*/
 		});
-
 		$("#receivedRequestsBtn").click(function () {
 			$("#sentRequestsBtn").removeClass('clicked');
 			$("#receivedRequestsBtn").addClass('clicked');
@@ -247,22 +241,22 @@
 			$("#sentRequestsBtn").css("background-color", "");
 			// Show Accept/Reject Buttons
 			/*$("#reject-item").removeClass('hidden-xs-up');
-			 $("#accept-item").removeClass('hidden-xs-up');*/
+			$("#accept-item").removeClass('hidden-xs-up');*/
 		});
 	</script>
 
 	<script>
 		// Accept/Rejecting an item
-		$("#accept").click(function () {
-			$.post('/account/request/accept', {"requestid": currentRequestID, "foodid": currentFoodID}, function () {
+		$("#accept").click(function() {
+			$.post('/account/request/accept', {"requestid": currentRequestID, "foodid": currentFoodID}, function() {
 				// Change to Accepted
 				$('#accept-item').addClass('hidden-xs-up');
 				$('#reject-item').addClass('hidden-xs-up');
 				$('#accepted-item').removeClass('hidden-xs-up');
 			});
 		});
-		$("#reject").click(function () {
-			$.post('/account/request/reject', {"requestid": currentRequestID}, function () {
+		$("#reject").click(function() {
+			$.post('/account/request/reject', {"requestid": currentRequestID}, function() {
 				// Change to Rejected
 				$('#accept-item').addClass('hidden-xs-up');
 				$('#reject-item').addClass('hidden-xs-up');
@@ -279,57 +273,86 @@
 				// data is all that users requests
 				$.each(data, function (index, value) {
 					// value is requestid, foodid, accepted
-					$.post('/messenger/userfood/' + value['userid'] + '/' + value['foodid'] + '/' + value['requestid'], $.param(value), function (html) {
-						$("#sentRequests").append($.parseHTML(html));
-					});
+					$.getJSON('/messenger/userfood/' + value['userid'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
+						$("#sentRequests").append(
+							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['userid'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="sent" time="' + array['MAX(`messagetable`.`time`)'] + '" foodid="' + value['foodid'] + '">' +
+							'<div class="row">' +
+							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
+							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
+							'</div>' +
+							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
+							'<div class="card-block" style="padding: 0.5rem;">' +
+							'<small class="text-muted float-right" style="margin-right:  1rem;">' + (array['MAX(`messagetable`.`time`)'] ? array['MAX(`messagetable`.`time`)'] : "") + '</small>' +
+							'<p class="card-text">' + array['username'] + '</p>' +
+							'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + array['name'] + '</p>' +
+							'<small class="text-muted">' + (array['message'] ? array['message'] : "") + '</small>' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							'</div>'
+						);
+					})
 				});
 			});
 			callback();
 		}
-
 		function fillReceivedRequests(callback) {
 			$("#receivedRequests").empty();
 			$.getJSON('/request/received', function (data) {
 				// data is all that users requests
 				$.each(data, function (index, value) {
 					// value is requestid, foodid, accepted
-					$.post('/messenger/userfood/' + value['requester'] + '/' + value['foodid'] + '/' + value['requestid'], $.param(value), function (html) {
-						$("#receivedRequests").append($.parseHTML(html));
+					$.getJSON('/messenger/userfood/' + value['requester'] + '/' + value['foodid'] + '/' + value['requestid'], function(array) {
+						$("#receivedRequests").append(
+							'<div class="card square-border contact ' + (array['SUM(`user2seen`)'] != 0 ?'bold' : '') + '" style="border: 0;" receiverid="' + value['requester'] + '" requestid="' + value['requestid'] + '" username="' + array['username'] + '" request="received" time="' + array['MAX(`messagetable`.`time`)'] + '" foodid="' + value['foodid'] + '">' +
+							'<div class="row">' +
+							'<div class="col-sm-5 col-md-4 col-lg-3 col-xl-2 col-4" style="padding: 0;">' +
+							'<img class="card-img-top circle" src="../../images/people/' + array['picture'] + '" alt="Card image cap" style="width:100%; padding: 0.5rem;">' +
+							'</div>' +
+							'<div class="col-sm-7 col-md-8 col-lg-9 col-xl-10 col-8" style="padding: 0;">' +
+							'<div class="card-block" style="padding: 0.5rem;">' +
+							'<small class="text-muted float-right" style="margin-right:  1rem;">' + (array['MAX(`messagetable`.`time`)'] ? array['MAX(`messagetable`.`time`)'] : "") + '</small>' +
+							'<p class="card-text">' + array['username'] + '</p>' +
+							'<p class="card-subtitle text-muted" style="margin-bottom: -0.25rem;">' + array['name'] + '</p>' +
+							'<small class="text-muted">' + (array['message'] ? array['message'] : "") + '</small>' +
+							'</div>' +
+							'</div>' +
+							'</div>' +
+							'</div>'
+						);
 					});
 				});
 			});
 			callback();
 		}
-
 		function sortRequests() {
 			// sorted into inverse order
 			var receivedRequests = $('#receivedRequests>.card').sort(function (a, b) {
-				var contentA = Date.parse($(a).attr('time'));
-				var contentB = Date.parse($(b).attr('time'));
+      	var contentA = Date.parse( $(a).attr('time'));
+      	var contentB = Date.parse( $(b).attr('time'));
 				if (isNaN(contentA)) { contentA = 9007199254740991; }
 				if (isNaN(contentB)) { contentB = 9007199254740991; }
-				return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
-			});
+      	return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
+   		});
 			var sentRequests = $('#sentRequests>.card').sort(function (a, b) {
-				var contentA = Date.parse($(a).attr('time'));
-				var contentB = Date.parse($(b).attr('time'));
+      	var contentA = Date.parse( $(a).attr('time'));
+      	var contentB = Date.parse( $(b).attr('time'));
 				if (isNaN(contentA)) { contentA = 9007199254740991; }
 				if (isNaN(contentB)) { contentB = 9007199254740991; }
-				return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
-			});
-			$(receivedRequests).each(function (index) {
+      	return (contentA < contentB) ? 1 : (contentA > contentB) ? -1 : 0;
+   		});
+			$(receivedRequests).each(function(index) {
 				$("#receivedRequests").append(this);
 			});
-			$(sentRequests).each(function (index) {
+			$(sentRequests).each(function(index) {
 				$("#sentRequests").append(this);
 			});
 		}
-
 		function fillMessages(requestID) {
-			$.getJSON('/account/request/status/' + requestID, function (data) {
-				if (data['status'] == 0) {
+			$.getJSON('/account/request/status/' + requestID, function(data) {
+				if(data['status'] == 0) {
 					// No Response
-					if ($('#sentRequestsBtn').hasClass('clicked')) {
+					if($('#sentRequestsBtn').hasClass('clicked')) {
 						// Is A Sent Request
 						$('#accept-item').addClass('hidden-xs-up');
 						$('#reject-item').addClass('hidden-xs-up');

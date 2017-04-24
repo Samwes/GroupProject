@@ -954,7 +954,7 @@ class DBDataMapper
 
 	public function getUserFoodInfo($userid, $foodid) {
 		// fix to get message corresponding to time
-		$query = 'SELECT DISTINCT `usertable`.`username`, MAX(`messagetable`.`time`) as `lasttime`, `messagetable`.`message`, `itemtable`.`name`, `usertable`.`picture`
+		$query = 'SELECT DISTINCT `usertable`.`username`, MAX(`messagetable`.`time`), `messagetable`.`message`, `itemtable`.`name`, `usertable`.`picture`
 				FROM `usertable`, `messagetable`, `itemtable`, `requestmessagetable`, `requesttable`
 				WHERE `usertable`.`userid` = :uid AND `itemtable`.`foodid` = :fid AND
 				`messagetable`.`messageid` = `requestmessagetable`.`messageid` AND
