@@ -258,7 +258,7 @@ class App extends Application
 			  ->secure('ROLE_USER');
 
 		$account->post('/user/review', 'rest.handler:reviewUser')
-				->secure('IS_AUTHENTICATED_FULLY');
+				->secure('ROLE_USER');
 
 		$this->mount('/account', $account);
 	}
