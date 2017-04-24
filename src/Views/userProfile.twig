@@ -8,6 +8,7 @@
 	<script src="{{ asset('quagga.min.js','javascript') }}"></script>
 	<script src="{{ asset('moment.js','javascript') }}"></script>
 	<script src="{{ asset('jquery.cropit.js','javascript') }}"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -51,6 +52,13 @@
 				</div>
 			</div>
 			<div class="col-md-8">
+
+				<h3>Wastage Analysis</h3>
+				<p id="recommendation"></p>
+
+				<br>
+
+				<div id="piechart" style="width: 900px; height: 500px;"></div>
 
 				<br>
 
@@ -121,6 +129,38 @@
 	{#future transition map instead of directly placing #}
 	{#future move geolocator to map.twig? #}
 	{#note dragging cursor on chrome - DOM mousemove is captured?#}
+
+	<script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+				$.getJSON('/user/analysis', function(data) {
+					var recommendation = data['recommendation'];
+					var categories = data['categories'];
+					$('#recommendation').text(recommendation);
+
+					var array = ["Category", "Number Of Items"];
+					for (var category in categories) {
+						array.push([category, categories[category]]);
+					}
+
+					var data = google.visualization.arrayToDataTable(array);
+
+	        var options = {
+	          title: 'Wastage Analysis'
+	        };
+
+	        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+	        chart.draw(data, options);
+
+				});
+
+      }
+    </script>
+
 	<script>
 		// ---------------MAP INIT HERE---------------------
 		$("#map").one("maploaded", function () {
