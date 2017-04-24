@@ -280,7 +280,7 @@
 				$.each(data, function (index, value) {
 					// value is requestid, foodid, accepted
 					$.post('/messenger/userfood/' + value['userid'] + '/' + value['foodid'] + '/' + value['requestid'], $.param(value), function (html) {
-						$("#receivedRequests").append($.parseHTML(html));
+						$("#sentRequests").append($.parseHTML(html));
 					});
 				});
 			});
