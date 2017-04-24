@@ -78,6 +78,7 @@
 
 <script>
 	$.getJSON('/user/rating/{{ foodData.userid }}', function(data) {
+		$('#stars').empty();
 		for(var i = 0; i < data['rating']; i++) {
 			$('#stars').append('<i class="fa fa-star" aria-hidden="true"></i>');
 		}

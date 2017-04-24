@@ -27,6 +27,7 @@ class Requests
 	//note: Request handling functions go here
 
 	public function foodItemsGet(Request $request, App $app) {
+		// Returns food items uploaded by current user
 
 		$token = $app['security.token_storage']->getToken(); //future refactor this into its own func?
 
@@ -44,6 +45,7 @@ class Requests
 	}
 
 	public function foodItemGet(Request $request, App $app, $foodID) {
+		// Returns food item details by its id
 		$toEncode = $this->db->getFoodItemByID($foodID);
 		if ($toEncode === null) {
 			$toEncode = array('error' => 'failed');
@@ -53,6 +55,7 @@ class Requests
 	}
 
 	public function verifyToken(App $app, $token) {
+		// Verifies current user token
 		$result = $this->db->verifyToken($token);
 		if (false !== $result) {
 			//Success - future log them in? result has their userID  --- $user = $app->user(); ?
@@ -65,6 +68,7 @@ class Requests
 	}
 
 	public function registerNewUser(Request $request, App $app) {
+		// Adds new user data to database
 		$username = $request->get('username');
 		$email = $request->get('email');
 		$password = $request->get('password');
@@ -97,6 +101,7 @@ class Requests
 	}
 
 	public function sendVerifyToken(App $app, $userid) {
+		// Sends verification token to email
 		//note maybe broke with this if
 		if ($this->db->getRoles($userid) === 'ROLE_BASIC') {
 			$bytes = bin2hex(random_bytes(32));
@@ -119,6 +124,7 @@ class Requests
 	}
 
 	public function foodItemUpdate(Request $request, Application $app) {
+		// POST - Updates food item uploaded by current user
 		$toEncode = array("error" => "failed to add");
 
 		$token = $app['security.token_storage']->getToken();
@@ -175,10 +181,11 @@ class Requests
 			}
 		}
 
-		return new RedirectResponse($app->path('user')); //note change redirect on failure/success
+		return new RedirectResponse($app->path('useritems')); //note change redirect on failure/success
 	}
 
 	public function foodItemPost(Request $request, Application $app) {
+		// Adds food item to database
 		$toEncode = array("error" => "failed to add");
 
 		$token = $app['security.token_storage']->getToken();
@@ -232,6 +239,7 @@ class Requests
 	}
 
 	public function getRequestsSentByUserID(Request $request, App $app) {
+		// Gets food items requested by user
 		$toEncode = null;
 		$token = $app['security.token_storage']->getToken();
 
@@ -247,6 +255,7 @@ class Requests
 	}
 
 	public function getRequestsReceivedByUserID(Request $request, App $app) {
+
 		$toEncode = null;
 		$token = $app['security.token_storage']->getToken();
 
@@ -452,7 +461,7 @@ class Requests
 			}
 		}
 
-		return new RedirectResponse($app->path('user')); //note change redirect on failure/success
+		return new RedirectResponse($app->path('useritems')); //note change redirect on failure/success
 	}
 
 	public function addNewRequest(Request $request, App $app, $foodid) {
@@ -591,7 +600,7 @@ class Requests
 
 			//Have they wasted enough to warrant telling them to stop wasting them
 
-			if ($keys[0] > 5) {
+			if ($keys[0] > 2) {
 				$response = "You could consider buying fewer " + $mostWasted + " items, as you've given away " + $keys[0] + "of this item type.";
 			} else {
 				$response = "You haven't had to give away too many items, well done.";
@@ -599,7 +608,7 @@ class Requests
 
 			// Content Here
 
-			return new JsonResponse(array("recommendation" => $response));
+			return new JsonResponse(array("recommendation" => $response, "categories" => $categories));
 
 		}
 	}

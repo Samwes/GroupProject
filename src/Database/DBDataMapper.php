@@ -212,7 +212,7 @@ class DBDataMapper
 
 	public function removeFoodItem($foodID, $userID) {
 		$query = 'UPDATE `itemtable`
-				SET `active` = 0, `hidden` = 1
+				SET `active` = 1, `hidden` = 1
 				WHERE `foodid`=:fid AND `userid`=:uid';
 		$result = true;
 		try {
